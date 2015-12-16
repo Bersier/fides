@@ -2,28 +2,32 @@ package ante
 
 object Syntax {
 
-  val x = new ReceiveSigned
-  val c = x.content: ReceiveSigned#Content
-
   sealed trait Expr
 
-  class Receive extends Expr {
-    val content = new Content
+  /**
+    * Type of Expr:s that don't return the trivial value 'Unit'.
+    */
+  sealed trait Unt
 
-    class Content extends Expr
+  class Receive(val previousOperation: Unt) extends Expr
 
+  class Send(val message: Expr) extends Unt
+
+  // what about higher-order use of primitive agents?
+  final case class UnpackSigned(signed: Expr) {
+    val content = new Content(this)
+    val signature = new Signature(this)
+
+    class Content(val parent: UnpackSigned) extends Expr
+
+    class Signature(val parent: UnpackSigned) extends Expr
   }
 
-  // directly decomposes the message, preventing reuse of it (bad)
-  class ReceiveSigned extends Receive {
-    val signature = new Signature
+  // technically, this is not required, but it clarifies when values get ignored
+  final case class Ignore(ignored: Expr) extends Unt
 
-    class Signature extends Expr
-
+  final class Plus(value: Expr) {
+    // could use it either as such in each place where it could decide to send its value
+    // but then it would be currently ambiguous, as currently, reuse means duplication of data
   }
-
-  class Send() extends Expr {
-
-  }
-
 }
