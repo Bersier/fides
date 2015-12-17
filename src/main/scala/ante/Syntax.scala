@@ -2,7 +2,10 @@ package ante
 
 object Syntax {
 
-  val x = new Par(0)(new Par(1)(new MyPair(???).left))
+  def unused[A](used: Boolean)(a: => A): A = {
+    if (used) throw new IllegalStateException(a + " already used.")
+    else a
+  }
 
   sealed trait Expr {
     def in: Val => Unit = ??? // apply (not needed to model the syntax)
@@ -39,23 +42,47 @@ object Syntax {
 
   /**
     * Will only execute once all the incoming branches are done.
-    * Returns a multiset of all the gotten values.
     *
     * @param size number of incoming branches
     */
-  final class Par(size: Int)(out: Expr) extends Expr
+  final class Par(size: Int)(out: Unt) {
+    private[this] var counter = 0
+
+    def in = {
+      val i: In = unused(counter < size)(new In)
+      counter += 1
+      i
+    }
+
+    final class In private[this]() extends Expr {
+      def parent = Par.this
+    }
+
+  }
 
   // template
   final class MyPair(out: Expr) {
-    val left = new Left(this)
-    val rite = new Rite(this)
+    private[this] var leftUsed = false
+    private[this] var riteUsed = false
 
-    // a child should be used only once (enforce?)
-    protected abstract class Child(val parent: MyPair) extends Expr
+    def left = {
+      val l = unused(leftUsed)(new Left)
+      leftUsed = true
+      l
+    }
 
-    final class Left private[MyPair](parent: MyPair) extends Child(parent)
+    def rite = {
+      val r = unused(riteUsed)(new Rite)
+      riteUsed = true
+      r
+    }
 
-    final class Rite private[MyPair](parent: MyPair) extends Child(parent)
+    protected abstract class Child extends Expr {
+      def parent = MyPair.this
+    }
 
+    final class Left private[this] extends Child
+
+    final class Rite private[this] extends Child
   }
 }
