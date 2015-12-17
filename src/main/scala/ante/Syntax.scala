@@ -26,8 +26,14 @@ object Syntax {
   // technically, this is not required, but it clarifies when values get ignored
   final case class Ignore(ignored: Expr) extends Unt
 
-  final class Plus(value: Expr) {
-    // could use it either as such in each place where it could decide to send its value
-    // but then it would be currently ambiguous, as currently, reuse means duplication of data
-  }
+  /**
+    * Only one of the outgoing branches shall be executed,
+    * without control of which one (internal choice).
+    */
+  final class Plus(value: Expr)
+
+  /**
+    * Will only execute once all the incoming branches are done.
+    */
+  final class Par(values: Set[Expr])
 }
