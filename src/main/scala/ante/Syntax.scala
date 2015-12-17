@@ -2,7 +2,13 @@ package ante
 
 object Syntax {
 
-  sealed trait Expr
+  val x = new Par(0)(new Par(1)(new MyPair(???).left))
+
+  sealed trait Expr {
+    def in: Val => Unit = ??? // apply (not needed to model the syntax)
+  }
+
+  sealed trait Val extends Expr
 
   /**
     * Type of Expr:s that don't return the trivial value 'Unit'.
@@ -19,7 +25,6 @@ object Syntax {
     val signature = new Signature(this)
 
     class Content(val parent: UnpackSigned) extends Expr
-
     class Signature(val parent: UnpackSigned) extends Expr
   }
 
@@ -34,6 +39,23 @@ object Syntax {
 
   /**
     * Will only execute once all the incoming branches are done.
+    * Returns a multiset of all the gotten values.
+    *
+    * @param size number of incoming branches
     */
-  final class Par(values: Set[Expr])
+  final class Par(size: Int)(out: Expr) extends Expr
+
+  // template
+  final class MyPair(out: Expr) {
+    val left = new Left(this)
+    val rite = new Rite(this)
+
+    // a child should be used only once (enforce?)
+    protected abstract class Child(val parent: MyPair) extends Expr
+
+    final class Left private[MyPair](parent: MyPair) extends Child(parent)
+
+    final class Rite private[MyPair](parent: MyPair) extends Child(parent)
+
+  }
 }
