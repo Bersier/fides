@@ -8,7 +8,7 @@ object Syntax {
   }
 
   sealed trait Expr {
-    def in: Val => Unit = ??? // apply (not needed to model the syntax)
+    def apply: Val => Unit = ??? // apply (not needed to model the syntax)
   }
 
   sealed trait Val extends Expr
@@ -17,6 +17,13 @@ object Syntax {
     * Type of Expr:s that don't return the trivial value 'Unit'.
     */
   sealed trait Unt
+
+  /**
+    * Will only execute once all the incoming branches are done.
+    */
+  sealed trait Par {
+    def in: Par.In
+  }
 
   class Receive(val previousOperation: Unt) extends Expr
 
@@ -40,26 +47,6 @@ object Syntax {
     */
   final class Plus(value: Expr)
 
-  /**
-    * Will only execute once all the incoming branches are done.
-    *
-    * @param size number of incoming branches
-    */
-  final class Par(size: Int)(out: Unt) {
-    private[this] var counter = 0
-
-    def in = {
-      val i: In = unused(counter < size)(new In)
-      counter += 1
-      i
-    }
-
-    final class In private[this]() extends Expr {
-      def parent = Par.this
-    }
-
-  }
-
   // template
   final class MyPair(out: Expr) {
     private[this] var leftUsed = false
@@ -81,8 +68,24 @@ object Syntax {
       def parent = MyPair.this
     }
 
-    final class Left private[this] extends Child
+    final class Left private[MyPair] extends Child
+    final class Rite private[MyPair] extends Child
+  }
 
-    final class Rite private[this] extends Child
+  object Par {
+    def apply(size: Int)(out: Unt): Par = new Par.In(size)(out)
+
+    /**
+      * @param size number of incoming branches
+      */
+    final class In private[Par] (size: Int)(out: Unt) extends Par with Expr {
+      private[this] var counter = 0
+
+      def in = {
+        val i = unused(counter < size)(this)
+        counter += 1
+        i
+      }
+    }
   }
 }
