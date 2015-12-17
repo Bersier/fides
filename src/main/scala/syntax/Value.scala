@@ -1,0 +1,3 @@
+package syntax
+
+trait Value
