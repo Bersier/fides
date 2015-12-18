@@ -3,17 +3,17 @@ package syntax
 /**
   * Will only execute once all the incoming branches are done.
   */
-sealed trait Par {
-  def in: Par.In
+sealed trait Times {
+  def in: Times.In
 }
 
-object Par {
-  def apply(size: Int)(out: UntTaker): Par = new Par.In(size)(out)
+object Times {
+  def apply(size: Int)(out: UnitTaker): Times = new Times.In(size)(out)
 
   /**
     * @param size number of incoming branches
     */
-  final class In private[Par] (size: Int)(val out: UntTaker) extends Par with UntTaker {
+  final class In private[Times$](size: Int)(val out: UnitTaker) extends Times with UnitTaker {
     private[this] var counter = 0
 
     def in = {

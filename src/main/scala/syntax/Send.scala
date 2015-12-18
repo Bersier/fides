@@ -1,3 +1,3 @@
 package syntax
 
-final class Send(val out: UntTaker) extends ExprTaker
+final class Send(val out: UnitTaker) extends ExprTaker
