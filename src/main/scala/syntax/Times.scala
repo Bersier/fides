@@ -13,7 +13,7 @@ object Times {
   /**
     * @param size number of incoming branches
     */
-  final class In private[Times$](size: Int)(val out: UnitTaker) extends Times with UnitTaker {
+  final class In private[Times](size: Int)(val out: UnitTaker) extends Times with UnitTaker {
     private[this] var counter = 0
 
     def in = {
