@@ -4,7 +4,7 @@ trait Abstract {
 
   sealed trait Content
 
-  sealed trait Key extends Content {
+  sealed trait Port extends Content {
     def name: Name
   }
 
@@ -13,7 +13,7 @@ trait Abstract {
   final class Name extends Content
 
   final case class Plain(content: Content) extends Message
-  final class Signed(val content: Content, key: Key) extends Message {
+  final class Signed(val content: Content, key: Port) extends Message {
     val name = key.name
   }
 }

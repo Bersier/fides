@@ -17,7 +17,7 @@ object Times {
     private[this] var counter = 0
 
     def in = {
-      val i = Utils.unused(counter < size)(this)
+      val i = Utils.unused(counter >= size)(this)
       counter += 1
       i
     }
