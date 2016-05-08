@@ -3,23 +3,28 @@ package syntax
 /**
   * Will only execute once all the incoming branches are done.
   */
-sealed trait Times {
+sealed trait Times {//how will evaluation work.?.
   def in: Times.In
 }
 
 object Times {
-  def apply(size: Int)(out: UnitTaker): Times = new Times.In(size)(out)
+  def apply(out: => UnitTaker): Times = new Times.In(out)
 
-  /**
-    * @param size number of incoming branches
-    */
-  final class In private[Times](size: Int)(val out: UnitTaker) extends Times with UnitTaker {
+  final class In private[Times](o: => UnitTaker) extends Times with Taker[Value] {
+    val out = o
+
     private[this] var counter = 0
 
+    def apply(v: Value): Unit = {
+      counter -= 1
+      if (counter == 0) {
+        out()
+      }
+    }
+
     def in = {
-      val i = Utils.unused(counter >= size)(this)
       counter += 1
-      i
+      this
     }
   }
 }
