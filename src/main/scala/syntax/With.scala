@@ -14,5 +14,7 @@ object With {
     val out = o
 
     def in = this
+
+    override def apply(v: OuT): Unit = out(v)
   }
 }

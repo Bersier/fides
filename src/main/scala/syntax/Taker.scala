@@ -9,5 +9,3 @@ trait UnitTaker extends Taker[Value] {
 
   def apply(ignored: Value): Unit = apply()
 }
-
-trait ExprTaker extends Taker[Value]

@@ -7,4 +7,6 @@ package syntax
 final class Plus[InT <: Value](o: => Set[Taker[InT]]) extends Taker[InT] {
   require(o.nonEmpty)
   val out = o
+
+  override def apply(v: InT): Unit = out.find(_ => true).get(v)
 }

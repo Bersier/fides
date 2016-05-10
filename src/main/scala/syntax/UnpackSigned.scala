@@ -1,13 +1,14 @@
 package syntax
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-final class UnpackSigned(mT: => Taker[Idee], uT: => Taker[Idee]) extends Taker[Signed] {
-  val mTaker = mT
-  val uTaker = uT
+final class UnpackSigned(cT: => Taker[Idee], sT: => Taker[Idee]) extends Taker[Signed] {
+  val contentsTaker = cT
+  val signatureTaker = sT
 
   override def apply(v: Signed): Unit = {
-    Future(mTaker(v.contents))(null) // TODO:
-    uTaker(v.signatory)
+    Future(contentsTaker(v.contents))
+    Future(signatureTaker(v.signatory))
   }
 }
