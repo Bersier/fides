@@ -3,18 +3,23 @@ package syntax
 /**
   * Will execute as soon as one of the incoming branches is done.
   */
-sealed trait With[-OuT <: Value] {
+sealed trait With[-OuT <: Val] {
   def in: With.In[OuT]
 }
 
 object With {
-  def apply[OuT <: Value](out: => Taker[OuT]): With[OuT] = new With.In(out)
+  def apply[OuT <: Val](out: => Taker[OuT]): With[OuT] = new With.In(out)
 
-  final class In[-OuT <: Value] private[With](o: => Taker[OuT]) extends With[OuT] with Taker[OuT] {
+  final class In[-OuT <: Val] private[With](o: => Taker[OuT]) extends With[OuT] with Taker[OuT] {
     val out = o
 
     def in = this
 
-    override def apply(v: OuT): Unit = out(v)
+    override def apply(v: OuT): Unit = todo
+
+    private[this] var todo: OuT => Unit = v => {
+      out(v)
+      todo = _ => {}
+    }
   }
 }

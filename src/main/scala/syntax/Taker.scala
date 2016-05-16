@@ -1,11 +1,11 @@
 package syntax
 
-trait Taker[-ValueT <: Value] {
+trait Taker[-ValueT <: Val] {
   def apply(v: ValueT): Unit
 }
 
-trait UnitTaker extends Taker[Value] {
+trait UnitTaker extends Taker[Val] {
   def apply(): Unit
 
-  def apply(ignored: Value): Unit = apply()
+  def apply(ignored: Val): Unit = apply()
 }

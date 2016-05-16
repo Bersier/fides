@@ -10,12 +10,12 @@ sealed trait Times {//how will evaluation work.?.
 object Times {
   def apply(out: => UnitTaker): Times = new Times.In(out)
 
-  final class In private[Times](o: => UnitTaker) extends Times with Taker[Value] {
+  final class In private[Times](o: => UnitTaker) extends Times with Taker[Val] {
     val out = o
 
     private[this] var counter = 0
 
-    def apply(v: Value): Unit = {
+    def apply(v: Val): Unit = {
       counter -= 1
       if (counter == 0) {
         out()

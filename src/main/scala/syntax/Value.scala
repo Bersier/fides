@@ -1,6 +1,8 @@
 package syntax
 
-sealed trait Value
+sealed trait Val
+object Unit extends Val
+sealed trait Value extends Val
 
 final case class Signed private(contents: Idee, signatory: Idee) extends Value {
   def this(message: Idee, signatory: Port) = this(message, signatory.idee)
