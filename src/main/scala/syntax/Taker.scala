@@ -7,5 +7,5 @@ trait Taker[-ValueT <: Val] {
 trait UnitTaker extends Taker[Val] {
   def apply(): Unit
 
-  def apply(ignored: Val): Unit = apply()
+  final def apply(ignored: Val): Unit = apply()
 }

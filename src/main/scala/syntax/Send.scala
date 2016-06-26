@@ -3,8 +3,7 @@ package syntax
 import commons.Utils
 import semantics.Env
 
-final class Send(o: => UnitTaker) {
-  val out = o
+final class Send {
 
   def address: Address = {
     if (addressVar == null) Utils.throwAlreadyUsedException(this + ".address")
@@ -26,7 +25,6 @@ final class Send(o: => UnitTaker) {
 
   private[this] def send(a: Idee, m: Val): Unit = {
     Env.send(a, m)
-    out()
   }
 
   final class Address private[Send] extends In[Idee] {

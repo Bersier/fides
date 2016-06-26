@@ -1,6 +1,6 @@
 package syntax.flowcontrol
 
-import syntax.{Taker, UnitTaker, Val}
+import syntax.{Taker, Val}
 
 /**
   * Will only execute once all the incoming branches are done.
@@ -10,9 +10,9 @@ sealed trait Times {//how will evaluation work.?.
 }
 
 object Times {
-  def apply(out: => UnitTaker): Times = new Times.In(out)
+  def apply(out: => Taker[Unit]): Times = new Times.In(out)
 
-  final class In private[Times](o: => UnitTaker) extends Times with Taker[Val] {
+  final class In private[Times](o: => Taker[Unit]) extends Times with Taker[Val] {
     val out = o
 
     private[this] var counter = 0
