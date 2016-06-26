@@ -1,37 +1,49 @@
 package syntax
 
+import scala.collection.mutable
+
 sealed trait Val
 object Unit extends Val
 sealed trait Value extends Val
 
-final case class Signed private(contents: Idee, signatory: Idee) extends Value {
-  def this(message: Idee, signatory: Port) = this(message, signatory.idee)
+final case class Signed private(contents: Address, signatory: Address) extends Value {
+  def this(message: Address, signatory: Idee) = this(message, signatory.address)
 }
 
-final case class Port private(idee: Idee) extends Value {
-  def this() = this(new Idee)
+sealed trait Port extends Value
+sealed trait Address extends Value
 
-  def this(name: String) = this(new NamedIdee(name))
+final class Idee private extends Port with Address {
+  def port: Port = this
+  def address: Address = this
 }
 
-object Port {
-  def apply(name: String): Port = new Port(name)
-}
+object Idee {
+  def makeNew: Idee = {
+    val result = new Idee
+    NameRegister.register(result)
+    result
+  }
 
-sealed class Idee extends Value
-
-final class NamedIdee(name: String) extends Idee {
-  def this() = this(NamedIdee.newName())
-
-  override val toString = name
-}
-
-private object NamedIdee {
-  private[this] var counter: BigInt = 0
-
-  def newName(): String = {
-    counter += 1
-    "name" + counter
+  def makeNew(name: String): Idee = {
+    val result = new Idee
+    NameRegister.register(result, name)
+    result
   }
 }
 
+private object NameRegister {
+  private[this] val map: mutable.Map[Idee, String] = mutable.Map()
+
+  def register(id: Idee): Unit = {
+    map(id) = newName()
+  }
+
+  def register(id: Idee, name: String): Unit = {
+    map(id) = name
+  }
+
+  def newName(): String = {
+    "name" + map.size
+  }
+}

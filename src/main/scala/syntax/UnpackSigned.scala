@@ -2,7 +2,7 @@ package syntax
 
 import commons.Utils
 
-final class UnpackSigned(cT: => Taker[Idee], sT: => Taker[Idee]) extends Taker[Signed] {
+final class UnpackSigned(cT: => Taker[Address], sT: => Taker[Address]) extends Taker[Signed] {
   val contentsTaker = cT
   val signatureTaker = sT
 

@@ -1,8 +1,8 @@
 package semantics
 
-import syntax.{Idee, Receive, Val}
+import syntax.{Address, Receive, Val}
 
 object Env {
-  def send(a: Idee, m: Val): Unit = ???
+  def send(a: Address, m: Val): Unit = ???
   def addReceiver[T <: Val](receiver: Receive[T]): Unit = ???
 }

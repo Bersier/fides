@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="Wrote 'Generic'">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Constant.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Interruptible.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Sink.scala" />
+    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="Added Constant, Sink and Interruptible">
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Sink.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Sink.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Receive.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Receive.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/semantics/Env.scala" afterPath="$PROJECT_DIR$/src/main/scala/semantics/Env.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Send.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Send.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Taker.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Taker.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Times.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Times.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Sign.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Sign.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/UnpackSigned.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/UnpackSigned.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Value.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Value.scala" />
     </list>
     <ignored path="Fides.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,11 +38,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Interruptible.scala" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Interruptible.scala">
+      <file leaf-file-name="Value.scala" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Value.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="81">
-              <caret line="3" column="81" selection-start-line="3" selection-start-column="81" selection-end-line="3" selection-end-column="81" />
+            <state relative-caret-position="513">
+              <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -87,12 +86,8 @@
         <option value="$PROJECT_DIR$/src/main/scala/syntax/UnitTaker.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/ExprTaker.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/AnyTaker.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/syntax/Sign.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/syntax/UnpackSigned.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/syntax/Value.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Par.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Plus.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/semantics/Env.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Times.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/With.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/bug/A.scala" />
@@ -106,9 +101,14 @@
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Constant.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Times.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Sink.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/syntax/Send.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Receive.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Interruptible.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Sink.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/syntax/Value.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/semantics/Env.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/syntax/Send.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/syntax/Sign.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/syntax/UnpackSigned.scala" />
       </list>
     </option>
   </component>
@@ -903,7 +903,14 @@
       <option name="project" value="LOCAL" />
       <updated>1466958891920</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Added Constant, Sink and Interruptible">
+      <created>1466964954705</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1466964954705</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -966,7 +973,8 @@
     <MESSAGE value="Stuff, and added Sign to syntax" />
     <MESSAGE value="More stuff" />
     <MESSAGE value="Wrote 'Generic'" />
-    <option name="LAST_COMMIT_MESSAGE" value="Wrote 'Generic'" />
+    <MESSAGE value="Added Constant, Sink and Interruptible" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Constant, Sink and Interruptible" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1204,53 +1212,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Par.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
-          <folding>
-            <marker date="1466941680113" expanded="false" signature="35:144" ph="..." />
-            <marker date="1466941680113" expanded="true" signature="146:203" ph="/**...*/" />
-            <marker date="1466941680113" expanded="true" signature="283:369" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/package.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="2" column="32" selection-start-line="2" selection-start-column="32" selection-end-line="2" selection-end-column="32" />
-          <folding>
-            <marker date="1463167910356" expanded="true" signature="23:206" ph="{...}" />
-            <marker date="1463167910356" expanded="true" signature="92:204" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Plus.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="9" column="21" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="21" />
-          <folding>
-            <marker date="1466941680145" expanded="true" signature="56:173" ph="/**...*/" />
-            <marker date="1466941680145" expanded="true" signature="245:349" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/With.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="729">
-          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
-          <folding>
-            <marker date="1466941680130" expanded="true" signature="56:130" ph="/**...*/" />
-            <marker date="1466941680130" expanded="true" signature="162:188" ph="{...}" />
-            <marker date="1466941680130" expanded="true" signature="202:552" ph="{...}" />
-            <marker date="1466941680130" expanded="true" signature="375:550" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/doodle/Main.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
@@ -1275,15 +1236,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Generic.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Par.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="15" column="1" selection-start-line="15" selection-start-column="1" selection-end-line="15" selection-end-column="1" />
+        <state relative-caret-position="270">
+          <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
           <folding>
-            <marker date="1466958849971" expanded="true" signature="87:379" ph="{...}" />
-            <marker date="1466958849971" expanded="true" signature="144:377" ph="{...}" />
-            <marker date="1466958849971" expanded="true" signature="235:373" ph="{...}" />
-            <marker date="1466958849971" expanded="true" signature="316:367" ph="{...}" />
+            <marker date="1466941680113" expanded="true" signature="35:144" ph="..." />
+            <marker date="1466941680113" expanded="true" signature="146:203" ph="/**...*/" />
+            <marker date="1466941680113" expanded="true" signature="283:369" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Plus.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="9" column="21" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="21" />
+          <folding>
+            <marker date="1466941680145" expanded="true" signature="56:173" ph="/**...*/" />
+            <marker date="1466941680145" expanded="true" signature="245:349" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Sink.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
+          <folding>
+            <marker date="1466964997539" expanded="true" signature="83:120" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1304,97 +1285,59 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/With.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="729">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          <folding>
+            <marker date="1466941680130" expanded="true" signature="56:130" ph="/**...*/" />
+            <marker date="1466941680130" expanded="true" signature="162:188" ph="{...}" />
+            <marker date="1466941680130" expanded="true" signature="202:552" ph="{...}" />
+            <marker date="1466941680130" expanded="true" signature="375:550" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Constant.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+        <state relative-caret-position="54">
+          <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
           <folding>
             <marker date="1466961803663" expanded="true" signature="84:125" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Taker.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Generic.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+        <state relative-caret-position="405">
+          <caret line="15" column="1" selection-start-line="15" selection-start-column="1" selection-end-line="15" selection-end-column="1" />
           <folding>
-            <marker date="1466960811259" expanded="true" signature="44:76" ph="{...}" />
-            <marker date="1466960811259" expanded="true" signature="113:185" ph="{...}" />
+            <marker date="1466958849971" expanded="true" signature="87:379" ph="{...}" />
+            <marker date="1466958849971" expanded="true" signature="144:377" ph="{...}" />
+            <marker date="1466958849971" expanded="true" signature="235:373" ph="{...}" />
+            <marker date="1466958849971" expanded="true" signature="316:367" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Sink.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Interruptible.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+        <state relative-caret-position="54">
+          <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
           <folding>
-            <marker date="1466962140328" expanded="true" signature="46:83" ph="{...}" />
+            <marker date="1466964928029" expanded="true" signature="66:196" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Sign.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/package.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="17" column="70" selection-start-line="17" selection-start-column="70" selection-end-line="17" selection-end-column="70" />
+        <state relative-caret-position="54">
+          <caret line="2" column="32" selection-start-line="2" selection-start-column="32" selection-end-line="2" selection-end-column="32" />
           <folding>
-            <marker date="1462867398201" expanded="true" signature="54:495" ph="{...}" />
-            <marker date="1462867398201" expanded="true" signature="106:244" ph="{...}" />
-            <marker date="1462867398201" expanded="true" signature="286:419" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Value.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="489">
-          <caret line="20" column="14" selection-start-line="20" selection-start-column="14" selection-end-line="20" selection-end-column="14" />
-          <folding>
-            <marker date="1463167319992" expanded="true" signature="168:246" ph="{...}" />
-            <marker date="1463167319992" expanded="true" signature="304:391" ph="{...}" />
-            <marker date="1463167319992" expanded="true" signature="405:457" ph="{...}" />
-            <marker date="1463167319992" expanded="true" signature="541:617" ph="{...}" />
-            <marker date="1463167319992" expanded="true" signature="644:758" ph="{...}" />
-            <marker date="1463167319992" expanded="true" signature="713:756" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/UnpackSigned.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
-          <folding>
-            <marker date="1462948701702" expanded="true" signature="125:305" ph="{...}" />
-            <marker date="1462948701702" expanded="true" signature="219:303" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Send.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="580">
-          <caret line="26" column="18" selection-start-line="26" selection-start-column="18" selection-end-line="26" selection-end-column="18" />
-          <folding>
-            <marker date="1466964928038" expanded="false" signature="23:57" ph="..." />
-            <marker date="1466964928038" expanded="true" signature="76:1109" ph="{...}" />
-            <marker date="1466964928038" expanded="true" signature="104:208" ph="{...}" />
-            <marker date="1466964928038" expanded="true" signature="237:341" ph="{...}" />
-            <marker date="1466964928038" expanded="true" signature="607:631" ph="{...}" />
-            <marker date="1466964928038" expanded="true" signature="686:862" ph="{...}" />
-            <marker date="1466964928038" expanded="true" signature="916:1107" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/semantics/Env.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
-          <folding>
-            <marker date="1463167910376" expanded="true" signature="66:171" ph="{...}" />
+            <marker date="1463167910356" expanded="true" signature="23:206" ph="{...}" />
+            <marker date="1463167910356" expanded="true" signature="92:204" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1411,10 +1354,70 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Interruptible.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/semantics/Env.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="3" column="81" selection-start-line="3" selection-start-column="81" selection-end-line="3" selection-end-column="81" />
+        <state relative-caret-position="54">
+          <caret line="2" column="22" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
+          <folding>
+            <marker date="1466968538607" expanded="true" signature="69:177" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Send.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="672">
+          <caret line="29" column="23" selection-start-line="29" selection-start-column="23" selection-end-line="29" selection-end-column="23" />
+          <folding>
+            <marker date="1466968538585" expanded="false" signature="23:57" ph="..." />
+            <marker date="1466968538585" expanded="true" signature="76:1130" ph="{...}" />
+            <marker date="1466968538585" expanded="true" signature="106:210" ph="{...}" />
+            <marker date="1466968538585" expanded="true" signature="237:341" ph="{...}" />
+            <marker date="1466968538585" expanded="true" signature="617:641" ph="{...}" />
+            <marker date="1466968538585" expanded="true" signature="701:880" ph="{...}" />
+            <marker date="1466968538585" expanded="true" signature="934:1128" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Sign.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="17" column="65" selection-start-line="17" selection-start-column="65" selection-end-line="17" selection-end-column="65" />
+          <folding>
+            <marker date="1466968538576" expanded="true" signature="54:502" ph="{...}" />
+            <marker date="1466968538576" expanded="true" signature="109:249" ph="{...}" />
+            <marker date="1466968538576" expanded="true" signature="287:423" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Taker.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+          <folding>
+            <marker date="1466960811259" expanded="true" signature="44:76" ph="{...}" />
+            <marker date="1466960811259" expanded="true" signature="113:185" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/UnpackSigned.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding>
+            <marker date="1466968538598" expanded="true" signature="131:311" ph="{...}" />
+            <marker date="1466968538598" expanded="true" signature="225:309" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Value.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
           <folding />
         </state>
       </provider>
