@@ -1,4 +1,6 @@
-package syntax
+package syntax.flowcontrol
+
+import syntax.{Taker, Val}
 
 /**
   * Only one of the outgoing branches shall be executed,

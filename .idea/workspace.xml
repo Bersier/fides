@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="Stuff, and added Sign to syntax">
+    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="More stuff">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/doodle/RuntimeType.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Generic.scala" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Par.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Par.scala" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Plus.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Plus.scala" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Times.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Times.scala" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/scala/syntax/With.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/With.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/commons/Utils.scala" afterPath="$PROJECT_DIR$/src/main/scala/commons/Utils.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/doodle/Main.scala" afterPath="$PROJECT_DIR$/src/main/scala/doodle/Main.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/semantics/Env.scala" afterPath="$PROJECT_DIR$/src/main/scala/semantics/Env.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Par.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Par.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Plus.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Plus.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Receive.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Receive.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Send.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Send.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Taker.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Taker.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Times.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Times.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/UnpackSigned.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/UnpackSigned.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Value.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Value.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/With.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/With.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/package.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/package.scala" />
     </list>
     <ignored path="Fides.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,11 +40,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="With.scala" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/With.scala">
+      <file leaf-file-name="Generic.scala" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Generic.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
-              <caret line="22" column="5" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
+            <state relative-caret-position="432">
+              <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -95,18 +90,22 @@
         <option value="$PROJECT_DIR$/src/main/scala/syntax/AnyTaker.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Sign.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/UnpackSigned.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/doodle/Main.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/commons/Utils.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Value.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Taker.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Par.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Plus.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Receive.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/syntax/package.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Send.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/semantics/Env.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Times.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/With.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/bug/A.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/doodle/Main.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/syntax/package.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/With.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/commons/Utils.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/doodle/RuntimeType.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/syntax/Generic.scala" />
       </list>
     </option>
   </component>
@@ -141,8 +140,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -200,9 +199,35 @@
               <option name="myItemId" value="syntax" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="With.scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+              <option name="myItemId" value="Fides" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Fides" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="syntax" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Taker.scala" />
+              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -228,6 +253,88 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="syntax" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="flowcontrol" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Fides" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Fides" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="semantics" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Fides" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Fides" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="doodle" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Fides" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Fides" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="commons" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -273,7 +380,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -283,10 +390,10 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Global Libraries" />
     <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="229" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
@@ -316,7 +423,7 @@
       <recent name="C:\Users\Stephane Bersier\Repositories\Fides\src\main\scala\syntax" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.RuntimeType">
     <configuration default="false" name="Main" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -325,6 +432,46 @@
         </pattern>
       </extension>
       <option name="MAIN_CLASS_NAME" value="doodle.Main" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="fides" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="A" type="Application" factoryName="Application" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="bug.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="bug.A" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="fides" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="RuntimeType" type="Application" factoryName="Application" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="doodle.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="doodle.RuntimeType" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -616,12 +763,16 @@
       <envs />
       <method />
     </configuration>
-    <list size="1">
+    <list size="3">
       <item index="0" class="java.lang.String" itemvalue="Application.Main" />
+      <item index="1" class="java.lang.String" itemvalue="Application.A" />
+      <item index="2" class="java.lang.String" itemvalue="Application.RuntimeType" />
     </list>
     <recent_temporary>
-      <list size="1">
-        <item index="0" class="java.lang.String" itemvalue="Application.Main" />
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="Application.RuntimeType" />
+        <item index="1" class="java.lang.String" itemvalue="Application.Main" />
+        <item index="2" class="java.lang.String" itemvalue="Application.A" />
       </list>
     </recent_temporary>
   </component>
@@ -765,7 +916,14 @@
       <option name="project" value="LOCAL" />
       <updated>1462867489750</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="More stuff">
+      <created>1463406029434</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1463406029434</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -774,29 +932,29 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32875264" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="SBT" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.45983088" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.47357294" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25520834" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2546875" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="6" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32875264" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -826,7 +984,8 @@
     <MESSAGE value="Restarted working on project" />
     <MESSAGE value="Stuff" />
     <MESSAGE value="Stuff, and added Sign to syntax" />
-    <option name="LAST_COMMIT_MESSAGE" value="Stuff, and added Sign to syntax" />
+    <MESSAGE value="More stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="More stuff" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -838,27 +997,88 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/With.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Times.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
+          <folding>
+            <marker date="1466941680161" expanded="true" signature="67:138" ph="/**...*/" />
+            <marker date="1466941680161" expanded="true" signature="158:209" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="224:580" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="364:578" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="448:522" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="493:516" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="537:574" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/With.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Times.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
-          <folding />
+        <state relative-caret-position="567">
+          <caret line="21" column="7" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="7" />
+          <folding>
+            <marker date="1466941680161" expanded="true" signature="67:138" ph="/**...*/" />
+            <marker date="1466941680161" expanded="true" signature="158:209" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="224:580" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="364:578" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="448:522" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="493:516" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="537:574" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/With.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Times.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="594">
+          <caret line="22" column="5" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
+          <folding>
+            <marker date="1466941680161" expanded="true" signature="67:138" ph="/**...*/" />
+            <marker date="1466941680161" expanded="true" signature="158:209" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="224:580" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="364:578" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="448:522" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="493:516" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="537:574" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Times.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="594">
+          <caret line="22" column="5" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
+          <folding>
+            <marker date="1466941680161" expanded="true" signature="67:138" ph="/**...*/" />
+            <marker date="1466941680161" expanded="true" signature="158:209" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="224:580" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="364:578" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="448:522" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="493:516" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="537:574" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/With.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/With.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
           <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/With.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -869,28 +1089,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Plus.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Plus.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
           <caret line="6" column="12" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Plus.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Plus.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="6" column="12" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Plus.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Plus.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="6" column="12" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Plus.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Plus.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="6" column="12" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
@@ -899,28 +1119,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/ExprTaker.scala" />
     <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/ExprTaker.scala" />
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Plus.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Plus.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Plus.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Plus.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Plus.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Plus.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/With.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/With.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="12" column="29" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
@@ -988,24 +1208,28 @@
     <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/ExprTaker.scala" />
     <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Ignore.scala" />
     <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/MyPair.scala" />
-    <entry file="file://$PROJECT_DIR$/src/main/scala/doodle/Main.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/bug/A.scala" />
+    <entry file="file://$PROJECT_DIR$/src/main/scala/semantics/Env.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
+        <state relative-caret-position="108">
+          <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
+          <folding>
+            <marker date="1463167910376" expanded="true" signature="66:171" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Par.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/commons/Utils.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="8" column="29" selection-start-line="8" selection-start-column="29" selection-end-line="8" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Plus.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="6" column="27" selection-start-line="6" selection-start-column="27" selection-end-line="6" selection-end-column="27" />
+        <state relative-caret-position="270">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding>
+            <marker date="1466942205020" expanded="false" signature="24:105" ph="..." />
+            <marker date="1466942205020" expanded="true" signature="120:480" ph="{...}" />
+            <marker date="1466942205020" expanded="true" signature="168:252" ph="{...}" />
+            <marker date="1466942205020" expanded="true" signature="313:384" ph="{...}" />
+            <marker date="1466942205020" expanded="true" signature="445:478" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1013,55 +1237,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="4" column="31" selection-start-line="4" selection-start-column="31" selection-end-line="4" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/commons/Utils.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1131">
-          <caret line="42" column="50" selection-start-line="42" selection-start-column="50" selection-end-line="42" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/package.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/semantics/Env.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="2" column="33" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Send.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="449">
-          <caret line="27" column="10" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Sign.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="15" column="3" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Taker.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Times.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="17" column="20" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
+          <folding>
+            <marker date="1463167910349" expanded="true" signature="109:388" ph="{...}" />
+            <marker date="1463167910349" expanded="true" signature="278:330" ph="{...}" />
+            <marker date="1463167910349" expanded="true" signature="366:386" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1069,20 +1249,158 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+          <folding>
+            <marker date="1462948701702" expanded="true" signature="125:305" ph="{...}" />
+            <marker date="1462948701702" expanded="true" signature="219:303" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Par.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
+          <folding>
+            <marker date="1466941680113" expanded="false" signature="35:144" ph="..." />
+            <marker date="1466941680113" expanded="true" signature="146:203" ph="/**...*/" />
+            <marker date="1466941680113" expanded="true" signature="283:369" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/package.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="32" selection-start-line="2" selection-start-column="32" selection-end-line="2" selection-end-column="32" />
+          <folding>
+            <marker date="1463167910356" expanded="true" signature="23:206" ph="{...}" />
+            <marker date="1463167910356" expanded="true" signature="92:204" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Send.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+          <folding>
+            <marker date="1463167910391" expanded="false" signature="23:57" ph="..." />
+            <marker date="1463167910391" expanded="true" signature="93:1150" ph="{...}" />
+            <marker date="1463167910391" expanded="true" signature="135:239" ph="{...}" />
+            <marker date="1463167910391" expanded="true" signature="268:372" ph="{...}" />
+            <marker date="1463167910391" expanded="true" signature="638:672" ph="{...}" />
+            <marker date="1463167910391" expanded="true" signature="727:903" ph="{...}" />
+            <marker date="1463167910391" expanded="true" signature="957:1148" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Value.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-80">
-          <caret line="4" column="30" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
+        <state relative-caret-position="54">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+          <folding>
+            <marker date="1463167319992" expanded="true" signature="168:246" ph="{...}" />
+            <marker date="1463167319992" expanded="true" signature="304:391" ph="{...}" />
+            <marker date="1463167319992" expanded="true" signature="405:457" ph="{...}" />
+            <marker date="1463167319992" expanded="true" signature="541:617" ph="{...}" />
+            <marker date="1463167319992" expanded="true" signature="644:758" ph="{...}" />
+            <marker date="1463167319992" expanded="true" signature="713:756" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/With.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Sign.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="22" column="5" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
+        <state relative-caret-position="459">
+          <caret line="17" column="70" selection-start-line="17" selection-start-column="70" selection-end-line="17" selection-end-column="70" />
+          <folding>
+            <marker date="1462867398201" expanded="true" signature="54:495" ph="{...}" />
+            <marker date="1462867398201" expanded="true" signature="106:244" ph="{...}" />
+            <marker date="1462867398201" expanded="true" signature="286:419" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Taker.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+          <folding>
+            <marker date="1463167320009" expanded="true" signature="44:76" ph="{...}" />
+            <marker date="1463167320009" expanded="true" signature="113:179" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Plus.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="9" column="21" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="21" />
+          <folding>
+            <marker date="1466941680145" expanded="true" signature="56:173" ph="/**...*/" />
+            <marker date="1466941680145" expanded="true" signature="245:349" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Times.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="15" column="15" selection-start-line="15" selection-start-column="15" selection-end-line="15" selection-end-column="15" />
+          <folding>
+            <marker date="1466941680161" expanded="true" signature="67:138" ph="/**...*/" />
+            <marker date="1466941680161" expanded="true" signature="158:209" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="224:580" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="364:578" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="448:522" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="493:516" ph="{...}" />
+            <marker date="1466941680161" expanded="true" signature="537:574" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/With.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="729">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          <folding>
+            <marker date="1466941680130" expanded="true" signature="56:130" ph="/**...*/" />
+            <marker date="1466941680130" expanded="true" signature="162:188" ph="{...}" />
+            <marker date="1466941680130" expanded="true" signature="202:552" ph="{...}" />
+            <marker date="1466941680130" expanded="true" signature="375:550" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/doodle/Main.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+          <folding>
+            <marker date="1463414355387" expanded="true" signature="40:1371" ph="{...}" />
+            <marker date="1463414355387" expanded="true" signature="633:731" ph="{...}" />
+            <marker date="1463414355387" expanded="true" signature="789:1369" ph="{...}" />
+            <marker date="1463414355387" expanded="true" signature="972:1212" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/doodle/RuntimeType.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding>
+            <marker date="1466958760554" expanded="true" signature="47:490" ph="{...}" />
+            <marker date="1466958760554" expanded="true" signature="263:366" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Generic.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1116,6 +1434,7 @@
       </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
+          <last-edited>scala-sdk-2.11.8</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

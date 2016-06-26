@@ -1,4 +1,6 @@
-package syntax
+package syntax.flowcontrol
+
+import syntax.{Taker, Val}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

@@ -1,4 +1,6 @@
-package syntax
+package syntax.flowcontrol
+
+import syntax.{Taker, UnitTaker, Val}
 
 /**
   * Will only execute once all the incoming branches are done.
