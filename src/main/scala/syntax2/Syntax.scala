@@ -10,18 +10,25 @@ object Syntax {
   sealed trait Process
 
   trait Atom extends Process
-  final case class Constant(value: Val, out: Idee) extends Atom
-  final case class NewIdee(ideeOut: Idee) extends Atom
-  final case class Send(packetIn: Idee, toIn: Idee) extends Atom
-  final case class Receive(fromIn: Idee, onSetupOut: Idee, packetOut: Idee) extends Atom
-  final case class GetPort(ideeIn: Idee, portOut: Idee) extends Atom
-  final case class GetAddress(ideeIn: Idee, addressOut: Idee) extends Atom
-  final case class UnpackSigned(signedIn: Idee, messageOut: Idee, signatoryOut: Idee) extends Atom
-  final case class Sign(messageIn: Idee, signatureIn: Idee, signedMessageOut: Idee) extends Atom
-  final case class Wait(in: Idee, startIn: Idee, out: Idee) extends Atom
-  final case class Both(valIn: Idee, valOut1: Idee, valOut2: Idee) extends Atom
+  final case class Constant(value: Val, out: Address) extends Atom
+  final case class NewIdee(ideeOut: Address) extends Atom
 
-  final case class Apply(className: ClassName, arguments: Map[Idee, Idee]) extends Process
+  final case class Send(packetIn: Port, toIn: Port) extends Atom
+  final case class Receive(fromIn: Port, onSetupOut: Address, packetOut: Address) extends Atom
+
+  final case class GetPort(ideeIn: Port, portOut: Address) extends Atom
+  final case class GetAddress(ideeIn: Port, addressOut: Address) extends Atom
+
+  final case class Sign(messageIn: Port, signatoryIn: Port, signedMessageOut: Address) extends Atom
+  final case class UnpackSigned(signedIn: Port, messageOut: Address, signatoryOut: Address) extends Atom
+
+  final case class Wait(in: Port, startIn: Port, out: Address) extends Atom
+  final case class Fork(valIn: Port, valOut1: Address, valOut2: Address) extends Atom
+
+  final case class IfEqual(valIn1: Port, valIn2: Port, equalOut: Address, notEqualOut: Address) extends Atom
+  //final case class GetType(valIn: Port, )
+
+  final case class Apply(className: ClassName, arguments: Map[Idee, Val]) extends Process
 
   final case class Par(processes: Multiset[Process]) extends Process
   final case class MayInterrupt(run: Idee, stop: Idee, kill: Idee, process: Process) extends Process
