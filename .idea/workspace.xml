@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="Changed the meaning of Idee, so that this is now the ultimate key, and Port and Address are dual.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/doodle/CollisionCalculator.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/doodle/LongMap.scala" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Interruptible.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Process.scala" />
+    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="Commented out some stuff to make it compile, and maybe about to switch to new vision.">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/doodle/DSet.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/syntax2/Syntax.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/syntax2/package.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/semantics/Env.scala" afterPath="$PROJECT_DIR$/src/main/scala/semantics/Env.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/Receive.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/Receive.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Times.scala" afterPath="$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Times.scala" />
     </list>
     <ignored path="Fides.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -38,11 +36,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="LongMap.scala" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/doodle/LongMap.scala">
+      <file leaf-file-name="Syntax.scala" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/syntax2/Syntax.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="521">
-              <caret line="43" column="21" selection-start-line="43" selection-start-column="21" selection-end-line="43" selection-end-column="21" />
+            <state relative-caret-position="0">
+              <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -106,12 +104,18 @@
         <option value="$PROJECT_DIR$/src/main/scala/syntax/UnpackSigned.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Value.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Interruptible.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/doodle/LongMap.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Process.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/Receive.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Times.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/semantics/Env.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/doodle/CollisionCalculator.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/doodle/LongMap.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/doodle/Colli.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/doodle/CollectionType.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/doodle/DSet.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/doodle/Syntax.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/syntax2/package.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/syntax2/Syntax.scala" />
       </list>
     </option>
   </component>
@@ -441,6 +445,70 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="immutable" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Fides" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SBT: org.scala-lang:scala-library:2.11.7:jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala-library-2.11.7.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="collection" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="immutable" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="HashSet.class" />
+              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Fides" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SBT: org.scala-lang:scala-library:2.11.7:jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala-library-2.11.7.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="collection" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="generic" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -571,7 +639,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="syntax" />
+              <option name="myItemId" value="syntax2" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -597,11 +665,37 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="syntax" />
+              <option name="myItemId" value="syntax2" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="flowcontrol" />
+              <option name="myItemId" value="package.scala" />
+              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Fides" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Fides" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="syntax" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -771,7 +865,7 @@
     <configuration default="false" name="Main" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="doodle.*" />
+          <option name="PATTERN" value="syntax2.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -811,7 +905,7 @@
     <configuration default="false" name="RuntimeType" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="doodle.*" />
+          <option name="PATTERN" value="syntax2.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -831,7 +925,7 @@
     <configuration default="false" name="CollisionCalculator" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="doodle.*" />
+          <option name="PATTERN" value="syntax2.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -1310,7 +1404,14 @@
       <option name="project" value="LOCAL" />
       <updated>1466968627414</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Commented out some stuff to make it compile, and maybe about to switch to new vision.">
+      <created>1468411367838</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1468411367838</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1375,7 +1476,8 @@
     <MESSAGE value="Wrote 'Generic'" />
     <MESSAGE value="Added Constant, Sink and Interruptible" />
     <MESSAGE value="Changed the meaning of Idee, so that this is now the ultimate key, and Port and Address are dual." />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed the meaning of Idee, so that this is now the ultimate key, and Port and Address are dual." />
+    <MESSAGE value="Commented out some stuff to make it compile, and maybe about to switch to new vision." />
+    <option name="LAST_COMMIT_MESSAGE" value="Commented out some stuff to make it compile, and maybe about to switch to new vision." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1387,29 +1489,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/ExprTaker.scala" />
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/ExprTaker.scala" />
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Plus.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Plus.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Plus.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/With.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1486,20 +1565,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/doodle/Main.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/doodle/RuntimeType.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Plus.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="243">
@@ -1511,13 +1576,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/With.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="729">
-          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1535,13 +1593,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Send.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="672">
-          <caret line="29" column="23" selection-start-line="29" selection-start-column="23" selection-end-line="29" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Sign.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
@@ -1553,34 +1604,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="243">
           <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/UnpackSigned.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Value.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Par.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/package.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="2" column="32" selection-start-line="2" selection-start-column="32" selection-end-line="2" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -1819,26 +1842,6 @@
           <caret line="20" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding>
             <marker date="1468243032437" expanded="true" signature="0:483" ph="/.../" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Times.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="12" column="19" selection-start-line="0" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-          <folding>
-            <marker date="1468243032453" expanded="true" signature="0:637" ph="/.../" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/semantics/Env.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
-          <folding>
-            <marker date="1468243083344" expanded="true" signature="60:170" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -2248,13 +2251,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/doodle/CollisionCalculator.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/semantics/Env.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+        <state relative-caret-position="162">
+          <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
           <folding>
-            <marker date="1468409917128" expanded="true" signature="55:285" ph="{...}" />
-            <marker date="1468409917128" expanded="true" signature="200:283" ph="{...}" />
+            <marker date="1468243083344" expanded="true" signature="60:170" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -2263,6 +2265,396 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="521">
           <caret line="43" column="21" selection-start-line="43" selection-start-column="21" selection-end-line="43" selection-end-column="21" />
+          <folding>
+            <marker date="1468242929365" expanded="true" signature="148:1354" ph="{...}" />
+            <marker date="1468242929365" expanded="true" signature="525:822" ph="..." />
+            <marker date="1468242929365" expanded="true" signature="534:822" ph="{...}" />
+            <marker date="1468242929365" expanded="true" signature="567:818" ph="..." />
+            <marker date="1468242929365" expanded="true" signature="615:696" ph="{...}" />
+            <marker date="1468242929365" expanded="true" signature="728:763" ph="{...}" />
+            <marker date="1468242929365" expanded="true" signature="775:807" ph="{...}" />
+            <marker date="1468242929365" expanded="true" signature="874:1185" ph="{...}" />
+            <marker date="1468242929365" expanded="true" signature="925:1133" ph="{...}" />
+            <marker date="1468242929365" expanded="true" signature="953:1082" ph="{...}" />
+            <marker date="1468242929365" expanded="true" signature="1062:1074" ph="{...}" />
+            <marker date="1468242929365" expanded="true" signature="1094:1127" ph="{...}" />
+            <marker date="1468242929365" expanded="true" signature="1143:1172" ph="{...}" />
+            <marker date="1468242929365" expanded="true" signature="1339:1352" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/doodle/CollisionCalculator.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+          <folding>
+            <marker date="1468409917128" expanded="true" signature="55:285" ph="{...}" />
+            <marker date="1468409917128" expanded="true" signature="200:283" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.11.7-sources.jar!/scala/collection/immutable/HashSet.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="1037" column="7" selection-start-line="1037" selection-start-column="7" selection-end-line="1037" selection-end-column="7" />
+          <folding>
+            <marker date="1435004230000" expanded="false" signature="0:524" ph="/.../" />
+            <marker date="1435004230000" expanded="false" signature="587:713" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="715:1119" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="1540:8454" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="2048:2311" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="2059:2311" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="2315:2983" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="3042:3174" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="3396:3595" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="3407:3595" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="3444:3559" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="3653:3862" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="3664:3862" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="3701:3822" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="3915:4100" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="3926:4100" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="3963:4065" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="4104:4491" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="4572:4665" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="4669:5243" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="5361:5454" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="5458:6026" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="6148:6250" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="6254:6806" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="6923:7025" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="7107:7231" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="7455:7566" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="7612:7722" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="7946:8053" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="8456:8730" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="8783:43069" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="9281:9948" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="9392:9707" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="9512:9571" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="9577:9636" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="9713:9944" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="9952:10065" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="10141:10180" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="10286:13204" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="10484:10832" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="10492:10792" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="10911:11251" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="10969:11251" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="11002:11094" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="11100:11243" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="11344:12138" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="11355:12138" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="11410:11534" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="11640:11849" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="11666:11692" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="11698:11849" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="11899:12132" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="12043:12069" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="12075:12132" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="12256:12407" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="12264:12370" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="13329:20076" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="13546:13902" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="13554:13844" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="13981:14123" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="14197:15710" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="14208:15710" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="14263:14387" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="14493:14882" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="14632:14658" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="14664:14882" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="14676:14826" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="14932:15704" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="14984:15704" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="15045:15261" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="15494:15646" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="15821:16178" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="15832:16178" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="16003:16118" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="16312:17318" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="16472:17312" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="16586:16765" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="16833:17016" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="17447:18121" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="17526:18115" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="17640:17819" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="18200:18763" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="18223:18753" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="18275:18745" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="18901:19200" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="18985:19194" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="19378:19810" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="19386:19671" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="19870:20071" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="19984:20065" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="20080:22079" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="22229:40878" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="22288:22443" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="22540:22875" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="22639:22703" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="22735:22850" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="22948:23852" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="23109:23495" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="23244:23487" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="23501:23846" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="23945:24808" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="24113:24476" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="24237:24468" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="24482:24802" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="24938:28149" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="24949:28149" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="24994:25405" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="25616:28122" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="26203:26618" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="26665:27050" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="26679:26800" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="27056:27441" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="27070:27191" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="27481:27591" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="27618:27728" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="27734:28122" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="27746:27894" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="28283:31891" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="28294:31891" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="28339:28750" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="28807:29027" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="29125:31864" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="29894:30393" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="30000:30133" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="30440:30711" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="30454:30653" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="30717:30988" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="30731:30930" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="31022:31120" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="31143:31312" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="31155:31287" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="31340:31509" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="31352:31484" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="31515:31864" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="31676:31854" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="32020:35405" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="32031:35405" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="32076:32487" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="32621:34983" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="33203:33673" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="33304:33437" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="33720:34107" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="33734:33855" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="34113:34372" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="34127:34326" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="34405:34431" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="34459:34628" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="34471:34603" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="34634:34983" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="34795:34973" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="35033:35159" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="35168:35378" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="35244:35345" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="35478:36936" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="35639:36902" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="35794:36517" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="35866:36485" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="36130:36287" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="36585:36613" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="36619:36894" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="36908:36930" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="37006:39084" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="37045:39084" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="37168:38557" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="37344:38386" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="37793:38191" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="37809:37978" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="38204:38315" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="38392:38557" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="38404:38531" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="38582:39064" ph="/.../" />
+            <marker date="1435004230000" expanded="true" signature="39222:40537" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="39548:39739" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="39792:39831" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="39854:39897" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="39979:40028" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="40034:40531" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="40279:40353" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="40359:40478" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="40567:40717" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="40627:40717" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="40767:40874" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="40882:41103" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="41182:41360" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="41461:41897" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="41952:42373" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="42162:42230" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="42619:43066" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="42682:42794" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="42752:42788" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="42854:43016" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="42929:43010" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.11.7-sources.jar!/scala/collection/generic/GenericCompanion.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="44" column="6" selection-start-line="44" selection-start-column="6" selection-end-line="44" selection-end-column="6" />
+          <folding>
+            <marker date="1435004230000" expanded="false" signature="0:524" ph="/.../" />
+            <marker date="1435004230000" expanded="false" signature="583:632" ph="..." />
+            <marker date="1435004230000" expanded="true" signature="634:1072" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="1134:1912" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="1241:1347" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="1390:1494" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="1545:1757" ph="/**...*/" />
+            <marker date="1435004230000" expanded="true" signature="1793:1910" ph="{...}" />
+            <marker date="1435004230000" expanded="true" signature="1836:1906" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Value.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="81">
+          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="31" selection-end-column="3" />
+          <folding>
+            <marker date="1466968538566" expanded="true" signature="207:291" ph="{...}" />
+            <marker date="1466968538566" expanded="true" signature="412:469" ph="{...}" />
+            <marker date="1466968538566" expanded="true" signature="483:705" ph="{...}" />
+            <marker date="1466968538566" expanded="true" signature="507:583" ph="{...}" />
+            <marker date="1466968538566" expanded="true" signature="621:703" ph="{...}" />
+            <marker date="1466968538566" expanded="true" signature="735:997" ph="{...}" />
+            <marker date="1466968538566" expanded="true" signature="838:867" ph="{...}" />
+            <marker date="1466968538566" expanded="true" signature="916:940" ph="{...}" />
+            <marker date="1466968538566" expanded="true" signature="968:995" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/Send.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="756">
+          <caret line="29" column="23" selection-start-line="29" selection-start-column="23" selection-end-line="29" selection-end-column="23" />
+          <folding>
+            <marker date="1466968538585" expanded="false" signature="23:57" ph="..." />
+            <marker date="1466968538585" expanded="true" signature="76:1130" ph="{...}" />
+            <marker date="1466968538585" expanded="true" signature="106:210" ph="{...}" />
+            <marker date="1466968538585" expanded="true" signature="237:341" ph="{...}" />
+            <marker date="1466968538585" expanded="true" signature="617:641" ph="{...}" />
+            <marker date="1466968538585" expanded="true" signature="701:880" ph="{...}" />
+            <marker date="1466968538585" expanded="true" signature="934:1128" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/doodle/DSet.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="864">
+          <caret line="32" column="1" selection-start-line="32" selection-start-column="1" selection-end-line="32" selection-end-column="1" />
+          <folding>
+            <marker date="1468418779160" expanded="true" signature="95:381" ph="{...}" />
+            <marker date="1468418779160" expanded="true" signature="395:593" ph="{...}" />
+            <marker date="1468418779160" expanded="true" signature="607:754" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/doodle/RuntimeType.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+          <folding>
+            <marker date="1466958760554" expanded="true" signature="47:490" ph="{...}" />
+            <marker date="1466958760554" expanded="true" signature="263:366" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/doodle/Main.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+          <folding>
+            <marker date="1463414355387" expanded="true" signature="40:1371" ph="{...}" />
+            <marker date="1463414355387" expanded="true" signature="633:731" ph="{...}" />
+            <marker date="1463414355387" expanded="true" signature="789:1369" ph="{...}" />
+            <marker date="1463414355387" expanded="true" signature="972:1212" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/UnpackSigned.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+          <folding>
+            <marker date="1466968538598" expanded="true" signature="131:311" ph="{...}" />
+            <marker date="1466968538598" expanded="true" signature="225:309" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/With.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="729">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          <folding>
+            <marker date="1466941680130" expanded="true" signature="56:130" ph="/**...*/" />
+            <marker date="1466941680130" expanded="true" signature="162:188" ph="{...}" />
+            <marker date="1466941680130" expanded="true" signature="202:552" ph="{...}" />
+            <marker date="1466941680130" expanded="true" signature="375:550" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Times.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="12" column="19" selection-start-line="0" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+          <folding>
+            <marker date="1468243032453" expanded="true" signature="0:637" ph="/.../" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/flowcontrol/Par.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
+          <folding>
+            <marker date="1466941680113" expanded="true" signature="35:144" ph="..." />
+            <marker date="1466941680113" expanded="true" signature="146:203" ph="/**...*/" />
+            <marker date="1466941680113" expanded="true" signature="283:369" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax/package.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="32" selection-start-line="2" selection-start-column="32" selection-end-line="2" selection-end-column="32" />
+          <folding>
+            <marker date="1463167910356" expanded="true" signature="23:206" ph="{...}" />
+            <marker date="1463167910356" expanded="true" signature="92:204" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax2/package.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="783">
+          <caret line="36" column="12" selection-start-line="36" selection-start-column="12" selection-end-line="36" selection-end-column="12" />
+          <folding>
+            <marker date="1468580594270" expanded="true" signature="24:803" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/syntax2/Syntax.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
           <folding />
         </state>
       </provider>
