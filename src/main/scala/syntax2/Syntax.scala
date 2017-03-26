@@ -3,9 +3,9 @@ package syntax2
 object Syntax {
   type Multiset[A] = Map[A, BigInt]
 
-  final case class Program(definitions: Set[Class], main: Process)
+  final case class Program(definitions: Set[Behavior], main: Process)
 
-  final case class Class(name: ClassName, parameters: Set[Var], body: Process)
+  final case class Behavior(name: BehaviorName, parameters: Set[Var], body: Process)
 
   sealed trait Process
 
@@ -31,12 +31,12 @@ object Syntax {
   final case class IfEqual(valIn1: Port, valIn2: Port, equalOut: Address, notEqualOut: Address) extends Atom
   //final case class GetType(valIn: Port, )
 
-  final case class Apply(className: ClassName, arguments: Map[Var, Val]) extends Process
+  final case class Apply(className: BehaviorName, arguments: Map[Var, Val]) extends Process
 
   final case class Par(processes: Multiset[Process]) extends Process
   final case class MayInterrupt(run: Port, stop: Port, kill: Port, process: Process) extends Process
 
-  final class ClassName
+  final class BehaviorName
 
   sealed trait Val
 
