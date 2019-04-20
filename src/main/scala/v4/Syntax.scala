@@ -8,7 +8,7 @@ object Syntax {
   type InLoc = Loc
 
   sealed trait Val extends Loc // extends Loc for convenience
-  final class Address() extends Val
+  final class Address extends Val
 
   sealed trait Process
   sealed trait Primitive extends Process
@@ -21,6 +21,7 @@ object Syntax {
 
   // final case class Forward(inLoc: InLoc, outLoc: OutLoc) extends Primitive
 
+  // Should it be possible to broadcast to an "external" address? No, otherwise, can take down a repeated receiver...
   final case class Broadcast(inLoc: InLoc, outLoc: OutLoc) extends Primitive
 
   final case class Wait(token: InLoc, inLoc: InLoc, outLoc: OutLoc) extends Primitive
@@ -29,8 +30,8 @@ object Syntax {
   final case class Sign(message: InLoc, signatory: InLoc, signedMessage: OutLoc) extends Primitive
   final case class Unsign(signedMessage: InLoc, message: OutLoc, signatory: OutLoc) extends Primitive
 
-  final case class Pair(first: InLoc, second: InLoc, pair: OutLoc) extends Primitive
-  final case class Unpair(pair: InLoc, first: OutLoc, second: OutLoc) extends Primitive
+  final case class Join(first: InLoc, second: InLoc, pair: OutLoc) extends Primitive
+  final case class Fork(pair: InLoc, first: OutLoc, second: OutLoc) extends Primitive
 
   final case class Equals(first: InLoc, second: InLoc, equal: OutLoc) extends Primitive
 
@@ -53,6 +54,16 @@ object Syntax {
 
   final case class APair()
 
+  final case class Signed private(contents: Val, signatory: Signatory) extends Val {
+    def this(message: Address, signatoryKey: SignatoryKey) = this(message, signatoryKey.signatory)
+  }
+
+  sealed trait Signatory extends Val
+
+  final class SignatoryKey() extends Signatory {
+    def signatory: Signatory = this
+  }
+
   // Swap
 
   /**
@@ -60,7 +71,7 @@ object Syntax {
     */
   final case class Execute[A, B](input: InLoc, function: A => B, output: OutLoc) extends Process
 
-  final case class ScalaVal[T](private val value: T) extends Val
+  final case class ScalaVal[T] private(private val value: T) extends Val
   object ScalaVal {
     implicit def pack[T](value: T): ScalaVal[T] = ScalaVal(value)
     implicit def unpack[T](scalaVal: ScalaVal[T]): T = scalaVal match {
