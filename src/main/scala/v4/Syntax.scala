@@ -7,11 +7,13 @@ object Syntax {
   type OutLoc = Loc
   type InLoc = Loc
 
-  sealed trait Val extends Loc // extends Loc for convenience
+  sealed trait Val
   final class Address extends Val
 
   sealed trait Process
   sealed trait Primitive extends Process
+
+  // final case class Code(process: Process)
 
   final case class Constant(value: Val, outLoc: OutLoc) extends Primitive
 
@@ -19,9 +21,9 @@ object Syntax {
 //  /** @param address A fixed address (not an InLoc) */ // In that case, don't really need it.
 //  final case class Receive(message: OutLoc, address: Address) extends Primitive
 
-  // final case class Forward(inLoc: InLoc, outLoc: OutLoc) extends Primitive
+  final case class Forward(inLoc: InLoc, outLoc: OutLoc) extends Primitive
 
-  // Should it be possible to broadcast to an "external" address? No, otherwise, can take down a repeated receiver...
+  /** Can only be used to broadcast to locs in this code, not external ones */
   final case class Broadcast(inLoc: InLoc, outLoc: OutLoc) extends Primitive
 
   final case class Wait(token: InLoc, inLoc: InLoc, outLoc: OutLoc) extends Primitive
@@ -42,6 +44,9 @@ object Syntax {
   final case class Asleep(command: InLoc, process: Process) extends Process
 
   final case class Branch(boolean: InLoc, trueBranch: Process, falseBranch: Process) extends Process
+
+  // Swappable(process, address)
+  // Swap(process: InLoc, at: InLoc |?| Address)
 
   sealed trait Command extends Val
   object Start extends Command
