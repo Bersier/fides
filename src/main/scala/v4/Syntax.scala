@@ -18,8 +18,6 @@ object Syntax {
   final case class Constant(value: Val, outLoc: OutLoc) extends Primitive
 
   final case class Send(message: InLoc, to: InLoc) extends Primitive
-//  /** @param address A fixed address (not an InLoc) */ // In that case, don't really need it.
-//  final case class Receive(message: OutLoc, address: Address) extends Primitive
 
   final case class Forward(inLoc: InLoc, outLoc: OutLoc) extends Primitive
 
@@ -38,7 +36,7 @@ object Syntax {
   final case class Equals(first: InLoc, second: InLoc, equal: OutLoc) extends Primitive
 
   final case class Parallel(processes: Multiset[Process]) extends Process
-  final case class Replicated(addresses: Set[Address], process: Process) extends Process
+  final case class Replicated(addresses: Set[Loc], process: Process) extends Process
 
   final case class Awake(command: InLoc, process: Process) extends Process
   final case class Asleep(command: InLoc, process: Process) extends Process
