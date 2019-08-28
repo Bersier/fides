@@ -20,10 +20,10 @@ final class CollatzerLengthAndHeight(e: Int) {
     lengthAndHeight(n, 0, n)
   }
 
-  for (i <- 1 until c) {
-    val (l, h) = Collatz.lengthAndHeight8(i)
-    sl(i) = l; sh(i) = h
-  }
+//  for (i <- 1 until c) {
+//    val (l, h) = Collatz.lengthAndHeight8(i)
+//    sl(i) = l; sh(i) = h
+//  }
 
   for (i <- 0 until c) {
     val (ai, bi, li, hai, hbi) = compute(c, i, 0, c, i)

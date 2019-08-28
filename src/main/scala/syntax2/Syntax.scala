@@ -63,7 +63,7 @@ object Syntax {
     }
   }
 
-  final case class Codon[C <: Atom](implicit c: scala.reflect.ClassTag[C])
+//  final case class Codon[C <: Atom](implicit c: scala.reflect.ClassTag[C])
 
   final class Var
 }

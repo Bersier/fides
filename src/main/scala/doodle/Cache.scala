@@ -2,7 +2,7 @@ package doodle
 
 import scala.collection.mutable
 
-class Cache[K, V](size: Int)(value: (K, V) => Double) extends mutable.Map[K, V] {
+abstract class Cache[K, V](size: Int)(value: (K, V) => Double) extends mutable.Map[K, V] {
   private[this] val internalMap = mutable.Map.empty[K, (V, Long)]
 
   private[this] def negativeWeight(k: K): Double = {
@@ -24,20 +24,20 @@ class Cache[K, V](size: Int)(value: (K, V) => Double) extends mutable.Map[K, V] 
     }
   }
 
-  override def +=(kv: (K, V)): Cache.this.type = {
-    if (!internalMap.contains(kv._1)) {
-      internalMap(kv._1) =(kv._2, 0)
-      if (internalMap.size >= size) {
-        cleanup()
-      }
-    }
-    this
-  }
+//  override def +=(kv: (K, V)): Cache.this.type = {
+//    if (!internalMap.contains(kv._1)) {
+//      internalMap(kv._1) =(kv._2, 0)
+//      if (internalMap.size >= size) {
+//        cleanup()
+//      }
+//    }
+//    this
+//  }
 
-  override def -=(key: K): Cache.this.type = {
-    internalMap -= key
-    this
-  }
+//  override def -=(key: K): Cache.this.type = {
+//    internalMap -= key
+//    this
+//  }
 
   override def get(key: K): Option[V] = {
     internalMap.get(key).map({case (v, t) => internalMap(key) = (v, t + 1); v })
