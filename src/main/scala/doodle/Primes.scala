@@ -1,34 +1,44 @@
 package doodle
 
-import scala.collection.mutable
-
+//noinspection DropTakeToSlice
 object Primes extends App {
-  val slowPrimes: LazyList[Int] = LazyList.from(2).filter(n => (2 until n).forall(m => n % m != 0))
-  val primes: LazyList[Int] = 2 #:: LazyList.from(3, 2).filter(n => primes.takeWhile(p => p <= math.sqrt(n)).forall(p => n % p > 0))
+  val primesV0: LazyList[Int] = LazyList.from(2).filter(n => (2 until n).forall(m => n % m != 0))
+  val primesV1: LazyList[Int] = 2 #:: LazyList.from(3, 2)
+    .filter(n => primesV1.takeWhile(p => p <= math.sqrt(n)).drop(1).forall(p => n % p > 0))
 
-  val addends: Array[Int] = Array(6, 2, 6, 4, 2, 4, 2, 4)
-  // val pre: LazyList[Int] = 23 #::
+  val repeatedAddends: LazyList[Int] = LazyList(2, 4, 2, 4, 6, 2, 6, 4) #::: repeatedAddends
 
-  def integrate(c: Int, seq: Seq[Int]): IndexedSeq[Int] = {
-    val acc = new mutable.ArrayBuilder.ofInt
-    @scala.annotation.tailrec
-    def integrate(c: Int, seq: Seq[Int]): IndexedSeq[Int] = {
-      acc.addOne(c)
-      seq match {
-        case Nil    => acc.result()
-        case h +: t => integrate(c + h, t)
-      }
-    }
-    integrate(c, seq)
+  //noinspection ForwardReference
+  val primesV2: LazyList[Int] =
+    LazyList(2, 3, 5, 7) #::: series(11, repeatedAddends)
+      .filter(n => primesV2Tail.takeWhile(p => p <= math.sqrt(n)).forall(p => n % p > 0))
+  val primesV2Tail: LazyList[Int] = primesV2.drop(3)
+
+  val primesV3: LazyList[Int] = LazyList(2, 3, 5, 7) #::: primeFilter(series(11, repeatedAddends), primesV3.drop(3))
+  def primeFilter(remainingCandidates: LazyList[Int], remainingDividers: LazyList[Int]): LazyList[Int] = {
+    val nextCandidate +: otherCandidates = remainingCandidates
+    val nextDivider +: otherDividers = remainingDividers
+    val nextDSquared = nextDivider * nextDivider
+
+    require(nextCandidate <= nextDSquared)
+    if (nextDSquared == nextCandidate) primeFilter(otherCandidates.filter(n => n % nextDivider > 0), otherDividers)
+    else nextCandidate #:: primeFilter(otherCandidates, remainingDividers)
   }
 
-  for (p <- slowPrimes.slice(1000, 1010)) {
-    println(p)
+  def series(s0: Int, infiniteSeq: LazyList[Int]): LazyList[Int] = {
+    val s1 +: t = infiniteSeq
+    s0 #:: series(s0 + s1, t)
   }
 
-  println("-----------")
+  timePrimes(10000, 10, primesV0)
+  timePrimes(1000000, 10, primesV1)
+  timePrimes(1000000, 10, primesV2)
+  timePrimes(1000000, 10, primesV3)
 
-  for (p <- primes.slice(100000, 100010)) {
-    println(p)
+  def timePrimes(dropCount: Int, takeCount: Int, primes: LazyList[Int]): Unit = {
+    val start = System.currentTimeMillis
+    val result: List[Int] = primes.drop(dropCount).take(takeCount).toList
+    val stop = System.currentTimeMillis
+    println("(time: " + (stop - start) + ") " + result)
   }
 }
