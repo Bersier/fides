@@ -1,23 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/steph.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/Primes.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/fides-build.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/fides-build.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/fides.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/fides.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sbt.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sbt.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/scala_compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterDir="false" />
+    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="Added Prime file to doodle">
+      <change afterPath="$PROJECT_DIR$/src/main/java/CodingExercise.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/CoolPeepsApp.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/Counter.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/MaxNumberExercise.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/SubMaxesExercise.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Cache.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/Cache.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Collatz/Collatz.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/Collatz/Collatz.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Collatz/CollatzerLengthAndHeight.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/Collatz/CollatzerLengthAndHeight.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Collatz/CollatzerPlatzer.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/Collatz/CollatzerPlatzer.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/DSet.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/DSet.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/LongMap.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/LongMap.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/syntax2/Syntax.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/syntax2/Syntax.scala" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,42 +43,11 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Scala Object" />
-        <option value="Class" />
         <option value="Package Object" />
         <option value="Scala Class" />
+        <option value="Class" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>private[this]</find>
-      <find>n.toInt</find>
-      <find>ha</find>
-      <find>mb</find>
-      <find>Long</find>
-      <find>Int</find>
-      <find>println</find>
-      <find>BigInt</find>
-      <find>54</find>
-      <find>81</find>
-      <find>48</find>
-      <find>+=</find>
-      <find>under</find>
-      <find>&gt;&gt; 31</find>
-      <find>floatValue</find>
-      <find>outLoc</find>
-      <find>output</find>
-      <find>assert</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>i</replace>
-      <replace>BigInt</replace>
-      <replace>Long</replace>
-      <replace>&gt;&gt;&gt; 31</replace>
-      <replace>output</replace>
-      <replace>outLoc</replace>
-      <replace>require</replace>
-    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -98,11 +57,6 @@
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="1" />
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-10" />
-    <option name="width" value="1100" />
-    <option name="height" value="1040" />
   </component>
   <component name="ProjectId" id="1OmeKxSbsvykhoEzCCB9f0Bfe1S" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -138,7 +92,7 @@
     <property name="project.structure.last.edited" value="Global Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
@@ -166,7 +120,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Primes">
+  <component name="RunManager" selected="Application.SubMaxesExercise">
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="" />
       <option name="DEPLOY" value="true" />
@@ -332,8 +286,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DiscreteTotalMixture" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="doodle.DiscreteTotalMixture" />
+    <configuration name="CodingExercise (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="CodingExercise" />
+      <module name="Fides" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CodingExercise" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="doodle.MaxNumberExercise" />
       <module name="Fides" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
@@ -346,22 +308,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="doodle.Main" />
-      <module name="Fides" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="doodle.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="MainM" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="doodle.MainM" />
+    <configuration name="Counter" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="doodle.Counter" />
       <module name="Fides" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
@@ -388,14 +336,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Ultron" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="doodle.Collatz.Ultron" />
+    <configuration name="SubMaxesExercise" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="doodle.SubMaxesExercise" />
       <module name="Fides" />
-      <option name="VM_PARAMETERS" value="-Xmx4g" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="doodle.Collatz.*" />
+          <option name="PATTERN" value="doodle.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -419,19 +366,19 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.Main (1)" />
-      <item itemvalue="Application.MainM" />
-      <item itemvalue="Application.Ultron" />
-      <item itemvalue="Application.DiscreteTotalMixture" />
       <item itemvalue="Application.Primes" />
+      <item itemvalue="Application.Counter" />
+      <item itemvalue="Application.CodingExercise" />
+      <item itemvalue="Application.CodingExercise (1)" />
+      <item itemvalue="Application.SubMaxesExercise" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.SubMaxesExercise" />
+        <item itemvalue="Application.CodingExercise (1)" />
+        <item itemvalue="Application.CodingExercise" />
+        <item itemvalue="Application.Counter" />
         <item itemvalue="Application.Primes" />
-        <item itemvalue="Application.DiscreteTotalMixture" />
-        <item itemvalue="Application.MainM" />
-        <item itemvalue="Application.Main (1)" />
-        <item itemvalue="Application.Ultron" />
       </list>
     </recent_temporary>
   </component>
@@ -673,7 +620,21 @@
       <option name="project" value="LOCAL" />
       <updated>1562723572333</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Added Prime file to doodle">
+      <created>1566964983752</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1566964983753</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Added to Prime in Doodle">
+      <created>1567037805922</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1567037805922</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -700,8 +661,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Abstract now contains some types that model the basics of keys, names and messages." />
-    <MESSAGE value="Started object Syntax" />
     <MESSAGE value="Plus..." />
     <MESSAGE value="About to switch to CPS" />
     <MESSAGE value="Multiset or array? Also, instead of using val, use def to check for proper use?" />
@@ -725,7 +684,9 @@
     <MESSAGE value="backup" />
     <MESSAGE value="Added DiscreteTotalMixture in doodle" />
     <MESSAGE value="Improved DiscreteTotalMixture code" />
-    <option name="LAST_COMMIT_MESSAGE" value="Improved DiscreteTotalMixture code" />
+    <MESSAGE value="Added Prime file to doodle" />
+    <MESSAGE value="Added to Prime in Doodle" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added to Prime in Doodle" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="antWorkspaceConfiguration">
