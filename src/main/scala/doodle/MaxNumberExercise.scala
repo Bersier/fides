@@ -1,7 +1,6 @@
 package doodle
 
 import scala.Ordering.Implicits._
-import scala.collection.mutable
 
 object MaxNumberExercise extends App {
   type Number = Seq[Int]
@@ -69,24 +68,6 @@ object MaxNumberExercise extends App {
       callCount += 1
       if (numbers.isEmpty) Nil
       else (for (number <- numbers) yield number ++ self(numbers - number)).max
-    }
-  }
-
-  trait RecFun[A, B] {
-    type selfT = A => B
-
-    def rec(self: selfT)(a: A): B
-
-    final def apply(a: A): B = rec(apply)(a)
-
-    def mem: A => B = {
-      val map = mutable.Map.empty[A, B]
-
-      def memF(a: A): B = {
-        map.getOrElseUpdate(a, rec(memF)(a))
-      }
-
-      memF
     }
   }
 }
