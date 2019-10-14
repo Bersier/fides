@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="Added a bunch more doodles">
-      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/KthElementFinder.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/RecFun.scala" afterDir="false" />
+    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="Added KthElementFinder">
+      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/SubsetSumExercise.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/MaxNumberExercise.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/MaxNumberExercise.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/RecFun.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/RecFun.scala" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -49,6 +49,10 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.scala" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.scala" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="VVWfhhIM" />
@@ -118,7 +122,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.KthElementFinder">
+  <component name="RunManager" selected="Application.Exercise">
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="" />
       <option name="DEPLOY" value="true" />
@@ -306,8 +310,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Counter" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="doodle.Counter" />
+    <configuration name="Exercise" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="doodle.SubsetSumExercise" />
       <module name="Fides" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
@@ -364,19 +368,19 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.Counter" />
       <item itemvalue="Application.CodingExercise" />
       <item itemvalue="Application.CodingExercise (1)" />
       <item itemvalue="Application.SubMaxesExercise" />
       <item itemvalue="Application.KthElementFinder" />
+      <item itemvalue="Application.Exercise" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Exercise" />
         <item itemvalue="Application.KthElementFinder" />
         <item itemvalue="Application.SubMaxesExercise" />
         <item itemvalue="Application.CodingExercise (1)" />
         <item itemvalue="Application.CodingExercise" />
-        <item itemvalue="Application.Counter" />
       </list>
     </recent_temporary>
   </component>
@@ -639,7 +643,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570828938904</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Added KthElementFinder">
+      <created>1570844060746</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1570844060746</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -666,7 +677,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="About to switch to CPS" />
     <MESSAGE value="Multiset or array? Also, instead of using val, use def to check for proper use?" />
     <MESSAGE value="Backup" />
     <MESSAGE value="Par and MyPair redone" />
@@ -691,7 +701,8 @@
     <MESSAGE value="Added Prime file to doodle" />
     <MESSAGE value="Added to Prime in Doodle" />
     <MESSAGE value="Added a bunch more doodles" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a bunch more doodles" />
+    <MESSAGE value="Added KthElementFinder" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added KthElementFinder" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="antWorkspaceConfiguration">

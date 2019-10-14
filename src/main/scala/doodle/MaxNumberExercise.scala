@@ -64,7 +64,7 @@ object MaxNumberExercise extends App {
   }
 
   object SimpleSolution extends RecFun[Set[Number], Number] {
-    override def rec(self: selfT)(numbers: Set[Number]): Number = {
+    override def rec(self: SelfT)(numbers: Set[Number]): Number = {
       callCount += 1
       if (numbers.isEmpty) Nil
       else (for (number <- numbers) yield number ++ self(numbers - number)).max
