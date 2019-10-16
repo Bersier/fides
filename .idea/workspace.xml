@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="Added KthElementFinder">
-      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/SubsetSumExercise.scala" afterDir="false" />
+    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="Added SubsetSumExercise">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/Interview.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/graph/Graph.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/graph/GraphImpl.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/graph/SingleUseGraph.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/MaxNumberExercise.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/MaxNumberExercise.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/RecFun.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/RecFun.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/GraphIsomorphismChecker.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/graph/Utils.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/SubsetSumExercise.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/SubsetSumExercise.scala" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -52,7 +57,6 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock:///Dummy.scala" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.scala" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="VVWfhhIM" />
@@ -88,7 +92,7 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/scala/doodle" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/scala/doodle/graph" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
     <property name="project.structure.last.edited" value="Global Libraries" />
@@ -98,6 +102,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="doodle.graph" />
       <recent name="doodle" />
       <recent name="syntax" />
     </key>
@@ -122,7 +127,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Exercise">
+  <component name="RunManager" selected="Application.GraphIsomorphismChecker">
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="" />
       <option name="DEPLOY" value="true" />
@@ -288,21 +293,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CodingExercise (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="CodingExercise" />
-      <module name="Fides" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CodingExercise" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="doodle.MaxNumberExercise" />
+    <configuration name="Exercise" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="doodle.SubsetSumExercise" />
       <module name="Fides" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="doodle.*" />
+          <option name="PATTERN" value="doodle.graph.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -310,13 +307,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Exercise" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="doodle.SubsetSumExercise" />
+    <configuration name="GraphIsomorphismChecker" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="doodle.graph.Utils" />
       <module name="Fides" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="doodle.*" />
+          <option name="PATTERN" value="doodle.graph.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Interview" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="doodle.Interview" />
+      <module name="Fides" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="doodle.graph.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -330,7 +341,7 @@
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="doodle.*" />
+          <option name="PATTERN" value="doodle.graph.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -344,7 +355,7 @@
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="doodle.*" />
+          <option name="PATTERN" value="doodle.graph.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -368,19 +379,19 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.CodingExercise" />
-      <item itemvalue="Application.CodingExercise (1)" />
       <item itemvalue="Application.SubMaxesExercise" />
       <item itemvalue="Application.KthElementFinder" />
       <item itemvalue="Application.Exercise" />
+      <item itemvalue="Application.Interview" />
+      <item itemvalue="Application.GraphIsomorphismChecker" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.GraphIsomorphismChecker" />
+        <item itemvalue="Application.Interview" />
         <item itemvalue="Application.Exercise" />
         <item itemvalue="Application.KthElementFinder" />
         <item itemvalue="Application.SubMaxesExercise" />
-        <item itemvalue="Application.CodingExercise (1)" />
-        <item itemvalue="Application.CodingExercise" />
       </list>
     </recent_temporary>
   </component>
@@ -650,7 +661,21 @@
       <option name="project" value="LOCAL" />
       <updated>1570844060746</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Added SubsetSumExercise">
+      <created>1571019484828</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1571019484828</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Added Interview and GraphIsomorphismChecker (but latter is incomplete)">
+      <created>1571190835279</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1571190835279</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -677,8 +702,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Multiset or array? Also, instead of using val, use def to check for proper use?" />
-    <MESSAGE value="Backup" />
     <MESSAGE value="Par and MyPair redone" />
     <MESSAGE value="Moved syntax classes into Syntax package, and fixed remaining old classes." />
     <MESSAGE value="Par really is Times" />
@@ -702,7 +725,9 @@
     <MESSAGE value="Added to Prime in Doodle" />
     <MESSAGE value="Added a bunch more doodles" />
     <MESSAGE value="Added KthElementFinder" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added KthElementFinder" />
+    <MESSAGE value="Added SubsetSumExercise" />
+    <MESSAGE value="Added Interview and GraphIsomorphismChecker (but latter is incomplete)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Interview and GraphIsomorphismChecker (but latter is incomplete)" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="antWorkspaceConfiguration">

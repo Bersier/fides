@@ -4,6 +4,7 @@ import scala.collection.mutable
 import scala.math.abs
 
 // TODO combine best of solution 1 and 2
+// TODO greedy can be repeated until a fixed point is reached
 object SubsetSumExercise extends App {
   type SeqN3Int = (Seq[Int], Int, Int, Int)
   type SeqNInt  = (Seq[Int], Int)
@@ -80,10 +81,10 @@ object SubsetSumExercise extends App {
     val max = positive.sum
     val min = negative.sum
 
-    val s1 = rec(positive.sorted.reverse, k, min, max)
-    val newMax = math.min(s1.map(_._2).maxOption.getOrElse(max), max)
-    val s2 = rec(negative.sorted, k, min, newMax)
+    val groups = elements.sorted.reverse.grouped(math.ceil(elements.size / 2.0).toInt)
 
+    val s1 = rec(groups.next, k, min, max)
+    val s2 = rec(groups.next, k, min, max)
 
     println("count: " + counter)
     closestPair(s2, s1.reverse, k, greedySolution)
