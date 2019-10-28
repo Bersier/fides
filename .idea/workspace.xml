@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="Added SubsetSumExercise">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/Interview.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/graph/Graph.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/graph/GraphImpl.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/graph/SingleUseGraph.scala" afterDir="false" />
+    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="graph isomorphism algorithm works (except that loop count might be too low)">
+      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/QuickSort.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/Triangle.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/GraphIsomorphismChecker.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/graph/Utils.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/SubsetSumExercise.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/SubsetSumExercise.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Primes.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/Primes.scala" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,9 +50,6 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.scala" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="VVWfhhIM" />
@@ -127,7 +120,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.GraphIsomorphismChecker">
+  <component name="RunManager" selected="Application.Primes">
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="" />
       <option name="DEPLOY" value="true" />
@@ -293,20 +286,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Exercise" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="doodle.SubsetSumExercise" />
-      <module name="Fides" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="doodle.graph.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="GraphIsomorphismChecker" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="doodle.graph.Utils" />
       <module name="Fides" />
@@ -335,13 +314,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="KthElementFinder" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="doodle.KthElementFinder" />
+    <configuration name="Primes" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="doodle.Primes" />
       <module name="Fides" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="doodle.graph.*" />
+          <option name="PATTERN" value="doodle.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -349,13 +328,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SubMaxesExercise" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="doodle.SubMaxesExercise" />
+    <configuration name="QuickSort" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="doodle.QuickSort" />
       <module name="Fides" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="doodle.graph.*" />
+          <option name="PATTERN" value="doodle.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Triangle" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="doodle.Triangle" />
+      <module name="Fides" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="doodle.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -379,19 +372,19 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.SubMaxesExercise" />
-      <item itemvalue="Application.KthElementFinder" />
-      <item itemvalue="Application.Exercise" />
       <item itemvalue="Application.Interview" />
       <item itemvalue="Application.GraphIsomorphismChecker" />
+      <item itemvalue="Application.QuickSort" />
+      <item itemvalue="Application.Triangle" />
+      <item itemvalue="Application.Primes" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Primes" />
+        <item itemvalue="Application.Triangle" />
+        <item itemvalue="Application.QuickSort" />
         <item itemvalue="Application.GraphIsomorphismChecker" />
         <item itemvalue="Application.Interview" />
-        <item itemvalue="Application.Exercise" />
-        <item itemvalue="Application.KthElementFinder" />
-        <item itemvalue="Application.SubMaxesExercise" />
       </list>
     </recent_temporary>
   </component>
@@ -675,7 +668,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571190835279</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="graph isomorphism algorithm works (except that loop count might be too low)">
+      <created>1571268463817</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1571268463817</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -702,7 +702,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Par and MyPair redone" />
     <MESSAGE value="Moved syntax classes into Syntax package, and fixed remaining old classes." />
     <MESSAGE value="Par really is Times" />
     <MESSAGE value="All combinators corresponding to binary linear logic operators now added." />
@@ -727,7 +726,8 @@
     <MESSAGE value="Added KthElementFinder" />
     <MESSAGE value="Added SubsetSumExercise" />
     <MESSAGE value="Added Interview and GraphIsomorphismChecker (but latter is incomplete)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Interview and GraphIsomorphismChecker (but latter is incomplete)" />
+    <MESSAGE value="graph isomorphism algorithm works (except that loop count might be too low)" />
+    <option name="LAST_COMMIT_MESSAGE" value="graph isomorphism algorithm works (except that loop count might be too low)" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="antWorkspaceConfiguration">
