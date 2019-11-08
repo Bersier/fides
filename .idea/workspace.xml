@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="graph isomorphism algorithm works (except that loop count might be too low)">
-      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/QuickSort.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/Triangle.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="backup">
+      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/BottleProblem.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/doodle/Orderer.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/steph.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/steph.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Primes.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/Primes.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/graph/Graph.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/graph/Graph.scala" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,7 +31,12 @@
   <component name="ExternalProjectsManager">
     <system id="SBT">
       <state>
-        <projects_view />
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
       </state>
     </system>
   </component>
@@ -85,7 +90,7 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/scala/doodle/graph" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/scala/doodle" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
     <property name="project.structure.last.edited" value="Global Libraries" />
@@ -95,8 +100,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="doodle.graph" />
       <recent name="doodle" />
+      <recent name="doodle.graph" />
       <recent name="syntax" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -120,7 +125,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Primes">
+  <component name="RunManager" selected="Application.BottleProblem">
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="" />
       <option name="DEPLOY" value="true" />
@@ -286,13 +291,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GraphIsomorphismChecker" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="doodle.graph.Utils" />
+    <configuration name="BottleProblem" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="doodle.BottleProblem" />
       <module name="Fides" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="doodle.graph.*" />
+          <option name="PATTERN" value="doodle.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -300,8 +305,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Interview" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="doodle.Interview" />
+    <configuration name="GraphIsomorphismChecker" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="doodle.graph.Utils" />
       <module name="Fides" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
@@ -372,19 +377,19 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.Interview" />
       <item itemvalue="Application.GraphIsomorphismChecker" />
       <item itemvalue="Application.QuickSort" />
       <item itemvalue="Application.Triangle" />
       <item itemvalue="Application.Primes" />
+      <item itemvalue="Application.BottleProblem" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.BottleProblem" />
         <item itemvalue="Application.Primes" />
         <item itemvalue="Application.Triangle" />
         <item itemvalue="Application.QuickSort" />
         <item itemvalue="Application.GraphIsomorphismChecker" />
-        <item itemvalue="Application.Interview" />
       </list>
     </recent_temporary>
   </component>
@@ -675,7 +680,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571268463817</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="backup">
+      <created>1572224345281</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1572224345282</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -717,7 +729,6 @@
     <MESSAGE value="Added more atoms, and stuff" />
     <MESSAGE value="Started v4" />
     <MESSAGE value="Added Protos. Worked on Syntax. Commented out Receive." />
-    <MESSAGE value="backup" />
     <MESSAGE value="Added DiscreteTotalMixture in doodle" />
     <MESSAGE value="Improved DiscreteTotalMixture code" />
     <MESSAGE value="Added Prime file to doodle" />
@@ -727,7 +738,8 @@
     <MESSAGE value="Added SubsetSumExercise" />
     <MESSAGE value="Added Interview and GraphIsomorphismChecker (but latter is incomplete)" />
     <MESSAGE value="graph isomorphism algorithm works (except that loop count might be too low)" />
-    <option name="LAST_COMMIT_MESSAGE" value="graph isomorphism algorithm works (except that loop count might be too low)" />
+    <MESSAGE value="backup" />
+    <option name="LAST_COMMIT_MESSAGE" value="backup" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="antWorkspaceConfiguration">

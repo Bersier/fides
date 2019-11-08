@@ -5,6 +5,7 @@ import doodle.graph.Utils.hash
 import scala.collection.mutable
 import scala.util.hashing.MurmurHash3
 
+@specialized(Unit)
 trait Graph[+V, +E] {
   def vertices: Set[Vertex]
 
