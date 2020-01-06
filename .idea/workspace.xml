@@ -2,12 +2,52 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e5fdbe38-7baf-448e-81e6-2f8246375606" name="Default" comment="backup">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/steph.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/steph.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/sbt__org_scala_lang_scala_library_2_11_7_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/fides.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/fides.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/scala_compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Evo.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/doodle/Evo.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/AlternativeOperators.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/ArraySlice.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/BottleProblem.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Cache.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Collatz/Collatz.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Collatz/Collatzer.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Collatz/CollatzerLengthAndHeight.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Collatz/CollatzerPlatzer.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Collatz/Ultron.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/CollisionCalculator.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/CoolPeepsApp.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Counter.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/DSet.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/DiscreteTotalMixture.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Evo.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Inte.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Interview.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/JumpList.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/KthElementFinder.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/LargestPossibleProfit.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/LongMap.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Main.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/MaxNumberExercise.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/MutableBigInt.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/NthPrimeFinder.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Orderer.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Primes.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/QuickSort.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/RandomNameGenerator.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/RecFun.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/RuntimeType.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/SubMaxesExercise.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/SubsetSumExercise.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/TimeToNext.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/Triangle.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/graph/Graph.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/graph/GraphImpl.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/graph/SingleUseGraph.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/graph/Utils.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/doodle/p2.scala" beforeDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -65,6 +105,13 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
@@ -92,10 +139,10 @@
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/scala/doodle" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
-    <property name="project.structure.last.edited" value="Global Libraries" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
@@ -111,18 +158,6 @@
       <recent name="C:\Users\Stephane Bersier\Repositories\Fides\src\main\scala" />
       <recent name="C:\Users\Stephane Bersier\Repositories\Fides\src\main\scala\syntax" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager" selected="Application.Evo">
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android App">
@@ -210,6 +245,12 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="Applet">
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -283,12 +324,6 @@
       <properties />
       <listeners />
       <method />
-    </configuration>
-    <configuration default="true" type="Applet">
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
     </configuration>
     <configuration name="BottleProblem" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="doodle.BottleProblem" />
@@ -376,11 +411,11 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.Primes" />
       <item itemvalue="Application.BottleProblem" />
-      <item itemvalue="Application.LargestPossibleProfit" />
-      <item itemvalue="Application.Inte" />
       <item itemvalue="Application.Evo" />
+      <item itemvalue="Application.Inte" />
+      <item itemvalue="Application.LargestPossibleProfit" />
+      <item itemvalue="Application.Primes" />
     </list>
     <recent_temporary>
       <list>
@@ -428,6 +463,18 @@
         <entry key="$PROJECT_DIR$/project/build.properties" value="467715934" />
         <entry key="$PROJECT_DIR$/project/plugins.sbt" value="3635407264" />
       </map>
+    </option>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
     </option>
   </component>
   <component name="SvnConfiguration">
@@ -700,7 +747,14 @@
       <option name="project" value="LOCAL" />
       <updated>1574813194062</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="backup">
+      <created>1574967123185</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1574967123185</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -754,6 +808,28 @@
     <MESSAGE value="backup" />
     <option name="LAST_COMMIT_MESSAGE" value="backup" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="620" y="305" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1578332486074">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="620" y="305" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1536.824@0.0.1536.824" timestamp="1578332486074" />
+    <state x="549" y="171" key="FileChooserDialogImpl" timestamp="1578335989047">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="549" y="171" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1578335989047" />
+    <state x="249" y="0" key="SettingsEditor" timestamp="1578337485986">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="249" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1578337485986" />
+    <state x="477" y="239" key="com.intellij.ide.util.TipDialog" timestamp="1578331573927">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="477" y="239" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1578331573927" />
+    <state x="419" y="141" key="new project wizard" timestamp="1578336011468">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="419" y="141" key="new project wizard/0.0.1536.824@0.0.1536.824" timestamp="1578336011468" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />

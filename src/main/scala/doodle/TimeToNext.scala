@@ -1,7 +1,0 @@
-package doodle
-
-object TimeToNext {
-
-
-
-}
