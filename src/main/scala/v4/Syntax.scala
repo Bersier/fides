@@ -27,13 +27,13 @@ object Syntax {
 
   final case class Join(first: InLoc, second: InLoc, pair: OutLoc) extends Primitive
   final case class Split(pair: InLoc, first: OutLoc, second: OutLoc) extends Primitive
-
+  
   final case class Concurrent(processes: Multiset[Process]) extends Process
   final case class Replicated(addresses: Set[Loc], process: Process) extends Process
   // Semantics?
 
   final case class New(addresses: Set[Loc], process: Process) // Scope. ? to specify loc privacy
-
+  
   final case class Awake(name: Name, process: Process) extends Process
   final case class Asleep(name: Name, process: Process) extends Process
 
