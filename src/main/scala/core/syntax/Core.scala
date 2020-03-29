@@ -1,7 +1,7 @@
 package core.syntax
 
 class Loc[+T <: Val]
-final case class Constant(value: Val) extends Loc
+final case class Constant[T <: Val](value: T) extends Loc[T]
 
 sealed trait Process
 
