@@ -21,7 +21,7 @@ sealed trait BoolVal extends Val
 object True extends BoolVal
 object False extends BoolVal
 
-final case class APair()
+final case class APair(first: Val, second: Val)
 
 final case class Signed private(contents: Val, signatory: Signatory) extends Val {
   def this(message: Address, signatoryKey: SignatoryKey) = this(message, signatoryKey.signatory)
