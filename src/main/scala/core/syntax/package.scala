@@ -1,8 +1,9 @@
+package core
+
 package object syntax {
 
   type Multiset[A] = Map[A, BigInt]
 
-  sealed trait Loc
-  type OutLoc = Loc
-  type InLoc = Loc
+  type OutLoc[T <: Val] = Loc[T]
+  type InLoc[T <: Val] = Loc[T]
 }

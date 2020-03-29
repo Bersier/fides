@@ -3,19 +3,21 @@ package core.syntax
 final class Name
 
 trait Val
-sealed class Address extends Val
+sealed class Address extends Loc[Val] with Val
 
-sealed trait PrivateAddress extends Address
+final class PrivateAddress extends Address
 final case class Broadcast(address: PrivateAddress) extends Address
 
 sealed trait Command extends Address
-final class Start(name: Name) extends Command
-final class Pause(name: Name) extends Command
-final class Dissolve(name: Name) extends Command
-final class Kill(name: Name) extends Command
-final class Move(name: Name) extends Command
+final class Start(name: Name) extends Loc[Unit.type] with Command
+final class Pause(name: Name) extends Loc[Unit.type] with Command
+final class Dissolve(name: Name) extends Loc[Unit.type] with Command
+final class Kill(name: Name) extends Loc[Unit.type] with Command
+final class Move(name: Name) extends Loc[Destination] with Command
 
-final case class APair(first: Val, second: Val) extends Val
+final class Destination(name: Name) extends Val
+
+final case class APair[S <: Val, T <: Val](first: S, second: T) extends Val
 final case class Code(process: Process) extends Val
 
 final case class Signed private(contents: Val, signatory: Signatory) extends Val {
