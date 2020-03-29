@@ -1,13 +1,6 @@
-package v4
-
-import v4.Syntax.Address
+package syntax
 
 object Protos {
-
-  /**
-    * Reification of the language as an agent
-    */
-  trait Fides
 
   val Mailer     = new Address
   val Comparator = new Address

@@ -1,8 +1,8 @@
-
 package object syntax {
-  abstract class In[InT <: Val] protected[this] extends Taker[InT] {
-    protected var continuation: InT => Unit
 
-    def apply(in: InT): Unit = synchronized(continuation(in))
-  }
+  type Multiset[A] = Map[A, BigInt]
+
+  sealed trait Loc
+  type OutLoc = Loc
+  type InLoc = Loc
 }

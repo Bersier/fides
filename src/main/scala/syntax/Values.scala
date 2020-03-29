@@ -1,4 +1,4 @@
-package v4
+package syntax
 
 sealed trait Val
 sealed class Address extends Val
@@ -32,3 +32,5 @@ sealed trait Signatory extends Val
 final class SignatoryKey() extends Signatory {
   def signatory: Signatory = this
 }
+
+final case class Code(process: Process) extends Val
