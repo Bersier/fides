@@ -9,6 +9,8 @@
     <profile name="sbt 1" modules="fides">
       <option name="implicitConversions" value="true" />
     </profile>
-    <profile name="sbt 2" modules="Fides" />
+    <profile name="sbt 2" modules="Fides">
+      <option name="implicitConversions" value="true" />
+    </profile>
   </component>
 </project>

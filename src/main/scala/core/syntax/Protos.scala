@@ -1,4 +1,4 @@
-package syntax
+package core.syntax
 
 object Protos {
 

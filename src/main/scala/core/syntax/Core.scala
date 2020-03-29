@@ -1,4 +1,4 @@
-package syntax
+package core.syntax
 
 sealed trait Process
 
@@ -15,3 +15,4 @@ final case class New(addresses: Set[Loc], process: Process)
 final case class Awake(name: Name, process: Process) extends Process
 final case class Asleep(name: Name, process: Process) extends Process
 final case class Swappable(inLoc: InLoc, process: Process) extends Process
+final case class Annotated(process: Process, annotation: Process) extends Process

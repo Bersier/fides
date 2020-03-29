@@ -1,5 +1,0 @@
-package syntax
-
-object Sugar {
-
-}
