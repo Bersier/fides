@@ -4,6 +4,10 @@ sealed trait Val
 sealed class Address extends Val
 final class Name extends Val
 
+sealed trait PrivateAddress extends Address
+
+final class Broadcast(address: PrivateAddress) extends Address
+
 sealed trait Command extends Address
 final class Start(name: Name) extends Command
 final class Pause(name: Name) extends Command
