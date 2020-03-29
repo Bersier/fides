@@ -3,7 +3,8 @@ package core.syntax
 class Loc[+T <: Val]
 final case class Constant[T <: Val](value: T) extends Loc[T]
 
-sealed trait Process
+sealed trait Pattern
+sealed trait Process extends Pattern
 
 sealed trait Primitive extends Process
 final case class Copy[T <: Val](inLoc: InLoc[T], outLocs: Multiset[OutLoc[T]]) extends Primitive
@@ -18,3 +19,6 @@ final case class Awake(name: Name, process: Process) extends Process
 final case class Asleep(name: Name, process: Process) extends Process
 final case class Swappable(inLoc: InLoc[Code], process: Process) extends Process
 final case class Annotated(process: Process, annotation: Process) extends Process
+
+final case class ProcessVar[T: Process](outLoc: OutLoc[Code]) extends Pattern
+final case class ValVar[T: Process](outLoc: OutLoc[Code]) extends Pattern
