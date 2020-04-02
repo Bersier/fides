@@ -1,15 +1,26 @@
 package core.semantics
 
-trait Env {
-  type Address
-  type Val
+import core.syntax._
 
-  def send(a: Address, m: Val): Unit
+import scala.collection.mutable
 
-  def register[T <: Val](r: Receiver[T]): Address
+final class Env {
+  private[this] val messages: mutable.Set[Message[_]] = ???
+  private[this] val receivers: mutable.Map[Loc[Val], Multiset[]] = ???
+
+  def send[T <: Val](value: T, recipient: OutLoc[T]): Unit = {
+    messages += new Message(value, recipient)
+  }
+
+  def register[R: Receiver](inLoc: InLoc[_], receiver: R): Unit = {
+    val r = implicitly[Receiver[R]];
+    receivers(inLoc)(receiver) += 1
+  }
 }
 
-trait Receiver[-Val] { // Should be a type class, ideally
+final class Message[+T <: Val](val value: T, val recipient: InLoc[T])
 
-  def receive(m: Val): Unit
+trait Receiver[R] {
+  type T <: Val
+  def receive(message: T): Unit
 }
