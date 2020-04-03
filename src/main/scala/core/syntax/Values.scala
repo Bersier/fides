@@ -20,7 +20,7 @@ final class Destination(name: Name) extends Val
 
 final case class APair[S <: Val, T <: Val](first: S, second: T) extends Val
 
-final case class Code(process: Process) extends Val
+final case class Code(pattern: Pattern) extends Val
 final case class Patt(pattern: Pattern) extends Val
 
 final case class Signed[T <: Val] private(contents: T, signatory: Signatory) extends Val {

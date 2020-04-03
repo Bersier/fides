@@ -26,7 +26,8 @@ final case class Shell() extends Process {
   def remove() = ???
 }
 
-final case class Var(outLoc: OutLoc[Code]) extends Pattern
+final case class Var(loc: Loc[Code]) extends Pattern // should also extend ValPattern...
+// and currently can't be put inside process!
 
 trait Loc[+T <: Val]
 object Loc {
