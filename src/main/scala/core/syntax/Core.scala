@@ -18,6 +18,13 @@ final case class Awake(name: Name, process: Process) extends Process
 final case class Asleep(name: Name, process: Process) extends Process
 final case class Swappable(inLoc: InLoc[Code], process: Process) extends Process
 final case class Annotated(process: Process, annotation: Process) extends Process
+final case class Guarded(handler: OutLoc[Error], process: Process) extends Process
+final case class Shell() extends Process {
+  def send(value: Val): Unit = ???
+  def register[T <: Val](inLoc: InLoc[T])(consumer: T => ()): Unit = ???
+  def registerReplicated[T <: Val](inLoc: InLoc[T])(consumer: T => ()): Unit = ???
+  def remove() = ???
+}
 
 final case class Var(outLoc: OutLoc[Code]) extends Pattern
 

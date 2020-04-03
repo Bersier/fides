@@ -2,22 +2,18 @@ package core.semantics
 
 import scala.collection.mutable
 
-final class Env {
-  private[this] val messages: mutable.Set[Message] = ???
-  private[this] val receivers: mutable.Map[Loc, Multiset[_]] = ???
+final class Environment {
+  private[this] val messages: mutable.Set[Message] = mutable.Set.empty
+  private[this] val receivers: mutable.Map[Loc, mutable.Map[Receiver, BigInt]] = mutable.Map.empty
 
   def send(value: Val, recipient: Loc): Unit = {
     messages += new Message(value, recipient)
   }
 
-  def register[R: Receiver](inLoc: Loc, receiver: R): Unit = {
-    val r = implicitly[Receiver[R]];
-    receivers(inLoc)(receiver) += 1
+  def register(inLoc: Loc, receiver: Receiver): Unit = {
+    receivers.getOrElseUpdate(inLoc, mutable.Map.empty)
+      .updateWith(receiver)(o => Some(o.getOrElse(BigInt(0)) + 1))
   }
-}
 
-final class Message(val value: Val, val recipient: Loc)
-
-trait Receiver[R] {
-  def receive(message: Val, r: R): Unit
+  final class Message(val value: Val, val recipient: Loc)
 }
