@@ -10,6 +10,8 @@ final case class Copy[T <: Val](inLoc: InLoc[T], outLocs: Multiset[OutLoc[T]]) e
 final case class Wait[T <: Val](token: InLoc[Unit.type], inLoc: InLoc[T], outLoc: OutLoc[T]) extends Primitive
 final case class Join[S <: Val, T <: Val](one: InLoc[S], two: InLoc[T], pair: OutLoc[APair[S, T]]) extends Primitive
 final case class Split[S <: Val, T <: Val](pair: InLoc[APair[S, T]], one: OutLoc[S], two: OutLoc[T]) extends Primitive
+// Join can be made a "Process-Val"
+// Could Split be made some kind of "Pattern-Val"?
 
 final case class Concurrent(processes: Multiset[Process]) extends Process
 final case class Replicated(process: Process) extends Process
