@@ -26,8 +26,9 @@ final case class Shell() extends Process {
   def remove() = ???
 }
 
-final case class Var(loc: Loc[Code]) extends Pattern // should also extend ValPattern...
-// and currently can't be put inside process!
+final case class Var(loc: Loc[Code]) extends Process with Val // Or give additional type variable to Process and Val.
+// using locs inside values creates mutable or lazy values; do we really want that? Or blocking values.
+// Perhaps the latter is the proper semantics. Then they can just be seen as syntactic sugar for a process.
 
 trait Loc[+T <: Val]
 object Loc {
