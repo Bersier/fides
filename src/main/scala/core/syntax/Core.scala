@@ -1,16 +1,12 @@
 package core.syntax
 
-final case class Constant[T <: Val](value: T) extends Loc[T]
-
 sealed trait Pattern
 sealed trait Process extends Pattern
 
 sealed trait Primitive extends Process
-final case class Copy[T <: Val](inLoc: InLoc[T], outLocs: Multiset[OutLoc[T]]) extends Primitive
+final case class Forward[T <: Val](inLoc: InLoc[T], outLocs: Multiset[OutLoc[T]]) extends Primitive
 final case class Wait[T <: Val](token: InLoc[Unit.type], inLoc: InLoc[T], outLoc: OutLoc[T]) extends Primitive
-final case class Join[S <: Val, T <: Val](one: InLoc[S], two: InLoc[T], pair: OutLoc[APair[S, T]]) extends Primitive
 final case class Split[S <: Val, T <: Val](pair: InLoc[APair[S, T]], one: OutLoc[S], two: OutLoc[T]) extends Primitive
-// Join can be made a "Process-Val"
 // Could Split be made some kind of "Pattern-Val"?
 
 final case class Concurrent(processes: Multiset[Process]) extends Process
@@ -31,8 +27,3 @@ final case class Shell() extends Process {
 final case class Var(loc: Loc[Code]) extends Process with Val // Or give additional type variable to Process and Val.
 // using locs inside values creates mutable or lazy values; do we really want that? Or blocking values.
 // Perhaps the latter is the proper semantics. Then they can just be seen as syntactic sugar for a process.
-
-trait Loc[+T <: Val]
-object Loc {
-  def apply[T <: Val](): Loc[T] = new PrivateAddress[T]
-}

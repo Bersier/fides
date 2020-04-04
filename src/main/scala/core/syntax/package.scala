@@ -3,13 +3,10 @@ package core
 package object syntax {
   type Multiset[A] = Map[A, BigInt]
 
-  type OutLoc[T <: Val] = Loc[T]
-  type InLoc[T <: Val] = Loc[T]
-
-  val Mailer   = new Address[Nothing]
-  val Matcher  = new Address[Nothing]
-  val KeySmith = new Address[Nothing]
-  val Witness  = new Address[Nothing]
-  val Notary   = new Address[Nothing]
-  val Compiler = new Address[Nothing]
+  val Mailer   = new Address
+  val Matcher  = new Address
+  val KeySmith = new Address
+  val Witness  = new Address
+  val Notary   = new Address
+  val Compiler = new Address
 }
