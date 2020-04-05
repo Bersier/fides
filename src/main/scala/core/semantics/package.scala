@@ -1,7 +1,11 @@
 package core
 
+import core.syntax.RegularK
+
 package object semantics {
-  type Val = syntax.Val
-  type Loc = syntax.Loc[_]
   type Multiset[A] = syntax.Multiset[A]
+
+  type Val = syntax.V[RegularK]
+  type Loc = syntax.Loc[RegularK, _]
+  type Proc = syntax.Proc[RegularK]
 }
