@@ -4,11 +4,9 @@ sealed trait Proc[+K <: I] extends Lex[K]
 
 final case class Forward[K <: I, T <: V[K]](inLoc: Inp[K, T], outLocs: Multiset[Out[K, T]]) extends Proc[K]
 final case class Wait[K <: I, T <: V[K]](token: Inp[K, U], inLoc: Inp[K, T], outLoc: Out[K, T]) extends Proc[K]
-final case class Split[K <: I, S <: V[K], T <: V[K]](pair: Inp[K, APair[K, S, T]], one: Out[K, S], two: Out[K, T]) extends Proc[K]
-// Could Split be made some kind of "Pattern-Val"?
 
 // Could be an agent instead of a primitive...
-final case class Match[K <: I](inLoc: Inp[K, Code[K]], pattern: Patt, noMatch: Out[K, U]) extends Proc[K]
+final case class Match[K <: I](inLoc: Inp[K, Code[K]], pattern: Patt, noMatch: Out[K, Code[K]]) extends Proc[K]
 
 final case class Concurrent[K <: I](processes: Multiset[Proc[K]]) extends Proc[K]
 final case class Replicated[K <: I](process: Proc[K]) extends Proc[K]
