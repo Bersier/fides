@@ -9,10 +9,13 @@ final case class Wait[T <: Val](token: InLoc[Unit.type], inLoc: InLoc[T], outLoc
 final case class Split[S <: Val, T <: Val](pair: InLoc[APair[S, T]], one: OutLoc[S], two: OutLoc[T]) extends Primitive
 // Could Split be made some kind of "Pattern-Val"?
 
+// Could be an agent instead of a primitive...
+final case class Match(inLoc: InLoc[Code], pattern: Pattern) extends Primitive
+
 final case class Concurrent(processes: Multiset[Process]) extends Process
 final case class Replicated(process: Process) extends Process
 final case class New(addresses: Set[Loc[_]], process: Process)
-final case class Awake(name: Name, process: Process) extends Process
+final case class Awake(name: Name, process: Process) extends Process // return name?
 final case class Asleep(name: Name, process: Process) extends Process
 final case class Swappable(inLoc: InLoc[Code], process: Process) extends Process
 final case class Annotated(process: Process, annotation: Process) extends Process
@@ -24,6 +27,6 @@ final case class Shell() extends Process {
   def remove() = ???
 }
 
-final case class Var(loc: Loc[Code]) extends Process with Val // Or give additional type variable to Process and Val.
+final case class Var(outLoc: OutLoc[Code]) extends Process with Val // Or give additional type variable to Process and Val.
 // using locs inside values creates mutable or lazy values; do we really want that? Or blocking values.
 // Perhaps the latter is the proper semantics. Then they can just be seen as syntactic sugar for a process.
