@@ -1,11 +1,12 @@
 package core.syntax
 
-trait E[+K <: I, +S <: G] extends Lex[K]
+trait E[+K <: I] extends Lex[K]
 
-final case class APair[K <: I, S <: G, T1 <: E[K, S], T2 <: E[K, S]](first: T1, second: T2) extends E[K, S]
+final case class APair[K <: I, T1 <: E[K], T2 <: E[K]](first: T1, second: T2) extends E[K]
 
 final case class Code[K <: I, S <: G](process: P[K]) extends V[K] // Do I now need to feed S to P as well?! Also, does having S == A guarantee that the process is well-built? Not sure...
 final case class Patt(pattern: Pattern) extends Val // todo...
+// Does pattern inside pattern work
 
 final case class Signed[K <: I, T <: V[K]] private(contents: T, signatory: Signatory) extends V[K] {
   def this(message: T, signatoryKey: SignatoryKey) = this(message, signatoryKey.signatory)
