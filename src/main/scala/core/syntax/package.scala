@@ -16,7 +16,7 @@ package object syntax {
   type I = Kind[_]
   type G = General
   type A = Evaluated
-  type V[K] = E[K, A]
+  type V[+K[_]] = E[K[A]]
 
   type Pattern[S] = Lex[PatternK[S]]
   type Val = V[Nothing]
