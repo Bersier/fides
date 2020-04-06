@@ -7,9 +7,10 @@ package object syntax {
   sealed trait Evaluated extends General
 
   sealed trait Kind[+S <: G]
-  sealed trait PatternK[+S <: G] extends Kind[S]
   sealed trait RegularK[+S <: G] extends Kind[S]
-  sealed trait BothK[+S <: G] extends PatternK[S] with RegularK[S]
+  sealed trait PatternK[+S <: G] extends Kind[S]
+  sealed trait CodeK[+S <: G] extends PatternK[S]
+  sealed trait AllK[+S <: G] extends CodeK[S] with RegularK[S]
 
   trait Lex[+K <: I]
 
