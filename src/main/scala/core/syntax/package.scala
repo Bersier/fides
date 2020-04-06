@@ -8,9 +8,15 @@ package object syntax {
   sealed trait RegularK extends I
   sealed trait EitherK extends PatternK with RegularK
 
-  type I = Kind
+  sealed trait General
+  sealed trait Evaluated extends General
 
   trait Lex[+K <: I]
+
+  type I = Kind
+  type G = General
+  type A = Evaluated
+  type V[K] = E[K, A]
 
   type Pattern = Lex[PatternK]
   type Val = V[Nothing]

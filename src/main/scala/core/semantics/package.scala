@@ -7,5 +7,5 @@ package object semantics {
 
   type Val = syntax.V[RegularK]
   type Loc = syntax.Loc[RegularK, _]
-  type Proc = syntax.Proc[RegularK]
+  type Proc = syntax.P[RegularK]
 }
