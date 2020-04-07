@@ -8,9 +8,10 @@ package object syntax {
 
   sealed trait Kind[+S <: G]
   sealed trait RegularK[+S <: G] extends Kind[S]
-  sealed trait PatternK[+S <: G] extends Kind[S]
-  sealed trait CodeK[+S <: G] extends PatternK[S]
-  sealed trait AllK[+S <: G] extends CodeK[S] with RegularK[S]
+  sealed trait PattK[+S <: G] extends Kind[S]
+  sealed trait CodeK[+S <: G] extends PattK[S]
+  sealed trait AllK[+S <: G] extends CodeK[A] with RegularK[S]
+  // CodeK[A], because normal unevaluated stuff can be used as part of a code value.
 
   trait Lex[+K <: I]
 
@@ -19,7 +20,6 @@ package object syntax {
   type A = Evaluated
   type V[+K[_]] = E[K[A]]
 
-  type Pattern[S] = Lex[PatternK[S]]
   type Val = V[Nothing]
 
 //  val Mailer   = new Address

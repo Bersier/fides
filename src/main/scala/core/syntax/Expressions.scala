@@ -6,23 +6,21 @@ final case class APair[K <: I, T1 <: E[K], T2 <: E[K]](first: T1, second: T2) ex
 
 // Do I now need to feed S to P as well?!
 // Also, does having S == A guarantee that the process is well-built? Not sure...
-// Should be able to hold other stuff than P as well.
-// Also, should be able to hold unevaluated expressions while itself being a value.
-// Need something to play the role of #. Only inside Code (and co)? Or everywhere?
-// Why not allow naked P as expr?
-// In the interpretation of E as syntactic sugar for P, having E active and P not
-// doesn't make sense. => Have the dual of # ? Hmm, doesn't seem to work as well...
-// 'Code' freezes, '<something>' unfreezes...
-// Seems much simpler to only have 'Code' that freezes, without unfreeze.
-final case class Code[K <: I](process: P[K]) extends E[K]
-final case class Patt[S <: G](pattern: Pattern[S]) extends E[AllK[S]]
-// Does pattern inside pattern work?
+final case class Code[S <: G](process: Lex[CodeK[S]]) extends E[AllK[S]]
+final case class Patt[S <: G](pattern: Lex[PattK[S]]) extends E[AllK[S]]
+
+final case class Escape(expr: E[RegularK[_]]) extends E[CodeK[G]]
+
+/**
+  * Matches Escape when level is zero. Otherwise, matches Epacse of a level lower by one.
+  */
+final case class Epacse[S <: G](level: BigInt, expr: E[PattK[S]]) extends E[PattK[S]]
 
 final case class Signed[+K <: I, T <: E[K]] private(contents: T, signatory: Signatory) extends E[K] {
   def this(message: T, signatoryKey: SignatoryKey) = this(message, signatoryKey.signatory)
 }
 object Signed {
-  def pattern[S <: G, T <: E[PatternK[S]]](contents: T, signatory: Signatory): Signed[PatternK[S], T] = {
+  def pattern[S <: G, T <: E[PattK[S]]](contents: T, signatory: Signatory): Signed[PattK[S], T] = {
     new Signed(contents, signatory)
   }
 }
@@ -30,5 +28,5 @@ object Signed {
 // Need dual of this as well, right? (Can use inherited abstract class for implementation)
 final case class Var[K <: I, T <: V[K]](group: Address[K], outLoc: Out[K, T]) extends
   E[K] with
-  P[PatternK] with
-  Loc[PatternK, Nothing] // with ...
+  P[PattK] with
+  Loc[PattK, Nothing] // with ...
