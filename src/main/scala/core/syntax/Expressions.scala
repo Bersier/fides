@@ -1,6 +1,6 @@
 package core.syntax
 
-trait E[+K <: I] extends Lex[K]
+trait X[+K <: I, C <: D] extends Lex[K]
 
 final case class InVar[K[_] <: Kind[_], T <: V[K]](inp: Inp[K[A], T]) extends E[K[G]] // Do I only need this for code?
 
@@ -14,3 +14,5 @@ object Signed {
     new Signed(contents, signatory)
   }
 }
+
+final case class Duplicate(out1: Out[_, _], out2: Out[_, _]) extends R[_]

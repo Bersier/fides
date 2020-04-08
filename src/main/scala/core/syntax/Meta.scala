@@ -3,8 +3,6 @@ package core.syntax
 // Do I now need to feed S to P as well?!
 // Also, does having S == A guarantee that the process is well-built? Not sure...
 final case class Code[S <: G](process: Lex[CodeK[S]]) extends E[AllK[S]]
-final case class Patt[S <: G](pattern: Lex[PattK[S]]) extends E[AllK[S]]
-// Make Patt the dual of E?
 
 final case class Escape(expr: E[RegularK[_]]) extends E[CodeK[G]]
 

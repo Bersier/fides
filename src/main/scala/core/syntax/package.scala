@@ -10,19 +10,21 @@ package object syntax {
   sealed trait General
   sealed trait Evaluated extends General
 
-  sealed trait Kind[+S <: G]
-  sealed trait RegularK[+S <: G] extends Kind[S]
-  sealed trait PattK[+S <: G] extends Kind[S]
-  sealed trait CodeK[+S <: G] extends PattK[S]
-  sealed trait AllK[+S <: G] extends CodeK[A] with RegularK[S]
+  sealed trait Kind
+  sealed trait RegularK extends Kind
+  sealed trait CodeK[+S <: G, C <: D] extends Kind
+  sealed trait AllK[+S <: G] extends CodeK[A, Inp with Out] with RegularK
   // CodeK[A], because normal unevaluated stuff can be used as part of a code value.
 
   trait Lex[+K <: I]
 
-  type I = Kind[_]
+  type E[+K] = X[K, Inp]
+  type R[+K] = X[K, Out]
+  type I = Kind
   type G = General
   type A = Evaluated
   type V[+K[_]] = E[K[A]]
+  type D = Direction
 
   type Val = V[Nothing]
 
