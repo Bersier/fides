@@ -4,8 +4,8 @@ trait Loc[+K <: I, +T <: V[K]] extends V[K]
 object Loc {
   def newOne[T <: Val](): Loc[AllK, T] = Address.newOne()
 }
-trait Inp[+K <: I, +T <: V[K]] extends Loc[K, T] with E[K, T]
-trait Out[+K <: I, +T <: V[K]] extends Loc[K, T]
+trait Inp[+K <: I, +T <: V[K]] extends Loc[K, T] with E[K]
+trait Out[+K <: I, +T <: V[K]] extends Loc[K, T] with R[K]
 sealed trait Address[K <: I] extends Inp[K, Nothing] with Out[K, Nothing]
 object Address {
   def newOne(): Address[AllK] = Key.newOne()

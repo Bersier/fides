@@ -3,6 +3,10 @@ package core
 package object syntax {
   type Multiset[A] = Map[A, BigInt]
 
+  sealed trait Direction
+  sealed trait Inp extends Direction
+  sealed trait Out extends Direction
+
   sealed trait General
   sealed trait Evaluated extends General
 
