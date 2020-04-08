@@ -16,11 +16,13 @@ package object syntax {
   sealed trait AllK[+S <: G] extends CodeK[A, Inp with Out] with RegularK
   // CodeK[A], because normal unevaluated stuff can be used as part of a code value.
 
-  trait Lex[+K <: I]
+  trait Lex[+K <: N]
 
-  type E[+K] = X[K, Inp]
-  type R[+K] = X[K, Out]
-  type I = Kind
+  type I = Inp
+  type O = Out
+  type E[+K] = X[K, I]
+  type R[+K] = X[K, O]
+  type N = Kind
   type G = General
   type A = Evaluated
   type V[+K[_]] = E[K[A]]

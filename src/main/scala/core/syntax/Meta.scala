@@ -13,7 +13,10 @@ final case class Epacse[S <: G](level: BigInt, expr: E[PattK[S]]) extends E[Patt
 
 
 // Need dual of this as well, right? (Can use inherited abstract class for implementation)
-final case class OutVar[K <: I, T <: V[K]](group: Address[K], outLoc: Out[K, T]) extends
+final case class OutVar[K <: N, T <: V[K]](group: Address[K], outLoc: Out[K, T]) extends
   E[K] with
   P[PattK] with
   Loc[PattK, Nothing] // with ...
+
+// It looks like we could actually move back to a flow syntax. Perhaps do that later once it's stable, as a form that
+// directly includes semantics.
