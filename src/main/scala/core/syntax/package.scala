@@ -6,9 +6,7 @@ package object syntax {
   sealed trait D
   sealed trait Inp extends D
   sealed trait Out extends D
-
-  sealed trait G
-  sealed trait A extends G
+  sealed trait Val extends Inp with Out
 
   sealed trait N
   sealed trait RegularK extends N
@@ -20,9 +18,7 @@ package object syntax {
 
   type I[K, T] = Loc[K, T, Inp]
   type O[K, T] = Loc[K, T, Out]
-  type E[+K] = X[K, Inp]
-  type R[+K] = X[K, Out]
-  type V[T] = X[AllK, Inp with Out, A, T]
+  type V[+T] = X[AllK, Inp with Out, T]
 
   type Val = V[AllK[A, Inp with Out]]
 

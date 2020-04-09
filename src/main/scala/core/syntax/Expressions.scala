@@ -1,8 +1,9 @@
 package core.syntax
 
-trait X[+K <: N, C <: D, L <: G, T <: V[T]] extends Lex[K]
+trait X[+K <: N, C <: D, T <: V[T]] extends Lex[K]
 
-final case class APair[K <: N, T1 <: E[K], T2 <: E[K]](first: T1, second: T2) extends E[K]
+final case class APair[K <: N, C <: D, T1 <: X[K, C, V[T1]], T2 <: X[K, C, V[T2]]]
+(first: T1, second: T2) extends X[K, C, V[APair[K, C, T1, T2]]]
 
 final case class Signed[+K <: N, T <: E[K]] private(contents: T, signatory: Signatory) extends E[K] {
   def this(message: T, signatoryKey: SignatoryKey) = this(message, signatoryKey.signatory)
