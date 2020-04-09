@@ -3,32 +3,28 @@ package core
 package object syntax {
   type Multiset[A] = Map[A, BigInt]
 
-  sealed trait Direction
-  sealed trait Inp extends Direction
-  sealed trait Out extends Direction
+  sealed trait D
+  sealed trait Inp extends D
+  sealed trait Out extends D
 
-  sealed trait General
-  sealed trait Evaluated extends General
+  sealed trait G
+  sealed trait A extends G
 
-  sealed trait Kind
-  sealed trait RegularK extends Kind
-  sealed trait CodeK[+S <: G, C <: D] extends Kind
-  sealed trait AllK[+S <: G] extends CodeK[A, Inp with Out] with RegularK
+  sealed trait N
+  sealed trait RegularK extends N
+  sealed trait CodeK extends N
+  sealed trait AllK extends CodeK with RegularK
   // CodeK[A], because normal unevaluated stuff can be used as part of a code value.
 
   trait Lex[+K <: N]
 
-  type I = Inp
-  type O = Out
-  type E[+K] = X[K, I]
-  type R[+K] = X[K, O]
-  type N = Kind
-  type G = General
-  type A = Evaluated
-  type V[+K[_]] = E[K[A]]
-  type D = Direction
+  type I[K, T] = Loc[K, T, Inp]
+  type O[K, T] = Loc[K, T, Out]
+  type E[+K] = X[K, Inp]
+  type R[+K] = X[K, Out]
+  type V[T] = X[AllK, Inp with Out, A, T]
 
-  type Val = V[Nothing]
+  type Val = V[AllK[A, Inp with Out]]
 
 //  val Mailer   = new Address
 //  val Matcher  = new Address

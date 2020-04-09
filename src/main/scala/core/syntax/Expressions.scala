@@ -1,8 +1,6 @@
 package core.syntax
 
-trait X[+K <: N, C <: D] extends Lex[K]
-
-final case class InVar[K[_] <: Kind[_], T <: V[K]](inp: Inp[K[A], T]) extends E[K[G]] // Do I only need this for code?
+trait X[+K <: N, C <: D, L <: G, T <: V[T]] extends Lex[K]
 
 final case class APair[K <: N, T1 <: E[K], T2 <: E[K]](first: T1, second: T2) extends E[K]
 
@@ -15,4 +13,6 @@ object Signed {
   }
 }
 
-final case class Duplicate(out1: Out[_, _], out2: Out[_, _]) extends R[_]
+final case class Copy(outs: Seq[O[_, _]]) extends R[_]
+
+final case class Match(patterns: Seq[O[_, _]]) extends R[_]

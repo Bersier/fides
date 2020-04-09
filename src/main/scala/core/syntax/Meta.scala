@@ -13,7 +13,7 @@ final case class Epacse[S <: G](level: BigInt, expr: E[PattK[S]]) extends E[Patt
 
 
 // Need dual of this as well, right? (Can use inherited abstract class for implementation)
-final case class OutVar[K <: N, T <: V[K]](group: Address[K], outLoc: Out[K, T]) extends
+final case class Var[K <: N, T <: V[K]](group: Address[K], outLoc: Out[K, T]) extends
   E[K] with
   P[PattK] with
   Loc[PattK, Nothing] // with ...
