@@ -2,8 +2,6 @@ package core.syntax
 
 final class Name extends Val
 
-final class Destination(name: Name) extends Val
-
 sealed trait Signatory extends Val
 final class SignatoryKey() extends Signatory {
   def signatory: Signatory = this

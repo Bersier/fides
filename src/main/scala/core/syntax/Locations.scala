@@ -1,21 +1,25 @@
 package core.syntax
 
-trait Loc[+K <: N, +T <: V[K], C <: D] extends X[K, C]
-sealed trait Address[K <: N] extends Inp[K, Nothing] with Out[K, Nothing]
+trait Loc[+K <: N, +C <: D, +T <: X[K, C, T]] extends X[K, C, T]
+
+sealed trait Address extends Loc[AllK, Inp with Out, Nothing]
 object Address {
-  def newOne(): Address[AllK] = Key.newOne()
+  def newOne(): Address = Key.newOne()
 }
 
-sealed trait Key[K <: N] extends Address[K]// Key allows broadcasting
+/**
+  * Keys allow broadcasting.
+  */
+sealed trait Key extends Address
 object Key {
-  def newOne(): Key[AllK] = new Key[AllK]{}
+  def newOne(): Key = new Key{}
 }
 
-final case class Broadcast[K <: N, T <: V[K]](address: Key[K]) extends Out[K, T]
+final case class Broadcast(address: Key) extends O[AllK, Nothing]
 
-sealed trait Command[T <: Val] extends Out[AllK, T]
+sealed trait Command[+T <: V[T]] extends O[AllK, T]
 final class Start(name: Name) extends Command[U]
 final class Pause(name: Name) extends Command[U]
 final class Dissolve(name: Name) extends Command[U]
 final class Kill(name: Name) extends Command[U]
-final class Move(name: Name) extends Command[Destination]
+final class Move(name: Name) extends Command[Name]

@@ -10,17 +10,14 @@ package object syntax {
 
   sealed trait N
   sealed trait RegularK extends N
-  sealed trait CodeK extends N
-  sealed trait AllK extends CodeK with RegularK
-  // CodeK[A], because normal unevaluated stuff can be used as part of a code value.
+  sealed trait CodeK[+K <: N, +C <: D] extends N
+  sealed trait AllK extends CodeK[AllK, Val] with RegularK // Not sure about CodeK[AllK, Val] here...
 
-  trait Lex[+K <: N]
+  trait Lex[+K <: N, +C <: D, +T <: Lex[K, C, T]]
 
-  type I[K, T] = Loc[K, T, Inp]
-  type O[K, T] = Loc[K, T, Out]
-  type V[+T] = X[AllK, Inp with Out, T]
-
-  type Val = V[AllK[A, Inp with Out]]
+  type I[+K <: N, +T <: I[K, T]] = Loc[K, Inp, T]
+  type O[+K <: N, +T <: O[K, T]] = Loc[K, Out, T]
+  type V[+T <: V[T]] = X[AllK, Val, T]
 
 //  val Mailer   = new Address
 //  val Matcher  = new Address
