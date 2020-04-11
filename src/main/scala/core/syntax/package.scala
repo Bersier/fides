@@ -17,7 +17,7 @@ package object syntax {
 
   type I[+K <: N, +T <: X[K, D, T]] = X[K, Inp, T]
   type O[+K <: N, +T <: X[K, D, T]] = X[K, Out, T]
-  type V[+T <: V[T]] = X[AllK, Val, T]
+  type V[+K <: N, +T <: X[K, D, T]] = X[K, Val, T]
 
 //  val Mailer   = new Address
 //  val Matcher  = new Address

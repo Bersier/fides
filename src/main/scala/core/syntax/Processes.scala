@@ -8,7 +8,6 @@ package core.syntax
 trait P[+K <: N] extends Lex[K, Val, P[K]]
 
 final case class Forward[+K <: N, +T <: X[K, D, T]](inp: I[K, T], out: O[K, T]) extends P[K]
-final case class Wait[K <: N, +T <: X[K, D, T]](token: I[K, U], inp: I[K, T], out: O[K, T]) extends P[K]
 
 final case class Concurrent[K <: N](processes: Multiset[P[K]]) extends P[K]
 final case class Replicated[K <: N](process: P[K]) extends P[K]
