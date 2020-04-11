@@ -15,8 +15,8 @@ package object syntax {
 
   trait Lex[+K <: N, +C <: D, +T <: Lex[K, C, T]]
 
-  type I[+K <: N, +T <: I[K, T]] = Loc[K, Inp, T]
-  type O[+K <: N, +T <: O[K, T]] = Loc[K, Out, T]
+  type I[+K <: N, +T <: X[K, D, T]] = X[K, Inp, T]
+  type O[+K <: N, +T <: X[K, D, T]] = X[K, Out, T]
   type V[+T <: V[T]] = X[AllK, Val, T]
 
 //  val Mailer   = new Address

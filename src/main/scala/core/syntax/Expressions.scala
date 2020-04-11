@@ -1,6 +1,8 @@
 package core.syntax
 
-trait X[+K <: N, +C <: D, +T <: X[K, C, T]] extends Lex[K]
+trait X[+K <: N, +C <: D, +T <: X[K, D, T]] extends Lex[K, C, T]
+
+final case class Constant[+K <: N, +T <: X[K, Val, T]](value: T) extends X[K, Val, T]
 
 final case class APair[+K <: N, +C <: D, +T1 <: X[K, C, V[T1]], +T2 <: X[K, C, V[T2]]]
 (first: T1, second: T2) extends X[K, C, APair[K, C, T1, T2]]

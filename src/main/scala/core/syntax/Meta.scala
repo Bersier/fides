@@ -1,7 +1,5 @@
 package core.syntax
 
-// Not sure about the Cs in here...
-
 final case class Code[+K <: N, +C <: D, +C2 <: D, +T <: Lex[K, C, T]]
 (lex: Lex[CodeK[K, C], C2, T]) extends X[K, C, Code[K, C, C2, T]]
 

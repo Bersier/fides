@@ -1,6 +1,6 @@
 package core.syntax
 
-trait Loc[+K <: N, +C <: D, +T <: X[K, C, T]] extends X[K, C, T]
+trait Loc[+K <: N, +C <: D, +T <: X[K, D, T]] extends X[K, C, T]
 
 sealed trait Address extends Loc[AllK, Inp with Out, Nothing]
 object Address {
