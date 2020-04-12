@@ -8,6 +8,13 @@ final case class AsValue[+K <: N, T <: TOP_X](value: Loc[K, T]) extends X[K, Val
 final case class APair[+K <: N, +C <: D, +T1 <: X[K, C, T1], +T2 <: X[K, C, T2]]
 (first: T1, second: T2) extends X[K, C, APair[K, C, T1, T2]]
 
+final case class ASet[+K <: N, +C <: D, T <: X[K, C, T]](elements: Multiset[T]) extends X[K, C, ASet[K, C, T]]
+
+final case class Merge[+K <: N, +C >: Inp with Out <: D, T <: X[K, C, T]](
+    one: X[K, C, ASet[K, C, T]],
+    two: X[K, C, ASet[K, C, T]],
+) extends X[K, C, ASet[K, C, T]]
+
 // Have set as well (useful in building code)? (need way to match it, though (?))
 
 final case class Signed[+K <: N, +C <: D, +T <: X[K, C, T]] private(contents: T, signatory: X[K, C, Signatory])

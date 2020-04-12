@@ -18,4 +18,12 @@ package object syntax {
   type I[+K <: N, +T <: TOP_X] = X[K, Inp, T]
   type O[+K <: N, +T <: TOP_X] = X[K, Out, T]
   type V[+K <: N, +T <: TOP_X] = X[K, Val, T]
+
+  // Sets
+  // Shell
+  // Polishing
+  // Test
+  // Semantics
+  // Concrete syntax?
+  // Share?
 }

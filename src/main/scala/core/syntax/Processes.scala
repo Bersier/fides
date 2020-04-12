@@ -8,9 +8,14 @@ trait P[+K <: N] extends L[K, Val, P[K]]
 final case class Send[+K <: N, +T <: TOP_X](inp: I[K, T], address: I[K, X[K, D, Loc[K, TOP_X]]]) extends P[K]
 final case class Forward[+K <: N, +T <: TOP_X](inp: I[K, T], out: O[K, T]) extends P[K]
 
-final case class Concurrent[K <: N](processes: Multiset[P[K]]) extends P[K]
+final case class Launch[+K <: N](
+    code: I[K, Code[K, Inp, Val, P[K]]],
+    receipt: O[K, Signed[K, Out, Code[K, Out, Val, P[K]]]],
+) extends P[K]
+
+final case class Concurrent[K <: N](processes: Multiset[P[K]]) extends P[K] // ASet
 final case class Replicated[+K <: N](process: P[K]) extends P[K]
-final case class New[K <: N, T <: TOP_X](iDs: Set[ID[K, Inp with Out, T]], process: P[K]) extends P[K]
+final case class New[K <: N, T <: TOP_X](iDs: Set[ID[K, Inp with Out, T]], process: P[K]) extends P[K] // ASet
 final case class Awake[+K <: N](name: Name, process: P[K]) extends P[K]
 final case class Asleep[+K <: N](name: Name, process: P[K]) extends P[K]
 final case class Swappable[+K <: N](inp: I[K, Code[K, Inp, Val, P[K]]], process: P[K]) extends P[K]
