@@ -20,10 +20,6 @@ package object syntax {
   type O[+K <: N, +T <: TOP_X] = X[K, Out, T]
   type V[+K <: N, +T <: TOP_X] = X[K, Val, T]
 
-//  val Mailer   = new Address
-//  val Matcher  = new Address
-//  val KeySmith = new Address
-//  val Witness  = new Address
 //  val Notary   = new Address
 //  val Compiler = new Address
 }

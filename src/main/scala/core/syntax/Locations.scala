@@ -1,6 +1,7 @@
 package core.syntax
 
-trait Loc[+K <: N, +T <: TOP_X] extends X[K, Inp with Out, T]
+trait ID[+K <: N, C <: Inp with Out, +T <: TOP_X] extends X[K, C, T]
+trait Loc[+K <: N, +T <: TOP_X] extends ID[K, Inp with Out, T]
 
 /**
   * Keys allow broadcasting.

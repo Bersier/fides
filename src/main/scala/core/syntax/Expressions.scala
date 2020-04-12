@@ -21,8 +21,8 @@ object Signed {
   }
 }
 
-final case class Forget[+K <: N](expr: I[K, TOP_X]) extends I[K, U]
-final case class Tegrof[+K <: N](expr: O[K, U]) extends O[K, Nothing]
+final case class ForgetInp[+K <: N](expr: I[K, TOP_X]) extends I[K, U]
+final case class ForgetOut[+K <: N](expr: O[K, U]) extends O[K, Nothing]
 
 final case class Copy[+K <: N, +T <: O[K, T]](outs: Seq[O[K, T]]) extends O[K, T]
 final case class Match[+K <: N, +T <: O[K, T]](patterns: Seq[O[K, T]]) extends O[K, T]

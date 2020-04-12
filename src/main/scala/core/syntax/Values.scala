@@ -8,7 +8,7 @@ object False extends BoolVal
 
 sealed trait Error extends V[Nothing, Error]
 
-final class Name extends V[Nothing, Name]
+final class Name extends ID[Nothing, Val, Name]
 
-sealed trait Signatory extends V[Nothing, Signatory]
+sealed trait Signatory extends ID[Nothing, Val, Signatory]
 final class SignatoryKey() extends Signatory
