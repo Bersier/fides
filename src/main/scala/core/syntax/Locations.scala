@@ -1,6 +1,6 @@
 package core.syntax
 
-trait Loc[+K <: N, +T <: X[K, D, T]] extends X[K, Inp with Out, T]
+trait Loc[+K <: N, +T <: X_TOP] extends X[K, Inp with Out, T]
 
 /**
   * Keys allow broadcasting.

@@ -1,20 +1,23 @@
 package core.syntax
 
-trait X[+K <: N, +C <: D, +T <: X[K, D, T]] extends Lex[K, C, T]
+trait X_TOP extends X[N, D, X_TOP] with L_TOP
+trait X[+K <: N, +C <: D, +T <: X_TOP] extends L[K, C, T]
 
 final case class AsValue[+K <: N, T <: X[K, D, T]](value: Loc[K, T]) extends X[K, Val, Loc[K, T]]
 
-final case class APair[+K <: N, +C <: D, +T1 <: X[K, C, V[T1]], +T2 <: X[K, C, V[T2]]]
+final case class APair[+K <: N, +C <: D, +T1 <: X[K, C, T1], +T2 <: X[K, C, T2]]
 (first: T1, second: T2) extends X[K, C, APair[K, C, T1, T2]]
 
 // Have set as well (useful in building code)? (need way to match it, though (?))
 
-final case class Signed[+K <: N, +C <: D, +T <: X[K, C, T]] private(contents: T, signatory: Signatory)
+final case class Signed[+K <: N, +C <: D, +T <: X[K, C, T]] private(contents: T, signatory: X[K, C, Signatory])
   extends X[K, C, Signed[K, C, T]] {
-  def this(message: T, signatoryKey: SignatoryKey) = this(message, signatoryKey.signatory)
+  def this(message: T, signatoryKey: X[K, Inp, SignatoryKey]) = {
+    this(message, signatoryKey.asInstanceOf[X[K, C, Signatory]])
+  }
 }
 object Signed {
-  def out[K <: N, T <: O[K, T]](contents: T, signatory: Signatory): Signed[K, Out, T] = {
+  def out[K <: N, T <: O[K, T]](contents: T, signatory: O[K, Signatory]): Signed[K, Out, T] = {
     new Signed(contents, signatory)
   }
 }

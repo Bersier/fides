@@ -11,9 +11,10 @@ package object syntax {
   sealed trait N
   sealed trait RegularK extends N
   sealed trait CodeK[+K <: N, +C <: D] extends N
-  sealed trait AllK extends CodeK[AllK, Val] with RegularK // Not sure about CodeK[AllK, Val] here...
+//  sealed trait AllK extends CodeK[AllK, Val] with RegularK // Not sure about CodeK[AllK, Val] here...
 
-  trait Lex[+K <: N, +C <: D, +T <: Lex[K, C, T]]
+  trait L_TOP extends L[N, D, L_TOP]
+  trait L[+K <: N, +C <: D, +T <: L_TOP]
 
   type I[+K <: N, +T <: X[K, D, T]] = X[K, Inp, T]
   type O[+K <: N, +T <: X[K, D, T]] = X[K, Out, T]

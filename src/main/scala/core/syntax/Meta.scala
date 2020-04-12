@@ -1,7 +1,7 @@
 package core.syntax
 
-final case class Code[+K <: N, +C <: D, +C2 <: D, +T <: Lex[K, C, T]]
-(lex: Lex[CodeK[K, C], C2, T]) extends X[K, C, Code[K, C, C2, T]]
+final case class Code[+K <: N, +C <: D, +C2 <: D, +T <: L[K, C, T]]
+(lex: L[CodeK[K, C], C2, T]) extends X[K, C, Code[K, C, C2, T]]
 
 /**
   * Escapes one level of code.
