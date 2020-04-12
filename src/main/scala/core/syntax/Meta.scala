@@ -14,12 +14,8 @@ final case class Escape[+K <: N, +C <: D, +T <: X[K, C, T]](expr: T) extends Loc
 final case class MatchEscape[+K <: N, +T <: X[K, Out, T]](level: BigInt, expr: T) extends X[CodeK[K, Out], Val, T]
 // Not sure about these type parameters...
 
-/**
-  * @param newIDs IDs in code that get replaced by new ones (so that the program writer doesn't have access to them),
-  *               but get provided in the signed receipt of the compiler.
-  */
-final case class Program[+K <: N, +C <: D](newIDs: Set[ID[K, Inp with Out, TOP_X]], code: Code[K, C, Val, P[K]])
-  extends X[K, C, Program[K, C]] // Do we really need that?
+final case class Launch[+K <: N](code: I[K, Code[K, Inp, Val, P[K]]])
+  extends I[K, Signed[K, Inp, Code[K, Inp, Val, P[K]]]]
 
 // It looks like we could actually move back to a flow syntax. Perhaps do that later once it's stable, as a form that
 // directly includes semantics.

@@ -11,7 +11,6 @@ package object syntax {
   sealed trait N
   sealed trait RegularK extends N
   sealed trait CodeK[+K <: N, +C <: D] extends N
-//  sealed trait AllK extends CodeK[AllK, Val] with RegularK // Not sure about CodeK[AllK, Val] here...
 
   trait TOP_L
   trait L[+K <: N, +C <: D, +T <: TOP_L] extends TOP_L
@@ -19,7 +18,4 @@ package object syntax {
   type I[+K <: N, +T <: TOP_X] = X[K, Inp, T]
   type O[+K <: N, +T <: TOP_X] = X[K, Out, T]
   type V[+K <: N, +T <: TOP_X] = X[K, Val, T]
-
-//  val Notary   = new Address
-//  val Compiler = new Address
 }
