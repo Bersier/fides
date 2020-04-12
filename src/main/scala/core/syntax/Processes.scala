@@ -9,9 +9,9 @@ trait P[+K <: N] extends L[K, Val, P[K]]
 
 final case class Forward[+K <: N, +T <: X[K, D, T]](inp: I[K, T], out: O[K, T]) extends P[K]
 
-final case class Concurrent[+K <: N](processes: Multiset[P[K]]) extends P[K]
+final case class Concurrent[K <: N](processes: Multiset[P[K]]) extends P[K]
 final case class Replicated[+K <: N](process: P[K]) extends P[K]
-final case class New[+K <: N, T <: X[K, D, T]](locs: Set[Loc[K, T]], process: P[K]) extends P[K]
+final case class New[K <: N, T <: X[K, D, T]](locs: Set[Loc[K, T]], process: P[K]) extends P[K]
 final case class Awake[+K <: N](name: Name, process: P[K]) extends P[K]
 final case class Asleep[+K <: N](name: Name, process: P[K]) extends P[K]
 final case class Swappable[+K <: N](inp: I[K, Code[K, Inp, Val, P[K]]], process: P[K]) extends P[K]
