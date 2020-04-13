@@ -1,7 +1,7 @@
 package core.syntax
 
 trait TOP_X extends TOP_L
-trait X[+K <: N, +C <: D, +T <: TOP_X] extends TOP_X with L[K, C, T]
+trait X[+K <: N, +C <: D, +T <: TOP_X] extends TOP_X with L[K, C, T] // Use only values in T? So TOP_V?
 
 final case class AsValue[+K <: N, T <: TOP_X](value: Loc[K, T]) extends X[K, Val, Loc[K, T]]
 

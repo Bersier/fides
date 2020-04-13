@@ -15,8 +15,8 @@ final case class Launch[+K <: N](
 
 final case class Concurrent[K <: N](processes: Multiset[P[K]]) extends P[K] // ASet
 final case class Replicated[+K <: N](process: P[K]) extends P[K]
-final case class New[K <: N, T <: TOP_X](iDs: Set[ID[K, Inp with Out, T]], process: P[K]) extends P[K] // ASet
-final case class Awake[+K <: N](name: Name, process: P[K]) extends P[K]
+final case class New[K <: N, T <: TOP_X](iDs: Set[ID[K, Inp with Out, T]], process: P[K]) extends P[K] //X[K, Val, ASet]
+final case class Awake[+K <: N](name: Name, process: L[K, Val, P[K]]) extends P[K] // Also replace P[K] with L[K, Val, P[K]] in others
 final case class Asleep[+K <: N](name: Name, process: P[K]) extends P[K]
 final case class Swappable[+K <: N](inp: I[K, Code[K, Inp, Val, P[K]]], process: P[K]) extends P[K]
 final case class Annotated[+K <: N](process: P[K], annotation: P[N]) extends P[K]
