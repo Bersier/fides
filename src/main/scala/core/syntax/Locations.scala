@@ -1,17 +1,20 @@
 package core.syntax
 
-trait ID[+K <: N, C <: Inp with Out, +T <: TOP_X] extends L[K, C, T]
+sealed trait ID[+K <: N, +C <: Ide[_]] extends ValT with L[K, C]
 
-/**
-  * Keys allow broadcasting.
-  */
-final class Key[+K <: N, +T <: X[K, D, T]] extends Loc[K, T]
+final class Name extends ID[Nothing, Val[Name]]
+
+sealed trait SignatoryVal extends ID[Nothing, Val[SignatoryVal]]
+final class  SignatoryKey extends SignatoryVal
+
+sealed trait LocVal[+T <: ValT] extends ID[Nothing, Loc[T]]
+final class  LocKey[+T <: ValT] extends LocVal[T] // Allows broadcasting
 
 /**
   * Can be used as a value, or as an O.
   * However, when used as an O, does not behave like a pattern, but rather like a Loc.
   */
-final case class Broadcast[+K <: N, +T <: X[K, D, T]](address: Key[K, T]) extends V[K, T]
+final case class Broadcast[+K <: N, +T <: X[K, D, T]](address: L[K, LocKey[T]]) extends V[K, T]
 
 /**
   * Can be used as a value, or as an O.

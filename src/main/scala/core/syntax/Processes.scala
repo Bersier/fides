@@ -20,7 +20,7 @@ final case class Awake[+K <: N](name: Name, process: L[K, Val, P[K]]) extends P[
 final case class Asleep[+K <: N](name: Name, process: P[K]) extends P[K]
 final case class Swappable[+K <: N](inp: I[K, Code[K, Inp, Val, P[K]]], process: P[K]) extends P[K]
 final case class Annotated[+K <: N](process: P[K], annotation: X[K, D, TOP_X]) extends P[K]
-final case class Guarded[+K <: N](process: P[K], handler: O[K, Error]) extends P[K]
+final case class Handled[+K <: N](process: P[K], handler: O[K, Error]) extends P[K]
 final case class Shell() extends P[RegularK] {
   def send(value: Val): Unit = ???
   def register[T <: V[RegularK, T]](inp: Loc[RegularK, T])(consumer: T => Unit): Unit = ???
