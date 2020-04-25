@@ -19,7 +19,7 @@ final case class New[K <: N, T <: TOP_X](iDs: Set[ID[K, Inp with Out, T]], proce
 final case class Awake[+K <: N](name: Name, process: L[K, Val, P[K]]) extends P[K] // Also replace P[K] with L[K, Val, P[K]] in others
 final case class Asleep[+K <: N](name: Name, process: P[K]) extends P[K]
 final case class Swappable[+K <: N](inp: I[K, Code[K, Inp, Val, P[K]]], process: P[K]) extends P[K]
-final case class Annotated[+K <: N](process: P[K], annotation: P[N]) extends P[K]
+final case class Annotated[+K <: N](process: P[K], annotation: X[K, D, TOP_X]) extends P[K]
 final case class Guarded[+K <: N](process: P[K], handler: O[K, Error]) extends P[K]
 final case class Shell() extends P[RegularK] {
   def send(value: Val): Unit = ???
