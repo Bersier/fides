@@ -8,7 +8,7 @@ package object syntax {
   sealed trait Exp[+T <: ValT] extends D
   sealed trait Inp[+T <: ValT] extends Exp[T]
   sealed trait Out[+T <: ValT] extends Exp[T]
-  sealed trait Loc[+T <: ValT] extends Inp[T] with Out[T]
+  sealed trait Loc[+T <: ValT] extends Out[T]
   sealed trait Val[+T <: ValT] extends Inp[T] with Out[T]
   sealed trait Ide[+T <: ValT] extends Inp[T] with Out[T]
 
