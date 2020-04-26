@@ -1,26 +1,21 @@
 package core.syntax
 
-/**
-  * Process
-  */
-trait P[+K <: N] extends L[K, Val, P[K]]
-
-final case class Send[+K <: N, +T <: TOP_X](inp: I[K, T], address: I[K, X[K, D, Loc[K, TOP_X]]]) extends P[K]
-final case class Forward[+K <: N, +T <: TOP_X](inp: I[K, T], out: O[K, T]) extends P[K]
+final case class Send[+K <: N, +T <: ValT](inp: L[K, Inp[T]], address: L[K, Loc[T]]) extends L[K, Pro]
+final case class Forward[+K <: N, +T <: ValT](inp: L[K, Inp[T]], out: L[K, Out[T]]) extends L[K, Pro]
 
 final case class Launch[+K <: N](
-    code: I[K, Code[K, Inp, Val, P[K]]],
-    receipt: O[K, Signed[K, Out, Code[K, Out, Val, P[K]]]],
-) extends P[K]
+    code: Inp[K, Code[K, Inp, Val, L[K, Pro]]],
+    receipt: O[K, Signed[K, Out, Code[K, Out, Val, L[K, Pro]]]],
+) extends L[K, Pro]
 
-final case class Concurrent[K <: N](processes: Multiset[P[K]]) extends P[K] // ASet
-final case class Replicated[+K <: N](process: P[K]) extends P[K]
-final case class New[K <: N, T <: TOP_X](iDs: Set[ID[K, Inp with Out, T]], process: P[K]) extends P[K] //X[K, Val, ASet]
-final case class Awake[+K <: N](name: Name, process: L[K, Val, P[K]]) extends P[K] // Also replace P[K] with L[K, Val, P[K]] in others
-final case class Asleep[+K <: N](name: Name, process: P[K]) extends P[K]
-final case class Swappable[+K <: N](inp: I[K, Code[K, Inp, Val, P[K]]], process: P[K]) extends P[K]
-final case class Annotated[+K <: N](process: P[K], annotation: X[K, D, TOP_X]) extends P[K]
-final case class Handled[+K <: N](process: P[K], handler: O[K, Error]) extends P[K]
+final case class Concurrent[K <: N](processes: Multiset[L[K, Pro]]) extends L[K, Pro] // ASet
+final case class Replicated[+K <: N](process: L[K, Pro]) extends L[K, Pro]
+final case class New[K <: N, T <: TOP_X](iDs: Set[ID[K, Inp with Out, T]], process: L[K, Pro]) extends L[K, Pro] //X[K, Val, ASet]
+final case class Awake[+K <: N](name: Name, process: L[K, Val, L[K, Pro]]) extends L[K, Pro] // Also replace L[K, Pro] with L[K, Val, L[K, Pro]] in others
+final case class Asleep[+K <: N](name: Name, process: L[K, Pro]) extends L[K, Pro]
+final case class Swappable[+K <: N](inp: I[K, Code[K, Inp, Val, L[K, Pro]]], process: L[K, Pro]) extends L[K, Pro]
+final case class Annotated[+K <: N](process: L[K, Pro], annotation: X[K, D, TOP_X]) extends L[K, Pro]
+final case class Handled[+K <: N](process: L[K, Pro], handler: O[K, Error]) extends L[K, Pro]
 final case class Shell() extends P[RegularK] {
   def send(value: Val): Unit = ???
   def register[T <: V[RegularK, T]](inp: Loc[RegularK, T])(consumer: T => Unit): Unit = ???

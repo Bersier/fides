@@ -3,7 +3,7 @@ package core
 package object syntax {
   type Multiset[A] = Map[A, BigInt]
 
-  sealed trait D
+  sealed trait D // Sort
   sealed trait Pro extends D
   sealed trait Exp[+T <: ValT] extends D
   sealed trait Inp[+T <: ValT] extends Exp[T]
@@ -11,12 +11,13 @@ package object syntax {
   sealed trait Loc[+T <: ValT] extends Inp[T] with Out[T]
   sealed trait Val[+T <: ValT] extends Inp[T] with Out[T]
   sealed trait Ide[+T <: ValT] extends Inp[T] with Out[T]
-  sealed trait Vid[+T <: ValT] extends Val[T] with Ide[T]
-  sealed trait Adr[+T <: ValT] extends Loc[T] with Ide[T]
+
+  type Vid[+T <: ValT] = Val[T] with Ide[T]
+  type Adr[+T <: ValT] = Loc[T] with Ide[T]
 
   sealed trait N
   sealed trait RegularK extends N
-  sealed trait CodeK[+K <: N, +C <: D] extends N
+  sealed trait CodeK[+K <: CodeK[_, _], +C[+_] <: D] extends N
 
   trait ValT
   
