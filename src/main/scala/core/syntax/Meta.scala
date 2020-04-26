@@ -11,6 +11,9 @@ final case class Escape[+K <: N, +C[+_] <: Exp[_], +C2 <: D](expr: L[K, C[Code[K
 
 /**
   * Matches Escape when level is zero. Otherwise, matches a MatchEscape of a level lower by one.
+  *
+  * Note: one would need a more advanced type system than what Scala has to fully type higher-order
+  * (i.e. where level > 0) MatchEscape.
   */
 final case class MatchEscape[+K <: N, +C[+_] <: Exp[_], +C2 <: D](
   level: BigInt,

@@ -5,8 +5,9 @@ final case class AsValue[+K <: N, +T <: ValT](loc: L[K, Loc[T]]) extends L[K, Va
 final case class APair[+K <: N, +C[+_] <: D, +T1 <: ValT, +T2 <: ValT, +C1 <: C[T1], +C2 <: C[T2]]
 (first: L[K, C1], second: L[K, C2]) extends ValT with L[K, C[APair[K, C, T1, T2, C1, C2]]]
 
-final case class ASet[+K <: N, T <: ValT, C[+_] <: D](elements: Multiset[L[K, C[T]]])
-  extends ValT with L[K, C[ASet[K, C, T]]]
+final case class ASet[+K <: N, T <: ValT, R <: Dir](elements: Multiset[L[K, Exp[T, R]]])
+  extends ValT with L[K, Exp[ASet[K, T, R], R]]
+// Can't use this set type for Concurrent... Make processes expressions; again?
 
 final case class Merge[+K <: N, T <: ValT, C[+_] <: D](
   one: L[K, C[ASet[K, T, C]]],
