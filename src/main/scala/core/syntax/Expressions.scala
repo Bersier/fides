@@ -8,6 +8,7 @@ final case class APair[+K <: N, +C[+_] <: D, +T1 <: ValT, +T2 <: ValT, +C1 <: C[
 final case class ASet[+K <: N, T <: ValT, R <: Dir](elements: Multiset[L[K, Exp[T, R]]])
   extends ValT with L[K, Exp[ASet[K, T, R], R]]
 // Can't use this set type for Concurrent... Make processes expressions; again?
+// Actually, locs should be exprs! Undo type change from previous commit?
 
 final case class Merge[+K <: N, T <: ValT, C[+_] <: D](
   one: L[K, C[ASet[K, T, C]]],
