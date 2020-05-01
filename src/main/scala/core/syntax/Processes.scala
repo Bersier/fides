@@ -8,18 +8,18 @@ final case class Launch[+K <: N, C2 <: D](
     receipt: L[K, Out[Signed[K, Code[K, Out, C2], Out]]],
 ) extends L[K, Prs]
 
-final case class Concurrent[K <: N](processes: Multiset[L[K, Prs]]) extends L[K, Prs] // ASet
-final case class Concurrent2[K <: N](processes: L[K, ASet[K, Prs]]) extends L[K, Prs] // ASet
+final case class Concurrent[K <: N](processes: Multiset[L[K, Prs]]) extends L[K, Prs]
+//final case class Concurrent[K <: N](processes: L[K, ASet[K, Prs]]) extends L[K, Prs]
 final case class Replicated[+K <: N](process: L[K, Prs]) extends L[K, Prs]
 final case class New[K <: N](iDs: Set[L[K, Ide[_]]], process: L[K, Prs]) extends L[K, Prs] //X[K, Val, ASet]
-final case class Awake[+K <: N](name: Name, process: L[K, Val, L[K, Prs]]) extends L[K, Prs] // Also replace L[K, Prs] with L[K, Val, L[K, Prs]] in others
+final case class Awake[+K <: N](name: Name, process: L[K, Prs]) extends L[K, Prs]
 final case class Asleep[+K <: N](name: Name, process: L[K, Prs]) extends L[K, Prs]
-final case class Swappable[+K <: N](inp: I[K, Code[K, Inp, Val, L[K, Prs]]], process: L[K, Prs]) extends L[K, Prs]
-final case class Annotated[+K <: N](process: L[K, Prs], annotation: X[K, D, TOP_X]) extends L[K, Prs]
-final case class Handled[+K <: N](process: L[K, Prs], handler: O[K, Error]) extends L[K, Prs]
-final case class Shell() extends P[RegularK] {
-  def send(value: Val): Unit = ???
-  def register[T <: V[RegularK, T]](inp: Loc[RegularK, T])(consumer: T => Unit): Unit = ???
-  def registerReplicated[T <: V[RegularK, T]](inp: Loc[RegularK, T])(consumer: T => Unit): Unit = ???
+final case class Swappable[+K <: N](inp: L[K, Inp[Code[K, Inp, Prs]]], process: L[K, Prs]) extends L[K, Prs]
+final case class Handled[+K <: N](process: L[K, Prs], handler: L[K, Out[Error]]) extends L[K, Prs]
+
+final case class Shell() extends L[RegularK, Prs] {
+  def send(value: V[_]): Unit = ???
+  def register[T <: V[T]](consumer: T => Unit): LocKey[T] = ???
+  def registerReplicated[T <: V[T]](consumer: T => Unit): LocKey[T] = ???
   def remove(): Unit = ???
 }

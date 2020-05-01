@@ -21,9 +21,11 @@ final case class MatchEscape[+K <: N, +C[+_] <: Exp[_], +C2 <: D](
 ) extends L[CodeK[CodeK[K, Out], C], C2]
 // Not sure about these type parameters...
 
-// It looks like we could actually move back to a flow syntax. Perhaps do that later once it's stable, as a form that
-// directly includes semantics.
-
 /*
 Code[Nothing, Val[Code[Nothing, ]]](Code(Escape[](Loc[T]())))
  */
+
+final case class Annotated[+K <: N, C <: D](l: L[K, C], annotation: L[K, Val[_]]) extends L[K, C]
+
+// It looks like we could actually move back to a flow syntax. Perhaps do that later once it's stable, as a form that
+// directly includes semantics.

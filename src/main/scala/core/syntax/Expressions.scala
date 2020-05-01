@@ -5,10 +5,9 @@ final case class AsValue[+K <: N, +T <: ValT](loc: L[K, Loc[T]]) extends L[K, Va
 final case class APair[+K <: N, +C[+_] <: D, +T1 <: ValT, +T2 <: ValT, +C1 <: C[T1], +C2 <: C[T2]]
 (first: L[K, C1], second: L[K, C2]) extends ValT with L[K, C[APair[K, C, T1, T2, C1, C2]]]
 
-final case class ASet[+K <: N, T <: ValT, R <: Dir](elements: Multiset[L[K, Exp[T, R]]])
-  extends ValT with L[K, Exp[ASet[K, T, R], R]]
+final case class ASet[+K <: N, T <: ValT, C[+_] <: D](elements: Multiset[L[K, C[T]]])
+  extends ValT with L[K, C[ASet[K, C, T]]]
 // Can't use this set type for Concurrent... Make processes expressions; again?
-// Actually, locs should be exprs! Undo type change from previous commit?
 
 final case class Merge[+K <: N, T <: ValT, C[+_] <: D](
   one: L[K, C[ASet[K, T, C]]],
@@ -32,8 +31,8 @@ object Signed {
   }
 }
 
-final case class ForgetInp[+K <: N](expr: I[K, TOP_X]) extends I[K, U]
-final case class ForgetOut[+K <: N](expr: O[K, U]) extends O[K, Nothing]
+final case class ForgetInp[+K <: N](expr: L[K, Inp[_]]) extends L[K, Inp[U]]
+final case class ForgetOut[+K <: N](expr: L[K, Out[U]]) extends L[K, Out[Nothing]]
 
-final case class Copy[+K <: N, +T <: O[K, T]](outs: Seq[O[K, T]]) extends O[K, T]
-final case class Match[+K <: N, +T <: O[K, T]](patterns: Seq[O[K, T]]) extends O[K, T]
+final case class Copy[+K <: N, +C <: Out[_]](outs: Multiset[L[K, C]]) extends L[K, C]
+final case class Match[+K <: N, +C <: Out[_]](patterns: Seq[L[K, C]]) extends L[K, C]
