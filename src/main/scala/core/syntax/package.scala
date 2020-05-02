@@ -4,26 +4,26 @@ package object syntax {
   type Multiset[A] = Map[A, BigInt]
 
   sealed trait D // Sort
-  sealed trait Prs extends D
-  sealed trait Exp[+T <: ValT] extends D
-  sealed trait Inp[+T <: ValT] extends Exp[T]
-  sealed trait Out[+T <: ValT] extends Exp[T]
-  sealed trait Loc[+T <: ValT] extends Out[T]
-  sealed trait Val[+T <: ValT] extends Inp[T] with Out[T]
-  sealed trait Ide[+T <: ValT] extends Inp[T] with Out[T]
+  sealed trait Pro[_] extends D // Type argument only needed for uniformity
+  sealed trait Exp[+T <: A] extends D
+  sealed trait Inp[+T <: A] extends Exp[T]
+  sealed trait Out[+T <: A] extends Exp[T]
+  sealed trait Loc[+T <: A] extends Out[T]
+  sealed trait Val[+T <: A] extends Inp[T] with Out[T]
 
-  type Vid[+T <: ValT] = Val[T] with Ide[T]
-  type Adr[+T <: ValT] = Loc[T] with Ide[T]
+  type E = Exp[A] // TODO use E instead of D wherever appropriate
+  type Prs = Pro[A]
 
   sealed trait N
   sealed trait RegularK extends N
-  sealed trait CodeK[+K <: CodeK[_, _], +C[+_] <: D] extends N
+  sealed trait CodeK[+K <: N, +C[+_ <: A] <: E] extends N
 
-  trait ValT
+  trait A
+  trait IdeT extends A
 
   trait L[+K <: N, +C <: D]
 
-  type V[+T <: ValT] = ValT with L[Nothing, Val[T]]
+  type V[+T <: A] = L[Nothing, Val[T]]
 
   // (Multi?)Sets (and Seqs, and Ints)
   // Shell
