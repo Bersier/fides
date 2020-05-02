@@ -11,7 +11,7 @@ package object syntax {
   sealed trait Loc[+T <: A] extends Out[T]
   sealed trait Val[+T <: A] extends Inp[T] with Out[T]
 
-  type E = Exp[A] // TODO use E instead of D wherever appropriate
+  type E = Exp[A]
   type Prs = Pro[A]
 
   sealed trait N
@@ -24,6 +24,8 @@ package object syntax {
   trait L[+K <: N, +C <: D]
 
   type V[+T <: A] = L[Nothing, Val[T]]
+
+  val Launcher: SignatoryVal = new SignatoryKey
 
   // (Multi?)Sets (and Seqs, and Ints)
   // Shell

@@ -29,4 +29,9 @@ final case class ForgetInp[+K <: N](expr: L[K, Inp[_]]) extends L[K, Inp[U]]
 final case class ForgetOut[+K <: N](expr: L[K, Out[U]]) extends L[K, Out[Nothing]]
 
 final case class Copy[+K <: N, +T <: A, +C[+_ <: A] <: Out[_]](outs: L[K, Val[Bag[K, T, C]]]) extends L[K, C[T]]
-final case class Match[+K <: N, +C <: Out[_]](patterns: Seq[L[K, C]]) extends L[K, C]
+
+final case class All[+K <: N, +T <: A, +C[+_ <: A] <: Out[_]](outs: L[K, Val[Bag[K, T, C]]]) extends L[K, C[T]]
+final case class Any[+K <: N, +T <: A, +C[+_ <: A] <: Out[_]](outs: L[K, Val[Bag[K, T, C]]]) extends L[K, C[T]]
+final case class One[+K <: N, +T <: A, +C[+_ <: A] <: Out[_]](outs: L[K, Val[Bag[K, T, C]]]) extends L[K, C[T]]
+final case class Not[+K <: N, +C <: Out[_]](Out: L[K, C]) extends L[K, C]
+// Too complex... restrict to patterns that can be interpreted as shallow syntactic sugar for processes?

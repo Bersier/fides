@@ -1,6 +1,6 @@
 package core.syntax
 
-final case class Send[+K <: N, +T <: A](inp: L[K, Inp[T]], address: L[K, Loc[T]]) extends L[K, Prs]
+final case class Send[+K <: N, +T <: A](inp: L[K, Inp[T]], address: L[K, Inp[AsValue[K, T, Loc[T]]]]) extends L[K, Prs]
 final case class Forward[+K <: N, +T <: A](inp: L[K, Inp[T]], out: L[K, Out[T]]) extends L[K, Prs]
 
 final case class Launch[+K <: N](
