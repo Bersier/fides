@@ -7,7 +7,7 @@ package object syntax {
   sealed trait Pro[_] extends D // Type argument only needed for uniformity
   sealed trait Exp extends D
   sealed trait Inp[+T <: A] extends Exp
-  sealed trait Out[-T <: A] extends Exp // Shouldn't this be contravariant?
+  sealed trait Out[-T <: A] extends Exp
   sealed trait Loc[-T <: A] extends Out[T]
   sealed trait Val[T <: A] extends Inp[T] with Out[T]
 
@@ -16,7 +16,7 @@ package object syntax {
 
   sealed trait N
   sealed trait RegularK extends N
-  sealed trait CodeK[+K <: N, +C[+_ <: A] <: X] extends N
+  sealed trait CodeK[+K <: N, +C[_ <: A] <: X] extends N
 
   trait A
   trait IdeT extends A
