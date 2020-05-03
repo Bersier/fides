@@ -19,14 +19,14 @@ final case class Escape[+K <: N, +C[+_ <: A] <: E, +C2 <: D](expr: L[K, C[Code[K
   */
 final case class MatchEscape[+K <: N, +C[+_ <: A] <: E, +C2 <: D](
   level: L[CodeK[K, Out], Val[Z]],
-  expr: L[CodeK[K, Out], C[Code[CodeK[K, Out], C, C2]]]
+  expr : L[CodeK[K, Out], C[Code[CodeK[K, Out], C, C2]]]
 ) extends L[CodeK[CodeK[K, Out], C], C2]
 // Not sure about these type parameters...
 
 /**
   * Depending on C, can denote an expression, or processes to be run concurrently.
   */
-final case class Bag[+K <: N, +T <: A, +C[+_ <: A] <: D](elements: Multiset[L[K, C[T]] @uncheckedVariance])
+final case class Bag[+K <: N, +T <: A, +C[+_ <: A] <: D](elements: Multiset[L[K, C[T]]@uncheckedVariance])
   extends A with L[K, C[Bag[K, T, C]]]
 
 /*

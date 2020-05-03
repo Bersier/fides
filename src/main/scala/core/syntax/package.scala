@@ -26,6 +26,7 @@ package object syntax {
   type V[+T <: A] = L[Nothing, Val[T]]
 
   val Launcher: SignatoryVal = new SignatoryKey
+  val ErrorLoc: L[Nothing, Loc[A]] = new LocKey
 
   // (Multi?)Sets (and Seqs, and Ints)
   // Shell

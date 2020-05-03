@@ -16,20 +16,5 @@ final case class ForgetOut[+K <: N](expr: L[K, Out[U]]) extends L[K, Out[Nothing
 
 final case class Copy[+K <: N, +T <: A](outs: L[K, Val[Bag[K, T, Out]]]) extends L[K, Out[T]]
 
-final case class Apply1[+K <: N](i: L[K, Inp[Z]], f: BigInt => BigInt) extends L[K, Inp[Z]]
-final case class Apply2[+K <: N](i1: L[K, Inp[Z]], i2: L[K, Inp[Z]], f: (BigInt, BigInt) => BigInt)
-  extends L[K, Inp[Z]]
-final case class Apply3[+K <: N](
-  i1: L[K, Inp[Z]],
-  i2: L[K, Inp[Z]],
-  i3: L[K, Inp[Z]],
-  f : (BigInt, BigInt, BigInt) => BigInt,
-) extends L[K, Inp[Z]]
-
-final case class ApplyP1[+K <: N](i: L[K, Inp[Z]], f: BigInt => Boolean) extends L[K, Inp[BoolVal]]
-final case class ApplyP2[+K <: N](
-  i1: L[K, Inp[Z]],
-  i2: L[K, Inp[Z]],
-  f: (BigInt, BigInt) => Boolean
-) extends L[K, Inp[BoolVal]]
-// Add more (eg boolean functions)?
+final case class Apply[+K <: N, S >: U, +T](input: L[K, Inp[ScalaVal[S]]], f: S => T) extends L[K, Inp[ScalaVal[T]]]
+final case class Convert[+K <: N, T, +C[+_ <: A] <: E](v: L[K, C[SimT[T]]]) extends L[K, C[ScalaVal[T]]]
