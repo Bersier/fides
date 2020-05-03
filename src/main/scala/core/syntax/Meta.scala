@@ -29,8 +29,8 @@ final case class MatchEscape[K <: N, C[_ <: A] <: X, C2 <: D](
 /**
   * Depending on C, can denote an expression, or processes to be run concurrently.
   */
-final case class Bag[+K <: N, T <: A, +C[+_ <: A] <: D](elements: Multiset[L[K, C[T]]@uncheckedVariance])
-  extends A with L[K, C[Bag[K, T, C]]]
+final case class Bag[+K <: N, T <: A, C[S <: A] >: Out[S] with Inp[S] <: D](elements: L[K, C[T]]*)
+  extends A with L[K, C[Bag[_, T, C]]] // What if C is Loc?
 
 /*
 Code[Nothing, Val[Code[Nothing, ]]](Code(Escape[](Loc[T]())))

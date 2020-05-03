@@ -14,7 +14,7 @@ final case class Branch[+K <: N, -T <: A](one: L[K, Out[T]], two: L[K, Out[T]]) 
 final case class ForgetInp[+K <: N](expr: L[K, Inp[_]]) extends L[K, Inp[U]]
 final case class ForgetOut[+K <: N](expr: L[K, Out[U]]) extends L[K, Out[Nothing]]
 
-final case class Copy[K <: N, T <: A](outs: L[K, Val[Bag[K, _ >: T, Out]]]) extends L[K, Out[T]]
+final case class Copy[K <: N, T <: A](outs: L[K, Out[Bag[K, _ >: T, Out]]]) extends L[K, Out[T]]
 
 final case class Apply[+K <: N, S >: U, T](input: L[K, Inp[ScalaVal[_ <: S]]], f: S => T)
   extends L[K, Inp[ScalaVal[_ >: T]]]
