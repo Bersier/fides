@@ -12,4 +12,4 @@ object False extends BoolVal
 
 final class Atom extends A with V[Atom]
 
-final case class ScalaVal[+T](value: T) extends A with V[ScalaVal[T]]
+final case class ScalaVal[T](value: T) extends A with V[ScalaVal[T]]
