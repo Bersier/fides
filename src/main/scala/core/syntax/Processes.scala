@@ -13,7 +13,7 @@ final case class New[K <: N](iDs: L[K, Val[Bag[K, IdeT, Val]]], process: L[K, Pr
 final case class Awake[+K <: N](name: Name, process: L[K, Prs]) extends L[K, Prs]
 final case class Asleep[+K <: N](name: Name, process: L[K, Prs]) extends L[K, Prs]
 final case class Swappable[+K <: N](inp: L[K, Inp[Code[K, Inp, Prs]]], process: L[K, Prs]) extends L[K, Prs]
-final case class Handled[+K <: N](process: L[K, Prs], handler: L[K, Out[Error]]) extends L[K, Prs]
+final case class Handled[+K <: N](process: L[K, Prs], handler: L[K, Out[Error[K, Out[A]]]]) extends L[K, Prs]
 
 final case class Shell() extends L[RegularK, Prs] {
   def send(value: V[_]): Unit = ???

@@ -18,7 +18,7 @@ final case class Escape[+K <: N, +C[+_ <: A] <: E, +C2 <: D](expr: L[K, C[Code[K
   * (i.e. where level > 0) MatchEscape.
   */
 final case class MatchEscape[+K <: N, +C[+_ <: A] <: E, +C2 <: D](
-  level: BigInt,
+  level: L[CodeK[K, Out], Val[Z]],
   expr: L[CodeK[K, Out], C[Code[CodeK[K, Out], C, C2]]]
 ) extends L[CodeK[CodeK[K, Out], C], C2]
 // Not sure about these type parameters...

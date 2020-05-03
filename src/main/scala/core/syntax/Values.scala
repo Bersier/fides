@@ -6,9 +6,11 @@ sealed trait BoolVal extends A with V[BoolVal]
 object True extends BoolVal
 object False extends BoolVal
 
-sealed trait Error extends A with V[Error]
+final class Atom extends A with V[Atom]
 
-final case class Integer(value: BigInt) extends A with V[Integer]
+final case class Error[+K <: N, +C <: E](value: L[K, C]) extends A with V[Error[K, C]]
+
+final case class Z(value: BigInt) extends A with V[Z]
 
 final case class AsValue[+K <: N, +T <: A, +C <: Loc[T]](loc: L[K, C]) extends A with L[K, Val[AsValue[K, T, C]]]
 
