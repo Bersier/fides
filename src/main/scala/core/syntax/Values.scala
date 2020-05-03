@@ -9,6 +9,7 @@ object False extends BoolVal
 final class Atom extends A with V[Atom]
 
 final case class Error[+K <: N, +C <: E](value: L[K, C]) extends A with V[Error[K, C]]
+// Replace with designated error Loc
 
 final case class Z(value: BigInt) extends A with V[Z]
 
