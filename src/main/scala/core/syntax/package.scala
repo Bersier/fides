@@ -8,7 +8,6 @@ package object syntax {
   sealed trait Exp extends Sort
   sealed trait Inp[+T <: A] extends Exp
   sealed trait Out[-T <: A] extends Exp
-  sealed trait Loc[-T <: A] extends Out[T]
   sealed trait Val[T <: A] extends Inp[T] with Out[T]
 
   sealed trait S[C <: Sort] // Use instead of Sort, so that Loc[T] can be an S[Out[T]]?
@@ -22,6 +21,7 @@ package object syntax {
   sealed trait CodeK[+K <: N, +C[_ <: A] <: X] extends N
 
   trait A
+  trait LocT extends A
   trait IdeT extends A
 
   trait L[+K <: N, +C <: Sort]
