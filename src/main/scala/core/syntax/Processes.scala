@@ -9,6 +9,8 @@ final case class Launch[+K <: N](
   receipt: L[K, Out[Signed[_, Code[_, Out, Prs], Out]]],
 ) extends L[K, Prs]
 
+// TODO Reflect?
+
 final case class Replicated[+K <: N](process: L[K, Prs]) extends L[K, Prs]
 final case class New[+K <: N](iDs: L[K, Val[Bag[_, IdeT, Val]]], process: L[K, Prs]) extends L[K, Prs]
 final case class Awake[+K <: N](name: Name, process: L[K, Prs]) extends L[K, Prs]

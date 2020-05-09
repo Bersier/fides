@@ -1,9 +1,9 @@
 package core.syntax
 
-import scala.annotation.unchecked.uncheckedVariance
-
 final case class Code[+K <: N, C[_ <: A] <: X, C2 <: Sort](code: L[CodeK[K, C], _ <: C2])
   extends A with L[K, C[Code[_, C, C2]]]
+// What about a piece of code for a bag? How does it get evaluated? Need some kind of eval?
+// Maybe move to Quote after all?
 
 // A[+T] means S <: T => A[S] <: A[T]
 // A[-T] means S >: T => A[S] <: A[T]
@@ -25,12 +25,6 @@ final case class MatchEscape[K <: N, C[_ <: A] <: X, C2 <: Sort](
   expr : L[CodeK[K, Out], C[Code[CodeK[K, Out], C, C2]]]
 ) extends L[CodeK[CodeK[K, Out], C], C2]
 // Not sure about these type parameters...
-
-/**
-  * Depending on C, can denote an expression, or processes to be run concurrently.
-  */
-final case class Bag[+K <: N, T <: A, B[S <: A] >: Out[S] with Inp[S] <: Sort, C[_] <: B](elements: L[K, C[T]]*)
-  extends A with L[K, C[Bag[_, T, C]]] // What if C is Loc?
 
 /*
 Code[Nothing, Val[Code[Nothing, ]]](Code(Escape[](Loc[T]())))
