@@ -1,10 +1,12 @@
 package core.syntax
 
-final case class Merge[+K <: N, T <: A](one: L[K, Inp[Bag[K, _ <: T, Inp]]], two: L[K, Inp[Bag[K, _ <: T, Inp]]])
-  extends L[K, Inp[Bag[K, T, Inp]]]
+final case class Merge[+K <: N, T <: A, +B <: G](
+  one: L[K, Inp[Bag[K, _ <: T, Inp, B]]],
+  two: L[K, Inp[Bag[K, _ <: T, Inp, B]]],
+) extends L[K, Inp[Bag[K, T, Inp, B]]]
 
 final case class Contains[+K <: N, T <: A](bag: L[K, Inp[Bag[K, _ <: T, Inp]]], element: L[K, Inp[T]])
-  extends L[K, Inp[Bag[K, T, Inp]]]
+  extends L[K, Inp[BoolVal]]
 
 final case class Equals[+K <: N, +T <: A](one: L[K, Inp[T]], two: L[K, Inp[T]]) extends L[K, Inp[BoolVal]]
 

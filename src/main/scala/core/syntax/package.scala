@@ -3,7 +3,7 @@ package core
 package object syntax {
   type Multiset[A] = Map[A, BigInt]
 
-  sealed trait Sort
+  sealed trait Sort // Couldn't the R type be added to sorts?
   sealed trait D[_] extends Sort
   sealed trait Pro[_] extends Sort // Type argument only needed for uniformity
   sealed trait Exp extends Sort
@@ -20,7 +20,8 @@ package object syntax {
 
   trait A
 
-  sealed trait Eva { type R = Eva }
+  sealed trait Prc { type R = Prc } //
+  sealed trait Eva extends Prc { override type R = Eva }
   sealed trait Loc extends Eva { override type R = Eva }
   sealed trait Ide extends Eva { override type R = Eva }
   sealed trait Val extends Eva { override type R = Val }

@@ -1,12 +1,40 @@
 package core.syntax
 
-final case class Code[+K <: N, C[_ <: A] <: X, C2 <: Sort](code: L[CodeK[K, C], _ <: C2])
-  extends A with L[K, C[Code[_, C, C2]]]
+final case class Code[+K <: N, +C[_ <: A] <: X, C2 <: Sort](code: L[CodeK[K, C], _ <: C2])
+  extends A with L[K, C[Code[_, D, C2]]]
+
+final case class Quoted()
+
+final case class Quote()
 // What about a piece of code for a bag? How does it get evaluated? Need some kind of eval?
 // Maybe move to Quote after all?
+// Eval
+// AsCode
 
-// A[+T] means S <: T => A[S] <: A[T]
-// A[-T] means S >: T => A[S] <: A[T]
+/*
+eval(X) = V
+eval(Quoted(X)) = X
+eval(Quoted(Q(Escape(X)) = Q(V)
+
+Eval(X) = Quoted(V)
+Eval(Quoted(X)) = Quoted(X)
+Eval(Quoted(Q(Escape(X))) = Quoted(Q(V))
+Eval(X(Quoted(Y)) = Quoted(V(Y))
+
+type of Quoted(bool) should be bool, so
+type of Quoted(proc) should be proc.
+Really?
+
+However, we don't want to allow Pair(       proc,         proc),
+while    we       want to allow Pair(Quoted(proc), Quoted(proc)).
+
+How to achieve this with Scala's type system?
+Scala <-> Alax, Alacs
+
+ExpandCode(V(Code(X)) => Code(V(X)) // What if V(X) is not legal?
+
+// Perhaps static typing is not possible after all?
+ */
 
 /**
   * Escapes one level of code.
