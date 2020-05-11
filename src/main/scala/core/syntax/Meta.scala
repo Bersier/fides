@@ -2,6 +2,9 @@ package core.syntax
 
 final case class Code[+K <: N, +C[_ <: A] <: X, C2 <: Sort](code: L[CodeK[K, C], _ <: C2])
   extends A with L[K, C[Code[_, D, C2]]]
+// Have code specify some escape variables in scope? This way, escape is connected to the code it escapes.
+
+// AsCode
 
 final case class Quoted()
 
@@ -28,12 +31,31 @@ Really?
 However, we don't want to allow Pair(       proc,         proc),
 while    we       want to allow Pair(Quoted(proc), Quoted(proc)).
 
+Pair(Quoted(And(True, True)), ...)
+Quoted(Pair(And(True, True))
+
+// Quoted(True) is a bool, but of quote level 1. Quoted(Quoted(True)) is a bool of quote level 2.
+
+Pair(proc, proc) could be typed as a nonsense type. Make proc a type of expression, but then recursively exclude it,
+starting from top-level process Inp and Outs.
+
+Things would work fine if we only had expressions...
+
 How to achieve this with Scala's type system?
 Scala <-> Alax, Alacs
 
-ExpandCode(V(Code(X)) => Code(V(X)) // What if V(X) is not legal?
+ExpandCode(V(Code(X)) => Code(V(X)) // ExpandProc
+// Keep track of whether the current term is a valid argument for ExpandCode
 
-// Perhaps static typing is not possible after all?
+// APair(Code(X))
+// Code(APair(X))
+// Code(APair(Escape(1), Escape(2)))
+
+Bag(Quoted(X))
+Quoted(Bag(X))
+  ... Have a primitive that does that for bags.
+
+Seq(Pair(Quoted(X)))
  */
 
 /**

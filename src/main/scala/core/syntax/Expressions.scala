@@ -20,3 +20,6 @@ final case class Copy[K <: N, T <: A](outs: L[K, Out[Bag[K, _ >: T, Out]]]) exte
 
 final case class Apply[+K <: N, S, T](input: L[K, Inp[ScalaVal[_ <: S]]], f: S => T) extends L[K, Inp[ScalaVal[T]]]
 final case class Convert[+K <: N, T, +C[+_ <: A] <: X](v: L[K, C[SimT[T]]]) extends L[K, C[ScalaVal[T]]]
+
+///final case class Map(out: Out T) extends L[...Bag T]
+// Need New at the expression level? (To avoid bottleneck?)
