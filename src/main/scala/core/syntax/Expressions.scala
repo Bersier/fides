@@ -9,6 +9,7 @@ final case class Contains[+K <: N, T <: A](bag: L[K, Inp[Bag[K, _ <: T, Inp]]], 
   extends L[K, Inp[BoolVal]]
 
 final case class Equals[+K <: N, +T <: A](one: L[K, Inp[T]], two: L[K, Inp[T]]) extends L[K, Inp[BoolVal]]
+// Hash...
 
 final case class Branch[+K <: N, -T <: A](one: L[K, Out[T]], two: L[K, Out[T]]) extends L[K, Out[BoolVal]]
 // Do we really need stuff like that?

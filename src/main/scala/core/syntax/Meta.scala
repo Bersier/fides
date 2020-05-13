@@ -4,11 +4,10 @@ final case class Code[+K <: N, +C[_ <: A] <: X, C2 <: Sort](code: L[CodeK[K, C],
   extends A with L[K, C[Code[_, D, C2]]]
 // Have code specify some escape variables in scope? This way, escape is connected to the code it escapes.
 
-// AsCode
+final case class AsCode()
 
-final case class Quoted()
+final case class CodeZip()
 
-final case class Quote()
 // What about a piece of code for a bag? How does it get evaluated? Need some kind of eval?
 // Maybe move to Quote after all?
 // Eval
@@ -53,7 +52,7 @@ ExpandCode(V(Code(X)) => Code(V(X)) // ExpandProc
 
 Bag(Quoted(X))
 Quoted(Bag(X))
-  ... Have a primitive that does that for bags.
+  ... Have a primitive that does that for bags. <======
 
 Seq(Pair(Quoted(X)))
  */
