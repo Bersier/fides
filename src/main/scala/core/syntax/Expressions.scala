@@ -1,15 +1,19 @@
 package core.syntax
 
-final case class Merge[+K <: N, T <: A, +B <: G](
-  one: L[K, Inp[Bag[K, _ <: T, Inp, B]]],
-  two: L[K, Inp[Bag[K, _ <: T, Inp, B]]],
-) extends L[K, Inp[Bag[K, T, Inp, B]]]
+final case class Merge[+K <: N, +S <: Sort, T <: A](
+  one: L[K, _, Inp[Bag[_, S, Inp, T]]],
+  two: L[K, _, Inp[Bag[_, S, Inp, T]]],
+) extends L[K, S#R, Inp[Bag[_, S, Inp, T]]]
 
-final case class Contains[+K <: N, T <: A](bag: L[K, Inp[Bag[K, _ <: T, Inp]]], element: L[K, Inp[T]])
-  extends L[K, Inp[BoolVal]]
+final case class Contains[+K <: N, +S <: Sort, T <: A](bag: L[K, S, Inp[Bag[_, _, Inp, T]]], element: L[K, S, Inp[T]])
+  extends L[K, S#R, Inp[BoolVal]]
 
 final case class Equals[+K <: N, +T <: A](one: L[K, Inp[T]], two: L[K, Inp[T]]) extends L[K, Inp[BoolVal]]
 // Hash...
+
+// branch (a ->
+//        (b ->
+
 
 final case class Branch[+K <: N, -T <: A](one: L[K, Out[T]], two: L[K, Out[T]]) extends L[K, Out[BoolVal]]
 // Do we really need stuff like that?

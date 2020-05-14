@@ -10,22 +10,26 @@ final case class APair[+K <: N, +S <: Sort, +D[_ <: A] <: Dir[_], T1 <: A, T2 <:
 /**
   * Depending on C, can denote an expression, or processes to be run concurrently.
   */
-final case class Bag[+K <: N, T <: A, +C[_ <: A] <: Sort, +B <: G](elements: L[K, C[T], B]*)
-  extends A with L[K, C[Bag[_, T, D, B @uncheckedVariance]], B#R]
+final case class Bag[+K <: N, +S <: Sort, +D[_ <: A] <: Dir[_], T <: A](elements: L[K, S, D[T]]*)
+  extends A with L[K, S#R, D[Bag[_, S @uncheckedVariance, Dir, T]]]
 
-final case class Signed[+K <: N, T <: A, +C[_ <: A] <: X, +B <: G] private(
-  contents: L[K, C[T], B],
-  signatory: L[K, C[SignatoryVal], B],
-) extends A with L[K, C[Signed[_, T, D, _]], B#R]
+final case class Signed[+K <: N, +S <: Sort, +D[_ <: A] <: Dir[_], T <: A] private(
+  contents: L[K, S, D[T]],
+  signatory: L[K, S, D[SignatoryVal]],
+) extends A with L[K, S#R, D[Signed[_, _, Dir, T]]]
 
 object Signed {
-  def out[K <: N, T <: A](contents: L[K, Out[T]], signatory: L[K, Out[SignatoryVal]]): Signed[K, T, Out, G] = {
+  def out[K <: N, S <: Sort, T <: A](
+    contents: L[K, S, Out[T]],
+    signatory: L[K, S, Out[SignatoryVal]],
+  ): Signed[K, S, Out, T] = {
     new Signed(contents, signatory)
   }
-  def inp[K <: N, T <: A, B <: G](
-    contents: L[K, Inp[T], B],
-    signatory: L[K, Inp[SignatoryKey], B],
-  ): Signed[K, T, Inp, B#R] = {
-    new Signed(contents, signatory: L[K, Inp[SignatoryVal]])
+
+  def inp[K <: N, S <: Sort, T <: A](
+    contents: L[K, S, Inp[T]],
+    signatory: L[K, S, Inp[SignatoryKey]],
+  ): Signed[K, S, Inp, T] = {
+    new Signed(contents, signatory: L[K, S, Inp[SignatoryVal]])
   }
 }
