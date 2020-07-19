@@ -5,7 +5,9 @@ final case class Send[+K <: N, T <: A](inp: L[K, Inp[T]], address: L[K, Inp[Code
 final case class Receive[+K <: N, T <: A](out: L[K, Inp[T]], dual(address): L[K, Inp[Code[_, Inp, Loc[T]]]])
   extends L[K, Prs]
 // Can be achieve using two sends: Send(<a>, <b>)|Send(r, <a>)|Forward(a, out)
+//                                 Send(<out>, <b>)|Send(r, <out>)
 //                            for: Forward(r, b)|Receive(out, <b>)
+//                      If r == b: Receive(out, <b>)
 
 final case class Forward[+K <: N, T <: A](inp: L[K, Inp[T]], out: L[K, Out[T]]) extends L[K, Prs]
 
