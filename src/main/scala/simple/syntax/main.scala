@@ -5,8 +5,8 @@ trait Proc extends Top
 trait Expr extends Top
 trait Pot extends Proc with Expr
 
-final case class Send(inp: Expr, address: Expr)
-final case class Forward(inp: Expr, out: Expr)
+final case class Send(inp: Expr, address: Expr) extends Proc
+final case class Forward(inp: Expr, out: Expr) extends Proc
 final case class Replicated(process: Proc) extends Proc
 final case class New(idees: Expr, process: Proc) extends Proc
 final case class Awake(name: Expr, process: Proc) extends Proc
