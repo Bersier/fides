@@ -1,34 +1,36 @@
 package simplest
 
 sealed trait Expr
+sealed trait Value
+sealed trait Service extends Value
 
 final case class C(first: Expr, second: Expr) extends Expr
 
-object Forward extends Expr
+object Forward extends Service
 
-object Send extends Expr
+object Send extends Service
 
 object Replicated extends Expr
 object New extends Expr
 object Awake extends Expr
 object Asleep extends Expr
 
-object U extends Expr
-object True extends Expr
-object False extends Expr
+object U extends Value
+object True extends Value
+object False extends Value
 final class Idee extends Expr
 
-object Pair extends Expr
-object Bag extends Expr
+object Pair extends Service
+object Bag extends Service
 
-object Signed extends Expr
+object Signed extends Service
 
-object Merge extends Expr
-object Contains extends Expr
-object Equals extends Expr
+object Merge extends Service
+object Contains extends Service
+object Equals extends Service
 object Branch extends Expr
 object Copy extends Expr
-object Public extends Expr
+object Address extends Expr // Weakens a key to an address. Should this be an inp or an out?
 
 object Broadcast extends Expr
 
