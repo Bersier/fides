@@ -1,4 +1,4 @@
-package core.syntax
+package museum.core.syntax
 
 import scala.annotation.unchecked.uncheckedVariance
 

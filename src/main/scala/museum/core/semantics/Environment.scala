@@ -1,4 +1,4 @@
-//package core.semantics
+//package museum.core.semantics
 //
 //import scala.collection.mutable
 //

@@ -1,7 +1,7 @@
-//package core.semantics
+//package museum.core.semantics
 //
-//import core.syntax
-//import core.syntax.RegularK
+//import museum.core.syntax
+//import museum.core.syntax.RegularK
 //
 //trait Receiver extends Any {
 //  def receive(message: Val): (Multiset[Receiver], Set[Message], Multiset[Proc])

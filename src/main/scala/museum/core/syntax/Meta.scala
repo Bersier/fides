@@ -1,4 +1,4 @@
-package core.syntax
+package museum.core.syntax
 
 final case class Code[+K <: N, +C[_ <: A] <: X, C2 <: Sort](code: L[CodeK[K, C], _ <: C2])
   extends A with L[K, C[Code[_, D, C2]]]

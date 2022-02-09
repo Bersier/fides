@@ -1,6 +1,6 @@
-package core
+package museum.core
 
-import core.syntax.RegularK
+import museum.core.syntax.RegularK
 
 package object semantics {
   type Multiset[A] = syntax.Multiset[A]

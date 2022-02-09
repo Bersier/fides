@@ -1,4 +1,4 @@
-package simple.syntax
+package museum.simple.syntax
 
 trait Top
 trait Proc extends Top

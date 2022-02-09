@@ -1,4 +1,4 @@
-package core.syntax
+package museum.core.syntax
 
 object Example {
   val Alice: L[Nothing, Loc[A]] = new LocKey

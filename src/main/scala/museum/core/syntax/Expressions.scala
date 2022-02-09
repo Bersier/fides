@@ -1,4 +1,4 @@
-package core.syntax
+package museum.core.syntax
 
 final case class Merge[+K <: N, +S <: Sort, T <: A](
   one: L[K, _, Inp[Bag[_, S, Inp, T]]],

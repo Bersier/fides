@@ -1,4 +1,4 @@
-package core.syntax
+package museum.core.syntax
 
 final case class U() extends A with V[U]
 

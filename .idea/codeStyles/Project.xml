@@ -10,7 +10,7 @@
       <option name="INDENT_FIRST_PARAMETER_CLAUSE" value="true" />
       <option name="BLANK_LINES_AROUND_METHOD_IN_INNER_SCOPES" value="0" />
       <option name="USE_SCALADOC2_FORMATTING" value="true" />
-      <option name="ALIGN_TYPES_IN_MULTILINE_DECLARATIONS" value="true" />
+      <option name="ALIGN_PARAMETER_TYPES_IN_MULTILINE_DECLARATIONS" value="1" />
       <option name="CALL_PARAMETERS_NEW_LINE_AFTER_LPAREN" value="2" />
       <option name="MULTILINE_STRING_CLOSING_QUOTES_ON_NEW_LINE" value="true" />
       <option name="TYPE_ANNOTATION_EXCLUDE_CONSTANT" value="false" />

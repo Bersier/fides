@@ -1,4 +1,4 @@
-package core.syntax
+package museum.core.syntax
 
 final case class Send[+K <: N, T <: A](inp: L[K, Inp[T]], address: L[K, Inp[Code[_, Inp, Loc[T]]]])
   extends L[K, Prs]

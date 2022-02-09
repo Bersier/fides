@@ -1,4 +1,4 @@
-package core.syntax
+package museum.core.syntax
 
 final class Name extends IdeT with L[Nothing, Val[Name]]
 // Maybe merge some ide-like sorts

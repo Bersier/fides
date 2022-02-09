@@ -1,4 +1,4 @@
-package core
+package museum.core
 
 package object syntax {
   type Multiset[A] = Map[A, BigInt]
