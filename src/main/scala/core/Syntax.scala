@@ -1,6 +1,6 @@
 package core
 
-sealed trait Expr
+sealed trait Expr derives CanEqual
 sealed trait Value extends Expr
 sealed trait Service extends Value
 
