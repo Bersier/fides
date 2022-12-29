@@ -25,6 +25,12 @@ type Opposite[Xput] = Xput match
   case Opposite[xput] => xput
 
 sealed trait Proc
+sealed trait Val
+
+trait Message extends Proc {
+  def value: Val
+  def target: Ouput
+}
 
 trait Send extends Proc {
   def message: Input

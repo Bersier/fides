@@ -2,7 +2,7 @@ lazy val root = project
   .in(file("."))
   .settings(
     name := "Fides",
-    scalaVersion := "3.1.1",
+    scalaVersion := "3.2.1",
     libraryDependencies += "org.scala-lang" %% "scala3-staging" % scalaVersion.value,
     scalacOptions ++= Seq(
       "-Ycheck-all-patmat",
