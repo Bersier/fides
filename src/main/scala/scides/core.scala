@@ -2,16 +2,17 @@ package scides
 
 import util.Async
 
-import scala.collection.mutable
+import scala.collection.{concurrent, mutable}
 
 type Consumer[T] = T => Async
 type Message = Any
 
 trait Scidesphere:
-  private[this] val messagesInTransit = mutable.HashMap.empty[Channel, mutable.ArrayBuffer[Message]]
-  private[this] val registeredRecipients = mutable.HashMap.empty[Channel, mutable.ArrayBuffer[Consumer[Message]]]
+  private[this] var messagesInTransit = mutable.HashMap.empty[Channel, mutable.ArrayBuffer[Message]]
+  private[this] val registeredRecipients = concurrent.TrieMap.empty[Channel, Consumer[Message]]
 
-  class Channel
+  class Channel:
+    val inTransit: mutable.ArrayBuffer[Message] // todo decentralize like this? Try to get rid of all bottlenecks...
   class Key:
     val channel: Channel = new Channel
 
@@ -23,20 +24,32 @@ trait Scidesphere:
 
   def step(): Unit
 
-  def run(): Unit =
-    for (channel, messages) <- messagesInTransit do
-      registeredRecipients.get(channel).foreach(arrayBuffer =>
-        for message <- messages do
-          // todo
-          arrayBuffer.pop()
-      )
+  def deliverAll(): Unit =
+    val allMessages = synchronized {
+      val allMessages = messagesInTransit
+      messagesInTransit = mutable.HashMap.empty
+      allMessages
+    }
+    for (channel, messages) <- allMessages
+        message <- messages
+    do deliver(message, channel) // todo add concurrency
 
-  def send(message: Message, recipient: Channel): Async = Async{
+  def send(message: Message, recipient: Channel): Async = Async { synchronized {
     messagesInTransit.getOrElseUpdate(recipient, mutable.ArrayBuffer.empty[Message]) += message
-  }
+  }}
 
-  def register(key: Key, recipient: Consumer[Message]): Unit =
-    registeredRecipients.getOrElseUpdate(key.channel, mutable.ArrayBuffer.empty[Consumer[Message]]) += recipient
+  private[this] inline def deliver(message: Message, recipient: Channel): Unit =
+    registeredRecipients.get(recipient).foreach(_(message))
+
+  def register(recipient: Consumer[Message]): Key =
+    val key = new Key
+    registeredRecipients(key.channel) = recipient
+    key
+
+  def deregister(key: Key): Unit =
+    registeredRecipients.remove(key.channel)
+
+// ------------------------------------------------------------
 
   def call(message: Message, recipient: Channel): Message
   // def call(message: Message, recipient: Channel, answerHandler: Consumer[Message]): Async
