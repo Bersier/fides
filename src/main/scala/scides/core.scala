@@ -10,45 +10,22 @@ import ExecutionContext.Implicits.global
 
 type Consumer[T] = T => Async
 type Message = Any
-
-object Loop:
-  opaque type Return = Unit
-  def done: Return = ()
+val NoOp: Consumer[Message] = m => Async()
 
 trait Scidesphere:
   class Channel:
-    private[this] val inTransit: ConcurrentLinkedQueue[Message] = new ConcurrentLinkedQueue
-    @volatile private[this] var registered: Option[Consumer[Message]] = None
+    @volatile private[this] var registered: Consumer[Message] = NoOp
 
-    def send(message: Message): Async = Async(inTransit.add(message))
-
-    // todo don't need inTransit at all with this implementation...
-    def send2(message: Message): Async = Async(Future(deliver(message)))
-
-    def run(): Unit =
-      def loop(): Loop.Return =
-        given CanEqual[Null, Message | Null] = CanEqual.derived
-        inTransit.poll() match
-          case null => Loop.done
-          case message =>
-            Future(deliver(message))
-            loop()
-      loop()
-
-    inline def step(): Unit =
-      Option(inTransit.poll()).foreach(deliver(_))
-
-    private[this] inline def deliver(inline message: Message): Unit =
-      registered.foreach(_(message))
+    def send(message: Message): Async = Async(Future(registered(message)))
 
     private[this] object Key extends Scidesphere.this.Key:
       def channel: Channel = Channel.this
 
       def register(recipient: Consumer[Message]): Unit =
-        registered = Some(recipient)
+        registered = recipient
 
       def deregister(): Unit =
-        registered = None
+        registered = NoOp
 
   object Channel:
     def newKey: Key = (new Channel).Key
