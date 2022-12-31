@@ -4,6 +4,8 @@ lazy val root = project
     name := "Fides",
     scalaVersion := "3.2.1",
     libraryDependencies += "org.scala-lang" %% "scala3-staging" % scalaVersion.value,
+    javacOptions ++= Seq("--release", "19", "--enable-preview"),
+    javaOptions += "--enable-preview",
     scalacOptions ++= Seq(
       "-Ycheck-all-patmat",
       "-Ycheck-reentrant",

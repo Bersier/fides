@@ -2,56 +2,46 @@ package scides
 
 import util.Async
 
+import java.util.concurrent.ConcurrentLinkedQueue
+import javax.sound.sampled.Clip
 import scala.collection.{concurrent, mutable}
 
 type Consumer[T] = T => Async
 type Message = Any
 
 trait Scidesphere:
-  private[this] var messagesInTransit = mutable.HashMap.empty[Channel, mutable.ArrayBuffer[Message]]
-  private[this] val registeredRecipients = concurrent.TrieMap.empty[Channel, Consumer[Message]]
 
   class Channel:
-    val inTransit: mutable.ArrayBuffer[Message] // todo decentralize like this? Try to get rid of all bottlenecks...
-  class Key:
-    val channel: Channel = new Channel
+    private[this] val inTransit: ConcurrentLinkedQueue[Message] = new ConcurrentLinkedQueue
+    @volatile private[this] var registered: Option[Consumer[Message]] = None
+
+    def send(message: Message): Async = Async(inTransit.add(message))
+
+    private[this] inline def step(): Unit =
+      Option(inTransit.poll()).foreach(deliver(_))
+
+    private[this] inline def deliver(inline message: Message): Unit =
+      registered.foreach(_(message))
+
+    private[this] object Key extends Scidesphere.this.Key:
+      def channel: Channel = Channel.this
+
+      def register(recipient: Consumer[Message]): Unit =
+        registered = Some(recipient)
+
+      def deregister(): Unit =
+        registered = None
+
+  object Channel:
+    def newKey: Key = (new Channel).Key
+
+  sealed trait Key:
+    def channel: Channel
+    def register(recipient: Consumer[Message]): Unit
+    def deregister(): Unit
 
   case class Signed private(message: Message, signature: Channel)
   object Signed:
     def apply(message: Message, key: Key): Signed = Signed(message, key.channel)
 
   trait Compiler extends Channel
-
-  def step(): Unit
-
-  def deliverAll(): Unit =
-    val allMessages = synchronized {
-      val allMessages = messagesInTransit
-      messagesInTransit = mutable.HashMap.empty
-      allMessages
-    }
-    for (channel, messages) <- allMessages
-        message <- messages
-    do deliver(message, channel) // todo add concurrency
-
-  def send(message: Message, recipient: Channel): Async = Async { synchronized {
-    messagesInTransit.getOrElseUpdate(recipient, mutable.ArrayBuffer.empty[Message]) += message
-  }}
-
-  private[this] inline def deliver(message: Message, recipient: Channel): Unit =
-    registeredRecipients.get(recipient).foreach(_(message))
-
-  def register(recipient: Consumer[Message]): Key =
-    val key = new Key
-    registeredRecipients(key.channel) = recipient
-    key
-
-  def deregister(key: Key): Unit =
-    registeredRecipients.remove(key.channel)
-
-// ------------------------------------------------------------
-
-  def call(message: Message, recipient: Channel): Message
-  // def call(message: Message, recipient: Channel, answerHandler: Consumer[Message]): Async
-
-  def registerCallee(key: Key, callee: Message => Message): Unit
