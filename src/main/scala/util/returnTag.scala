@@ -5,7 +5,7 @@ type Async = Async.Type
 
 class Done:
   opaque type Type = Unit
-  inline def apply(inline meaningless: Unit = ()): Type = ()
+  inline def apply(unit: Unit = ()): Type = ()
 
 class Return[T]:
   opaque type Type = T

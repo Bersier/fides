@@ -2,10 +2,22 @@ package scides
 
 import util.Async
 import scala.concurrent.{Future, ExecutionContext}
-import scala.quoted.{Expr, staging}
+import scala.quoted.{Expr, Quotes, staging}
 import ExecutionContext.Implicits.global
 
 given staging.Compiler = staging.Compiler.make(getClass.getClassLoader.nn)
+
+@main def test(): Unit =
+  val sphere = new Scidesphere
+  val certificateReceiver = sphere.Channel.newKey[sphere.LaunchCertificate]
+  certificateReceiver.register(certificate => Async(println(certificate)))
+  sphere.Launcher.send(
+    (
+      '{ println("Hello") }, // todo be able to print code
+      certificateReceiver.channel,
+    )
+  )
+  Thread.sleep(100)
 
 type Consumer[T] = T => Async
 val NoOp: Consumer[Any] = m => Async()
@@ -19,7 +31,7 @@ final class Scidesphere:
   end Channel
 
   sealed trait Key[T]:
-    def channel: Channel[T]
+    val channel: Channel[T]
     def register(recipient: Consumer[T]): Unit
     def deregister(): Unit
   end Key
@@ -27,10 +39,10 @@ final class Scidesphere:
   private[Scidesphere] final class UserChannel[T] extends Channel[T]:
     @volatile protected[this] var registered: Consumer[T] = NoOp
 
-    def send(message: T): Async = Async(Future(registered(message)))
+    def send(message: T): Async = Async(registered(message)) // todo add Future( )
 
     private[this] object Key extends Scidesphere.this.Key[T]:
-      def channel: Channel[T] = UserChannel.this
+      val channel: Channel[T] = UserChannel.this
 
       def register(recipient: Consumer[T]): Unit =
         registered = recipient
@@ -42,25 +54,26 @@ final class Scidesphere:
     def newKey[T]: Key[T] = (new UserChannel).Key
   end UserChannel
 
-  final case class Signed[T] private(message: T, signature: PublicKey)
+  final case class Signed[T, +S <: PublicKey] private(message: T, signature: S)
   object Signed:
-    def apply[T](message: T, key: PrivateKey): Signed[T] = Signed(message, key.channel)
+    def apply[T](message: T, key: PrivateKey): Signed[T, key.channel.type] = Signed(message, key.channel)
   end Signed
   type PrivateKey = Key[?]
   type PublicKey = Channel[?]
 
-  final class Launcher extends Channel[LauncherInput]:
-    def send(message: LauncherInput): Async = Async(Future{
-      val (code, certificateRecipient) = message
-      certificateRecipient.send(Signed(code, Key))
-      staging.run(code)
-    })
+  object Launcher extends Channel[LauncherInput]:
+    def send(message: LauncherInput): Async = Async { // todo add (Future )
+      val (_, certificateRecipient) = message
+      certificateRecipient.send(Signed(staging.withQuotes(message._1), Key))
+      staging.run(message._1)
+    }
 
     private[this] object Key extends Scidesphere.this.Key[LauncherInput]:
-      def channel: Channel[LauncherInput] = Launcher.this
+      val channel: Launcher.type = Launcher.this
       def register(recipient: Consumer[LauncherInput]): Unit = throw new AssertionError()
       def deregister(): Unit = throw new AssertionError()
     end Key
   end Launcher
-  type LauncherInput = (Expr[Unit], Channel[Signed[Expr[Unit]]])
+  type LaunchCertificate = Signed[Expr[Unit], Launcher.type]
+  type LauncherInput = (Quotes ?=> Expr[Unit], Channel[LaunchCertificate])
 end Scidesphere
