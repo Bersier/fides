@@ -8,6 +8,7 @@ import ExecutionContext.Implicits.global
 given staging.Compiler = staging.Compiler.make(getClass.getClassLoader.nn)
 
 @main def test(): Unit =
+  println("Java version: " + System.getProperty("java.version"))
   val sphere = new Scidesphere
   val certificateReceiver = sphere.Channel.newKey[sphere.LaunchCertificate]
   certificateReceiver.register(certificate => Async(println(certificate)))
@@ -23,7 +24,7 @@ type Consumer[T] = T => Async
 val NoOp: Consumer[Any] = m => Async()
 
 final class Scidesphere:
-  sealed trait Channel[-T]:
+  sealed trait Channel[-T]: // todo comparable? (also with keys?)
     def send(message: T): Async
   object Channel:
     def apply[T](): Channel[T] = new UserChannel
@@ -33,7 +34,7 @@ final class Scidesphere:
   sealed trait Key[T]:
     val channel: Channel[T]
     def register(recipient: Consumer[T]): Unit
-    def deregister(): Unit
+    def deregister(): Unit // todo redundant?
   end Key
 
   private[Scidesphere] final class UserChannel[T] extends Channel[T]:

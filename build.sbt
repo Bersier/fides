@@ -2,11 +2,11 @@ lazy val root = project
   .in(file("."))
   .settings(
     name := "Fides",
-    scalaVersion := "3.2.2",
+    scalaVersion := "3.3.1",
     libraryDependencies += "org.scala-lang" %% "scala3-staging" % scalaVersion.value,
-    libraryDependencies += "dev.zio" %% "zio" % "2.0.6",
-    libraryDependencies += "dev.zio" %% "zio-streams" % "2.0.6",
-    javacOptions ++= Seq("--release", "19", "--enable-preview"),
+    libraryDependencies += "dev.zio" %% "zio" % "2.0.18",
+    libraryDependencies += "dev.zio" %% "zio-streams" % "2.0.18",
+    javacOptions ++= Seq("--release", "20", "--enable-preview"),
     javaOptions += "--enable-preview",
     scalacOptions ++= Seq(
       // "-Xdisable-assertions",
