@@ -1,5 +1,3 @@
 
-package object core {
-
+package object core:
   type Multiset[T] = Map[T, BigInt]
-}
