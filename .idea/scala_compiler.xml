@@ -15,6 +15,7 @@
     <option name="explainTypeErrors" value="true" />
     <option name="continuations" value="true" />
     <profile name="sbt 1" modules="Fides">
+      <option name="featureWarnings" value="true" />
       <parameters>
         <parameter value="-Ycheck-all-patmat" />
         <parameter value="-Ycheck-reentrant" />

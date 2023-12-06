@@ -1,3 +1,0 @@
-# I added this JDK to my WSL Ubuntu home. To get sbt to use it, I created this file.
--java-home
-~/jdk-21

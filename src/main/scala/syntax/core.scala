@@ -1,4 +1,4 @@
-package core
+package syntax
 
 sealed trait Expr derives CanEqual
 sealed trait Value extends Expr

@@ -11,8 +11,5 @@
       <entry name="!?*.kt" />
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
-    <bytecodeTargetLevel>
-      <module name="Fides" target="20" />
-    </bytecodeTargetLevel>
   </component>
 </project>

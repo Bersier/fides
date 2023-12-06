@@ -6,10 +6,11 @@ import scala.quoted.{Expr, Quotes, staging}
 import ExecutionContext.Implicits.global
 
 given staging.Compiler =
-  staging.Compiler.make(getClass.getClassLoader.nn)
+  staging.Compiler.make(Predef.getClass.getClassLoader.nn)
 
 @main def test(): Unit =
   println("Java version: " + System.getProperty("java.version"))
+  println("Scala version: " + dotty.tools.dotc.config.Properties.simpleVersionString)
   val sphere = new Scidesphere
   val certificateReceiver = sphere.Channel[sphere.LaunchCertificate](certificate => Async(println(certificate)))
   // todo add externally mutable behavior to the example

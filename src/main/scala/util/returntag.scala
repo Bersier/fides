@@ -21,7 +21,7 @@ class Return[T]:
 //    def apply(value: r.Type): T = r.unapply(value)
 
 def returnTagExample(): Unit =
-  // todo why no warning without: import scala.language.implicitConversions
+  import scala.language.implicitConversions
   val fooReturn = new Done
   def foo: fooReturn.Type = if true then fooReturn() else foo
   val barReturn = new Return[Int]
