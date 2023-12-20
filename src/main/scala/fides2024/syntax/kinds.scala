@@ -1,9 +1,9 @@
 package fides2024.syntax
 
 trait Component(using SyntaxSeal)
-trait Expr[+P <: Polarity, +T <: ValTop](using SyntaxSeal) extends Component
-sealed trait ValTop
-trait Val[+T <: ValTop](using SyntaxSeal) extends Expr[Neutral, T], ValTop
+trait Expr[+P <: Polarity, +T <: ValSup](using SyntaxSeal) extends Component
+sealed trait ValSup
+trait Val[+T <: ValSup](using SyntaxSeal) extends Expr[Neutral, T], ValSup
 
 sealed trait Polarity
 sealed trait Positive extends Polarity
