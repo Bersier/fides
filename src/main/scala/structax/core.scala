@@ -13,7 +13,7 @@ class Channel(symbol: Symbol) extends AnyVal:
   def ouput: Ouput = Ouput(symbol)
 end Channel
 
-class Input(symbol: Symbol) extends AnyVal:
+class Input(symbol: Symbol) extends AnyVal: // todo what about metaprogamming
   def channel: Channel = Channel(symbol)
 end Input
 
