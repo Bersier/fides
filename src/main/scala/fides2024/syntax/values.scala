@@ -7,9 +7,9 @@ object Nil extends Val
 
 final case class Pair(first: Val, second: Val) extends Val
 final case class QuoteVal(code: Component) extends Val
-final case class Escape(code: Expr) extends Val
+final case class Escape[P <: Polarity](code: Expr[P]) extends Val
 
-sealed class Identifier extends Val
+sealed class Identifier extends Val derives CanEqual
 final class Address extends Identifier
 final class IdentifierKey extends Val:
   val identifier: Identifier = new Identifier

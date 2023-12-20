@@ -7,6 +7,8 @@ lazy val root = project
     libraryDependencies += "dev.zio" %% "zio" % "2.0.19",
     libraryDependencies += "dev.zio" %% "zio-streams" % "2.0.19",
     scalacOptions ++= Seq(
+      "-Wnonunit-statement",
+//      "-Wvalue-discard",
 //      "-Xdisable-assertions",
 //      "-Xmax-inlines", "128",
       "-Ycheck-all-patmat",

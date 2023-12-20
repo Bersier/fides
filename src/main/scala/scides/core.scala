@@ -8,7 +8,7 @@ import ExecutionContext.Implicits.global
 given staging.Compiler =
   staging.Compiler.make(Predef.getClass.getClassLoader.nn)
 
-@main def test(): Unit =
+@main def test(): Async =
   println("Java version: " + System.getProperty("java.version"))
   println("Scala version: " + dotty.tools.dotc.config.Properties.simpleVersionString)
   val sphere = new Scidesphere
@@ -20,7 +20,6 @@ given staging.Compiler =
       certificateReceiver.identifier,
     )
   )
-  Thread.sleep(100)
 
 type Consumer[T] = T => Async
 val NoOp: Consumer[Any] = m => Async()
@@ -50,18 +49,17 @@ final class Scidesphere:
   end ChannelKey
 
   private[Scidesphere] final class UserChannel[T](behavior: Consumer[T]) extends Channel[T]:
-    def send(message: T): Async = Async(behavior(message)) // todo add Future( )
+    def send(message: T): Async = behavior(message) // todo add Future( )
   private[Scidesphere] object UserChannel:
     def apply[T](behavior: Consumer[T]): ChannelKey[T] = new ChannelKey[T]:
       val identifier: Channel[T] = new UserChannel(behavior)
   end UserChannel
 
   object Launcher extends Channel[LauncherInput]:
-    def send(message: LauncherInput): Async = Async { // todo add (Future )
+    def send(message: LauncherInput): Async = // todo add (Future )
       val (_, certificateRecipient) = message
-      certificateRecipient.send(Signed(staging.withQuotes(message._1), Key))
       staging.run(message._1)
-    }
+      certificateRecipient.send(Signed(staging.withQuotes(message._1), Key))
 
     private[this] object Key extends Scidesphere.this.ChannelKey[LauncherInput]:
       val identifier: Launcher.type = Launcher.this
