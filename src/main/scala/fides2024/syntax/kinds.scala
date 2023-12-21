@@ -1,6 +1,7 @@
 package fides2024.syntax
 
 trait Component(using SyntaxSeal)
+// todo shouldn't T be contravariant when P is Negative?
 trait Expr[+P <: Polarity, +T <: ValSup](using SyntaxSeal) extends Component
 sealed trait ValSup
 trait Val[+T <: ValSup](using SyntaxSeal) extends Expr[Neutral, T], ValSup
