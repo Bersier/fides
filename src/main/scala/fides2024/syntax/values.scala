@@ -3,10 +3,15 @@ package fides2024.syntax
 object Unit extends Val[Unit.type]
 object True extends Val[True.type]
 object False extends Val[False.type]
-object Nil extends Val[Nil.type]
 
 final case class Pair[FirstT <: ValSup, SecondT <: ValSup]
 (first: Val[FirstT], second: Val[SecondT]) extends Val[Pair[FirstT, SecondT]]
+
+sealed trait Collection[ElementT <: ValSup] extends Val[Collection[ElementT]]
+object Empty extends Collection[Nothing]
+final case class NonEmpty[ElementT <: ValSup](elements: Iterable[ElementT]) extends Collection[ElementT]:
+  assert(elements.nonEmpty)
+end NonEmpty
 
 /**
   * Code as value, used for metaprogramming.

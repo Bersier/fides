@@ -3,6 +3,9 @@ package fides2024.syntax
 final case class PairTogether[P <: Polarity, FirstT <: ValSup, SecondT <: ValSup]
 (first: Expr[P, FirstT], second: Expr[P, SecondT]) extends Expr[P, Pair[FirstT, SecondT]]
 
+final case class Collect[P <: Polarity, ElementT <: ValSup]
+(element: Expr[P, ElementT], others: Expr[P, Collection[ElementT]]) extends Expr[P, Collection[ElementT]]
+
 /**
   * Primitive to sign messages.
   *
