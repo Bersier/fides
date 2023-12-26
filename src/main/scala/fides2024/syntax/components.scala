@@ -1,7 +1,9 @@
 package fides2024.syntax
 
-final case class Send(message: Expr[Positive, ValSup], recipient: Expr[Positive, Identifier]) extends Component
-final case class Message[T <: ValSup](message: Val[T], recipient: Val[Identifier]) extends Component
+final case class Send
+(message: Code[Expr[ValType]], recipient: Code[Expr[Identifier]]) extends Component
+
+final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Val[Identifier]]) extends Component
 
 final case class Scope(localIdentifiers: Val[Collection[Identifier]], body: Component) extends Component
 

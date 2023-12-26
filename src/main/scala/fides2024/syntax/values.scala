@@ -4,22 +4,20 @@ object Unit extends Val[Unit.type]
 object True extends Val[True.type]
 object False extends Val[False.type]
 
-final case class Pair[FirstT <: ValSup, SecondT <: ValSup]
-(first: Val[FirstT], second: Val[SecondT]) extends Val[Pair[FirstT, SecondT]]
+final case class Pair[FirstT <: ValType, SecondT <: ValType]
+(first: Code[Val[FirstT]], second: Code[Val[SecondT]]) extends Val[Pair[FirstT, SecondT]]
 
 // sealed trait Collection[ElementT <: F[K]] extends F[Collection[K]]
-sealed trait Collection[ElementT <: ValSup] extends Val[Collection[ElementT]]
+sealed trait Collection[ElementT <: ValType] extends Val[Collection[ElementT]]
 object Empty extends Collection[Nothing]
-final case class NonEmpty[ElementT <: ValSup](elements: Iterable[ElementT]) extends Collection[ElementT]:
+final case class NonEmpty[ElementT <: ValType](elements: Iterable[ElementT]) extends Collection[ElementT]:
   assert(elements.nonEmpty)
 end NonEmpty
 
 /**
   * Code as value, used for metaprogramming.
   */
-final case class Quotation(code: Component) extends Val[Quotation]
-
-final case class Escape[P <: Polarity](code: Expr[P, ValSup]) extends Val[Nothing]
+final case class Quotation[C <: CodeType](code: Code[C]) extends Val[Quotation[C]]
 
 /**
   * Identifiers are structureless. They can only be compared for equality. New identifiers can be created.
@@ -40,13 +38,13 @@ end IdentifierKey
   * @param signature the identifier corresponding to the key that was used to sign the document
   * @tparam ContentsT the type of the signed value
   */
-final case class Signed[ContentsT <: ValSup] private
+final case class Signed[ContentsT <: ValType] private
 (document: Val[ContentsT], signature: Identifier) extends Val[Signed[ContentsT]]
 object Signed:
   /**
     * Signed values can only be created from keys, but only reveal the corresponding identifier.
     */
-  def apply[ContentsT <: ValSup](document: Val[ContentsT], signatory: IdentifierKey): Signed[ContentsT] =
+  def apply[ContentsT <: ValType](document: Val[ContentsT], signatory: IdentifierKey): Signed[ContentsT] =
     new Signed(document, signatory.identifier)
 end Signed
 
@@ -58,8 +56,8 @@ end Signed
   * SignedMatcher(1, m, s) matches Signed(m, s).
   * For level > 1, SignedMatcher(level, m, s) matches SignedMatcher(level - 1, m, s).
   */
-final case class SignedMatcher[ContentsT <: ValSup]
-(level: BigInt, document: Val[ContentsT], signature: Val[Identifier]) extends Val[Signed[ContentsT]]:
+final case class SignedMatcher[ContentsT <: ValType]
+(level: BigInt, document: Code[Val[ContentsT]], signature: Code[Val[Identifier]]) extends Val[Signed[ContentsT]]:
   assert(level > 0)
 end SignedMatcher
 // todo should only be allowed in code patterns (although maybe it's not such a big deal if it can be used elsewhere)

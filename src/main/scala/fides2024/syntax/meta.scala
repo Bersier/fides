@@ -1,4 +1,3 @@
 package fides2024.syntax
 
-class meta {
-}
+final case class Escape[C <: CodeType](code: Code[Expr[Quotation[C]]]) extends Code[C]
