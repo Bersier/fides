@@ -7,6 +7,7 @@ object False extends Val[False.type]
 final case class Pair[FirstT <: ValSup, SecondT <: ValSup]
 (first: Val[FirstT], second: Val[SecondT]) extends Val[Pair[FirstT, SecondT]]
 
+// sealed trait Collection[ElementT <: F[K]] extends F[Collection[K]]
 sealed trait Collection[ElementT <: ValSup] extends Val[Collection[ElementT]]
 object Empty extends Collection[Nothing]
 final case class NonEmpty[ElementT <: ValSup](elements: Iterable[ElementT]) extends Collection[ElementT]:
@@ -16,7 +17,7 @@ end NonEmpty
 /**
   * Code as value, used for metaprogramming.
   */
-final case class QuoteVal(code: Component) extends Val[QuoteVal]
+final case class Quotation(code: Component) extends Val[Quotation]
 
 final case class Escape[P <: Polarity](code: Expr[P, ValSup]) extends Val[Nothing]
 
