@@ -1,8 +1,9 @@
 package fides2024.syntax
 
 object Unit extends Val[Unit.type]
-object True extends Val[True.type]
-object False extends Val[False.type]
+sealed trait Bool extends Val[Bool]
+object True extends Val[Bool]
+object False extends Val[Bool]
 
 final case class Pair[FirstT <: ValType, SecondT <: ValType]
 (first: Code[Val[FirstT]], second: Code[Val[SecondT]]) extends Val[Pair[FirstT, SecondT]]

@@ -2,7 +2,7 @@ lazy val root = project
   .in(file("."))
   .settings(
     name := "Fides",
-    scalaVersion := "3.3.1",
+    scalaVersion := "3.4.0-RC1-bin-20231223-938d405-NIGHTLY",
     libraryDependencies += "org.scala-lang" %% "scala3-staging" % scalaVersion.value,
     libraryDependencies += "dev.zio" %% "zio" % "2.0.19",
     libraryDependencies += "dev.zio" %% "zio-streams" % "2.0.19",
