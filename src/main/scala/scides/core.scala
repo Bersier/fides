@@ -61,7 +61,7 @@ final class Scidesphere:
       staging.run(message._1)
       certificateRecipient.send(Signed(staging.withQuotes(message._1), Key))
 
-    private[this] object Key extends Scidesphere.this.ChannelKey[LauncherInput]:
+    private object Key extends Scidesphere.this.ChannelKey[LauncherInput]:
       val identifier: Launcher.type = Launcher.this
     end Key
   end Launcher

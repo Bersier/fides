@@ -2,54 +2,67 @@ package fides2024.syntax
 
 final case class ExtractIdentifier(key: Expr[IdentifierKey]) extends Expr[Identifier]
 
-final case class PairTogether[P <: ([T <: ValType] =>> Polar[T]), FirstT <: ValType, SecondT <: ValType]
+final case class PairTogether[P <: [T <: ValType] =>> Polar[T], FirstT <: ValType, SecondT <: ValType]
 (first: Code[P[FirstT]], second: Code[P[SecondT]]) extends Code[P[Pair[FirstT, SecondT]]]
-
-//final case class PairTogether2[B <: Boolean, FirstT <: ValType, SecondT <: ValType]
-//(first: Code[PolarFromB[B, FirstT]], second: Code[PolarFromB[B, SecondT]]) extends Code[PolarFromB[B, Pair[FirstT, SecondT]]]
 
 def test(): Unit =
   val first = Location[[T <: ValType] =>> Expr[T], Bool](Identifier())
+  val negLoc = Location[[T <: ValType] =>> Ptrn[T], Bool](Identifier())
 //  val second = Location[[T <: ValType] =>> Expr[T], Bool](Identifier())
 //  val first = PairTogether(True, True)
   val second = ExtractIdentifier(IdentifierKey())
   PairTogether[Expr, Bool, Identifier](first, second)
 
-final case class AddElement[P <: ([T <: ValType] =>> Polar[T]), ElementT <: ValType]
+  Sign[Bool](first, IdentifierKey())
+  Unsign[Bool](negLoc, Identifier())
+
+final case class AddElement[P <: [T <: ValType] =>> Polar[T], ElementT <: ValType]
 (element: Code[P[ElementT]], others: Code[P[Collection[ElementT]]]) extends Code[P[Collection[ElementT]]]
 
 //// todo for later, since it uses Integer
-//final case class Observe[P <: ([T <: ValType] =>> Polar[T]), ElementT <: ValType]
+//final case class Observe[P <: [T <: ValType] =>> Polar[T], ElementT <: ValType]
 //(elementSource: Code[Location[P, ElementT]], size: Code[P[Nothing]]) extends Code[P[Collection[ElementT]]]
 
-///**
-//  * Primitive to sign messages.
-//  *
-//  * Dually, when polarity is negative, extracts contents of a signed message.
-//  * todo in that case, the type of @signatory should be Expr[Negative, Identifier]
-//  */
-//final case class Sign[P <: Polarity, ContentsT <: ValType]
-//(contents: Expr[P, ContentsT], signatory: Expr[P, IdentifierKey]) extends Expr[P, Signed[ContentsT]]
-//
-///**
-//  * Analoguous to s-Strings in Scala, but for code.
-//  *
-//  * Once all the Escape inside @code have been evaluated and spliced in, reduces to a QuoteVal.
-//  */
-//final case class Quote[P <: Polarity](code: Component) extends Expr[P, Quotation]
+/**
+  * Primitive to sign messages.
+  *
+  * Dual of Unsign. I split the definition in two because I couldn't type it properly in Scala otherwise.
+  * todo can a function be written that selects the right one, based on polarity?
+  * todo or maybe, by using a Boolean polarity indicator, a match type can reduce properly?
+  */
+final case class Sign[T <: ValType]
+(contents: Code[Expr[T]], signatory: Code[Expr[IdentifierKey]]) extends Code[Expr[Signed[T]]]
+// todo also keep track of signatory type?
+
+/**
+  * Primitive to unsign messages.
+  *
+  * Dual of Sign. I split the definition in two because I couldn't type it properly in Scala otherwise.
+  */
+final case class Unsign[T <: ValType]
+(contents: Code[Ptrn[T]], signatory: Code[Ptrn[Identifier]]) extends Code[Ptrn[Signed[T]]]
+
+//type SignatoryCodeType[P <: [U <: ValType] =>> Polar[U], T <: ValType] <: CodeType = P[T] match
+//  case Expr[T] => Expr[IdentifierKey]
+//  case Ptrn[T] => Ptrn[Identifier]
+
+/**
+  * Analoguous to s-Strings in Scala, but for code.
+  *
+  * Once all the Escape inside @code have been evaluated and spliced in, reduces to a QuoteVal.
+  */
+final case class Quote[P <: [U <: ValType] =>> Polar[U], C <: CodeType](code: Code[C]) extends Code[P[Quotation[C]]]
 
 /**
   * Wrapps a given value into quotes.
   *
   * Dually, when used in a negative polarity position, evaluates the given QuoteVal.
   */
-final case class WrapInQuotes[P <: ([U <: ValType] =>> Polar[U]), T <: ValType]
+final case class WrapInQuotes[P <: [U <: ValType] =>> Polar[U], T <: ValType]
 (value: Code[P[T]]) extends Code[WrapInQuotesCodeType[P, T]]
+// todo test (def probably has to be split in two)
 
-// todo delete
-// final case class Eval[T <: ValType](quotation: Code[Expr[Quotation[Expr[T]]]]) extends Expr[Val[T]]
-
-type WrapInQuotesCodeType[P <: ([U <: ValType] =>> Polar[U]), T <: ValType] <: CodeType = P[T] match
+type WrapInQuotesCodeType[P <: [U <: ValType] =>> Polar[U], T <: ValType] <: CodeType = P[T] match
   case Expr[T] => Expr[Quotation[Val[T]]]
   case Ptrn[T] => Ptrn[Quotation[Expr[T]]]
 
@@ -58,5 +71,5 @@ type WrapInQuotesCodeType[P <: ([U <: ValType] =>> Polar[U]), T <: ValType] <: C
   *
   * Dually, when used in a negative polarity position, emits on @id once it has a value.
   */
-final case class Location[P <: ([U <: ValType] =>> Polar[U]), T <: ValType]
+final case class Location[P <: [U <: ValType] =>> Polar[U], T <: ValType]
 (id: Val[Identifier]) extends Code[P[T]] // todo , CodeType, Code[Location[P, T]]
