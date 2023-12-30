@@ -2,21 +2,34 @@ package fides2024.syntax
 
 // todo make Val[T] equivalent to Quotation[Val[T]]?
 
+/**
+  * Type that doesn't carry any information beyond causality (the sending of any value occurs before its reception).
+  */
 object Unit extends Val[Unit.type]
+
+/**
+  * Boolean values
+  */
 sealed trait Bool extends Val[Bool]
 object True extends Val[Bool]
 object False extends Val[Bool]
 
+/**
+  * A value that is made up of two values.
+  */
 final case class Pair[T1 <: ValType, T2 <: ValType]
 (first: Code[Val[T1]], second: Code[Val[T2]]) extends Val[Pair[T1, T2]]
 
+/**
+  * A value that is made up of an unordered group of values.
+  */
 sealed trait Collection[T <: ValType] extends Val[Collection[T]]:
   def elements: Iterable[Val[T]]
 end Collection
 object Empty extends Collection[Nothing]:
   def elements: Iterable[Val[Nothing]] = Iterable.empty[Val[Nothing]]
 end Empty
-final case class NonEmpty[T <: ValType](elements: Iterable[Val[T]]) extends Collection[T]:
+final case class NonEmpty[T <: ValType](elements: Val[T]*) extends Collection[T]:
   assert(elements.nonEmpty)
 end NonEmpty
 
