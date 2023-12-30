@@ -1,8 +1,19 @@
 package fides2024.syntax
 
+/**
+  * General type to represent Fides code
+  */
 trait Code[+T <: CodeType] private[syntax]()
+
+/**
+  * Represents the different types of possible Fides code.
+  */
 trait CodeType private[syntax]()
-trait ValType private[syntax]()
+
+/**
+  * Parent type of all the types that represent Fides value types.
+  */
+sealed trait ValType private[syntax]()
 
 /**
   * Component also extends Code[Component] purely for convenience, so that we can write
@@ -10,6 +21,9 @@ trait ValType private[syntax]()
   */
 trait Component extends CodeType, Code[Component]
 
+/**
+  * Higher-kinded type, that, in practice, could be either Expr, Ptrn, or Val.
+  */
 type Polar = [T <: ValType] =>> CodeType
 
 /**
@@ -23,9 +37,6 @@ trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
   * "Foo extends Ptrn[Foo]", rather than "Foo extends Ptrn[Foo], Code[Ptrn[Foo]]".
   */
 trait Ptrn[-T <: ValType] extends CodeType, Code[Ptrn[T]]
-
-//trait PosVal[+T <: ValType] extends Expr[T]
-//trait NegVal[-T <: ValType] extends Ptrn[T]
 
 /**
   * Val[T] also extends Code[Val[T]] and ValType purely for convenience, so that we can write

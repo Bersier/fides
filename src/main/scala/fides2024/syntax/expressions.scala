@@ -1,16 +1,34 @@
 package fides2024.syntax
 
+/**
+  * Outputs the identifier corresponding to the obtained key.
+  */
 final case class ExtractIdentifier(key: Expr[IdentifierKey]) extends Expr[Identifier]
 
+/**
+  * Pairs two values together.
+  *
+  * Dually, when P =:= Ptrn, extracts the elements of a pair.
+  */
 final case class PairTogether[P[T <: ValType] <: Polar[T], T1 <: ValType, T2 <: ValType]
 (first: Code[P[T1]], second: Code[P[T2]]) extends Code[P[Pair[T1, T2]]]
 
+/**
+  * Outputs a collection with one element added to it.
+  *
+  * Dually, when P =:= Ptrn, extracts one element from a collection.
+  */
 final case class AddElement[P[U <: ValType] <: Polar[U], T <: ValType]
 (element: Code[P[T]], others: Code[P[Collection[T]]]) extends Code[P[Collection[T]]]
 
-// todo Nothing stands for a future Integer type in Fides
+/**
+  * Waits for @size elements from @elementSource, then outputs them as a collection.
+  *
+  * Dually, when P =:= Ptrn, outputs the elements of a collection to @elementSource, and its size to @size.
+  */
 final case class Observe[P[T <: ValType] <: Polar[T], T <: ValType]
-(elementSource: Code[Endpoint[P, T]], size: Code[Nothing]) extends Code[P[Collection[T]]]
+(elementSource: Code[Endpoint[P, T]], size: Code[P[Nothing]]) extends Code[P[Collection[T]]]
+// todo Nothing stands for a future Integer type in Fides
 
 /**
   * Primitive to sign messages.
@@ -32,11 +50,13 @@ final case class Unsign[T <: ValType]
   * Analoguous to s-Strings in Scala, but for code.
   *
   * Once all the Escape inside @code have been evaluated and spliced in, reduces to a QuoteVal.
+  *
+  * Dually, can act as a code pattern.
   */
 final case class Quote[P[U <: ValType] <: Polar[U], C <: CodeType](code: Code[C]) extends Code[P[Quotation[C]]]
 
 /**
-  * Wrapps a given value into quotes.
+  * Wrapps a value into quotes.
   *
   * Dual of Eval.
   */
@@ -71,3 +91,8 @@ final case class Inp[T <: ValType]
   */
 final case class Out[T <: ValType]
 (override val id: Code[Val[Identifier]]) extends Endpoint[Ptrn, T](id), Ptrn[T], Code[Out[T]]
+
+/**
+  * Tries to match the obtained value to the given pattern. Upon failure, output the value to the alternative instead.
+  */
+final case class Match[T <: ValType](pattern: Code[Ptrn[T]], alternative: Code[Ptrn[T]]) extends Ptrn[T]
