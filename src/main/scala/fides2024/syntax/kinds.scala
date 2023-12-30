@@ -33,6 +33,18 @@ trait Ptrn[-T <: ValType] extends CodeType, Code[Ptrn[T]]
   */
 trait Val[T <: ValType] extends Expr[T], Ptrn[T], Code[Val[T]], ValType
 
-type PolarFromB[B <: Boolean, T <: ValType] <: CodeType = B match
-  case true => Expr[T]
-  case false => Ptrn[T]
+// todo delete
+type Pole[P <: Polarity, T <: ValType] <: CodeType = P match
+  case Positive => Expr[T]
+  case Negative => Ptrn[T]
+  case Neutral => Val[T]
+
+sealed trait Polarity
+sealed trait Positive extends Polarity
+sealed trait Negative extends Polarity
+sealed trait Neutral extends Positive, Negative
+
+type Opposite[P <: Polarity] = P match
+  case Positive => Negative
+  case Negative => Positive
+  case Neutral => Neutral

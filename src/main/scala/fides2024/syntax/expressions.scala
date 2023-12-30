@@ -5,16 +5,18 @@ final case class ExtractIdentifier(key: Expr[IdentifierKey]) extends Expr[Identi
 final case class PairTogether[P[T <: ValType] <: Polar[T], T1 <: ValType, T2 <: ValType]
 (first: Code[P[T1]], second: Code[P[T2]]) extends Code[P[Pair[T1, T2]]]
 
-def test(): Unit =
-  val first = Location[[T <: ValType] =>> Expr[T], Bool](Identifier())
-  val negLoc = Location[[T <: ValType] =>> Ptrn[T], Bool](Identifier())
-//  val second = Location[[T <: ValType] =>> Expr[T], Bool](Identifier())
-//  val first = PairTogether(True, True)
-  val second = ExtractIdentifier(IdentifierKey())
-  PairTogether[Expr, Bool, Identifier](first, second)
+// todo delete
+final case class PairTogether2[P <: Polarity, T1 <: ValType, T2 <: ValType]
+(first: Code[Pole[P, T1]], second: Code[Pole[P, T2]]) extends Code[Pole[P, Pair[T1, T2]]]
 
-  Sign[Bool](first, IdentifierKey())
-  Unsign[Bool](negLoc, Identifier())
+def test(): Unit =
+  val posLoc = Location[Expr, Bool](Identifier())
+  val negLoc = Location[Ptrn, Bool](Identifier())
+  val extractedIdentifier = ExtractIdentifier(IdentifierKey())
+  println(Sign(PairTogether(posLoc, extractedIdentifier), IdentifierKey()))
+  println(Sign(PairTogether(Identifier(), Identifier()), IdentifierKey()))
+  println(Sign[Bool](posLoc, IdentifierKey()))
+  println(Unsign[Bool](negLoc, Identifier()))
 
 final case class AddElement[P[U <: ValType] <: Polar[U], T <: ValType]
 (element: Code[P[T]], others: Code[P[Collection[T]]]) extends Code[P[Collection[T]]]
@@ -27,12 +29,9 @@ final case class AddElement[P[U <: ValType] <: Polar[U], T <: ValType]
   * Primitive to sign messages.
   *
   * Dual of Unsign. I split the definition in two because I couldn't type it properly in Scala otherwise.
-  * todo can a function be written that selects the right one, based on polarity?
-  * todo or maybe, by using a Boolean polarity indicator, a match type can reduce properly?
   */
 final case class Sign[T <: ValType]
 (contents: Code[Expr[T]], signatory: Code[Expr[IdentifierKey]]) extends Code[Expr[Signed[T]]]
-// todo also keep track of signatory type?
 
 /**
   * Primitive to unsign messages.
@@ -72,4 +71,19 @@ type WrapInQuotesCodeType[P[U <: ValType] <: Polar[U], T <: ValType] <: CodeType
   * Dually, when used in a negative polarity position, emits on @id once it has a value.
   */
 final case class Location[P[U <: ValType] <: Polar[U], T <: ValType]
-(id: Val[Identifier]) extends Code[P[T]] // todo , CodeType, Code[Location[P, T]]
+(id: Code[Val[Identifier]]) extends Code[P[T]] // todo , CodeType, Code[Location[P, T]]
+// todo delete, and only keep Inp and Out?
+
+/**
+  * Absorbs from the location referred to by @id. Reduces to the received val after reception.
+  *
+  * Dual of Out.
+  */
+final case class Inp[T <: ValType](id: Code[Val[Identifier]]) extends Code[Expr[T]]
+
+/**
+  * Emits to the location referred to by @id, once it has a value.
+  *
+  * Dual of Inp.
+  */
+final case class Out[T <: ValType](id: Code[Val[Identifier]]) extends Code[Ptrn[T]]
