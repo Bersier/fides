@@ -10,9 +10,13 @@ object False extends Val[Bool]
 final case class Pair[T1 <: ValType, T2 <: ValType]
 (first: Code[Val[T1]], second: Code[Val[T2]]) extends Val[Pair[T1, T2]]
 
-sealed trait Collection[T <: ValType] extends Val[Collection[T]]
-object Empty extends Collection[Nothing]
-final case class NonEmpty[T <: ValType](elements: Iterable[T]) extends Collection[T]:
+sealed trait Collection[T <: ValType] extends Val[Collection[T]]:
+  def elements: Iterable[Val[T]]
+end Collection
+object Empty extends Collection[Nothing]:
+  def elements: Iterable[Val[Nothing]] = Iterable.empty[Val[Nothing]]
+end Empty
+final case class NonEmpty[T <: ValType](elements: Iterable[Val[T]]) extends Collection[T]:
   assert(elements.nonEmpty)
 end NonEmpty
 
@@ -26,6 +30,7 @@ final case class Quotation[C <: CodeType](code: Code[C]) extends Val[Quotation[C
   * It is not possible to construct an identifier in any other way.
   */
 final class Identifier extends Val[Identifier] derives CanEqual
+// todo add Symbol?
 
 /**
   * A key has a corresponding identifier. The identifer can be obtained from the key, but not vice versa

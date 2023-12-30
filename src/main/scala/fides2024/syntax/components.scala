@@ -35,5 +35,4 @@ final case class Repeated(body: Code[Component]) extends Component
 /**
   * Composes the given components concurrently.
   */
-final case class Concurrent(components: Val[Collection[?]]) extends Component
-// todo Collection[Component] is not a valid type...
+final case class Concurrent(components: Iterable[Code[Component]]) extends Component

@@ -96,3 +96,11 @@ final case class Out[T <: ValType]
   * Tries to match the obtained value to the given pattern. Upon failure, output the value to the alternative instead.
   */
 final case class Match[T <: ValType](pattern: Code[Ptrn[T]], alternative: Code[Ptrn[T]]) extends Ptrn[T]
+
+/**
+  * Converts a collection of component quotations to a quotation of the components, composed concurrently.
+  *
+  * Dually, when P =:= Ptrn, extracts the components out of an obtained Concurrent component.
+  */
+final case class Zip[P[U <: ValType] <: Polar[U]]
+(components: Code[P[Collection[Quotation[Component]]]]) extends Code[P[Quotation[Concurrent]]]
