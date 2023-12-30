@@ -5,23 +5,12 @@ final case class ExtractIdentifier(key: Expr[IdentifierKey]) extends Expr[Identi
 final case class PairTogether[P[T <: ValType] <: Polar[T], T1 <: ValType, T2 <: ValType]
 (first: Code[P[T1]], second: Code[P[T2]]) extends Code[P[Pair[T1, T2]]]
 
-def test(): Unit =
-  val posLoc = Inp[Bool](Identifier())
-  val negLoc = Out[Bool](Identifier())
-  val extractedIdentifier = ExtractIdentifier(IdentifierKey())
-  println(Sign(PairTogether(posLoc, extractedIdentifier), IdentifierKey()))
-  println(Sign(PairTogether(Identifier(), Identifier()), IdentifierKey()))
-  println(Sign[Bool](posLoc, IdentifierKey()))
-  println(Unsign[Bool](negLoc, Identifier()))
-  println(Sign(Wrap(posLoc), IdentifierKey()))
-  println(Unsign(Unwrap(negLoc), Identifier()))
-
 final case class AddElement[P[U <: ValType] <: Polar[U], T <: ValType]
 (element: Code[P[T]], others: Code[P[Collection[T]]]) extends Code[P[Collection[T]]]
 
-//// todo for later, since it uses Integer
-//final case class Observe[P[T <: ValType] <: Polar[T], ElementT <: ValType]
-//(elementSource: Code[Location[P, ElementT]], size: Code[P[Nothing]]) extends Code[P[Collection[ElementT]]]
+// todo Nothing stands for a future Integer type in Fides
+final case class Observe[P[T <: ValType] <: Polar[T], T <: ValType]
+(elementSource: Code[Endpoint[P, T]], size: Code[Nothing]) extends Code[P[Collection[T]]]
 
 /**
   * Primitive to sign messages.
@@ -61,16 +50,24 @@ final case class Wrap[T <: ValType](value: Code[Expr[T]]) extends Code[Expr[Quot
 final case class Unwrap[T <: ValType](value: Code[Ptrn[T]]) extends Code[Ptrn[Quotation[Expr[T]]]]
 
 /**
+  * Location end-point
+  */
+sealed class Endpoint[P[U <: ValType] <: Polar[U], T <: ValType]
+(val id: Code[Val[Identifier]]) extends Code[Endpoint[P, T]], CodeType
+// todo instead of an id, Location(id) could be passed, that itself has a ValType
+
+/**
   * Absorbs from the location referred to by @id. Reduces to the received val after reception.
   *
   * Dual of Out.
   */
-final case class Inp[T <: ValType](id: Code[Val[Identifier]]) extends Expr[T]
-// todo , CodeType, Code[Location[P, T]]
+final case class Inp[T <: ValType]
+(override val id: Code[Val[Identifier]]) extends Endpoint[Expr, T](id), Expr[T], Code[Inp[T]]
 
 /**
   * Emits to the location referred to by @id, once it has a value.
   *
   * Dual of Inp.
   */
-final case class Out[T <: ValType](id: Code[Val[Identifier]]) extends Ptrn[T]
+final case class Out[T <: ValType]
+(override val id: Code[Val[Identifier]]) extends Endpoint[Ptrn, T](id), Ptrn[T], Code[Out[T]]

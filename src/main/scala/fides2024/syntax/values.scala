@@ -1,5 +1,7 @@
 package fides2024.syntax
 
+// todo make Val[T] equivalent to Quotation[Val[T]]?
+
 object Unit extends Val[Unit.type]
 sealed trait Bool extends Val[Bool]
 object True extends Val[Bool]
