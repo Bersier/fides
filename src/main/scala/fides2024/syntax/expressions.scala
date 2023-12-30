@@ -5,18 +5,16 @@ final case class ExtractIdentifier(key: Expr[IdentifierKey]) extends Expr[Identi
 final case class PairTogether[P[T <: ValType] <: Polar[T], T1 <: ValType, T2 <: ValType]
 (first: Code[P[T1]], second: Code[P[T2]]) extends Code[P[Pair[T1, T2]]]
 
-// todo delete
-final case class PairTogether2[P <: Polarity, T1 <: ValType, T2 <: ValType]
-(first: Code[Pole[P, T1]], second: Code[Pole[P, T2]]) extends Code[Pole[P, Pair[T1, T2]]]
-
 def test(): Unit =
-  val posLoc = Location[Expr, Bool](Identifier())
-  val negLoc = Location[Ptrn, Bool](Identifier())
+  val posLoc = Inp[Bool](Identifier())
+  val negLoc = Out[Bool](Identifier())
   val extractedIdentifier = ExtractIdentifier(IdentifierKey())
   println(Sign(PairTogether(posLoc, extractedIdentifier), IdentifierKey()))
   println(Sign(PairTogether(Identifier(), Identifier()), IdentifierKey()))
   println(Sign[Bool](posLoc, IdentifierKey()))
   println(Unsign[Bool](negLoc, Identifier()))
+  println(Sign(Wrap(posLoc), IdentifierKey()))
+  println(Unsign(Unwrap(negLoc), Identifier()))
 
 final case class AddElement[P[U <: ValType] <: Polar[U], T <: ValType]
 (element: Code[P[T]], others: Code[P[Collection[T]]]) extends Code[P[Collection[T]]]
@@ -28,22 +26,18 @@ final case class AddElement[P[U <: ValType] <: Polar[U], T <: ValType]
 /**
   * Primitive to sign messages.
   *
-  * Dual of Unsign. I split the definition in two because I couldn't type it properly in Scala otherwise.
+  * Dual of Unsign.
   */
 final case class Sign[T <: ValType]
-(contents: Code[Expr[T]], signatory: Code[Expr[IdentifierKey]]) extends Code[Expr[Signed[T]]]
+(contents: Code[Expr[T]], signatory: Code[Expr[IdentifierKey]]) extends Expr[Signed[T]]
 
 /**
   * Primitive to unsign messages.
   *
-  * Dual of Sign. I split the definition in two because I couldn't type it properly in Scala otherwise.
+  * Dual of Sign.
   */
 final case class Unsign[T <: ValType]
-(contents: Code[Ptrn[T]], signatory: Code[Ptrn[Identifier]]) extends Code[Ptrn[Signed[T]]]
-
-//type SignatoryCodeType[P[U <: ValType] <: Polar[U], T <: ValType] <: CodeType = P[T] match
-//  case Expr[T] => Expr[IdentifierKey]
-//  case Ptrn[T] => Ptrn[Identifier]
+(contents: Code[Ptrn[T]], signatory: Code[Ptrn[Identifier]]) extends Ptrn[Signed[T]]
 
 /**
   * Analoguous to s-Strings in Scala, but for code.
@@ -55,35 +49,28 @@ final case class Quote[P[U <: ValType] <: Polar[U], C <: CodeType](code: Code[C]
 /**
   * Wrapps a given value into quotes.
   *
-  * Dually, when used in a negative polarity position, evaluates the given QuoteVal.
+  * Dual of Eval.
   */
-final case class WrapInQuotes[P[U <: ValType] <: Polar[U], T <: ValType]
-(value: Code[P[T]]) extends Code[WrapInQuotesCodeType[P, T]]
-// todo test (def probably has to be split in two)
-
-type WrapInQuotesCodeType[P[U <: ValType] <: Polar[U], T <: ValType] <: CodeType = P[T] match
-  case Expr[T] => Expr[Quotation[Val[T]]]
-  case Ptrn[T] => Ptrn[Quotation[Expr[T]]]
+final case class Wrap[T <: ValType](value: Code[Expr[T]]) extends Code[Expr[Quotation[Val[T]]]]
 
 /**
-  * Receives on @id. Reduces to the received val after reception.
+  * Evaluates a quotation.
   *
-  * Dually, when used in a negative polarity position, emits on @id once it has a value.
+  * Dual of wrap.
   */
-final case class Location[P[U <: ValType] <: Polar[U], T <: ValType]
-(id: Code[Val[Identifier]]) extends Code[P[T]] // todo , CodeType, Code[Location[P, T]]
-// todo delete, and only keep Inp and Out?
+final case class Unwrap[T <: ValType](value: Code[Ptrn[T]]) extends Code[Ptrn[Quotation[Expr[T]]]]
 
 /**
   * Absorbs from the location referred to by @id. Reduces to the received val after reception.
   *
   * Dual of Out.
   */
-final case class Inp[T <: ValType](id: Code[Val[Identifier]]) extends Code[Expr[T]]
+final case class Inp[T <: ValType](id: Code[Val[Identifier]]) extends Expr[T]
+// todo , CodeType, Code[Location[P, T]]
 
 /**
   * Emits to the location referred to by @id, once it has a value.
   *
   * Dual of Inp.
   */
-final case class Out[T <: ValType](id: Code[Val[Identifier]]) extends Code[Ptrn[T]]
+final case class Out[T <: ValType](id: Code[Val[Identifier]]) extends Ptrn[T]
