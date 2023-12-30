@@ -2,8 +2,8 @@ package fides2024.syntax
 
 final case class ExtractIdentifier(key: Expr[IdentifierKey]) extends Expr[Identifier]
 
-final case class PairTogether[P <: [T <: ValType] =>> Polar[T], FirstT <: ValType, SecondT <: ValType]
-(first: Code[P[FirstT]], second: Code[P[SecondT]]) extends Code[P[Pair[FirstT, SecondT]]]
+final case class PairTogether[P[T <: ValType] <: Polar[T], T1 <: ValType, T2 <: ValType]
+(first: Code[P[T1]], second: Code[P[T2]]) extends Code[P[Pair[T1, T2]]]
 
 def test(): Unit =
   val first = Location[[T <: ValType] =>> Expr[T], Bool](Identifier())
@@ -16,11 +16,11 @@ def test(): Unit =
   Sign[Bool](first, IdentifierKey())
   Unsign[Bool](negLoc, Identifier())
 
-final case class AddElement[P <: [T <: ValType] =>> Polar[T], ElementT <: ValType]
-(element: Code[P[ElementT]], others: Code[P[Collection[ElementT]]]) extends Code[P[Collection[ElementT]]]
+final case class AddElement[P[U <: ValType] <: Polar[U], T <: ValType]
+(element: Code[P[T]], others: Code[P[Collection[T]]]) extends Code[P[Collection[T]]]
 
 //// todo for later, since it uses Integer
-//final case class Observe[P <: [T <: ValType] =>> Polar[T], ElementT <: ValType]
+//final case class Observe[P[T <: ValType] <: Polar[T], ElementT <: ValType]
 //(elementSource: Code[Location[P, ElementT]], size: Code[P[Nothing]]) extends Code[P[Collection[ElementT]]]
 
 /**
@@ -42,7 +42,7 @@ final case class Sign[T <: ValType]
 final case class Unsign[T <: ValType]
 (contents: Code[Ptrn[T]], signatory: Code[Ptrn[Identifier]]) extends Code[Ptrn[Signed[T]]]
 
-//type SignatoryCodeType[P <: [U <: ValType] =>> Polar[U], T <: ValType] <: CodeType = P[T] match
+//type SignatoryCodeType[P[U <: ValType] <: Polar[U], T <: ValType] <: CodeType = P[T] match
 //  case Expr[T] => Expr[IdentifierKey]
 //  case Ptrn[T] => Ptrn[Identifier]
 
@@ -51,18 +51,18 @@ final case class Unsign[T <: ValType]
   *
   * Once all the Escape inside @code have been evaluated and spliced in, reduces to a QuoteVal.
   */
-final case class Quote[P <: [U <: ValType] =>> Polar[U], C <: CodeType](code: Code[C]) extends Code[P[Quotation[C]]]
+final case class Quote[P[U <: ValType] <: Polar[U], C <: CodeType](code: Code[C]) extends Code[P[Quotation[C]]]
 
 /**
   * Wrapps a given value into quotes.
   *
   * Dually, when used in a negative polarity position, evaluates the given QuoteVal.
   */
-final case class WrapInQuotes[P <: [U <: ValType] =>> Polar[U], T <: ValType]
+final case class WrapInQuotes[P[U <: ValType] <: Polar[U], T <: ValType]
 (value: Code[P[T]]) extends Code[WrapInQuotesCodeType[P, T]]
 // todo test (def probably has to be split in two)
 
-type WrapInQuotesCodeType[P <: [U <: ValType] =>> Polar[U], T <: ValType] <: CodeType = P[T] match
+type WrapInQuotesCodeType[P[U <: ValType] <: Polar[U], T <: ValType] <: CodeType = P[T] match
   case Expr[T] => Expr[Quotation[Val[T]]]
   case Ptrn[T] => Ptrn[Quotation[Expr[T]]]
 
@@ -71,5 +71,5 @@ type WrapInQuotesCodeType[P <: [U <: ValType] =>> Polar[U], T <: ValType] <: Cod
   *
   * Dually, when used in a negative polarity position, emits on @id once it has a value.
   */
-final case class Location[P <: [U <: ValType] =>> Polar[U], T <: ValType]
+final case class Location[P[U <: ValType] <: Polar[U], T <: ValType]
 (id: Val[Identifier]) extends Code[P[T]] // todo , CodeType, Code[Location[P, T]]
