@@ -16,7 +16,7 @@ final case class PairTogether[P[T <: ValType] <: Polar[T], T1 <: ValType, T2 <: 
 /**
   * Outputs a collection with one element added to it.
   *
-  * Dually, when P =:= Ptrn, extracts one element from a collection.
+  * Dually, when P =:= Ptrn, (non-deterministically) extracts one element from a collection.
   */
 final case class AddElement[P[U <: ValType] <: Polar[U], T <: ValType]
 (element: Code[P[T]], others: Code[P[Collection[T]]]) extends Code[P[Collection[T]]]
@@ -31,23 +31,23 @@ final case class Observe[P[T <: ValType] <: Polar[T], T <: ValType]
 // todo Nothing stands for a future Integer type in Fides
 
 /**
-  * Primitive to sign messages.
+  * Primitive to sign messages
   *
-  * Dual of Unsign.
+  * Dual of Unsign
   */
 final case class Sign[T <: ValType]
 (contents: Code[Expr[T]], signatory: Code[Expr[IdentifierKey]]) extends Expr[Signed[T]]
 
 /**
-  * Primitive to unsign messages.
+  * Primitive to unsign messages
   *
-  * Dual of Sign.
+  * Dual of Sign
   */
 final case class Unsign[T <: ValType]
 (contents: Code[Ptrn[T]], signatory: Code[Ptrn[Identifier]]) extends Ptrn[Signed[T]]
 
 /**
-  * Analoguous to s-Strings in Scala, but for code.
+  * Analoguous to s-Strings in Scala, but for code
   *
   * Once all the Escape inside @code have been evaluated and spliced in, reduces to a QuoteVal.
   *
@@ -56,16 +56,16 @@ final case class Unsign[T <: ValType]
 final case class Quote[P[U <: ValType] <: Polar[U], C <: CodeType](code: Code[C]) extends Code[P[Quotation[C]]]
 
 /**
-  * Wrapps a value into quotes.
+  * Wraps a value into a quotation.
   *
-  * Dual of Eval.
+  * Dual of Unwrap
   */
 final case class Wrap[T <: ValType](value: Code[Expr[T]]) extends Code[Expr[Quotation[Val[T]]]]
 
 /**
   * Evaluates a quotation.
   *
-  * Dual of wrap.
+  * Dual of wrap
   */
 final case class Unwrap[T <: ValType](value: Code[Ptrn[T]]) extends Code[Ptrn[Quotation[Expr[T]]]]
 
@@ -79,6 +79,8 @@ sealed class Endpoint[P[U <: ValType] <: Polar[U], T <: ValType]
 /**
   * Absorbs from the location referred to by @id. Reduces to the received val after reception.
   *
+  * Synonym for Endpoint[Expr, T]
+  *
   * Dual of Out.
   */
 final case class Inp[T <: ValType]
@@ -87,20 +89,22 @@ final case class Inp[T <: ValType]
 /**
   * Emits to the location referred to by @id, once it has a value.
   *
-  * Dual of Inp.
+  * Synonym for Endpoint[Ptrn, T]
+  *
+  * Dual of Inp
   */
 final case class Out[T <: ValType]
 (override val id: Code[Val[Identifier]]) extends Endpoint[Ptrn, T](id), Ptrn[T], Code[Out[T]]
 
 /**
-  * Tries to match the obtained value to the given pattern. Upon failure, output the value to the alternative instead.
+  * Tries to match a value to the given pattern. Upon failure, outputs the value to the alternative instead.
   */
 final case class Match[T <: ValType](pattern: Code[Ptrn[T]], alternative: Code[Ptrn[T]]) extends Ptrn[T]
 
 /**
   * Converts a collection of component quotations to a quotation of the components, composed concurrently.
   *
-  * Dually, when P =:= Ptrn, extracts the components out of an obtained Concurrent component.
+  * Dually, when P =:= Ptrn, extracts the components out of a Concurrent component.
   */
 final case class Zip[P[U <: ValType] <: Polar[U]]
 (components: Code[P[Collection[Quotation[Component]]]]) extends Code[P[Quotation[Concurrent]]]

@@ -3,9 +3,11 @@ package fides2024.syntax
 // todo make Val[T] equivalent to Quotation[Val[T]]?
 
 /**
-  * Type that doesn't carry any information beyond causality (the sending of any value occurs before its reception).
+  * A value that doesn't carry any information beyond causality (the sending of any value occurs before its reception).
+  *
+  * The corresponding type, U.type, is like the Unit type in Fides.
   */
-object Unit extends Val[Unit.type]
+object U extends Val[U.type]
 
 /**
   * Boolean values
@@ -34,13 +36,13 @@ final case class NonEmpty[T <: ValType](elements: Val[T]*) extends Collection[T]
 end NonEmpty
 
 /**
-  * Code as value, used for metaprogramming.
+  * Code as value, used for metaprogramming
   */
 final case class Quotation[C <: CodeType](code: Code[C]) extends Val[Quotation[C]]
 
 /**
-  * Identifiers are structureless. They can only be compared for equality. New identifiers can be created.
-  * It is not possible to construct an identifier in any other way.
+  * Identifiers are structureless. They can only be compared for equality. Tey cannot be inspeced in any other way.
+  * New identifiers can be created. It is not possible to construct identifiers in any other way.
   */
 final class Identifier extends Val[Identifier] derives CanEqual
 // todo add Symbol?
@@ -54,6 +56,8 @@ final class IdentifierKey extends Val[IdentifierKey]:
 end IdentifierKey
 
 /**
+  * Signed values are guaranteed to have been created using a key corresponding to @signature.
+  *
   * @param document the signed value
   * @param signature the identifier corresponding to the key that was used to sign the document
   * @tparam T the type of the signed value
@@ -68,9 +72,11 @@ object Signed:
 end Signed
 
 /**
-  * Since Signed values cannot be created freely, a different one is needed for matching. To match the latter, yet
-  * a different one is needed, and so forth. This is solved by having a level, effectively introducing a hierarchy of
-  * matchers.
+  * Since Signed values cannot be created freely, a different type of value is needed for matching.
+  * To match the latter, yet a different one is needed, and so forth.
+  * This is solved by having a level, effectively introducing a hierarchy of matchers.
+  * This is similar to having to use a backslash in a regex to escape another backslash
+  * (except that the number of backslashes needed grows exponentially with how meta the regex is).
   *
   * SignedMatcher(1, m, s) matches Signed(m, s).
   * For level > 1, SignedMatcher(level, m, s) matches SignedMatcher(level - 1, m, s).
