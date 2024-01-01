@@ -5,10 +5,9 @@ import scala.concurrent.{Future, ExecutionContext}
 import scala.quoted.{Expr, Quotes, staging}
 import ExecutionContext.Implicits.global
 
-given staging.Compiler =
-  staging.Compiler.make(Predef.getClass.getClassLoader.nn)
+given staging.Compiler = staging.Compiler.make(Predef.getClass.getClassLoader.nn)
 
-@main def test(): Async =
+def test(): Async =
   println("Java version: " + System.getProperty("java.version"))
   println("Scala version: " + dotty.tools.dotc.config.Properties.simpleVersionString)
   val sphere = new Scidesphere
