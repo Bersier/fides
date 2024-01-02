@@ -49,6 +49,9 @@ final class Location[T <: ValType] extends Val[Location[T]] derives CanEqual
 // todo add way to get reflected T, maybe using izumi-reflect
 // todo use context functions?
 
+// todo: Remove this hack, have Location wrap an identifier, and use hash consing to ensure that two different channels
+//  don't have the same identifier. Have two different subtypes of Location: Channel and Cell; also need to add new
+//  CodeType for these.
 type Identifier = Location[ValType]
 object Identifier:
   def apply(): Identifier = Location()
