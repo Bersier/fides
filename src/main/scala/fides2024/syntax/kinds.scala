@@ -56,7 +56,7 @@ trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
   * @tparam T ValType lower bound, for the type of non-values in the pattern
   * @tparam U ValType upper bound, for the type of values in the pattern
   */
-trait Pattern[-T <: ValType, +U <: ValType] extends CodeType, Code[Pattern[T, U]]
+trait Pattern[-T <: ValType, +U <: T] extends CodeType, Code[Pattern[T, U]]
 type Ptrn = [T <: ValType] =>> Pattern[T, T]
 
 /**
@@ -68,3 +68,4 @@ type Ptrn = [T <: ValType] =>> Pattern[T, T]
   * @tparam T keeps track of the value type
   */
 trait Val[+T <: ValType] extends Expr[T], Pattern[ValType, T], Code[Val[T]], ValType
+// todo should we really have covariance/subtyping?

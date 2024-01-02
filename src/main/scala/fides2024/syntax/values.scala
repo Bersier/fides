@@ -19,8 +19,8 @@ object False extends Val[Bool]
 /**
   * A value that is made up of two values.
   */
-final case class Pair[T1 <: ValType, T2 <: ValType]
-(first: Code[Val[T1]], second: Code[Val[T2]]) extends Val[Pair[T1, T2]]
+final case class Paired[T1 <: ValType, T2 <: ValType]
+(first: Code[Val[T1]], second: Code[Val[T2]]) extends Val[Paired[T1, T2]]
 
 /**
   * A value that is made up of an unordered group of values.
@@ -38,7 +38,7 @@ end NonEmpty
 /**
   * Code as value, used for metaprogramming
   */
-final case class Quotation[C <: CodeType](code: Code[C]) extends Val[Quotation[C]]
+final case class Quotation[+C <: CodeType](code: Code[C]) extends Val[Quotation[C]]
 
 /**
   * Identifiers are structureless. They can only be compared for equality. They cannot be inspected in any other way.
@@ -48,6 +48,7 @@ final class Location[T <: ValType] extends Val[Location[T]] derives CanEqual
 // todo add Symbol?
 // todo add way to get reflected T, maybe using izumi-reflect
 // todo use context functions?
+// todo should Location also have a LocType?
 
 type Identifier = Location[ValType]
 object Identifier:
@@ -69,7 +70,7 @@ end IdentifierKey
   * @param signature the identifier corresponding to the key that was used to sign the document
   * @tparam T the type of the signed value
   */
-final case class Signed[T <: ValType] private(document: Val[T], signature: Identifier) extends Val[Signed[T]]
+final case class Signed[+T <: ValType] private(document: Val[T], signature: Identifier) extends Val[Signed[T]]
 object Signed:
   /**
     * Signed values can only be created from keys, but only reveal the corresponding identifier.
