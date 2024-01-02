@@ -10,11 +10,8 @@ final case class ExtractIdentifier(key: Expr[IdentifierKey]) extends Expr[Identi
   *
   * Dually, when P =:= Ptrn, extracts the elements of a pair.
   */
-final case class Pair[P[T <: ValType] <: Polar[T], T1 <: ValType, T2 <: ValType]
-(first: Code[P[T1]], second: Code[P[T2]]) extends Code[P[Paired[T1, T2]]]
-
-final case class Unpair[T1 <: ValType, T2 <: ValType, U1 <: T1, U2 <: T2]
-(first: Code[Pattern[T1, U1]], second: Code[Pattern[T2, U2]]) extends Code[Pattern[Paired[T1, T2], Paired[U1, U2]]]
+final case class PairTogether[P[T <: ValType] <: Polar[T], T1 <: ValType, T2 <: ValType]
+(first: Code[P[T1]], second: Code[P[T2]]) extends Code[P[Pair[T1, T2]]]
 
 /**
   * Outputs a collection with one element added to it.
@@ -46,8 +43,8 @@ final case class Sign[T <: ValType]
   *
   * Dual of Sign
   */
-final case class Unsign[T <: ValType, U <: T]
-(contents: Code[Pattern[T, U]], signatory: Code[Ptrn[Identifier]]) extends Pattern[Signed[T], Signed[U]]
+final case class Unsign[T <: ValType]
+(contents: Code[Ptrn[T]], signatory: Code[Ptrn[Identifier]]) extends Ptrn[Signed[T]]
 
 /**
   * Analoguous to s-Strings in Scala, but for code
@@ -70,8 +67,7 @@ final case class Wrap[T <: ValType](value: Code[Expr[T]]) extends Code[Expr[Quot
   *
   * Dual of wrap
   */
-final case class Unwrap[T <: ValType, U <: T]
-(value: Code[Pattern[T, U]]) extends Code[Pattern[Quotation[Expr[T]], Quotation[Expr[U]]]]
+final case class Unwrap[T <: ValType](value: Code[Ptrn[T]]) extends Code[Ptrn[Quotation[Expr[T]]]]
 
 /**
   * Location end-point
@@ -98,12 +94,12 @@ final case class Inp[T <: ValType]
   * Dual of Inp
   */
 final case class Out[T <: ValType]
-(override val id: Code[Val[Location[T]]]) extends Endpoint[Ptrn, T](id), Pattern[T, Nothing], Code[Out[T]]
+(override val id: Code[Val[Location[T]]]) extends Endpoint[Ptrn, T](id), Ptrn[T], Code[Out[T]]
 
 /**
   * Tries to match a value to the given pattern. Upon failure, outputs the value to the alternative instead.
   */
-final case class Match[R <: Pattern[?, ?]](pattern: Code[R], alternative: Code[R]) extends Code[R]
+final case class Match[T <: ValType](pattern: Code[Ptrn[T]], alternative: Code[Ptrn[T]]) extends Ptrn[T]
 
 /**
   * Converts a collection of component quotations to a quotation of the components, composed concurrently.
