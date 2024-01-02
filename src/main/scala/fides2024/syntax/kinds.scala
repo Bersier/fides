@@ -52,8 +52,12 @@ trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
   *
   * For convenience, Ptrn[T] also extends Code[Ptrn[T]], so that we can write
   * "Foo extends Ptrn[Foo]", rather than "Foo extends Ptrn[Foo], Code[Ptrn[Foo]]".
+  *
+  * @tparam T ValType lower bound, for the type of non-values in the pattern
+  * @tparam U ValType upper bound, for the type of values in the pattern
   */
-trait Ptrn[-T <: ValType] extends CodeType, Code[Ptrn[T]]
+trait Pattern[-T <: ValType, +U <: ValType] extends CodeType, Code[Pattern[T, U]]
+type Ptrn = [T <: ValType] =>> Pattern[T, T]
 
 /**
   * Fides code type for Fides values.
@@ -63,4 +67,4 @@ trait Ptrn[-T <: ValType] extends CodeType, Code[Ptrn[T]]
   *
   * @tparam T keeps track of the value type
   */
-trait Val[T <: ValType] extends Expr[T], Ptrn[T], Code[Val[T]], ValType
+trait Val[+T <: ValType] extends Expr[T], Pattern[ValType, T], Code[Val[T]], ValType

@@ -47,20 +47,12 @@ final case class Quotation[C <: CodeType](code: Code[C]) extends Val[Quotation[C
 final class Location[T <: ValType] extends Val[Location[T]] derives CanEqual
 // todo add Symbol?
 // todo add way to get reflected T, maybe using izumi-reflect
+// todo use context functions?
 
 type Identifier = Location[ValType]
 object Identifier:
   def apply(): Identifier = Location()
 end Identifier
-
-//// todo delete
-// import scala.quoted
-//final class Location[T <: ValType](using quoted.Quotes ?=> quoted.Type[T]) extends Val[Location[T]]:
-//  def typeTag: quoted.Type[T] =
-//    import quoted.staging.{Compiler, withQuotes}
-//    given Compiler = Compiler.make(Predef.getClass.getClassLoader.nn)
-//    withQuotes(summon[quoted.Quotes ?=> quoted.Type[T]])
-//end Location
 
 /**
   * A key has a corresponding identifier. The identifer can be obtained from the key, but not vice versa
