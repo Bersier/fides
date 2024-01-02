@@ -19,8 +19,8 @@ object False extends Val[Bool]
 /**
   * A value that is made up of two values.
   */
-final case class Pair[T1 <: ValType, T2 <: ValType]
-(first: Code[Val[T1]], second: Code[Val[T2]]) extends Val[Pair[T1, T2]]
+final case class Paired[T1 <: ValType, T2 <: ValType]
+(first: Code[Val[T1]], second: Code[Val[T2]]) extends Val[Paired[T1, T2]]
 
 /**
   * A value that is made up of an unordered group of values.

@@ -10,8 +10,8 @@ final case class ExtractIdentifier(key: Expr[IdentifierKey]) extends Expr[Identi
   *
   * Dually, when P =:= Ptrn, extracts the elements of a pair.
   */
-final case class PairTogether[P[T <: ValType] <: Polar[T], T1 <: ValType, T2 <: ValType]
-(first: Code[P[T1]], second: Code[P[T2]]) extends Code[P[Pair[T1, T2]]]
+final case class Pair[P[T <: ValType] <: Polar[T], T1 <: ValType, T2 <: ValType]
+(first: Code[P[T1]], second: Code[P[T2]]) extends Code[P[Paired[T1, T2]]]
 
 /**
   * Outputs a collection with one element added to it.

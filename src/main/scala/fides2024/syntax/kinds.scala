@@ -54,6 +54,9 @@ trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
   * "Foo extends Ptrn[Foo]", rather than "Foo extends Ptrn[Foo], Code[Ptrn[Foo]]".
   */
 trait Ptrn[-T <: ValType] extends CodeType, Code[Ptrn[T]]
+// todo Could it be that, even without subtyping in Fides (i.e. Val with an invariant ValType), we need to keep track
+//  of another U in Ptrn (see commit 1868d133d14b469ec276aaf892c192b8c7f12fbf) for pattern values? Otherwise, couldn't
+//  we be trying to match a Paired(Bool, Bool) against Paired(Identifier(), Identifier())?
 
 /**
   * Fides code type for Fides values.
