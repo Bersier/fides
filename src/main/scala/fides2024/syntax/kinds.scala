@@ -16,6 +16,14 @@ trait CodeType private[syntax]()
 sealed trait ValType private[syntax]()
 
 /**
+  * All the Scala types that represent Fides identifier types.
+  */
+sealed trait IDType private[syntax]()
+sealed trait LocationType extends IDType
+sealed trait ChannelType[T <: ValType] extends LocationType
+sealed trait CellType[T <: ValType] extends LocationType
+
+/**
   * Fides code type for components.
   *
   * For convenience, Component also extends Code[Component], so that we can write
@@ -40,7 +48,9 @@ type Polar = [T <: ValType] =>> CodeType
   * For convenience, Expr[T] also extends Code[Expr[T]], so that we can write
   * "Foo extends Expr[Foo]", rather than "Foo extends Expr[Foo], Code[Expr[Foo]]".
   */
-trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
+trait Expr[T <: ValType] extends CodeType, Code[Expr[T]]
+// todo is variance even needed for Expr and Ptrn type parameter? If variance is not needed, then it might be possible
+//  to simplify these types: Polar[T <: ValType, P <: Polarity].
 
 /**
   * Fides code type for patterns. While patterns are really just a special type of component with a single input,
@@ -53,10 +63,7 @@ trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
   * For convenience, Ptrn[T] also extends Code[Ptrn[T]], so that we can write
   * "Foo extends Ptrn[Foo]", rather than "Foo extends Ptrn[Foo], Code[Ptrn[Foo]]".
   */
-trait Ptrn[-T <: ValType] extends CodeType, Code[Ptrn[T]]
-// todo Could it be that, even without subtyping in Fides (i.e. Val with an invariant ValType), we need to keep track
-//  of another U in Ptrn (see commit 1868d133d14b469ec276aaf892c192b8c7f12fbf) for pattern values? Otherwise, couldn't
-//  we be trying to match a Paired(Bool, Bool) against Paired(Identifier(), Identifier())?
+trait Ptrn[T <: ValType] extends CodeType, Code[Ptrn[T]]
 
 /**
   * Fides code type for Fides values.

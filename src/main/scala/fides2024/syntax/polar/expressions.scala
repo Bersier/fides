@@ -1,9 +1,12 @@
-package fides2024.syntax
+package fides2024.syntax.polar
+
+import fides2024.syntax.values.*
+import fides2024.syntax.*
 
 /**
   * Outputs the identifier corresponding to the obtained key.
   */
-final case class ExtractIdentifier(key: Expr[IdentifierKey]) extends Expr[Identifier]
+final case class ExtractID[T <: IDType](key: Expr[IDKey[T]]) extends Expr[ID[T]]
 
 /**
   * Pairs two values together.
@@ -26,7 +29,7 @@ final case class AddElement[P[U <: ValType] <: Polar[U], T <: ValType]
   *
   * Dually, when P =:= Ptrn, outputs the elements of a collection to @elementSource, and its size to @size.
   */
-final case class Observe[P[T <: ValType] <: Polar[T], T <: ValType]
+final case class Observe[P[U <: ValType] <: Polar[U], T <: ValType]
 (elementSource: Code[Endpoint[P, T]], size: Code[P[Nothing]]) extends Code[P[Collection[T]]]
 // todo Nothing stands for a future Integer type in Fides
 
@@ -35,16 +38,17 @@ final case class Observe[P[T <: ValType] <: Polar[T], T <: ValType]
   *
   * Dual of Unsign
   */
-final case class Sign[T <: ValType]
-(contents: Code[Expr[T]], signatory: Code[Expr[IdentifierKey]]) extends Expr[Signed[T]]
+final case class Sign[T <: ValType, U <: IDType]
+(contents: Code[Expr[T]], signatory: Code[Expr[IDKey[U]]]) extends Expr[Signed[T]]
 
 /**
   * Primitive to unsign messages
   *
   * Dual of Sign
   */
-final case class Unsign[T <: ValType]
-(contents: Code[Ptrn[T]], signatory: Code[Ptrn[Identifier]]) extends Ptrn[Signed[T]]
+final case class Unsign[T <: ValType, U <: IDType]
+(contents: Code[Ptrn[T]], signatory: Code[Ptrn[ID[U]]]) extends Ptrn[Signed[T]]
+// todo having to keep track of U just because of Scala's limitation is problematic...
 
 /**
   * Analoguous to s-Strings in Scala, but for code
@@ -73,7 +77,7 @@ final case class Unwrap[T <: ValType](value: Code[Ptrn[T]]) extends Code[Ptrn[Qu
   * Location end-point
   */
 sealed class Endpoint[P[U <: ValType] <: Polar[U], T <: ValType]
-(val id: Code[Val[Location[T]]]) extends Code[Endpoint[P, T]], CodeType
+(val id: Code[Val[Channel[T]]]) extends Code[Endpoint[P, T]], CodeType
 // todo instead of an id, Location(id) could be passed, that itself has a ValType
 
 /**
@@ -84,7 +88,7 @@ sealed class Endpoint[P[U <: ValType] <: Polar[U], T <: ValType]
   * Dual of Out.
   */
 final case class Inp[T <: ValType]
-(override val id: Code[Val[Location[T]]]) extends Endpoint[Expr, T](id), Expr[T], Code[Inp[T]]
+(override val id: Code[Val[Channel[T]]]) extends Endpoint[Expr, T](id), Expr[T], Code[Inp[T]]
 
 /**
   * Emits to the location referred to by @id, once it has a value.
@@ -94,7 +98,7 @@ final case class Inp[T <: ValType]
   * Dual of Inp
   */
 final case class Out[T <: ValType]
-(override val id: Code[Val[Location[T]]]) extends Endpoint[Ptrn, T](id), Ptrn[T], Code[Out[T]]
+(override val id: Code[Val[Channel[T]]]) extends Endpoint[Ptrn, T](id), Ptrn[T], Code[Out[T]]
 
 /**
   * Tries to match a value to the given pattern. Upon failure, outputs the value to the alternative instead.

@@ -1,5 +1,7 @@
 package fides2024.syntax
 
+import fides2024.syntax.values.*
+
 /**
   * Sends a value to an address.
   *
@@ -9,7 +11,7 @@ package fides2024.syntax
   * @param message the value to be sent
   * @param recipient address of the recipient
   */
-final case class Send[T <: ValType](message: Code[Expr[T]], recipient: Code[Expr[Location[T]]]) extends Component
+final case class Send[T <: ValType](message: Code[Expr[T]], recipient: Code[Expr[Channel[T]]]) extends Component
 
 /**
   * A message in transit
@@ -17,7 +19,7 @@ final case class Send[T <: ValType](message: Code[Expr[T]], recipient: Code[Expr
   * @param message the contents of the message
   * @param recipient the address of the recipient
   */
-final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Val[Location[T]]]) extends Component
+final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Val[Channel[T]]]) extends Component
 
 /**
   * A name scope
@@ -25,7 +27,8 @@ final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Va
   * @param localNames names whose meaning is only valid within this scope
   * @param body the body of the scope
   */
-final case class Scope(localNames: Code[Val[Collection[Location[?]]]], body: Code[Component]) extends Component
+final case class Scope
+(localNames: Code[Val[Collection[ID[? <: LocationType]]]], body: Code[Component]) extends Component
 
 /**
   * Behaviorally equivalent to an infinite number of copies of the given body

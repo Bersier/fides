@@ -1,5 +1,7 @@
 package fides2024.syntax
 
+import fides2024.syntax.values.Quotation
+
 /**
   * Allows escaping the body of a Quote.
   *
