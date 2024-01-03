@@ -2,6 +2,14 @@ package fides2024.syntax.values
 
 import fides2024.syntax.*
 
+// todo if only we could secretly make Identifier, Channel and Cell the same type. But I think value classes are too
+//  restrictive. Still, we should try using value classes.
+
+// todo try using a hacky secret ID supertype
+private transparent sealed class ID
+
+// todo use opaque type, and use type class instead of 'extends Val'?
+
 /**
   * Identifiers are structureless. They can only be compared for equality. They cannot be inspected in any other way.
   * New identifiers can be created. It is not possible to construct identifiers in any other way.

@@ -26,7 +26,10 @@ import scala.language.implicitConversions
   ))
 
 given [P[V <: ValType] <: Polar[V], T <: ValType, U <: ValType](using Conversion[T, U]): Conversion[P[T], P[U]] with
-  def apply(v: P[T]): P[U] = ??? // todo
+  def apply(v: P[T]): P[U] = ???
+// todo the dumb approach is to add all the cases here:
+//  try it out with only the cases needed to get the tests to run.
+//  Could the cases be generated with macros?
 
 given [T <: CodeType, U <: CodeType](using Conversion[T, U]): Conversion[Code[T], Code[U]] with
   def apply(v: Code[T]): Code[U] = ??? // todo
