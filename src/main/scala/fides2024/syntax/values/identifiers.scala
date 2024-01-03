@@ -19,6 +19,10 @@ object Identifier:
   def apply(): Identifier = Identifier(UniqueID())
 end Identifier
 
+// todo in-Fides conversion from channels to identifiers
+final case class ChannelIdentifier(channel: Code[Expr[Channel[?]]]) extends Expr[Identifier]
+// todo similarly for Cells
+
 /**
   * A type of location used for channels
   *
