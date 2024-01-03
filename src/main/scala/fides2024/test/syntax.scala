@@ -5,25 +5,28 @@ import fides2024.syntax.values.*
 import fides2024.syntax.polar.*
 // todo could 'export' help us reduce the number of imports?
 
+import scala.language.implicitConversions
+
 @main def syntax(): Unit =
   val posLoc = Inp(Channel[Bool]())
   val negLoc = Out(Channel[Bool]())
-  val extractID = ExtractID(IDKey())
-  println(Sign(Pair(posLoc, extractID), IDKey()))
-  println(Sign(Pair(ID(), ID()), IDKey()))
-  println(Sign[Bool, IDType](posLoc, IDKey()))
-  println(Unsign(negLoc, ID()))
-  println(Sign(Wrap(posLoc), IDKey()))
-  println(Unsign(Unwrap(negLoc), ID()))
-  println(SignedMatcher(BigInt(0), ID(), ID()))
+  val extractID = ExtractID(IdentifierKey())
+  println(Sign(Pair(posLoc, extractID), IdentifierKey()))
+  println(Sign(Pair(Identifier(), Identifier()), IdentifierKey()))
+  println(Sign[Bool](posLoc, IdentifierKey()))
+  println(Unsign(negLoc, Identifier()))
+  println(Sign(Wrap(posLoc), IdentifierKey()))
+  println(Unsign(Unwrap(negLoc), Identifier()))
+  println(SignedMatcher(BigInt(0), Identifier(), Channel()))
   println((
-    Unsign(Unwrap(negLoc), Escape(Wrap(ID()))),
-    Unsign(Unwrap(negLoc), Escape(Wrap(ExtractID(IDKey())))),
-    Unsign(Unwrap(negLoc), Out(Escape(Wrap(Channel[ID[?]]())))),
-    // todo doesn't work. We cannot see a way to make it work with the current approach.
+    Unsign(Unwrap(negLoc), Escape(Wrap(Identifier()))),
+    Unsign(Unwrap(negLoc), Escape(Wrap(ExtractID(IdentifierKey())))),
+    Unsign(Unwrap(negLoc), Out(Escape(Wrap(Channel[Identifier]())))),
+    Unsign(Unwrap(negLoc), Out(Escape(Wrap(Inp[Channel[Channel[Bool]]](Channel()))))),
   ))
-//  println(Location[Bool].typeTag)
 
-// Expr[Identifier]
-// Code[Expr[Quotation[Val[Identifier]]]]
-// Code[Val[Identifier]]
+given [P[V <: ValType] <: Polar[V], T <: ValType, U <: ValType](using Conversion[T, U]): Conversion[P[T], P[U]] with
+  def apply(v: P[T]): P[U] = ??? // todo
+
+given [T <: CodeType, U <: CodeType](using Conversion[T, U]): Conversion[Code[T], Code[U]] with
+  def apply(v: Code[T]): Code[U] = ??? // todo

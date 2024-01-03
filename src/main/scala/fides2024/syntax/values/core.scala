@@ -50,12 +50,12 @@ final case class Quotation[C <: CodeType](code: Code[C]) extends Val[Quotation[C
   * @param signature the identifier corresponding to the key that was used to sign the document
   * @tparam T the type of the signed value
   */
-final case class Signed[T <: ValType] private(document: Val[T], signature: ID[?]) extends Val[Signed[T]]
+final case class Signed[T <: ValType] private(document: Val[T], signature: Identifier) extends Val[Signed[T]]
 object Signed:
   /**
     * Signed values can only be created from keys, but only reveal the corresponding identifier.
     */
-  def apply[T <: ValType](document: Val[T], signatory: IDKey[?]): Signed[T] =
+  def apply[T <: ValType](document: Val[T], signatory: IdentifierKey): Signed[T] =
     new Signed(document, signatory.identifier)
 end Signed
 
@@ -74,8 +74,8 @@ end Signed
   * @tparam T keeps track of the value type
   * @tparam U we don't care about this type; it is only added to make the Scala code compile
   */
-final case class SignedMatcher[T <: ValType, U <: IDType]
-(level: BigInt, document: Code[Val[T]], signature: Code[Val[ID[U]]]) extends Val[Signed[T]]:
+final case class SignedMatcher[T <: ValType]
+(level: BigInt, document: Code[Val[T]], signature: Code[Val[Identifier]]) extends Val[Signed[T]]:
   assert(level >= 0)
 end SignedMatcher
 // todo should only be allowed in code patterns (although maybe it's not such a big deal if it can be used elsewhere)

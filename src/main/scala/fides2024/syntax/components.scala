@@ -24,11 +24,15 @@ final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Va
 /**
   * A name scope
   *
-  * @param localNames names whose meaning is only valid within this scope
+  * @param localChannels names whose meaning is only valid within this scope
+  * @param localCells names whose meaning is only valid within this scope
   * @param body the body of the scope
   */
-final case class Scope
-(localNames: Code[Val[Collection[ID[? <: LocationType]]]], body: Code[Component]) extends Component
+final case class Scope(
+  localChannels: Code[Val[Collection[Channel[?]]]],
+  localCells: Code[Val[Collection[Cell[?]]]],
+  body: Code[Component],
+) extends Component
 
 /**
   * Behaviorally equivalent to an infinite number of copies of the given body

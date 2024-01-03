@@ -16,14 +16,6 @@ trait CodeType private[syntax]()
 sealed trait ValType private[syntax]()
 
 /**
-  * All the Scala types that represent Fides identifier types.
-  */
-sealed trait IDType private[syntax]()
-sealed trait LocationType extends IDType
-sealed trait ChannelType[T <: ValType] extends LocationType
-sealed trait CellType[T <: ValType] extends LocationType
-
-/**
   * Fides code type for components.
   *
   * For convenience, Component also extends Code[Component], so that we can write
