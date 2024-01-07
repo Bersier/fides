@@ -37,14 +37,14 @@ final case class UnAddElement[T <: ValType]
 /**
   * Waits for @size elements from @elementSource, then outputs them as a Collected.
   */
-final case class Observe[T <: ValType]
+final case class Collect[T <: ValType]
 (elementSource: Code[Inp[T]], size: Code[Expr[Nothing]]) extends Expr[Collected[T]]
 // todo Nothing stands for a future Integer type in Fides
 
 /**
   * Outputs the elements of a Collected to @elementSource, and its size to @size.
   */
-final case class UnObserve[T <: ValType]
+final case class UnCollect[T <: ValType]
 (elementSource: Code[Out[T]], size: Code[Xctr[ValType]]) extends Xctr[Collected[T]]
 // todo AnyVal stands for a future Integer type in Fides
 
