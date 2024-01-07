@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicLong
 //  restrictive. Still, we should try using value classes.
 // todo use opaque type, and use type class instead of 'extends Val'?
 
-private[fides2024] transparent sealed trait ID protected(val uniqueID: Long) extends Matchable derives CanEqual:
+private[fides2024] sealed trait ID protected(val uniqueID: Long) derives CanEqual:
   override def equals(obj: Any): Boolean = obj.asInstanceOf[Matchable] match
     case that: ID => this.uniqueID == that.uniqueID
     case _ => false
@@ -21,6 +21,9 @@ end ID
 /**
   * Identifiers are structureless. They can only be compared for equality. They cannot be inspected in any other way.
   * New identifiers can be created. It is not possible to construct identifiers in any other way.
+  *
+  * Due to hacky implicit conversions using asInstanceOf,
+  * we effectively have Channel[T] < Identifier and Cell[T] < Identifier.
   */
 final class Identifier private[values](uniqueID: Long) extends ID(uniqueID), Val[Identifier]:
   override def toString: String = s"Identifier(${hashCode()})"
@@ -30,6 +33,8 @@ end Identifier
 
 /**
   * A type of location used for channels
+  *
+  * Due to hacky implicit conversions using asInstanceOf, we effectively have Channel[T] < Identifier.
   *
   * @tparam T the type of the values that transit through the channel
   */
@@ -45,6 +50,8 @@ end Channel
 /**
   * A type of location used for memory cells
   *
+  * Due to hacky implicit conversions using asInstanceOf, we effectively have Cell[T] < Identifier.
+  *
   * @tparam T the type of the values that get stored in the cell
   */
 final class Cell[T <: ValType] private(uniqueID: Long) extends ID(uniqueID), Val[Cell[T]]:
@@ -56,7 +63,7 @@ object Cell:
     def apply(cell: Cell[?]): Identifier = new Identifier(cell.uniqueID)
 end Cell
 
-sealed trait Key:
+private[fides2024] sealed trait Key:
   def identifier: Identifier
   override def toString: String = s"Key(${identifier.hashCode()})"
 
