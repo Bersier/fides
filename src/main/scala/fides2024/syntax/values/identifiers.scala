@@ -7,6 +7,10 @@ import java.util.concurrent.atomic.AtomicLong
 // todo try using type classes instead of subtyping
 // todo try adding a limited form of subtyping in Fides
 
+// todo delete ID, use subtyping between Identifer and locations, and delete implicit conversions.
+//  Last time, I added a distinction between irrefutable patterns, Xctr, and refutable ones, Ptrn
+//  and restarted adding variance, aka subtyping in Fides.
+//  CodePtrn! Are they needed? If so, can they be made to work?
 private[fides2024] sealed trait ID protected(val uniqueID: Long) derives CanEqual:
   override def equals(obj: Any): Boolean = obj.asInstanceOf[Matchable] match
     case that: ID => this.uniqueID == that.uniqueID

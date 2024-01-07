@@ -29,8 +29,8 @@ final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Va
   * @param body the body of the scope
   */
 final case class Scope(
-  localChannels: Code[Val[Collection[Channel[?]]]],
-  localCells: Code[Val[Collection[Cell[?]]]],
+  localChannels: Code[Val[Collected[Channel[?]]]],
+  localCells: Code[Val[Collected[Cell[?]]]],
   body: Code[Component],
 ) extends Component
 

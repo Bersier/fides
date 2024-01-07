@@ -21,31 +21,31 @@ final case class UnPair[L1 <: U1, L2 <: U2, U1 <: ValType, U2 <: ValType]
 (first: Code[Ptrn[L1, U1]], second: Code[Ptrn[L2, U2]]) extends Ptrn[Paired[L1, L2], Paired[U1, U2]]
 
 /**
-  * Outputs a collection with one element added to it.
+  * Outputs a Collected with one element added to it.
   */
 final case class AddElement[T <: ValType]
-(element: Code[Expr[T]], others: Code[Expr[Collection[T]]]) extends Expr[Collection[T]]
+(element: Code[Expr[T]], others: Code[Expr[Collected[T]]]) extends Expr[Collected[T]]
 
 /**
-  * (Non-deterministically) extracts one element from a collection.
+  * (Non-deterministically) extracts one element from a Collected.
   */
 final case class UnAddElement[T <: ValType]
-(element: Code[Xctr[T]], others: Code[Xctr[Collection[T]]]) extends Ptrn[Collection[T], Collection[T]]
-// todo this pattern can fail when applied to an empty collection, that is why it doesn't extend Xctr.
+(element: Code[Xctr[T]], others: Code[Xctr[Collected[T]]]) extends Ptrn[Collected[T], Collected[T]]
+// todo this pattern can fail when applied to an empty Collected, that is why it doesn't extend Xctr.
 //  But is that the right way to do it?
 
 /**
-  * Waits for @size elements from @elementSource, then outputs them as a collection.
+  * Waits for @size elements from @elementSource, then outputs them as a Collected.
   */
 final case class Observe[T <: ValType]
-(elementSource: Code[Inp[T]], size: Code[Expr[Nothing]]) extends Expr[Collection[T]]
+(elementSource: Code[Inp[T]], size: Code[Expr[Nothing]]) extends Expr[Collected[T]]
 // todo Nothing stands for a future Integer type in Fides
 
 /**
-  * Outputs the elements of a collection to @elementSource, and its size to @size.
+  * Outputs the elements of a Collected to @elementSource, and its size to @size.
   */
 final case class UnObserve[T <: ValType]
-(elementSource: Code[Out[T]], size: Code[Xctr[ValType]]) extends Xctr[Collection[T]]
+(elementSource: Code[Out[T]], size: Code[Xctr[ValType]]) extends Xctr[Collected[T]]
 // todo AnyVal stands for a future Integer type in Fides
 
 /**
@@ -67,31 +67,31 @@ final case class UnSign[L <: U, U <: ValType]
 /**
   * Analoguous to s-Strings in Scala, but for code
   *
-  * Once all the Escape inside @code have been evaluated and spliced in, reduces to a Quotation.
+  * Once all the Escape inside @code have been evaluated and spliced in, reduces to a Quoted.
   */
-final case class Quote[C <: CodeType](code: Code[C]) extends Expr[Quotation[C]]
+final case class Quote[C <: CodeType](code: Code[C]) extends Expr[Quoted[C]]
 
 /**
   * Code extractor.
   */
-//final case class UnQuote[L <: U, U <: CodeType](code: Code[C]) extends Ptrn[Quotation[C]]
+//final case class UnQuote[L <: U, U <: CodeType](code: Code[C]) extends Ptrn[Quoted[C]]
 // todo CodePtrn[L, U].?.
 
 /**
-  * Wraps a value into a quotation.
+  * Wraps a value into a Quoted.
   *
   * Dual of Unwrap
   */
-final case class Wrap[T <: ValType](value: Code[Expr[T]]) extends Expr[Quotation[Val[T]]]
+final case class Wrap[T <: ValType](value: Code[Expr[T]]) extends Expr[Quoted[Val[T]]]
 
 /**
-  * Evaluates a quotation.
+  * Evaluates a Quoted.
   *
   * Dual of wrap
   */
-final case class UnWrap[T <: ValType](value: Code[Xctr[T]]) extends Xctr[Quotation[Expr[T]]]
+final case class UnWrap[T <: ValType](value: Code[Xctr[T]]) extends Xctr[Quoted[Expr[T]]]
 // todo as a pattern, it would be weird to evaluate the expr, only to throw it away
-//  maybe it should be more symmetric with Wrap, i.e. extend Code[Xctr[Quotation[Val[T]]]]?
+//  maybe it should be more symmetric with Wrap, i.e. extend Code[Xctr[Quoted[Val[T]]]]?
 //  In that case, do we want a separate Eval? Or not?
 
 /**
@@ -114,14 +114,14 @@ final case class Out[T <: ValType](val iD: Code[Val[Channel[T]]]) extends Xctr[T
 final case class Match[T <: ValType](pattern: Code[Ptrn[T, T]], alternative: Code[Xctr[T]]) extends Xctr[T]
 
 /**
-  * Converts a collection of component quotations to a quotation of the components, composed concurrently.
+  * Converts a Collected of component quotations to a Quoted of the components, composed concurrently.
   */
-final case class Zip(components: Code[Expr[Collection[Quotation[Component]]]]) extends Expr[Quotation[Concurrent]]
+final case class Zip(components: Code[Expr[Collected[Quoted[Component]]]]) extends Expr[Quoted[Concurrent]]
 
 /**
   * Extracts the components out of a Concurrent component.
   */
-final case class UnZip(components: Code[Ptrn[Collection[Quotation[Component]], Collection[Quotation[Component]]]])
-extends Ptrn[Quotation[Concurrent], Quotation[Concurrent]]
+final case class UnZip(components: Code[Ptrn[Collected[Quoted[Component]], Collected[Quoted[Component]]]])
+extends Ptrn[Quoted[Concurrent], Quoted[Concurrent]]
 
 // todo add Rename?

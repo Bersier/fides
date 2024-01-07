@@ -3,7 +3,7 @@ package fides2024.syntax.values
 import fides2024.syntax.*
 
 
-// todo make Val[T] equivalent to Quotation[Val[T]]?
+// todo make Val[T] equivalent to Quoted[Val[T]]?
 
 /**
   * A value that doesn't carry any information beyond causality (the sending of any value occurs before its reception).
@@ -28,20 +28,20 @@ final case class Paired[+T1 <: ValType, +T2 <: ValType]
 /**
   * A value that is made up of an unordered group of values.
   */
-sealed trait Collection[T <: ValType] extends Val[Collection[T]]:
+sealed trait Collected[T <: ValType] extends Val[Collected[T]]:
   def elements: Iterable[Val[T]]
-end Collection
-object Empty extends Collection[Nothing]:
+end Collected
+object Empty extends Collected[Nothing]:
   def elements: Iterable[Val[Nothing]] = Iterable.empty[Val[Nothing]]
 end Empty
-final case class NonEmpty[T <: ValType](elements: Val[T]*) extends Collection[T]:
+final case class NonEmpty[T <: ValType](elements: Val[T]*) extends Collected[T]:
   assert(elements.nonEmpty)
 end NonEmpty
 
 /**
   * Code as value, used for metaprogramming
   */
-final case class Quotation[+C <: CodeType](code: Code[C]) extends Val[Quotation[C]]
+final case class Quoted[+C <: CodeType](code: Code[C]) extends Val[Quoted[C]]
 
 /**
   * Signed values are guaranteed to have been created using a key corresponding to @signature.
