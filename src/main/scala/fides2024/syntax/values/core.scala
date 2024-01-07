@@ -41,7 +41,7 @@ end NonEmpty
 /**
   * Code as value, used for metaprogramming
   */
-final case class Quotation[C <: CodeType](code: Code[C]) extends Val[Quotation[C]]
+final case class Quotation[+C <: CodeType](code: Code[C]) extends Val[Quotation[C]]
 
 /**
   * Signed values are guaranteed to have been created using a key corresponding to @signature.

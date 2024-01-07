@@ -38,7 +38,7 @@ trait Component extends CodeType, Code[Component]
 
 /**
   * Higher-kinded type alias, used to upper-bound type parameters,
-  * that, in practice, could be either Expr, Ptrn, or Val.
+  * that, in practice, could be either Expr, Xctr, or Val.
   */
 type Polar = [T <: ValType] =>> CodeType
 
@@ -48,27 +48,29 @@ type Polar = [T <: ValType] =>> CodeType
   * explicitly by a name, but implicitly by where they are written, as is usual with expressions in other languages.
   * This syntactic behavior could be viewed as some kind of mandatory syntactic sugar.
   *
-  * Dual of Ptrn
+  * Dual of Xctr
   *
   * For convenience, Expr[T] also extends Code[Expr[T]], so that we can write
   * "Foo extends Expr[Foo]", rather than "Foo extends Expr[Foo], Code[Expr[Foo]]".
   */
-trait Expr[T <: ValType] extends CodeType, Code[Expr[T]]
-// todo is variance even needed for Expr and Ptrn type parameter? If variance is not needed, then it might be possible
+trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
+// todo is variance even needed for Expr and Xctr type parameter? If variance is not needed, then it might be possible
 //  to simplify these types: Polar[T <: ValType, P <: Polarity].
 
+trait Ptrn[-Sup <: ValType, +Inf <: ValType] extends CodeType, Code[Ptrn[Sup, Inf]]
+
 /**
-  * Fides code type for patterns. While patterns are really just a special type of component with a single input,
+  * Fides code type for extractors. While patterns are really just a special type of component with a single input,
   * they behave differently from a syntactic point of view, as [where their only input comes from] is not represented
   * explicitly by a name, but implicitly by where they are written, dually to expressions. They can be thought of as
   * expressions that are being evaluated backwards, with the syntax for input and output being flipped.
   *
   * Dual of Expr
   *
-  * For convenience, Ptrn[T] also extends Code[Ptrn[T]], so that we can write
-  * "Foo extends Ptrn[Foo]", rather than "Foo extends Ptrn[Foo], Code[Ptrn[Foo]]".
+  * For convenience, Xctr[T] also extends Code[Xctr[T]], so that we can write
+  * "Foo extends Xctr[Foo]", rather than "Foo extends Xctr[Foo], Code[Xctr[Foo]]".
   */
-trait Ptrn[T <: ValType] extends CodeType, Code[Ptrn[T]]
+type Xctr[T <: ValType] = Ptrn[T, Nothing]
 
 /**
   * Fides code type for Fides values.
@@ -78,4 +80,10 @@ trait Ptrn[T <: ValType] extends CodeType, Code[Ptrn[T]]
   *
   * @tparam T keeps track of the value type
   */
-trait Val[T <: ValType] extends Expr[T], Ptrn[T], Code[Val[T]], ValType
+trait Val[+T <: ValType] extends Expr[T], Ptrn[ValType, T], Code[Val[T]], ValType
+
+// todo
+//  Need Channel pattern val to be able to match Identifier
+//  Need Identifier pattern to be able to match channel
+//  In non-refutable patterns, contravariance should be enforced
+//  In refutable patterns, what should the rule be?
