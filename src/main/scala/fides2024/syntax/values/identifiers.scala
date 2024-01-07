@@ -4,9 +4,8 @@ import fides2024.syntax.*
 
 import java.util.concurrent.atomic.AtomicLong
 
-// todo if only we could secretly make Identifier, Channel and Cell the same type. But I think value classes are too
-//  restrictive. Still, we should try using value classes.
-// todo use opaque type, and use type class instead of 'extends Val'?
+// todo try using type classes instead of subtyping
+// todo try adding a limited form of subtyping in Fides
 
 private[fides2024] sealed trait ID protected(val uniqueID: Long) derives CanEqual:
   override def equals(obj: Any): Boolean = obj.asInstanceOf[Matchable] match
