@@ -8,7 +8,8 @@ object Code:
   /**
     * Hacky implicit conversion.
     */
-  given [P[V <: ValType] <: Polar[V], T <: ValType, U <: ValType](using Conversion[T, U]): Conversion[P[T], P[U]] with
+  given [P <: [T <: ValType] =>> CodeType, T <: ValType, U <: ValType]
+  (using Conversion[T, U]): Conversion[P[T], P[U]] with
     def apply(v: P[T]): P[U] = v.asInstanceOf[P[U]]
 
   /**
@@ -37,12 +38,6 @@ sealed trait ValType private[syntax]()
 trait Component extends CodeType, Code[Component]
 
 /**
-  * Higher-kinded type alias, used to upper-bound type parameters,
-  * that, in practice, could be either Expr, Xctr, or Val.
-  */
-type Polar = [T <: ValType] =>> CodeType
-
-/**
   * Fides code type for expressions. While expressions are really just a special type of component with a single output,
   * they behave differently from a syntactic point of view, as [where their only output goes] is not represented
   * explicitly by a name, but implicitly by where they are written, as is usual with expressions in other languages.
@@ -54,13 +49,11 @@ type Polar = [T <: ValType] =>> CodeType
   * "Foo extends Expr[Foo]", rather than "Foo extends Expr[Foo], Code[Expr[Foo]]".
   */
 trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
-// todo is variance even needed for Expr and Xctr type parameter? If variance is not needed, then it might be possible
-//  to simplify these types: Polar[T <: ValType, P <: Polarity].
 
-trait Ptrn[-Sup <: ValType, +Inf <: ValType] extends CodeType, Code[Ptrn[Sup, Inf]]
+trait Ptrn[+L <: U, -U <: ValType] extends CodeType, Code[Ptrn[L, U]]
 
 /**
-  * Fides code type for extractors. While patterns are really just a special type of component with a single input,
+  * Fides code type for extractors. While extractors are really just a special type of component with a single input,
   * they behave differently from a syntactic point of view, as [where their only input comes from] is not represented
   * explicitly by a name, but implicitly by where they are written, dually to expressions. They can be thought of as
   * expressions that are being evaluated backwards, with the syntax for input and output being flipped.
@@ -70,7 +63,7 @@ trait Ptrn[-Sup <: ValType, +Inf <: ValType] extends CodeType, Code[Ptrn[Sup, In
   * For convenience, Xctr[T] also extends Code[Xctr[T]], so that we can write
   * "Foo extends Xctr[Foo]", rather than "Foo extends Xctr[Foo], Code[Xctr[Foo]]".
   */
-type Xctr[T <: ValType] = Ptrn[T, Nothing]
+type Xctr[-T <: ValType] = Ptrn[Nothing, T]
 
 /**
   * Fides code type for Fides values.
@@ -80,7 +73,7 @@ type Xctr[T <: ValType] = Ptrn[T, Nothing]
   *
   * @tparam T keeps track of the value type
   */
-trait Val[+T <: ValType] extends Expr[T], Ptrn[ValType, T], Code[Val[T]], ValType
+trait Val[+T <: ValType] extends Expr[T], Ptrn[T, ValType], Code[Val[T]], ValType
 
 // todo
 //  Need Channel pattern val to be able to match Identifier

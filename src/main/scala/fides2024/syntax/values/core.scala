@@ -22,7 +22,7 @@ object False extends Val[Bool]
 /**
   * A value that is made up of two values.
   */
-final case class Paired[T1 <: ValType, T2 <: ValType]
+final case class Paired[+T1 <: ValType, +T2 <: ValType]
 (first: Code[Val[T1]], second: Code[Val[T2]]) extends Val[Paired[T1, T2]]
 
 /**
@@ -50,7 +50,7 @@ final case class Quotation[+C <: CodeType](code: Code[C]) extends Val[Quotation[
   * @param signature the identifier corresponding to the key that was used to sign the document
   * @tparam T the type of the signed value
   */
-final case class Signed[T <: ValType] private(document: Val[T], signature: Identifier) extends Val[Signed[T]]
+final case class Signed[+T <: ValType] private(document: Val[T], signature: Identifier) extends Val[Signed[T]]
 object Signed:
   /**
     * Signed values can only be created from keys, but only reveal the corresponding identifier.
@@ -72,7 +72,6 @@ end Signed
   * For level > 0, SignedMatcher(level, m, s) matches SignedMatcher(level - 1, m, s).
   *
   * @tparam T keeps track of the value type
-  * @tparam U we don't care about this type; it is only added to make the Scala code compile
   */
 final case class SignedMatcher[T <: ValType]
 (level: BigInt, document: Code[Val[T]], signature: Code[Val[Identifier]]) extends Val[Signed[T]]:
