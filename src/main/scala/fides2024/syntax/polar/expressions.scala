@@ -48,7 +48,6 @@ final case class Sign[T <: ValType]
   */
 final case class Unsign[T <: ValType]
 (contents: Code[Ptrn[T]], signatory: Code[Ptrn[Identifier]]) extends Ptrn[Signed[T]]
-// todo having to keep track of U just because of Scala's limitation is problematic...
 
 /**
   * Analoguous to s-Strings in Scala, but for code
@@ -78,7 +77,6 @@ final case class Unwrap[T <: ValType](value: Code[Ptrn[T]]) extends Code[Ptrn[Qu
   */
 sealed class Endpoint[P[U <: ValType] <: Polar[U], T <: ValType]
 (val iD: Code[Val[Channel[T]]]) extends Code[Endpoint[P, T]], CodeType
-// todo instead of an id, Location(id) could be passed, that itself has a ValType
 
 /**
   * Absorbs from the location referred to by @id. Reduces to the received val after reception.

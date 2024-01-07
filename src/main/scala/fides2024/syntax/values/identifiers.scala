@@ -2,38 +2,44 @@ package fides2024.syntax.values
 
 import fides2024.syntax.*
 
+import java.util.concurrent.atomic.AtomicLong
+
 // todo if only we could secretly make Identifier, Channel and Cell the same type. But I think value classes are too
 //  restrictive. Still, we should try using value classes.
-
-// todo try using a hacky secret ID supertype
-private transparent sealed class ID
-
 // todo use opaque type, and use type class instead of 'extends Val'?
+
+private[fides2024] transparent sealed trait ID protected(val uniqueID: Long) extends Matchable derives CanEqual:
+  override def equals(obj: Any): Boolean = obj.asInstanceOf[Matchable] match
+    case that: ID => this.uniqueID == that.uniqueID
+    case _ => false
+  override def hashCode(): Int = uniqueID.hashCode()
+object ID:
+  private val currentID = AtomicLong(0)
+  private[values] def nextLong: Long = currentID.getAndIncrement()
+end ID
 
 /**
   * Identifiers are structureless. They can only be compared for equality. They cannot be inspected in any other way.
   * New identifiers can be created. It is not possible to construct identifiers in any other way.
   */
-final case class Identifier private[values](private val uniqueID: UniqueID) extends Val[Identifier] derives CanEqual
+final class Identifier private[values](uniqueID: Long) extends ID(uniqueID), Val[Identifier]:
+  override def toString: String = s"Identifier(${hashCode()})"
 object Identifier:
-  def apply(): Identifier = Identifier(UniqueID())
+  def apply(): Identifier = new Identifier(ID.nextLong)
 end Identifier
-
-// todo in-Fides conversion from channels to identifiers
-final case class ChannelIdentifier(channel: Code[Expr[Channel[?]]]) extends Expr[Identifier]
-// todo similarly for Cells
 
 /**
   * A type of location used for channels
   *
   * @tparam T the type of the values that transit through the channel
   */
-final case class Channel[T <: ValType] private(private val uniqueID: UniqueID) extends Val[Channel[T]]
+final class Channel[T <: ValType] private(uniqueID: Long) extends ID(uniqueID), Val[Channel[T]]:
+  override def toString: String = s"Channel(${hashCode()})"
 object Channel:
-  def apply[T <: ValType](): Channel[T] = Channel(UniqueID())
+  def apply[T <: ValType](): Channel[T] = new Channel(ID.nextLong)
+
   given Conversion[Channel[?], Identifier] with
-    def apply(channel: Channel[?]): Identifier =
-      Identifier(channel.uniqueID)
+    def apply(channel: Channel[?]): Identifier = new Identifier(channel.uniqueID)
 end Channel
 
 /**
@@ -41,16 +47,18 @@ end Channel
   *
   * @tparam T the type of the values that get stored in the cell
   */
-final case class Cell[T <: ValType] private(private val uniqueID: UniqueID) extends Val[Cell[T]]
+final class Cell[T <: ValType] private(uniqueID: Long) extends ID(uniqueID), Val[Cell[T]]:
+  override def toString: String = s"Cell(${hashCode()})"
 object Cell:
-  def apply[T <: ValType](): Cell[T] = Cell(UniqueID())
+  def apply[T <: ValType](): Cell[T] = new Cell(ID.nextLong)
+
   given Conversion[Cell[?], Identifier] with
-    def apply(cell: Cell[?]): Identifier =
-      Identifier(cell.uniqueID)
+    def apply(cell: Cell[?]): Identifier = new Identifier(cell.uniqueID)
 end Cell
 
 sealed trait Key:
   def identifier: Identifier
+  override def toString: String = s"Key(${identifier.hashCode()})"
 
 /**
   * A key has a corresponding identifier. The identifer can be obtained from the key, but not vice versa
@@ -66,8 +74,6 @@ final class ChannelKey[T <: ValType] extends Val[IdentifierKey], Key:
     import scala.language.implicitConversions
     channel
 end ChannelKey
-
-private final class UniqueID
 
 // todo add Symbol?
 // todo add way to get reflected T, maybe using izumi-reflect
