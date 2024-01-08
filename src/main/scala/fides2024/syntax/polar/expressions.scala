@@ -17,8 +17,8 @@ final case class Pair[T1 <: ValType, T2 <: ValType]
 /**
   * Extracts the elements of a pair.
   */
-final case class UnPair[L1 <: U1, L2 <: U2, U1 <: ValType, U2 <: ValType]
-(first: Code[Ptrn[L1, U1]], second: Code[Ptrn[L2, U2]]) extends Ptrn[Paired[L1, L2], Paired[U1, U2]]
+final case class UnPair[P1 <: N1, P2 <: N2, N1 <: ValType, N2 <: ValType]
+(first: Code[Ptrn[P1, N1]], second: Code[Ptrn[P2, N2]]) extends Ptrn[Paired[P1, P2], Paired[N1, N2]]
 
 /**
   * Outputs a Collected with one element added to it.
@@ -61,8 +61,8 @@ final case class Sign[T <: ValType]
   *
   * Dual of Sign
   */
-final case class UnSign[L <: U, U <: ValType]
-(contents: Code[Ptrn[L, U]], signatory: Code[Ptrn[Identifier, Identifier]]) extends Ptrn[Signed[L], Signed[U]]
+final case class UnSign[P <: N, N <: ValType]
+(contents: Code[Ptrn[P, N]], signatory: Code[Ptrn[Identifier, Identifier]]) extends Ptrn[Signed[P], Signed[N]]
 
 /**
   * Analoguous to s-Strings in Scala, but for code
@@ -74,8 +74,8 @@ final case class Quote[C <: CodeType](code: Code[C]) extends Expr[Quoted[C]]
 /**
   * Code extractor.
   */
-//final case class UnQuote[L <: U, U <: CodeType](code: Code[C]) extends Ptrn[Quoted[C]]
-// todo CodePtrn[L, U].?.
+//final case class UnQuote[P <: N, N <: CodeType](code: Code[C]) extends Ptrn[Quoted[C], Quoted[C]]
+// todo CodePtrn[P, N].?.
 
 /**
   * Wraps a value into a Quoted.
@@ -107,6 +107,7 @@ final case class Inp[T <: ValType](val iD: Code[Val[Channel[T]]]) extends Expr[T
   * Dual of Inp
   */
 final case class Out[T <: ValType](val iD: Code[Val[Channel[T]]]) extends Xctr[T], Code[Out[T]]
+// todo in a refutable pattern position, it could actually make the pattern fail. Do we really want that?
 
 /**
   * Tries to match a value to the given pattern. Upon failure, outputs the value to the alternative instead.

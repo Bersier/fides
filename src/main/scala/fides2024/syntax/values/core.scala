@@ -18,6 +18,9 @@ object U extends Val[U.type]
 sealed trait Bool extends Val[Bool]
 object True extends Val[Bool]
 object False extends Val[Bool]
+// todo Val[False] so that False cannot be used as an Xctr[Bool]
+//  Also for identifiers! A specific identifier has to be a strict subtype of Identifier
+//  Actually, maybe it's fine, because of how Val extends Ptrn?
 
 /**
   * A value that is made up of two values.

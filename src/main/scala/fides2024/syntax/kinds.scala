@@ -50,7 +50,14 @@ trait Component extends CodeType, Code[Component]
   */
 trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
 
-trait Ptrn[+L <: U, -U <: ValType] extends CodeType, Code[Ptrn[L, U]]
+/**
+  * Patterns do behave differently when they don't have connections: they may lead to a match failure. They are not
+  * just syntactic sugar for single-input components.
+  * 
+  * Refutable patterns (includes non-refutable ones as a special case)
+  */
+trait Ptrn[+P <: N, -N <: ValType] extends CodeType, Code[Ptrn[P, N]]
+// todo lower bound is not just for variables.
 
 /**
   * Fides code type for extractors. While extractors are really just a special type of component with a single input,
@@ -58,6 +65,8 @@ trait Ptrn[+L <: U, -U <: ValType] extends CodeType, Code[Ptrn[L, U]]
   * explicitly by a name, but implicitly by where they are written, dually to expressions. They can be thought of as
   * expressions that are being evaluated backwards, with the syntax for input and output being flipped.
   *
+  * Non-refutable patterns
+  * 
   * Dual of Expr
   *
   * For convenience, Xctr[T] also extends Code[Xctr[T]], so that we can write
