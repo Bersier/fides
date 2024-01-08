@@ -18,9 +18,6 @@ object U extends Val[U.type]
 sealed trait Bool extends Val[Bool]
 object True extends Val[Bool]
 object False extends Val[Bool]
-// todo Val[False] so that False cannot be used as an Xctr[Bool]
-//  Also for identifiers! A specific identifier has to be a strict subtype of Identifier
-//  Actually, maybe it's fine, because of how Val extends Ptrn?
 
 /**
   * A value that is made up of two values.
@@ -34,10 +31,10 @@ final case class Paired[+T1 <: ValType, +T2 <: ValType]
 sealed trait Collected[T <: ValType] extends Val[Collected[T]]:
   def elements: Iterable[Val[T]]
 end Collected
-object Empty extends Collected[Nothing]:
+case object Empty extends Collected[Nothing], Val[Empty.type]:
   def elements: Iterable[Val[Nothing]] = Iterable.empty[Val[Nothing]]
 end Empty
-final case class NonEmpty[T <: ValType](elements: Val[T]*) extends Collected[T]:
+final case class NonEmpty[T <: ValType](elements: Val[T]*) extends Collected[T], Val[NonEmpty[T]]:
   assert(elements.nonEmpty)
 end NonEmpty
 
@@ -61,8 +58,11 @@ object Signed:
   def apply[T <: ValType](document: Val[T], signatory: IdentifierKey): Signed[T] =
     new Signed(document, signatory.identifier)
 end Signed
+// todo should we also keep track of the type of the signatory? Or not?
 
-// todo what if we disallowed matching Signed in patterns? But what about when it's in code?
+// todo what if we disallowed matching Signed in patterns? But what about when it's in code? In the concrete syntax,
+//  we could try to use only symbol for Sign, Signed, Unsign, and SignedMatcher(any level).
+//  The parser would then have to disambiguate.
 
 /**
   * Since Signed values cannot be created freely, a different type of value is needed for matching.

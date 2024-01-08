@@ -8,9 +8,6 @@ import java.util.concurrent.atomic.AtomicLong
 // todo try adding a limited form of subtyping in Fides
 
 // todo delete ID, use subtyping between Identifer and locations, and delete implicit conversions.
-//  Last time, I added a distinction between irrefutable patterns, Xctr, and refutable ones, Ptrn
-//  and restarted adding variance, aka subtyping in Fides.
-//  CodePtrn! Are they needed? If so, can they be made to work?
 private[fides2024] sealed trait ID protected(val uniqueID: Long) derives CanEqual:
   override def equals(obj: Any): Boolean = obj.asInstanceOf[Matchable] match
     case that: ID => this.uniqueID == that.uniqueID
@@ -33,6 +30,7 @@ final class Identifier private[values](uniqueID: Long) extends ID(uniqueID), Val
 object Identifier:
   def apply(): Identifier = new Identifier(ID.nextLong)
 end Identifier
+// todo should the Fides programmer be allowed to extend this class? Make it open?
 
 /**
   * A type of location used for channels

@@ -30,9 +30,7 @@ final case class AddElement[T <: ValType]
   * (Non-deterministically) extracts one element from a Collected.
   */
 final case class UnAddElement[T <: ValType]
-(element: Code[Xctr[T]], others: Code[Xctr[Collected[T]]]) extends Ptrn[Collected[T], Collected[T]]
-// todo this pattern can fail when applied to an empty Collected, that is why it doesn't extend Xctr.
-//  But is that the right way to do it?
+(element: Code[Xctr[T]], others: Code[Xctr[Collected[T]]]) extends Xctr[NonEmpty[T]]
 
 /**
   * Waits for @size elements from @elementSource, then outputs them as a Collected.
@@ -50,16 +48,12 @@ final case class UnCollect[T <: ValType]
 
 /**
   * Primitive to sign messages
-  *
-  * Dual of Unsign
   */
 final case class Sign[T <: ValType]
 (contents: Code[Expr[T]], signatory: Code[Expr[IdentifierKey]]) extends Expr[Signed[T]]
 
 /**
   * Primitive to unsign messages
-  *
-  * Dual of Sign
   */
 final case class UnSign[P <: N, N <: ValType]
 (contents: Code[Ptrn[P, N]], signatory: Code[Ptrn[Identifier, Identifier]]) extends Ptrn[Signed[P], Signed[N]]
@@ -74,35 +68,29 @@ final case class Quote[C <: CodeType](code: Code[C]) extends Expr[Quoted[C]]
 /**
   * Code extractor.
   */
-//final case class UnQuote[P <: N, N <: CodeType](code: Code[C]) extends Ptrn[Quoted[C], Quoted[C]]
-// todo CodePtrn[P, N].?.
+final case class UnQuote[C <: CodeType](code: Code[C]) extends Code[Ptrn[Quoted[C], ValType]]
 
 /**
   * Wraps a value into a Quoted.
-  *
-  * Dual of Unwrap
   */
 final case class Wrap[T <: ValType](value: Code[Expr[T]]) extends Expr[Quoted[Val[T]]]
 
 /**
   * Evaluates a Quoted.
-  *
-  * Dual of wrap
   */
-final case class UnWrap[T <: ValType](value: Code[Xctr[T]]) extends Xctr[Quoted[Expr[T]]]
-// todo as a pattern, it would be weird to evaluate the expr, only to throw it away
-//  maybe it should be more symmetric with Wrap, i.e. extend Code[Xctr[Quoted[Val[T]]]]?
-//  In that case, do we want a separate Eval? Or not?
+final case class UnWrap[P <: N, N <: ValType](value: Code[Ptrn[P, N]]) extends Ptrn[Quoted[Expr[P]], Quoted[Expr[N]]]
 
 /**
   * Absorbs from the location referred to by @id. Reduces to the received val after reception.
   *
-  * Dual of Out.
+  * Dual of Out
   */
 final case class Inp[T <: ValType](val iD: Code[Val[Channel[T]]]) extends Expr[T], Code[Inp[T]]
 
 /**
   * Emits to the location referred to by @id, once it has a value.
+  *
+  * Should really be called UnInp. But, for convenience's sake, we make an exception to the naming convention.
   *
   * Dual of Inp
   */
@@ -122,7 +110,9 @@ final case class Zip(components: Code[Expr[Collected[Quoted[Component]]]]) exten
 /**
   * Extracts the components out of a Concurrent component.
   */
-final case class UnZip(components: Code[Ptrn[Collected[Quoted[Component]], Collected[Quoted[Component]]]])
+final case class UnZipPtrn(components: Code[Ptrn[Collected[Quoted[Component]], Collected[Quoted[Component]]]])
 extends Ptrn[Quoted[Concurrent], Quoted[Concurrent]]
+final case class UnZip(components: Code[Xctr[Collected[Quoted[Component]]]]) extends Xctr[Quoted[Concurrent]]
+// todo do we really need these two cases?
 
-// todo add Rename?
+// todo add Rename? Would allow to apply a renaming/replacement to a Quoted.

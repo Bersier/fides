@@ -53,7 +53,7 @@ trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
 /**
   * Patterns do behave differently when they don't have connections: they may lead to a match failure. They are not
   * just syntactic sugar for single-input components.
-  * 
+  *
   * Refutable patterns (includes non-refutable ones as a special case)
   */
 trait Ptrn[+P <: N, -N <: ValType] extends CodeType, Code[Ptrn[P, N]]
@@ -66,7 +66,7 @@ trait Ptrn[+P <: N, -N <: ValType] extends CodeType, Code[Ptrn[P, N]]
   * expressions that are being evaluated backwards, with the syntax for input and output being flipped.
   *
   * Non-refutable patterns
-  * 
+  *
   * Dual of Expr
   *
   * For convenience, Xctr[T] also extends Code[Xctr[T]], so that we can write
@@ -83,9 +83,3 @@ type Xctr[-T <: ValType] = Ptrn[Nothing, T]
   * @tparam T keeps track of the value type
   */
 trait Val[+T <: ValType] extends Expr[T], Ptrn[T, ValType], Code[Val[T]], ValType
-
-// todo
-//  Need Channel pattern val to be able to match Identifier
-//  Need Identifier pattern to be able to match channel
-//  In non-refutable patterns, contravariance should be enforced
-//  In refutable patterns, what should the rule be?
