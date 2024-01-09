@@ -4,20 +4,6 @@ package fides2024.syntax
   * General type to represent Fides code
   */
 trait Code[+T <: CodeType] private[syntax]()
-object Code:
-  /**
-    * Hacky implicit conversion.
-    */
-  given [P <: [T <: ValType] =>> CodeType, T <: ValType, U <: ValType]
-  (using Conversion[T, U]): Conversion[P[T], P[U]] with
-    def apply(v: P[T]): P[U] = v.asInstanceOf[P[U]]
-
-  /**
-    * Hacky implicit conversion.
-    */
-  given [T <: CodeType, U <: CodeType](using Conversion[T, U]): Conversion[Code[T], Code[U]] with
-    def apply(v: Code[T]): Code[U] = v.asInstanceOf[Code[U]]
-end Code
 
 /**
   * Parent type of all the Scala types that represent the different types of possible Fides code.

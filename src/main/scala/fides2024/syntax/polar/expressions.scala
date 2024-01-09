@@ -85,7 +85,9 @@ final case class UnWrap[P <: N, N <: ValType](value: Code[Ptrn[P, N]]) extends P
   *
   * Dual of Out
   */
-final case class Inp[T <: ValType](val iD: Code[Val[Channel[T]]]) extends Expr[T], Code[Inp[T]]
+final case class Inp[T <: ValType](val iD: Code[Val[Channel[T]]]) extends Expr[T], Code[Inp[T]]:
+  override def toString: String = s"<${show(iD)}>"
+end Inp
 
 /**
   * Emits to the location referred to by @id, once it has a value.
@@ -94,8 +96,14 @@ final case class Inp[T <: ValType](val iD: Code[Val[Channel[T]]]) extends Expr[T
   *
   * Dual of Inp
   */
-final case class Out[T <: ValType](val iD: Code[Val[Channel[T]]]) extends Xctr[T], Code[Out[T]]
+final case class Out[T <: ValType](val iD: Code[Val[Channel[T]]]) extends Xctr[T], Code[Out[T]]:
+  override def toString: String = s"[${show(iD)}]"
+end Out
 // todo in a refutable pattern position, it could actually make the pattern fail. Do we really want that?
+
+private def show(iD: Code[Val[Channel[?]]]): String = iD match
+  case c: Channel[?] => c.name
+  case _             => iD.toString
 
 /**
   * Tries to match a value to the given pattern. Upon failure, outputs the value to the alternative instead.
