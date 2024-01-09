@@ -36,6 +36,7 @@ trait Component extends CodeType, Code[Component]
   */
 trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
 
+// todo improve documentation
 /**
   * Patterns do behave differently when they don't have connections: they may lead to a match failure. They are not
   * just syntactic sugar for single-input components.

@@ -3,10 +3,14 @@ package fides2024.syntax.polar
 import fides2024.syntax.values.*
 import fides2024.syntax.*
 
+// todo organize definitions better
+
 /**
   * Outputs the identifier corresponding to the obtained key.
+  *
+  * Equivalent to signing a dummy message, and then extracting the signature from it.
   */
-final case class ExtractID(key: Expr[IdentifierKey]) extends Expr[Identifier]
+final case class ExtractIdentifier(key: Code[Expr[IdentifierKey]]) extends Expr[Identifier]
 
 /**
   * Pairs two values together.
@@ -24,7 +28,7 @@ final case class UnPair[P1 <: N1, P2 <: N2, N1 <: ValType, N2 <: ValType]
   * Outputs a Collected with one element added to it.
   */
 final case class AddElement[T <: ValType]
-(element: Code[Expr[T]], others: Code[Expr[Collected[T]]]) extends Expr[Collected[T]]
+(element: Code[Expr[T]], others: Code[Expr[Collected[T]]]) extends Expr[NonEmpty[T]]
 
 /**
   * (Non-deterministically) extracts one element from a Collected.
@@ -36,15 +40,13 @@ final case class UnAddElement[T <: ValType]
   * Waits for @size elements from @elementSource, then outputs them as a Collected.
   */
 final case class Collect[T <: ValType]
-(elementSource: Code[Inp[T]], size: Code[Expr[Nothing]]) extends Expr[Collected[T]]
-// todo Nothing stands for a future Integer type in Fides
+(elementSource: Code[Inp[T]], size: Code[Expr[Integer]]) extends Expr[Collected[T]]
 
 /**
   * Outputs the elements of a Collected to @elementSource, and its size to @size.
   */
 final case class UnCollect[T <: ValType]
-(elementSource: Code[Out[T]], size: Code[Xctr[ValType]]) extends Xctr[Collected[T]]
-// todo AnyVal stands for a future Integer type in Fides
+(elementSource: Code[Out[T]], size: Code[Xctr[Integer]]) extends Xctr[Collected[T]]
 
 /**
   * Primitive to sign messages
@@ -86,22 +88,24 @@ final case class UnWrap[P <: N, N <: ValType](value: Code[Ptrn[P, N]]) extends P
   * Dual of Out
   */
 final case class Inp[T <: ValType](val iD: Code[Val[Channel[T]]]) extends Expr[T], Code[Inp[T]]:
-  override def toString: String = s"<${show(iD)}>"
+  override def toString: String = s"<${internalIDString(iD)}>"
 end Inp
 
 /**
   * Emits to the location referred to by @id, once it has a value.
   *
-  * Should really be called UnInp. But, for convenience's sake, we make an exception to the naming convention.
+  * Should really be called UnInp. But, for convenience's sake, an exception to the naming convention is made.
+  *
+  * Note that, when used in a pattern,
+  * whenever the value that would be passed to it does not match @T, the pattern will fail.
   *
   * Dual of Inp
   */
 final case class Out[T <: ValType](val iD: Code[Val[Channel[T]]]) extends Xctr[T], Code[Out[T]]:
-  override def toString: String = s"[${show(iD)}]"
+  override def toString: String = s"[${internalIDString(iD)}]"
 end Out
-// todo in a refutable pattern position, it could actually make the pattern fail. Do we really want that?
 
-private def show(iD: Code[Val[Channel[?]]]): String = iD match
+private def internalIDString(iD: Code[Val[Channel[?]]]): String = iD match
   case c: Channel[?] => c.name
   case _             => iD.toString
 
@@ -116,11 +120,26 @@ final case class Match[T <: ValType](pattern: Code[Ptrn[T, T]], alternative: Cod
 final case class Zip(components: Code[Expr[Collected[Quoted[Component]]]]) extends Expr[Quoted[Concurrent]]
 
 /**
-  * Extracts the components out of a Concurrent component.
+  * Extracts the components out of a Concurrent component in the context of a refutable pattern.
   */
-final case class UnZipPtrn(components: Code[Ptrn[Collected[Quoted[Component]], Collected[Quoted[Component]]]])
-extends Ptrn[Quoted[Concurrent], Quoted[Concurrent]]
-final case class UnZip(components: Code[Xctr[Collected[Quoted[Component]]]]) extends Xctr[Quoted[Concurrent]]
-// todo do we really need these two cases?
+final case class UnZipPtrn(
+  components: Code[Ptrn[Collected[Quoted[Component]], Collected[Quoted[Component]]]],
+) extends Ptrn[Quoted[Concurrent], Quoted[Concurrent]]
 
-// todo add Rename? Would allow to apply a renaming/replacement to a Quoted.
+/**
+  * Extracts the components out of a Concurrent component in the context of an irrefutable pattern.
+  */
+final case class UnZip(components: Code[Xctr[Collected[Quoted[Component]]]]) extends Xctr[Quoted[Concurrent]]
+
+/**
+  * Applies a substitution to a Quoted.
+  *
+  * @param original the identifier to be replaced/renamed
+  * @param replacement the identifer that is to replace the original
+  * @param code the Quoted in which the replacement is to take place
+  */
+final case class Substitute[C <: CodeType](
+  original: Code[Expr[Identifier]],
+  replacement: Code[Expr[Identifier]],
+  code: Code[Expr[Quoted[C]]],
+) extends Expr[Quoted[C]]

@@ -6,18 +6,24 @@ import fides2024.syntax.*
 // todo make Val[T] equivalent to Quoted[Val[T]]?
 
 /**
-  * A value that doesn't carry any information beyond causality (the sending of any value occurs before its reception).
+  * A value that doesn't carry any information beyond causality
+  * (since the sending of any value occurs before its reception).
   *
   * The corresponding type, U.type, is like the Unit type in Fides.
   */
-object U extends Val[U.type]
+case object U extends Val[U.type]
 
 /**
   * Boolean values
   */
 sealed trait Bool extends Val[Bool]
-object True extends Val[Bool]
-object False extends Val[Bool]
+case object True extends Val[Bool]
+case object False extends Val[Bool]
+
+/**
+  * Integer values
+  */
+final case class Integer(value: BigInt) extends Val[Integer]
 
 /**
   * A value that is made up of two values.
@@ -26,7 +32,7 @@ final case class Paired[+T1 <: ValType, +T2 <: ValType]
 (first: Code[Val[T1]], second: Code[Val[T2]]) extends Val[Paired[T1, T2]]
 
 /**
-  * A value that is made up of an unordered group of values.
+  * A value that is made up of an unordered collection of values.
   */
 sealed trait Collected[T <: ValType] extends Val[Collected[T]]:
   def elements: Iterable[Val[T]]

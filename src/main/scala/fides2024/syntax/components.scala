@@ -3,6 +3,11 @@ package fides2024.syntax
 import fides2024.syntax.values.*
 
 /**
+  * A hard-coded connection between one input and one output
+  */
+final case class Forward[T <: ValType](input: Code[Expr[T]], output: Code[Xctr[T]]) extends Component
+
+/**
   * Sends a value to an address.
   *
   * The value is guaranteed to arrive eventually, assuming the address exists.
@@ -45,3 +50,5 @@ final case class Repeated(body: Code[Component]) extends Component
   * Composes the given components concurrently.
   */
 final case class Concurrent(components: Code[Component]*) extends Component
+
+// todo error handling (and interruption?)

@@ -15,7 +15,7 @@ import scala.language.implicitConversions
 
   val posLoc = Inp(Channel[Bool]())
   val negLoc = Out(Channel[Bool]())
-  val extractID = ExtractID(IdentifierKey())
+  val extractID = ExtractIdentifier(IdentifierKey())
   println(Sign(Pair(posLoc, extractID), IdentifierKey()))
   println(Sign(Pair(Identifier(), Identifier()), IdentifierKey()))
   println(Sign[Bool](posLoc, IdentifierKey()))
