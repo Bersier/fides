@@ -87,7 +87,7 @@ final case class UnWrap[P <: N, N <: ValType](value: Code[Ptrn[P, N]]) extends P
   *
   * Dual of Out
   */
-final case class Inp[T <: ValType](val iD: Code[Val[Channel[T]]]) extends Expr[T], Code[Inp[T]]:
+final case class Inp[T <: ValType](iD: Code[Val[Channel[T]]]) extends Expr[T], Code[Inp[T]]:
   override def toString: String = s"<${internalIDString(iD)}>"
 end Inp
 
@@ -96,18 +96,57 @@ end Inp
   *
   * Should really be called UnInp. But, for convenience's sake, an exception to the naming convention is made.
   *
-  * Note that, when used in a pattern,
-  * whenever the value that would be passed to it does not match @T, the pattern will fail.
-  *
   * Dual of Inp
   */
-final case class Out[T <: ValType](val iD: Code[Val[Channel[T]]]) extends Xctr[T], Code[Out[T]]:
-  override def toString: String = s"[${internalIDString(iD)}]"
+final case class Out[T <: ValType](iD: Code[Val[Channel[T]]]) extends Xctr[T], Code[Out[T]]:
+  override def toString: String = s"<|${internalIDString(iD)}|>"
 end Out
 
-private def internalIDString(iD: Code[Val[Channel[?]]]): String = iD match
-  case c: Channel[?] => c.name
-  case _             => iD.toString
+/**
+  * Emits to the location referred to by @id, once it has a matching value.
+  *
+  * Matches only if the type of val to be outputted is a subtype of @T,
+  * so that, when used in a pattern,
+  * whenever the value that would be passed to it does not match @T, the pattern will fail.
+  */
+final case class OutPtrn[T <: ValType](iD: Code[Val[Channel[T]]]) extends Ptrn[T, ValType], Code[Out[T]]:
+  override def toString: String = s"<:${internalIDString(iD)}:>"
+end OutPtrn
+
+/**
+  * Reads the value contained in the cell once the trigger value is available.
+  */
+final case class Read[T <: ValType](trigger: Code[Expr[U.type]], iD: Code[Val[Cell[T]]]) extends Expr[T]:
+  // todo only when trigger is trivial: override def toString: String = s"[${internalIDString(iD)}]"
+end Read
+
+/**
+  * Unconditionally overwrites the value contained in the cell, and signals completion.
+  */
+final case class Write[T <: ValType](signal: Code[Xctr[U.type]], iD: Code[Val[Cell[T]]]) extends Xctr[T]:
+  // todo only when trigger is trivial: override def toString: String = s"[|${internalIDString(iD)}|]"
+end Write
+
+/**
+  * Kind-of the dual of U.
+  *
+  * Sink, Forget
+  */
+final case class Ignore() extends Xctr[ValType]
+
+/**
+  * Atomically
+  *  1. Reads the value of the cell, V.
+  *  2. Compares V to @testValue.
+  *  3. If they are the same, writes @newValue to the cell.
+  *  4. Outputs V.
+  *
+  * Atomically compares the current value of the cell with the inputted pattern and,
+  * only if they are the same, updates the value of the cell to the inputted new value, and
+  * outputs the previous value of the cell.
+  */
+final case class CompareAndSwap[T <: ValType]
+(testValue: Code[Expr[T]], newValue: Code[Expr[T]], iD: Code[Val[Cell[T]]]) extends Expr[T]
 
 /**
   * Tries to match a value to the given pattern. Upon failure, outputs the value to the alternative instead.
@@ -143,3 +182,13 @@ final case class Substitute[C <: CodeType](
   replacement: Code[Expr[Identifier]],
   code: Code[Expr[Quoted[C]]],
 ) extends Expr[Quoted[C]]
+
+/**
+  * Outputs true iff its two identifiers are the same.
+  */
+final case class Equal(first: Code[Expr[Identifier]], second: Code[Expr[Identifier]]) extends Expr[Bool]
+// todo corecursively extend?
+
+private def internalIDString(iD: Code[Val[Identifier]]): String = iD match
+  case c: Identifier => c.name
+  case _             => iD.toString

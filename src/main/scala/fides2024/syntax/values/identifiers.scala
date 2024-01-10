@@ -69,6 +69,9 @@ end Channel
 /**
   * A type of location used for memory cells
   *
+  * A cell guarantees that there is a way to temporally order operations made on it
+  * in a way that is consistent with observations.
+  *
   * @tparam T the type of the values that get stored in the cell
   */
 open class Cell[T <: ValType] protected(name: String) extends Identifier(name), Val[Cell[T]]:
@@ -76,6 +79,7 @@ open class Cell[T <: ValType] protected(name: String) extends Identifier(name), 
 object Cell extends LocationBuilder[Cell]:
   def constructor[T <: ValType](name: String) = new Cell(name)
 end Cell
+// todo Does it need an initial value? I think so.
 
 /**
   * A key has a corresponding identifier. The identifer can be obtained from the key, but not vice versa
