@@ -1,13 +1,8 @@
 package fides2024.syntax.components
 
 import fides2024.syntax.identifiers.{Cell, Channel}
-import fides2024.syntax.kinds.{Code, Component, Expr, Val, ValType, Xctr}
+import fides2024.syntax.kinds.{Code, Component, Expr, Val, ValType}
 import fides2024.syntax.values.Collected
-
-/**
-  * A hard-coded connection between one input and one output
-  */
-final case class Forward[T <: ValType](input: Code[Expr[T]], output: Code[Xctr[T]]) extends Component
 
 /**
   * Sends a value to an address.
