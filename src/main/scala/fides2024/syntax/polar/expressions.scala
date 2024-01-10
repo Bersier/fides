@@ -6,9 +6,9 @@ import fides2024.syntax.*
 // todo organize definitions better
 
 /**
-  * Outputs the identifier corresponding to the obtained key.
+  * Outputs the identifier corresponding to the inputted key.
   *
-  * Equivalent to signing a dummy message, and then extracting the signature from it.
+  * Equivalent to signing a dummy message, and then extracting the signature from it via pattern matching.
   */
 final case class ExtractIdentifier(key: Code[Expr[IdentifierKey]]) extends Expr[Identifier]
 

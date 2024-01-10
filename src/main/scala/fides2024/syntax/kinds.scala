@@ -1,5 +1,7 @@
 package fides2024.syntax
 
+import fides2024.syntax.values.Quoted
+
 /**
   * General type to represent Fides code
   */
@@ -44,7 +46,6 @@ trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
   * Refutable patterns (includes non-refutable ones as a special case)
   */
 trait Ptrn[+P <: N, -N <: ValType] extends CodeType, Code[Ptrn[P, N]]
-// todo lower bound is not just for variables.
 
 /**
   * Fides code type for extractors. While extractors are really just a special type of component with a single input,
@@ -70,3 +71,9 @@ type Xctr[-T <: ValType] = Ptrn[Nothing, T]
   * @tparam T keeps track of the value type
   */
 trait Val[+T <: ValType] extends Expr[T], Ptrn[T, ValType], Code[Val[T]], ValType
+
+/**
+  * This is a tentative flattening of (nested) quotes of values.
+  */
+trait ValQ[+T <: ValType] extends Val[T], Code[Quoted[Val[T]]]
+// todo doesn't seem to work in the test...

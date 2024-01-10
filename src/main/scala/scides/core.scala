@@ -1,11 +1,15 @@
 package scides
 
 import util.Async
-import scala.concurrent.{Future, ExecutionContext}
+
+import scala.concurrent.{ExecutionContext, Future}
 import scala.quoted.{Expr, Quotes, staging}
+import scala.annotation.nowarn
+
 import ExecutionContext.Implicits.global
 
-given staging.Compiler = staging.Compiler.make(Predef.getClass.getClassLoader.nn)
+@nowarn
+given staging.Compiler = staging.Compiler.make(getClass.getClassLoader.nn)
 
 def test(): Async =
   println("Java version: " + System.getProperty("java.version"))

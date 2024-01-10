@@ -2,9 +2,6 @@ package fides2024.syntax.values
 
 import fides2024.syntax.*
 
-
-// todo make Val[T] equivalent to Quoted[Val[T]]?
-
 /**
   * A value that doesn't carry any information beyond causality
   * (since the sending of any value occurs before its reception).
@@ -16,38 +13,38 @@ case object U extends Val[U.type]
 /**
   * Boolean values
   */
-sealed trait Bool extends Val[Bool]
-case object True extends Val[Bool]
-case object False extends Val[Bool]
+sealed trait Bool extends ValQ[Bool]
+case object True extends Bool
+case object False extends Bool
 
 /**
   * Integer values
   */
-final case class Integer(value: BigInt) extends Val[Integer]
+final case class Integer(value: BigInt) extends ValQ[Integer]
 
 /**
   * A value that is made up of two values.
   */
 final case class Paired[+T1 <: ValType, +T2 <: ValType]
-(first: Code[Val[T1]], second: Code[Val[T2]]) extends Val[Paired[T1, T2]]
+(first: Code[Val[T1]], second: Code[Val[T2]]) extends ValQ[Paired[T1, T2]]
 
 /**
   * A value that is made up of an unordered collection of values.
   */
-sealed trait Collected[T <: ValType] extends Val[Collected[T]]:
+sealed trait Collected[T <: ValType] extends ValQ[Collected[T]]:
   def elements: Iterable[Val[T]]
 end Collected
-case object Empty extends Collected[Nothing], Val[Empty.type]:
+case object Empty extends Collected[Nothing], ValQ[Empty.type]:
   def elements: Iterable[Val[Nothing]] = Iterable.empty[Val[Nothing]]
 end Empty
-final case class NonEmpty[T <: ValType](elements: Val[T]*) extends Collected[T], Val[NonEmpty[T]]:
+final case class NonEmpty[T <: ValType](elements: Val[T]*) extends Collected[T], ValQ[NonEmpty[T]]:
   assert(elements.nonEmpty)
 end NonEmpty
 
 /**
   * Code as value, used for metaprogramming
   */
-final case class Quoted[+C <: CodeType](code: Code[C]) extends Val[Quoted[C]]
+final case class Quoted[+C <: CodeType](code: Code[C]) extends ValQ[Quoted[C]]
 
 /**
   * Signed values are guaranteed to have been created using a key corresponding to @signature.
@@ -56,7 +53,7 @@ final case class Quoted[+C <: CodeType](code: Code[C]) extends Val[Quoted[C]]
   * @param signature the identifier corresponding to the key that was used to sign the document
   * @tparam T the type of the signed value
   */
-final case class Signed[+T <: ValType] private(document: Val[T], signature: Identifier) extends Val[Signed[T]]
+final case class Signed[+T <: ValType] private(document: Val[T], signature: Identifier) extends ValQ[Signed[T]]
 object Signed:
   /**
     * Signed values can only be created from keys, but only reveal the corresponding identifier.
@@ -83,7 +80,7 @@ end Signed
   * @tparam T keeps track of the value type
   */
 final case class SignedMatcher[T <: ValType]
-(level: BigInt, document: Code[Val[T]], signature: Code[Val[Identifier]]) extends Val[Signed[T]]:
+(level: BigInt, document: Code[Val[T]], signature: Code[Val[Identifier]]) extends ValQ[Signed[T]]:
   assert(level >= 0)
 end SignedMatcher
 // todo should only be allowed in code patterns (although maybe it's not such a big deal if it can be used elsewhere)
