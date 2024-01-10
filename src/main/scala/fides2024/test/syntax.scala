@@ -1,9 +1,9 @@
 package fides2024.test
 
-import fides2024.syntax.*
-import fides2024.syntax.identifiers.{Channel, Context, Identifier, IdentifierKey}
+import fides2024.syntax.identifiers.*
+import fides2024.syntax.meta.*
+import fides2024.syntax.signatures.*
 import fides2024.syntax.values.*
-import fides2024.syntax.polar.*
 // todo could 'export' help us reduce the number of imports?
 
 import scala.collection.concurrent

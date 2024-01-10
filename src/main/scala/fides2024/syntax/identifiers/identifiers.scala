@@ -1,6 +1,7 @@
 package fides2024.syntax.identifiers
 
-import fides2024.syntax.Val
+import fides2024.syntax.kinds.{Code, Expr, Val}
+import fides2024.syntax.values.Bool
 
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -41,3 +42,9 @@ object Identifier:
   private val currentSymbolIndex = AtomicInteger(0)
   private val constructor: String => Identifier = new Identifier(_)
 end Identifier
+
+/**
+  * Outputs true iff its two identifiers are the same.
+  */
+final case class Equal(first: Code[Expr[Identifier]], second: Code[Expr[Identifier]]) extends Expr[Bool]
+// todo corecursively extend?

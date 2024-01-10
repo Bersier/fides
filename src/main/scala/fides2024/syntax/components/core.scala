@@ -1,7 +1,8 @@
-package fides2024.syntax
+package fides2024.syntax.components
 
 import fides2024.syntax.identifiers.{Cell, Channel}
-import fides2024.syntax.values.*
+import fides2024.syntax.kinds.{Code, Component, Expr, Val, ValType, Xctr}
+import fides2024.syntax.values.Collected
 
 /**
   * A hard-coded connection between one input and one output

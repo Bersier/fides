@@ -1,7 +1,11 @@
-package fides2024.syntax.polar
+package fides2024.syntax.values
 
-import fides2024.syntax.values.Integer
-import fides2024.syntax.{Code, Expr}
+import fides2024.syntax.kinds.{Code, Expr, ValQ}
+
+/**
+  * Integer values
+  */
+final case class Integer(value: BigInt) extends ValQ[Integer]
 
 /**
   * Outputs the sum of the two inputs.

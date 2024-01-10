@@ -1,56 +1,12 @@
-package fides2024.syntax.values
+package fides2024.syntax.signatures
 
-import fides2024.syntax.*
 import fides2024.syntax.identifiers.{Identifier, IdentifierKey}
-
-/**
-  * A value that doesn't carry any information beyond causality
-  * (since the sending of any value occurs before its reception).
-  *
-  * The corresponding type, U.type, is like the Unit type in Fides.
-  */
-case object U extends Val[U.type]
-
-/**
-  * Boolean values
-  */
-sealed trait Bool extends ValQ[Bool]
-case object True extends Bool
-case object False extends Bool
-
-/**
-  * Integer values
-  */
-final case class Integer(value: BigInt) extends ValQ[Integer]
-
-/**
-  * A value that is made up of two values.
-  */
-final case class Paired[+T1 <: ValType, +T2 <: ValType]
-(first: Code[Val[T1]], second: Code[Val[T2]]) extends ValQ[Paired[T1, T2]]
-
-/**
-  * A value that is made up of an unordered collection of values.
-  */
-sealed trait Collected[T <: ValType] extends ValQ[Collected[T]]:
-  def elements: Iterable[Val[T]]
-end Collected
-case object Empty extends Collected[Nothing], ValQ[Empty.type]:
-  def elements: Iterable[Val[Nothing]] = Iterable.empty[Val[Nothing]]
-end Empty
-final case class NonEmpty[T <: ValType](elements: Val[T]*) extends Collected[T], ValQ[NonEmpty[T]]:
-  assert(elements.nonEmpty)
-end NonEmpty
-
-/**
-  * Code as value, used for metaprogramming
-  */
-final case class Quoted[+C <: CodeType](code: Code[C]) extends ValQ[Quoted[C]]
+import fides2024.syntax.kinds.{Code, Expr, Ptrn, Val, ValQ, ValType}
 
 /**
   * Signed values are guaranteed to have been created using a key corresponding to @signature.
   *
-  * @param document the signed value
+  * @param document  the signed value
   * @param signature the identifier corresponding to the key that was used to sign the document
   * @tparam T the type of the signed value
   */
@@ -85,3 +41,15 @@ final case class SignedMatcher[T <: ValType]
   assert(level >= 0)
 end SignedMatcher
 // todo should only be allowed in code patterns (although maybe it's not such a big deal if it can be used elsewhere)
+
+/**
+  * Primitive to sign messages
+  */
+final case class Sign[T <: ValType]
+(contents: Code[Expr[T]], signatory: Code[Expr[IdentifierKey]]) extends Expr[Signed[T]]
+
+/**
+  * Primitive to unsign messages
+  */
+final case class UnSign[P <: N, N <: ValType]
+(contents: Code[Ptrn[P, N]], signatory: Code[Ptrn[Identifier, Identifier]]) extends Ptrn[Signed[P], Signed[N]]

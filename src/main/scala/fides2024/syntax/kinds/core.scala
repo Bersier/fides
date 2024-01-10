@@ -1,6 +1,6 @@
-package fides2024.syntax
+package fides2024.syntax.kinds
 
-import fides2024.syntax.values.Quoted
+import fides2024.syntax.meta.Quoted
 
 /**
   * General type to represent Fides code
