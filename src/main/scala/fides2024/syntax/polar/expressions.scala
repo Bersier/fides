@@ -2,6 +2,7 @@ package fides2024.syntax.polar
 
 import fides2024.syntax.values.*
 import fides2024.syntax.*
+import fides2024.syntax.identifiers.{Cell, Channel, Identifier, IdentifierKey}
 
 // todo organize definitions better
 

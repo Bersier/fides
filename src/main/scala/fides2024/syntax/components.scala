@@ -1,5 +1,6 @@
 package fides2024.syntax
 
+import fides2024.syntax.identifiers.{Cell, Channel}
 import fides2024.syntax.values.*
 
 /**

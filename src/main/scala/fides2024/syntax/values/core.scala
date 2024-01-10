@@ -1,6 +1,7 @@
 package fides2024.syntax.values
 
 import fides2024.syntax.*
+import fides2024.syntax.identifiers.{Identifier, IdentifierKey}
 
 /**
   * A value that doesn't carry any information beyond causality
