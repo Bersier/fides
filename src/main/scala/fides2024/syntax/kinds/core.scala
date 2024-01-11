@@ -64,14 +64,6 @@ trait Ptrn[+P <: N, -N <: ValType] extends CodeType, Code[Ptrn[P, N]]
   */
 type Xctr[-T <: ValType] = Ptrn[Nothing, T]
 
-trait Reversible[T <: ValType] extends Expr[T] // todo delete and replace by Expr[T]?
-trait Coversible[S <: ValType] extends Xctr[S] // todo delete and replace by Xctr[S]?
-final case class Reversed[S <: ValType, T <: ValType]
-(c: Code[Expr[S]] -> Reversible[T])(out: Code[Xctr[T]]) extends Coversible[S]
-final case class Coversed[S <: ValType, T <: ValType]
-(c: Code[Xctr[T]] -> Coversible[S])(inp: Code[Expr[S]]) extends Reversible[T]
-// todo
-
 /**
   * Fides code type for Fides values.
   *
