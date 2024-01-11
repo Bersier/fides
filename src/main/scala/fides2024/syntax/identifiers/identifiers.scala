@@ -5,6 +5,8 @@ import fides2024.syntax.values.Bool
 
 import java.util.concurrent.atomic.AtomicInteger
 
+import language.experimental.pureFunctions
+
 // todo add way to get reflected T, maybe using izumi-reflect
 // todo use context functions?
 
@@ -25,11 +27,11 @@ object Identifier:
   def apply(name: String)(using Context): Identifier = from(constructor, name)
 
   // todo make private or protect from abuse
-  def from[I <: Identifier](constructor: String => I)(using Context): I =
+  def from[I <: Identifier](constructor: String -> I)(using Context): I =
     from(constructor, util.symbols(currentSymbolIndex.getAndIncrement()).toString)
 
   // todo make private or protect from abuse
-  def from[I <: Identifier](constructor: String => I, name: String)(using Context): I =
+  def from[I <: Identifier](constructor: String -> I, name: String)(using Context): I =
     val identifier = constructor(qualifiedName(name))
     val previous   = summon[Context].names.putIfAbsent(name, identifier)
     require(previous.isEmpty, s"$name is already used for ${previous.toString}_${previous.get.hashCode().toHexString}")
@@ -40,7 +42,7 @@ object Identifier:
     s"$globalPrefix$name"
 
   private val currentSymbolIndex = AtomicInteger(0)
-  private val constructor: String => Identifier = new Identifier(_)
+  private val constructor: String -> Identifier = new Identifier(_)
 end Identifier
 
 /**

@@ -1,6 +1,6 @@
 package fides2024.syntax.identifiers
 
-import scala.collection.concurrent
+import collection.concurrent
 
 // todo
 trait Context:

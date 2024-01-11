@@ -1,22 +1,20 @@
 package fides2024.syntax.meta
 
-import fides2024.syntax.components.Concurrent
-import fides2024.syntax.kinds.{Code, Component, Expr, Ptrn, Xctr}
+import fides2024.syntax.kinds.{Code, CodeType, Expr, Ptrn, VarArgs, Xctr}
 import fides2024.syntax.values.Collected
 
 /**
-  * Converts a Collected of component quotations to a Quoted of the components, composed concurrently.
+  * Converts a Collected of code quotations to a Quoted of a VarArgs of all the pieces of code.
   */
-final case class Zip(components: Code[Expr[Collected[Quoted[Component]]]]) extends Expr[Quoted[Concurrent]]
+final case class Zip[C <: CodeType](pieces: Code[Expr[Collected[Quoted[C]]]]) extends Expr[Quoted[VarArgs[C]]]
 
 /**
   * Extracts the components out of a Concurrent component in the context of a refutable pattern.
   */
-final case class UnZipPtrn(
-  components: Code[Ptrn[Collected[Quoted[Component]], Collected[Quoted[Component]]]],
-) extends Ptrn[Quoted[Concurrent], Quoted[Concurrent]]
+final case class UnZipPtrn[C <: CodeType]
+(pieces: Code[Ptrn[Collected[Quoted[C]], Collected[Quoted[C]]]]) extends Ptrn[Quoted[VarArgs[C]], Quoted[VarArgs[C]]]
 
 /**
   * Extracts the components out of a Concurrent component in the context of an irrefutable pattern.
   */
-final case class UnZip(components: Code[Xctr[Collected[Quoted[Component]]]]) extends Xctr[Quoted[Concurrent]]
+final case class UnZip[C <: CodeType](pieces: Code[Xctr[Collected[Quoted[C]]]]) extends Xctr[Quoted[VarArgs[C]]]

@@ -18,7 +18,7 @@ end Channel
   *
   * Dual of Out
   */
-final case class Inp[T <: ValType](iD: Code[Val[Channel[T]]]) extends Expr[T], Code[Inp[T]]:
+final case class Inp[+T <: ValType](iD: Code[Val[Channel[? <: T]]]) extends Expr[T], Code[Inp[T]]:
   override def toString: String = s"<${internalIDString(iD)}>"
 end Inp
 
@@ -29,7 +29,7 @@ end Inp
   *
   * Dual of Inp
   */
-final case class Out[T <: ValType](iD: Code[Val[Channel[T]]]) extends Xctr[T], Code[Out[T]]:
+final case class Out[-T <: ValType](iD: Code[Val[Channel[? >: T]]]) extends Xctr[T], Code[Out[T]]:
   override def toString: String = s"<|${internalIDString(iD)}|>"
 end Out
 
@@ -40,6 +40,6 @@ end Out
   * so that, when used in a pattern,
   * whenever the value that would be passed to it does not match @T, the pattern will fail.
   */
-final case class OutPtrn[T <: ValType](iD: Code[Val[Channel[T]]]) extends Ptrn[T, ValType], Code[Out[T]]:
+final case class OutPtrn[+T <: ValType](iD: Code[Val[Channel[? <: T]]]) extends Ptrn[T, ValType]:
   override def toString: String = s"<:${internalIDString(iD)}:>"
 end OutPtrn

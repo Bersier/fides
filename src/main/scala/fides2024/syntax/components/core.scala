@@ -1,7 +1,7 @@
 package fides2024.syntax.components
 
 import fides2024.syntax.identifiers.{Cell, Channel}
-import fides2024.syntax.kinds.{Code, Component, Expr, Val, ValType}
+import fides2024.syntax.kinds.{Code, Component, Expr, Val, ValType, VarArgs}
 import fides2024.syntax.values.Collected
 
 /**
@@ -46,6 +46,6 @@ final case class Repeated(body: Code[Component]) extends Component
 /**
   * Composes the given components concurrently.
   */
-final case class Concurrent(components: Code[Component]*) extends Component
+final case class Concurrent(components: Code[VarArgs[Component]]) extends Component
 
 // todo error handling (and interruption?)

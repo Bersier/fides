@@ -1,7 +1,7 @@
 package fides2024.syntax.identifiers
 
 import fides2024.syntax.kinds.{Code, Expr, Val, ValType, Xctr}
-import fides2024.syntax.values.U
+import fides2024.syntax.values.Pulse
 
 /**
   * A type of location used for memory cells
@@ -21,14 +21,14 @@ end Cell
 /**
   * Reads the value contained in the cell once the trigger value is available.
   */
-final case class Read[T <: ValType](trigger: Code[Expr[U.type]], iD: Code[Val[Cell[T]]]) extends Expr[T]:
+final case class Read[T <: ValType](trigger: Code[Expr[Pulse]], iD: Code[Val[Cell[T]]]) extends Expr[T]:
   // todo only when trigger is trivial: override def toString: String = s"[${internalIDString(iD)}]"
 end Read
 
 /**
   * Unconditionally overwrites the value contained in the cell, and signals completion.
   */
-final case class Write[T <: ValType](signal: Code[Xctr[U.type]], iD: Code[Val[Cell[T]]]) extends Xctr[T]:
+final case class Write[T <: ValType](signal: Code[Xctr[Pulse]], iD: Code[Val[Cell[T]]]) extends Xctr[T]:
   // todo only when trigger is trivial: override def toString: String = s"[|${internalIDString(iD)}|]"
 end Write
 

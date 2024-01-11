@@ -2,6 +2,8 @@ package fides2024.syntax.kinds
 
 import fides2024.syntax.meta.Quoted
 
+import language.experimental.pureFunctions
+
 /**
   * General type to represent Fides code
   */
@@ -62,6 +64,14 @@ trait Ptrn[+P <: N, -N <: ValType] extends CodeType, Code[Ptrn[P, N]]
   */
 type Xctr[-T <: ValType] = Ptrn[Nothing, T]
 
+trait Reversible[T <: ValType] extends Expr[T] // todo delete and replace by Expr[T]?
+trait Coversible[S <: ValType] extends Xctr[S] // todo delete and replace by Xctr[S]?
+final case class Reversed[S <: ValType, T <: ValType]
+(c: Code[Expr[S]] -> Reversible[T])(out: Code[Xctr[T]]) extends Coversible[S]
+final case class Coversed[S <: ValType, T <: ValType]
+(c: Code[Xctr[T]] -> Coversible[S])(inp: Code[Expr[S]]) extends Reversible[T]
+// todo
+
 /**
   * Fides code type for Fides values.
   *
@@ -77,3 +87,5 @@ trait Val[+T <: ValType] extends Expr[T], Ptrn[T, ValType], Code[Val[T]], ValTyp
   */
 trait ValQ[+T <: ValType] extends Val[T], Code[Quoted[Val[T]]]
 // todo doesn't seem to work in the test...
+
+final case class VarArgs[+C <: CodeType](pieces: Code[C]*) extends Code[VarArgs[C]], CodeType

@@ -1,4 +1,4 @@
-package fides2024.syntax.matching
+package fides2024.syntax.conditionals
 
 import fides2024.syntax.kinds.{Code, Ptrn, ValType, Xctr}
 
