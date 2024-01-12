@@ -1,7 +1,8 @@
 package fides2024.syntax.control
 
 import fides2024.syntax.identifiers.Cell
-import fides2024.syntax.kinds.{Code, Component, Xctr}
+import fides2024.syntax.kinds.{Code, Component, Expr, Xctr}
+import fides2024.syntax.meta.Quoted
 import fides2024.syntax.values.{Bool, Pulse}
 
 /**
@@ -12,13 +13,12 @@ final case class Process(running: Code[Cell[Bool]], body: Code[Component]) exten
 /**
   * Upon reception of a pulse, the body's execution is started.
   */
-final case class OnHold(body: Code[Component]) extends Xctr[Pulse]
+final case class OnHold(startSignal: Code[Expr[Pulse]], body: Code[Component]) extends Component
 
 /**
   * Upon reception of a pulse, the body's execution is stopped.
   */
-final case class Mortal(body: Code[Component]) extends Xctr[Pulse]
-// todo it seems wrong that the extractor would be running before being triggered.
+final case class Mortal(killSignal: Code[Expr[Pulse]], body: Code[Component]) extends Component
 
 /**
   * No message can reach and/or exit the sandboxed component directly. The monitor serves as the intermediate.
@@ -26,4 +26,6 @@ final case class Mortal(body: Code[Component]) extends Xctr[Pulse]
   */
 final case class Sandboxed(monitor: Code[Component], sandboxed: Code[Component]) extends Component
 
-final case class Catchable() extends Component
+final case class Catchable
+(catchSignal: Code[Expr[Pulse]], body: Code[Component], codeReader: Xctr[Quoted[Component]]) extends Component
+// todo catchable that can be restarted?

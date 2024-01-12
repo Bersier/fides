@@ -31,6 +31,7 @@ end Read
 final case class Write[T <: ValType](signal: Code[Xctr[Pulse]], iD: Code[Val[Cell[T]]]) extends Xctr[T]:
   // todo only when trigger is trivial: override def toString: String = s"[|${internalIDString(iD)}|]"
 end Write
+// todo Write could also be written in the other polarity...
 
 /**
   * Atomically
