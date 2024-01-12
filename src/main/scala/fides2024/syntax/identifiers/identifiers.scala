@@ -13,9 +13,6 @@ import language.experimental.pureFunctions
   * New identifiers can be created. It is not possible to construct identifiers in any other way.
   *
   * Identifiers are globally unique. Their names are just a convenient representation (that may or may not be unique).
-  *
-  * Due to hacky implicit conversions using asInstanceOf,
-  * we effectively have Channel[T] < Identifier and Cell[T] < Identifier.
   */
 open class Identifier protected(val name: String) extends Atom, ValQ[Identifier] derives CanEqual:
   override def toString: String = s"#$name"

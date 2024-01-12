@@ -35,6 +35,8 @@ final case class Scope(
   localCells: Code[Val[Collected[Cell[?]]]],
   body: Code[Component],
 ) extends Component
+// todo need a way to make new identifiers; this doesn't quite seem to fit the bill.
+// todo Cell and Channel could be subtypes of Location
 
 /**
   * Behaviorally equivalent to an infinite number of copies of the given body
