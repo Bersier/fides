@@ -8,8 +8,9 @@ import scala.annotation.nowarn
 
 import ExecutionContext.Implicits.global
 
-@nowarn
-given staging.Compiler = staging.Compiler.make(getClass.getClassLoader.nn)
+given staging.Compiler =
+  object Dummy
+  staging.Compiler.make(Dummy.getClass.getClassLoader.nn)
 
 def test(): Async =
   println("Java version: " + System.getProperty("java.version"))

@@ -1,17 +1,29 @@
 package fides2024.syntax.control
 
-import fides2024.syntax.identifiers.Inp
+import fides2024.syntax.identifiers.Cell
 import fides2024.syntax.kinds.{Code, Component, Xctr}
-import fides2024.syntax.values.Pulse
+import fides2024.syntax.values.{Bool, Pulse}
 
-final case class Asleep(wake: Code[Inp[Pulse]], sleep: Code[Inp[Pulse]], body: Code[Component]) extends Component
-final case class Awake(wake: Code[Inp[Pulse]], sleep: Code[Inp[Pulse]], body: Code[Component]) extends Component
+/**
+  * @param running indicates whether the body is currently running
+  */
+final case class Process(running: Code[Cell[Bool]], body: Code[Component]) extends Component
 
+/**
+  * Upon reception of a pulse, the body's execution is started.
+  */
 final case class OnHold(body: Code[Component]) extends Xctr[Pulse]
 
-final case class Mortal(killSwitch: Code[Inp[Pulse]], body: Code[Component]) extends Component
-// todo, instead of separate channels, we could have separate messages for the types of orders (Kill, Stop, Start)
+/**
+  * Upon reception of a pulse, the body's execution is stopped.
+  */
+final case class Mortal(body: Code[Component]) extends Xctr[Pulse]
+// todo it seems wrong that the extractor would be running before being triggered.
 
-final case class Sandboxed() extends Component
+/**
+  * No message can reach and/or exit the sandboxed component directly. The monitor serves as the intermediate.
+  * It can send and receive messages to and from the sandboxed component.
+  */
+final case class Sandboxed(monitor: Code[Component], sandboxed: Code[Component]) extends Component
 
 final case class Catchable() extends Component

@@ -21,6 +21,10 @@ final case class Duplicate[T <: ValType]
 final case class Hold[T <: ValType](signal: Code[Expr[Pulse]], value: Code[Expr[T]]) extends Expr[T]
 
 final case class Signal(trigger: Code[Expr[?]]) extends Expr[Pulse]
+
+/**
+  * Equivalent to writing to an ignored cell.
+  */
 final case class Trigger(waiting: Code[Xctr[Pulse]]) extends Xctr[ValType]
 
 final case class Pick[T <: ValType](first: Code[Expr[T]], second: Code[Expr[T]]) extends Expr[T]
