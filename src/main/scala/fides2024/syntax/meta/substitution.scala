@@ -1,7 +1,7 @@
 package fides2024.syntax.meta
 
 import fides2024.syntax.identifiers.Identifier
-import fides2024.syntax.kinds.{Code, CodeType, Expr}
+import fides2024.syntax.code.{Code, CodeType, Expr}
 
 /**
   * Applies a substitution to a Quoted.

@@ -1,6 +1,6 @@
 package fides2024.syntax.identifiers
 
-import fides2024.syntax.kinds.{Code, Expr, Ptrn, Val, ValType, Xctr}
+import fides2024.syntax.code.{Code, Expr, Ptrn, Val, ValType, Xctr}
 
 /**
   * A type of location used for channels

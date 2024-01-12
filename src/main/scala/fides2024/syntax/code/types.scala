@@ -1,4 +1,4 @@
-package fides2024.syntax.kinds
+package fides2024.syntax.code
 
 import fides2024.syntax.meta.Quoted
 
@@ -82,5 +82,3 @@ trait ValQ[+T <: ValType] extends Val[T], Code[Quoted[Val[T]]]
 // todo doesn't seem to work in the test...
 
 trait Atom extends ValType
-
-final case class VarArgs[+C <: CodeType](pieces: Code[C]*) extends Code[VarArgs[C]], CodeType

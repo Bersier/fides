@@ -1,7 +1,7 @@
 package fides2024.syntax.control
 
-import fides2024.syntax.identifiers.{Cell, Inp}
-import fides2024.syntax.kinds.{Atom, Code, Component, Expr, ValQ, Xctr}
+import fides2024.syntax.identifiers.{Cell, Inp, Out}
+import fides2024.syntax.code.{Atom, Code, Component, Expr, Val, ValQ, ValType, Xctr}
 import fides2024.syntax.meta.Quoted
 import fides2024.syntax.values.{Bool, Pulse}
 
@@ -37,3 +37,10 @@ final case class Sandboxed(monitor: Code[Component], sandboxed: Code[Component])
 final case class Catchable
 (catchSignal: Code[Expr[Pulse]], body: Code[Component], codeReader: Xctr[Quoted[Component]]) extends Component
 // todo catchable that can be restarted?
+
+final case class Handled(errorHandler: Code[Out[Error[ValType]]], body: Code[Component]) extends Component
+
+final case class Error[+T <: ValType](value: Code[Val[T]]) extends Val[Error[T]]
+// todo develop
+
+// todo interrupts? Hot-swapping? Are these cases covered with the current control primitives?

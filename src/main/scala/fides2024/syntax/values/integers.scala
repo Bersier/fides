@@ -1,6 +1,6 @@
 package fides2024.syntax.values
 
-import fides2024.syntax.kinds.{Atom, Code, Expr, ValQ}
+import fides2024.syntax.code.{Atom, Code, Expr, ValQ}
 
 /**
   * Integer values

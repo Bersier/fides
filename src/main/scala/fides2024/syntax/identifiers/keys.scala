@@ -1,6 +1,6 @@
 package fides2024.syntax.identifiers
 
-import fides2024.syntax.kinds.{Code, Expr, Val, ValType}
+import fides2024.syntax.code.{Code, Expr, Val, ValType}
 
 /**
   * A key has a corresponding identifier. The identifer can be obtained from the key, but not vice versa

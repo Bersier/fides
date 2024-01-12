@@ -1,6 +1,6 @@
 package fides2024.syntax.meta
 
-import fides2024.syntax.kinds.{Code, Expr, Ptrn, Val, ValType}
+import fides2024.syntax.code.{Code, Expr, Ptrn, Val, ValType}
 
 /**
   * Wraps a value into a Quoted.

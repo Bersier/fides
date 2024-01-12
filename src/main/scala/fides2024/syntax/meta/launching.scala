@@ -1,6 +1,6 @@
 package fides2024.syntax.meta
 
-import fides2024.syntax.kinds.{Code, Component, Expr}
+import fides2024.syntax.code.{Code, Component, Expr}
 import fides2024.syntax.signatures.Signed
 
 /**

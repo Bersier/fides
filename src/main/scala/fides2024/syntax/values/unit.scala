@@ -1,6 +1,6 @@
 package fides2024.syntax.values
 
-import fides2024.syntax.kinds.{Atom, ValQ}
+import fides2024.syntax.code.{Atom, ValQ}
 
 sealed trait Pulse extends Atom, ValQ[Pulse]
 

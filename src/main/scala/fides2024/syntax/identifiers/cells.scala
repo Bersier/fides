@@ -1,7 +1,8 @@
 package fides2024.syntax.identifiers
 
-import fides2024.syntax.kinds.{Code, Expr, Val, ValType, Xctr}
-import fides2024.syntax.values.Pulse
+import fides2024.syntax.connectors.Ignore
+import fides2024.syntax.code.{Code, Expr, Val, ValType, Xctr}
+import fides2024.syntax.values.{Pulse, U}
 
 /**
   * A type of location used for memory cells
@@ -22,17 +23,23 @@ end Cell
   * Reads the value contained in the cell once the trigger value is available.
   */
 final case class Read[T <: ValType](trigger: Code[Expr[Pulse]], iD: Code[Val[Cell[T]]]) extends Expr[T]:
-  // todo only when trigger is trivial: override def toString: String = s"[${internalIDString(iD)}]"
+  override def toString: String =
+    given CanEqual[Code[Expr[Pulse]], Pulse] = CanEqual.derived
+    val prefix = Some(trigger).filter(_ != U).map(t => s"$t; ").getOrElse("")
+    s"[$prefix${internalIDString(iD)}]"
 end Read
 
 /**
   * Unconditionally overwrites the value contained in the cell, and signals completion.
   */
 final case class Write[T <: ValType](signal: Code[Xctr[Pulse]], iD: Code[Val[Cell[T]]]) extends Xctr[T]:
-  // todo only when trigger is trivial: override def toString: String = s"[|${internalIDString(iD)}|]"
+  override def toString: String =
+    given CanEqual[Pulse, Code[Expr[Pulse]]] = CanEqual.derived
+    val prefix = signal match
+      case Ignore() => ""
+      case _        => s"$signal; "
+    s"[$prefix|${internalIDString(iD)}|]"
 end Write
-// todo Write could also be written in the other polarity...
-//  which might be better, as it would be weird in a refutable pattern. Or maybe not.
 
 /**
   * Atomically

@@ -1,6 +1,6 @@
 package fides2024.syntax.identifiers
 
-import fides2024.syntax.kinds.ValType
+import fides2024.syntax.code.ValType
 
 trait LocationBuilder[I[T <: ValType] <: Identifier]:
   def apply[T <: ValType]()(using Context): I[T] = Identifier.from(constructor[T])

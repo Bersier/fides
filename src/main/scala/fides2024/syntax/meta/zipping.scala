@@ -1,6 +1,6 @@
 package fides2024.syntax.meta
 
-import fides2024.syntax.kinds.{Code, CodeType, Expr, Ptrn, VarArgs, Xctr}
+import fides2024.syntax.code.{Code, CodeType, Expr, Ptrn, VarArgs, Xctr}
 import fides2024.syntax.values.Collected
 
 /**

@@ -1,6 +1,6 @@
 package fides2024.syntax.identifiers
 
-import fides2024.syntax.kinds.{Atom, ValQ}
+import fides2024.syntax.code.{Atom, ValQ}
 
 import java.util.concurrent.atomic.AtomicInteger
 import language.experimental.pureFunctions

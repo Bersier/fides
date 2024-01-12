@@ -1,6 +1,6 @@
 package fides2024.syntax.values
 
-import fides2024.syntax.kinds.{Code, Expr, Ptrn, Val, ValQ, ValType}
+import fides2024.syntax.code.{Code, Expr, Ptrn, Val, ValQ, ValType}
 
 /**
   * A value that is made up of two values.

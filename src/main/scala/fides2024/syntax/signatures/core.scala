@@ -1,7 +1,7 @@
 package fides2024.syntax.signatures
 
 import fides2024.syntax.identifiers.{Identifier, IdentifierKey}
-import fides2024.syntax.kinds.{Code, Expr, Ptrn, Val, ValQ, ValType}
+import fides2024.syntax.code.{Code, Expr, Ptrn, Val, ValQ, ValType}
 
 /**
   * Signed values are guaranteed to have been created using a key corresponding to @signature.

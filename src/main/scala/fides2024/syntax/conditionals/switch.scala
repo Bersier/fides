@@ -1,6 +1,6 @@
 package fides2024.syntax.conditionals
 
-import fides2024.syntax.kinds.{Atom, Code, CodeType, Component, Expr, Ptrn, Val, ValType, VarArgs, Xctr}
+import fides2024.syntax.code.{Atom, Code, CodeType, Component, Expr, Ptrn, Val, ValType, VarArgs, Xctr}
 
 final case class SwitchComponent[T <: ValType, A <: Atom](
   input    : Code[Expr[T]],
