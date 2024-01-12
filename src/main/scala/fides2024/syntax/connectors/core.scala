@@ -25,3 +25,7 @@ final case class Signal(trigger: Code[Expr[?]]) extends Expr[Pulse]
 final case class Pick[T <: ValType](first: Code[Expr[T]], second: Code[Expr[T]]) extends Expr[T]
 
 final case class UnPick[T <: ValType](first: Code[Xctr[T]], second: Code[Xctr[T]]) extends Xctr[T]
+// todo doesn't really make sense in a refutable pattern, right? Maybe Ptrn should not be a supertype of Xctr?
+//  But that sounds like it's overcomplicating things... could be a Component.
+//  On the other hand, one could argue that it doesn't really make less sense than an Out in a pattern;
+//  It only actually gets triggered if the pattern matches.

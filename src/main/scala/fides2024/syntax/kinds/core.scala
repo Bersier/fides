@@ -73,11 +73,14 @@ type Xctr[-T <: ValType] = Ptrn[Nothing, T]
   * @tparam T keeps track of the value type
   */
 trait Val[+T <: ValType] extends Expr[T], Ptrn[T, ValType], Code[Val[T]], ValType
+// todo maybe we should remove these conveniences, as they allow nonsensical types like Val[Val[?]]...
 
 /**
   * This is a tentative flattening of (nested) quotes of values.
   */
 trait ValQ[+T <: ValType] extends Val[T], Code[Quoted[Val[T]]]
 // todo doesn't seem to work in the test...
+
+trait Atom extends ValType
 
 final case class VarArgs[+C <: CodeType](pieces: Code[C]*) extends Code[VarArgs[C]], CodeType

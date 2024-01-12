@@ -1,10 +1,8 @@
 package fides2024.syntax.identifiers
 
-import fides2024.syntax.kinds.{Code, Expr, Val}
-import fides2024.syntax.values.Bool
+import fides2024.syntax.kinds.{Atom, ValQ}
 
 import java.util.concurrent.atomic.AtomicInteger
-
 import language.experimental.pureFunctions
 
 // todo add way to get reflected T, maybe using izumi-reflect
@@ -19,7 +17,7 @@ import language.experimental.pureFunctions
   * Due to hacky implicit conversions using asInstanceOf,
   * we effectively have Channel[T] < Identifier and Cell[T] < Identifier.
   */
-open class Identifier protected(val name: String) extends Val[Identifier] derives CanEqual:
+open class Identifier protected(val name: String) extends Atom, ValQ[Identifier] derives CanEqual:
   override def toString: String = s"#$name"
 object Identifier:
   def apply()(using Context): Identifier = from(constructor)
@@ -44,9 +42,3 @@ object Identifier:
   private val currentSymbolIndex = AtomicInteger(0)
   private val constructor: String -> Identifier = new Identifier(_)
 end Identifier
-
-/**
-  * Outputs true iff its two identifiers are the same.
-  */
-final case class Equal(first: Code[Expr[Identifier]], second: Code[Expr[Identifier]]) extends Expr[Bool]
-// todo corecursively extend?

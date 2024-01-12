@@ -1,9 +1,17 @@
 package fides2024.syntax.control
 
-import fides2024.syntax.identifiers.Cell
-import fides2024.syntax.kinds.{Code, Component, Expr, Xctr}
+import fides2024.syntax.identifiers.{Cell, Inp}
+import fides2024.syntax.kinds.{Atom, Code, Component, Expr, ValQ, Xctr}
 import fides2024.syntax.meta.Quoted
 import fides2024.syntax.values.{Bool, Pulse}
+
+sealed trait Order extends Atom, ValQ[Order]
+case object Kill extends Order
+case object Stop extends Order
+case object Start extends Order
+
+final case class Awake(leash: Code[Inp[Order]], body: Code[Component]) extends Component
+final case class Asleep(leash: Code[Inp[Order]], body: Code[Component]) extends Component
 
 /**
   * @param running indicates whether the body is currently running

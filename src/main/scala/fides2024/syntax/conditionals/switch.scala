@@ -1,17 +1,27 @@
 package fides2024.syntax.conditionals
 
-import fides2024.syntax.identifiers.Identifier
-import fides2024.syntax.kinds.{Code, CodeType, Component, Expr, Ptrn, Val, ValType, VarArgs, Xctr}
+import fides2024.syntax.kinds.{Atom, Code, CodeType, Component, Expr, Ptrn, Val, ValType, VarArgs, Xctr}
 
-final case class SwitchComponent[T <: ValType](
+final case class SwitchComponent[T <: ValType, A <: Atom](
   input    : Code[Expr[T]],
-  condition: Code[Expr[Identifier]],
-  cases    : Code[VarArgs[XctrCase[T]]],
+  condition: Code[Expr[A]],
+  cases    : Code[VarArgs[XctrCase[T, A]]],
+  default  : Code[Xctr[T]],
 ) extends Component
 
-final case class Switch(cases : Code[VarArgs[Case]]) extends Ptrn[Identifier, Identifier]
+final case class SwitchExpr[T <: ValType, A <: Atom]
+(condition: Code[Expr[A]], cases: Code[VarArgs[ExprCase[T, A]]], default: Code[Expr[T]]) extends Expr[T]
+// todo eager?
 
-final case class Case(testValue: Code[Val[Identifier]], body: Code[Component]) extends Code[Case], CodeType
+final case class Switch[A <: Atom](cases : Code[VarArgs[Case[A]]]) extends Ptrn[A, A]
+// todo violates polarity reversal interdiction
 
-final case class XctrCase[T <: ValType]
-(testValue: Code[Val[Identifier]], body: Xctr[T]) extends Code[XctrCase[T]], CodeType
+final case class Case[A <: Atom](testValue: Code[Val[A]], body: Code[Component]) extends Code[Case[A]], CodeType
+
+final case class XctrCase[T <: ValType, A <: Atom]
+(testValue: Code[Val[A]], exctractor: Xctr[T]) extends Code[XctrCase[T, A]], CodeType
+
+final case class ExprCase[T <: ValType, A <: Atom]
+(testValue: Code[Val[A]], value: Expr[T]) extends Code[ExprCase[T, A]], CodeType
+
+// todo Scala code also has nested polarity reversals, at least within Exprs.

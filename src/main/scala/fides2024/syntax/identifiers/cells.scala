@@ -32,6 +32,7 @@ final case class Write[T <: ValType](signal: Code[Xctr[Pulse]], iD: Code[Val[Cel
   // todo only when trigger is trivial: override def toString: String = s"[|${internalIDString(iD)}|]"
 end Write
 // todo Write could also be written in the other polarity...
+//  which might be better, as it would be weird in a refutable pattern. Or maybe not.
 
 /**
   * Atomically
