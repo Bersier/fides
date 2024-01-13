@@ -5,7 +5,6 @@ import fides2024.syntax.code.{Atom, ValQ}
 import java.util.concurrent.atomic.AtomicInteger
 import language.experimental.pureFunctions
 
-// todo add way to get reflected T, maybe using izumi-reflect
 // todo use context functions?
 
 /**

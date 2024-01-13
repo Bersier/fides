@@ -2,6 +2,7 @@ package fides2024.syntax.identifiers
 
 import fides2024.syntax.code.ValType
 
+// todo delete
 trait LocationBuilder[I[T <: ValType] <: Identifier]:
   def apply[T <: ValType]()(using Context): I[T] = Identifier.from(constructor[T])
   def apply[T <: ValType](name: String)(using Context): I[T] = Identifier.from(constructor[T], name)

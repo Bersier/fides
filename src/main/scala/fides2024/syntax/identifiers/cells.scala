@@ -3,6 +3,7 @@ package fides2024.syntax.identifiers
 import fides2024.syntax.connectors.Ignore
 import fides2024.syntax.code.{Code, Expr, Val, ValType, Xctr}
 import fides2024.syntax.values.{Pulse, U}
+import izumi.reflect.Tag
 
 /**
   * A type of location used for memory cells
@@ -12,12 +13,16 @@ import fides2024.syntax.values.{Pulse, U}
   *
   * @tparam T the type of the values that get stored in the cell
   */
-open class Cell[T <: ValType] protected(name: String) extends Identifier(name), Val[Cell[T]]:
-  override def toString: String = s"\\$$name"
-object Cell extends LocationBuilder[Cell]:
-  protected def constructor[T <: ValType](name: String): Cell[T] = new Cell(name)
+open class Cell[T <: ValType : Tag] protected
+(var value: Code[Val[T]], name: String) extends Identifier(name), Val[Cell[T]]:
+  override def toString: String = s"\\$$name($value)"
+  def valueType: Tag[T] = summon[Tag[T]]
+object Cell:
+  def apply[T <: ValType](value: Code[Val[T]])(using Context, Tag[T]): Cell[T] =
+    Identifier.from(new Cell(value, _))
+  def apply[T <: ValType](value: Code[Val[T]], name: String)(using Context, Tag[T]): Cell[T] =
+    Identifier.from(new Cell(value, _), name)
 end Cell
-// todo Does it need an initial value? I think so.
 
 /**
   * Reads the value contained in the cell once the trigger value is available.

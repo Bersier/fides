@@ -1,16 +1,19 @@
 package fides2024.syntax.identifiers
 
 import fides2024.syntax.code.{Code, Expr, Ptrn, Val, ValType, Xctr}
+import izumi.reflect.Tag
 
 /**
   * A type of location used for channels
   *
   * @tparam T the type of the values that transit through the channel
   */
-open class Channel[T <: ValType] protected(name: String) extends Identifier(name), Val[Channel[T]]:
+open class Channel[T <: ValType : Tag] protected(name: String) extends Identifier(name), Val[Channel[T]]:
   override def toString: String = s"@$name"
-object Channel extends LocationBuilder[Channel]:
-  protected def constructor[T <: ValType](name: String): Channel[T] = new Channel(name)
+  def valueType: Tag[T] = summon[Tag[T]]
+object Channel:
+  def apply[T <: ValType]()(using Context, Tag[T]): Channel[T] = Identifier.from(new Channel(_))
+  def apply[T <: ValType](name: String)(using Context, Tag[T]): Channel[T] = Identifier.from(new Channel(_), name)
 end Channel
 
 /**
