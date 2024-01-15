@@ -1,7 +1,7 @@
 package fides2024.syntax.components
 
-import fides2024.syntax.identifiers.{Cell, Channel}
 import fides2024.syntax.code.{Code, Component, Expr, Val, ValType, VarArgs}
+import fides2024.syntax.identifiers.{Channel, Identifier}
 import fides2024.syntax.values.Collected
 
 /**
@@ -26,17 +26,13 @@ final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Va
 /**
   * A name scope
   *
-  * @param localChannels names whose meaning is only valid within this scope
-  * @param localCells names whose meaning is only valid within this scope
-  * @param body the body of the scope
+  * The local identifiers are really placeholders,
+  * to be replaced by new identifiers upon execution/dissolution of the scope.
+  *
+  * @param localIdentifiers names whose meaning is only valid within this scope
+  * @param body the body of the scope, in which the replacements will take place
   */
-final case class Scope(
-  localChannels: Code[Val[Collected[Channel[?]]]],
-  localCells: Code[Val[Collected[Cell[?]]]],
-  body: Code[Component],
-) extends Component
-// todo need a way to make new identifiers; this doesn't quite seem to fit the bill.
-// todo Cell and Channel could be subtypes of Location
+final case class Scope(localIdentifiers: Code[Val[Collected[Identifier]]], body: Code[Component]) extends Component
 
 /**
   * Behaviorally equivalent to an infinite number of copies of the given body

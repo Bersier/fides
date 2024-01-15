@@ -1,6 +1,6 @@
 package fides2024.syntax.identifiers
 
-import fides2024.syntax.code.{Atom, ValQ}
+import fides2024.syntax.code.{Atom, Expr, ValQ}
 
 import java.util.concurrent.atomic.AtomicInteger
 import language.experimental.pureFunctions
@@ -38,3 +38,8 @@ object Identifier:
   private val currentSymbolIndex = AtomicInteger(0)
   private val constructor: String -> Identifier = new Identifier(_)
 end Identifier
+
+/**
+  * Outputs a new identifier. Can be simulated with a scope with one placeholder. Added for convenience.
+  */
+final case class NewIdentifier() extends Expr[Identifier]
