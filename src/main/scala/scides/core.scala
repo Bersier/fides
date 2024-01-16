@@ -2,11 +2,10 @@ package scides
 
 import util.Async
 
-import scala.concurrent.{ExecutionContext, Future}
+//import scala.concurrent.{ExecutionContext, Future}
 import scala.quoted.{Expr, Quotes, staging}
-import scala.annotation.nowarn
 
-import ExecutionContext.Implicits.global
+//import ExecutionContext.Implicits.global
 
 given staging.Compiler =
   object Dummy

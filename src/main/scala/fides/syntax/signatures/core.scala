@@ -2,6 +2,7 @@ package fides.syntax.signatures
 
 import fides.syntax.identifiers.{Identifier, IdentifierKey}
 import fides.syntax.code.{Code, Expr, Ptrn, Val, ValQ, ValType}
+import fides.syntax.values.Integer
 
 /**
   * Signed values are guaranteed to have been created using a key corresponding to @signature.
@@ -37,10 +38,9 @@ end Signed
   * @tparam T keeps track of the value type
   */
 final case class SignedMatcher[T <: ValType]
-(level: BigInt, document: Code[Val[T]], signature: Code[Val[Identifier]]) extends ValQ[Signed[T]]:
-  assert(level >= 0)
-end SignedMatcher
+(level: Code[Val[Integer]], document: Code[Val[T]], signature: Code[Val[Identifier]]) extends ValQ[Signed[T]]
 // todo should only be allowed in code patterns (although maybe it's not such a big deal if it can be used elsewhere)
+// todo level should be >= 0
 
 /**
   * Primitive to sign messages

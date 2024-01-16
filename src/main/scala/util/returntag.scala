@@ -24,6 +24,7 @@ def returnTagExample(): Unit =
   import scala.language.implicitConversions
   val fooReturn = new Done
   def foo: fooReturn.Type = if true then fooReturn() else foo
+  println(foo)
   val barReturn = new Return[Int]
   def bar: barReturn.Type = if true then barReturn(0) else bar
   println(bar + 1)

@@ -36,3 +36,8 @@ final case class Divide(dividend: Code[Expr[Integer]], divisor: Code[Expr[Intege
   * Outputs the remainder of the division of the two inputs.
   */
 final case class Reduce(dividend: Code[Expr[Integer]], divisor: Code[Expr[Integer]]) extends Expr[Integer]
+
+/**
+  * Outputs -1 if the lhs is larger, 0 if they are equal, 1 if the rhs is larger.
+  */
+final case class Compare(lhs: Code[Expr[Integer]], rhs: Code[Expr[Integer]]) extends Expr[Integer]

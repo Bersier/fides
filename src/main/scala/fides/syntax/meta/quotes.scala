@@ -1,6 +1,7 @@
 package fides.syntax.meta
 
 import fides.syntax.code.{Code, CodeType, Expr, Ptrn, Val, ValQ, ValType, Xctr}
+import fides.syntax.values.Integer
 
 /**
   * Code as value, used for metaprogramming
@@ -14,6 +15,12 @@ final case class Quoted[+C <: CodeType](code: Code[C]) extends ValQ[Quoted[C]]
   */
 final case class Escape[C <: CodeType](code: Code[Expr[Quoted[C]] | Xctr[Quoted[C]]]) extends Code[C]
 // todo should we keep track of the polarity in the extended type?
+
+/**
+  * Allows matching an escape(matcher). See also SignedMatcher.
+  */
+final case class EscapeMatcher[C <: CodeType]
+(level: Code[Val[Integer]], code: Code[Expr[Quoted[C]] | Xctr[Quoted[C]]]) extends Code[C]
 
 
 /**

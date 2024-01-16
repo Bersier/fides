@@ -7,10 +7,21 @@ import fides.syntax.values.Pulse
 
 sealed trait Order extends Atom, ValQ[Order]
 case object Kill extends Order
-case object Stop extends Order
+case object Pause extends Order
 case object Start extends Order
 
+/**
+  * A controllable process that is awake
+  *
+  * A controllable process can be paused, (re)started, and killed.
+  */
 final case class Awake(leash: Code[Inp[Order]], body: Code[Process]) extends Process
+
+/**
+  * A controllable process that is asleep
+  *
+  * A controllable process can be paused, (re)started, and killed.
+  */
 final case class Asleep(leash: Code[Inp[Order]], body: Code[Process]) extends Process
 
 /**

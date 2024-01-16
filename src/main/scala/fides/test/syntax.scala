@@ -23,7 +23,7 @@ import scala.language.implicitConversions
 //  println(UnSign(negLoc, Identifier()))
   println(Sign(Wrap(posLoc), IdentifierKey()))
 //  println(UnSign(Unwrap(negLoc), Identifier()))
-  println(SignedMatcher(BigInt(0), Identifier(), Channel()))
+  println(SignedMatcher(Integer(0), Identifier(), Channel()))
 //  println(UnSign(Unwrap(negLoc), Escape(Wrap(Identifier()))))
 //  println(UnSign(Unwrap(negLoc), Escape(Wrap(ExtractID(IdentifierKey())))))
   println(UnSign(UnWrap(negLoc), Out(Escape(Wrap(Channel[Identifier]())))))
