@@ -1,6 +1,6 @@
-package fides2024.syntax.components
+package fides2024.syntax.processes
 
-import fides2024.syntax.code.{Code, Component, Expr, Val, ValType}
+import fides2024.syntax.code.{Code, Process, Expr, Val, ValType}
 import fides2024.syntax.identifiers.{Channel, Identifier}
 import fides2024.syntax.meta.VarArgs
 import fides2024.syntax.values.Collected
@@ -14,7 +14,7 @@ import fides2024.syntax.values.Collected
   * @param message the value to be sent
   * @param recipient address of the recipient
   */
-final case class Send[T <: ValType](message: Code[Expr[T]], recipient: Code[Expr[Channel[T]]]) extends Component
+final case class Send[T <: ValType](message: Code[Expr[T]], recipient: Code[Expr[Channel[T]]]) extends Process
 
 /**
   * A message in transit
@@ -27,7 +27,7 @@ final case class Send[T <: ValType](message: Code[Expr[T]], recipient: Code[Expr
   * @param message the contents of the message
   * @param recipient the address of the recipient
   */
-final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Val[Channel[T]]]) extends Component
+final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Val[Channel[T]]]) extends Process
 
 /**
   * A name scope
@@ -38,16 +38,16 @@ final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Va
   * @param localIdentifiers names whose meaning is only valid within this scope
   * @param body the body of the scope, in which the replacements will take place
   */
-final case class Scope(localIdentifiers: Code[Val[Collected[Identifier]]], body: Code[Component]) extends Component
+final case class Scope(localIdentifiers: Code[Val[Collected[Identifier]]], body: Code[Process]) extends Process
 
 /**
   * Behaviorally equivalent to an infinite number of copies of the given body
   *
-  * @param body the component to be repeated
+  * @param body the process to be repeated
   */
-final case class Repeated(body: Code[Component]) extends Component
+final case class Repeated(body: Code[Process]) extends Process
 
 /**
-  * Composes the given components concurrently.
+  * Composes the given processes concurrently.
   */
-final case class Concurrent(components: Code[VarArgs[Component]]) extends Component
+final case class Concurrent(processes: Code[VarArgs[Process]]) extends Process

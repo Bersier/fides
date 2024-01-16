@@ -1,12 +1,12 @@
 package fides2024.syntax.connectors
 
-import fides2024.syntax.code.{Code, Component, Expr, ValType, Xctr}
+import fides2024.syntax.code.{Code, Process, Expr, ValType, Xctr}
 import fides2024.syntax.values.Pulse
 
 /**
   * A hard-coded connection between one input and one output
   */
-final case class Forward[T <: ValType](input: Code[Expr[T]], output: Code[Xctr[T]]) extends Component
+final case class Forward[T <: ValType](input: Code[Expr[T]], output: Code[Xctr[T]]) extends Process
 
 /**
   * Kind-of the dual of values.
@@ -16,7 +16,7 @@ final case class Forward[T <: ValType](input: Code[Expr[T]], output: Code[Xctr[T
 final case class Ignore() extends Xctr[ValType]
 
 final case class Duplicate[T <: ValType]
-(value: Code[Expr[T]], first: Code[Xctr[T]], second: Code[Xctr[T]]) extends Component
+(value: Code[Expr[T]], first: Code[Xctr[T]], second: Code[Xctr[T]]) extends Process
 
 final case class Hold[T <: ValType](signal: Code[Expr[Pulse]], value: Code[Expr[T]]) extends Expr[T]
 

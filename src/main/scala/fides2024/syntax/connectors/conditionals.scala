@@ -1,6 +1,6 @@
 package fides2024.syntax.connectors
 
-import fides2024.syntax.code.{Atom, Code, CodeType, Component, Expr, Ptrn, Val, ValType, Xctr}
+import fides2024.syntax.code.{Atom, Code, CodeType, Process, Expr, Ptrn, Val, ValType, Xctr}
 import fides2024.syntax.meta.VarArgs
 
 /**
@@ -13,7 +13,7 @@ final case class Switch[T <: ValType, A <: Atom](
   testee : Code[Expr[A]],
   cases  : Code[VarArgs[Case[T, A]]],
   default: Code[Xctr[T]],
-) extends Component
+) extends Process
 
 final case class Case[T <: ValType, A <: Atom]
 (testValue: Code[Val[A]], exctractor: Code[Xctr[T]]) extends Code[Case[T, A]], CodeType

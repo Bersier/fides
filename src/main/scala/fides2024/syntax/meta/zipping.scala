@@ -14,12 +14,12 @@ final case class VarArgs[+C <: CodeType](pieces: Code[C]*) extends Code[VarArgs[
 final case class Zip[C <: CodeType](pieces: Code[Expr[Collected[Quoted[C]]]]) extends Expr[Quoted[VarArgs[C]]]
 
 /**
-  * Extracts the components out of a Concurrent component in the context of a refutable pattern.
+  * Extracts the processes out of a Concurrent process in the context of a refutable pattern.
   */
 final case class UnZipPtrn[C <: CodeType]
 (pieces: Code[Ptrn[Collected[Quoted[C]], Collected[Quoted[C]]]]) extends Ptrn[Quoted[VarArgs[C]], Quoted[VarArgs[C]]]
 
 /**
-  * Extracts the components out of a Concurrent component in the context of an irrefutable pattern.
+  * Extracts the processes out of a Concurrent process in the context of an irrefutable pattern.
   */
 final case class UnZip[C <: CodeType](pieces: Code[Xctr[Collected[Quoted[C]]]]) extends Xctr[Quoted[VarArgs[C]]]

@@ -1,12 +1,12 @@
 package fides2024.syntax.meta
 
-import fides2024.syntax.code.{Code, Component, Expr}
+import fides2024.syntax.code.{Code, Process, Expr}
 import fides2024.syntax.signatures.Signed
 
 /**
   * Launches the inputted code as a new process, and outputs a signed value of the code, confirming the launch.
   */
-final case class Launch(code: Code[Expr[Quoted[Component]]]) extends Expr[Signed[Quoted[Component]]]
+final case class Launch(code: Code[Expr[Quoted[Process]]]) extends Expr[Signed[Quoted[Process]]]
 
 /**
   * Launches a new sandboxed process, and outputs a signed value of the monitor's code, confirming the launch.
@@ -16,6 +16,6 @@ final case class Launch(code: Code[Expr[Quoted[Component]]]) extends Expr[Signed
   * be created that does the same as LaunchSandboxed.
   */
 final case class LaunchSandboxed(
-  monitor: Code[Expr[Quoted[Component]]],
-  sandboxed: Code[Expr[Quoted[Component]]],
-) extends Expr[Signed[Quoted[Component]]]
+  monitor: Code[Expr[Quoted[Process]]],
+  sandboxed: Code[Expr[Quoted[Process]]],
+) extends Expr[Signed[Quoted[Process]]]
