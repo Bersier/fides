@@ -8,7 +8,7 @@ import izumi.reflect.Tag
   *
   * @tparam T the type of the values that transit through the channel
   */
-open class Channel[T <: ValType : Tag] protected(name: String) extends Identifier(name), Val[Channel[T]]:
+final class Channel[T <: ValType : Tag] private(name: String) extends Identifier(name), Val[Channel[T]]:
   override def toString: String = s"@$name"
   def valueType: Tag[T] = summon[Tag[T]]
 object Channel:

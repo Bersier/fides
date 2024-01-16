@@ -13,7 +13,7 @@ import izumi.reflect.Tag
   *
   * @tparam T the type of the values that get stored in the cell
   */
-open class Cell[T <: ValType : Tag] protected
+final class Cell[T <: ValType : Tag] private
 (var value: Code[Val[T]], name: String) extends Identifier(name), Val[Cell[T]]:
   override def toString: String = s"\\$$name($value)"
   def valueType: Tag[T] = summon[Tag[T]]
