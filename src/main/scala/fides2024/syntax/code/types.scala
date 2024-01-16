@@ -26,6 +26,7 @@ sealed trait ValType private[syntax]()
   * "Foo extends Component", rather than "Foo extends Component, Code[Component]".
   */
 trait Component extends CodeType, Code[Component]
+// todo rename to Process
 
 /**
   * Fides code type for expressions. While expressions are really just a special type of component with a single output,

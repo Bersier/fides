@@ -1,6 +1,7 @@
 package fides2024.syntax.connectors
 
-import fides2024.syntax.code.{Atom, Code, CodeType, Component, Expr, Ptrn, Val, ValType, VarArgs, Xctr}
+import fides2024.syntax.code.{Atom, Code, CodeType, Component, Expr, Ptrn, Val, ValType, Xctr}
+import fides2024.syntax.meta.VarArgs
 
 /**
   * Tries to match a value to the given pattern. Upon failure, outputs the value to the alternative instead.

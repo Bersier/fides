@@ -10,6 +10,10 @@ final case class Launch(code: Code[Expr[Quoted[Component]]]) extends Expr[Signed
 
 /**
   * Launches a new sandboxed process, and outputs a signed value of the monitor's code, confirming the launch.
+  *
+  * Doesn't fundamentally add more trust power, even though, in the direct sense, it is more general than Launch.
+  * This is because Launch is already a universal trusted third party, so, via Launch, a new trusted third party can
+  * be created that does the same as LaunchSandboxed.
   */
 final case class LaunchSandboxed(
   monitor: Code[Expr[Quoted[Component]]],

@@ -1,7 +1,12 @@
 package fides2024.syntax.meta
 
-import fides2024.syntax.code.{Code, CodeType, Expr, Ptrn, VarArgs, Xctr}
+import fides2024.syntax.code.{Code, CodeType, Expr, Ptrn, Xctr}
 import fides2024.syntax.values.Collected
+
+/**
+  * Used for unordered collections of pieces of code, at the syntax level.
+  */
+final case class VarArgs[+C <: CodeType](pieces: Code[C]*) extends Code[VarArgs[C]], CodeType
 
 /**
   * Converts a Collected of code quotations to a Quoted of a VarArgs of all the pieces of code.

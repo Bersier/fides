@@ -46,3 +46,5 @@ end Out
 final case class OutPtrn[+T <: ValType](iD: Code[Val[Channel[? <: T]]]) extends Ptrn[T, ValType]:
   override def toString: String = s"<:${internalIDString(iD)}:>"
 end OutPtrn
+
+// todo should we consider some kind of limited Broadcast capability?

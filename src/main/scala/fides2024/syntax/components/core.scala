@@ -1,7 +1,8 @@
 package fides2024.syntax.components
 
-import fides2024.syntax.code.{Code, Component, Expr, Val, ValType, VarArgs}
+import fides2024.syntax.code.{Code, Component, Expr, Val, ValType}
 import fides2024.syntax.identifiers.{Channel, Identifier}
+import fides2024.syntax.meta.VarArgs
 import fides2024.syntax.values.Collected
 
 /**
@@ -17,6 +18,11 @@ final case class Send[T <: ValType](message: Code[Expr[T]], recipient: Code[Expr
 
 /**
   * A message in transit
+  *
+  * A message cannot be captured by any Inp that is on hold. If there is a possibility for an Inp to capture the
+  * message in the future, it should not disappear. In other words, it waits until an Inp is ready to receive it.
+  * On the other hand, if it is known that there will never be any Inp for the channel, the message should eventually
+  * get garbage-collected.
   *
   * @param message the contents of the message
   * @param recipient the address of the recipient

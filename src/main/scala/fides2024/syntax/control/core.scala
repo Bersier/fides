@@ -1,9 +1,9 @@
 package fides2024.syntax.control
 
-import fides2024.syntax.identifiers.{Cell, Inp, Out}
 import fides2024.syntax.code.{Atom, Code, Component, Expr, Val, ValQ, ValType, Xctr}
+import fides2024.syntax.identifiers.{Inp, Out}
 import fides2024.syntax.meta.Quoted
-import fides2024.syntax.values.{Bool, Pulse}
+import fides2024.syntax.values.Pulse
 
 sealed trait Order extends Atom, ValQ[Order]
 case object Kill extends Order
@@ -12,11 +12,6 @@ case object Start extends Order
 
 final case class Awake(leash: Code[Inp[Order]], body: Code[Component]) extends Component
 final case class Asleep(leash: Code[Inp[Order]], body: Code[Component]) extends Component
-
-/**
-  * @param running indicates whether the body is currently running
-  */
-final case class Process(running: Code[Cell[Bool]], body: Code[Component]) extends Component
 
 /**
   * Upon reception of a pulse, the body's execution is started.
