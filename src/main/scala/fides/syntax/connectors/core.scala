@@ -1,0 +1,27 @@
+package fides.syntax.connectors
+
+import fides.syntax.code.{Code, Process, Expr, ValType, Xctr}
+import fides.syntax.values.Pulse
+
+/**
+  * A hard-coded connection between one input and one output
+  */
+final case class Forward[T <: ValType](input: Code[Expr[T]], output: Code[Xctr[T]]) extends Process
+
+/**
+  * Kind-of the dual of values.
+  *
+  * Aka Sink, Forget
+  */
+final case class Ignore() extends Xctr[ValType]
+
+final case class Duplicate[T <: ValType]
+(value: Code[Expr[T]], first: Code[Xctr[T]], second: Code[Xctr[T]]) extends Process
+
+final case class Hold[T <: ValType](signal: Code[Expr[Pulse]], value: Code[Expr[T]]) extends Expr[T]
+
+final case class Signal(trigger: Code[Expr[?]]) extends Expr[Pulse]
+
+final case class Pick[T <: ValType](first: Code[Expr[T]], second: Code[Expr[T]]) extends Expr[T]
+
+final case class UnPick[T <: ValType](first: Code[Xctr[T]], second: Code[Xctr[T]]) extends Xctr[T]
