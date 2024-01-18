@@ -2,10 +2,10 @@ lazy val root = project
   .in(file("."))
   .settings(
     name := "Fides",
-    scalaVersion := "3.4.0-RC1-bin-20240109-91db06a-NIGHTLY",
+    scalaVersion := "3.4.0-RC1-bin-20240116-78c4da2-NIGHTLY",
     libraryDependencies += "org.scala-lang" %% "scala3-staging" % scalaVersion.value,
-    libraryDependencies += "dev.zio" %% "zio" % "2.0.19",
-    libraryDependencies += "dev.zio" %% "zio-streams" % "2.0.19",
+    libraryDependencies += "dev.zio" %% "zio" % "2.0.21",
+    libraryDependencies += "dev.zio" %% "zio-streams" % "2.0.21",
     // See https://github.com/lampepfl/dotty/blob/main/compiler/src/dotty/tools/dotc/config/ScalaSettings.scala
     scalacOptions ++= Seq(
 //      "-Vprofile",
@@ -30,6 +30,7 @@ lazy val root = project
       "-feature",
       "-language:strictEquality",
       "-new-syntax",
+      "-release:21",
       "-source:future",
       "-unchecked",
     ),

@@ -3,7 +3,6 @@ package fides.syntax.processes
 import fides.syntax.code.{Code, Process, Expr, Val, ValType}
 import fides.syntax.identifiers.{Channel, Identifier}
 import fides.syntax.meta.VarArgs
-import fides.syntax.values.Collected
 
 /**
   * Sends a value to an address.
@@ -38,7 +37,7 @@ final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Va
   * @param localIdentifiers names whose meaning is only valid within this scope
   * @param body the body of the scope, in which the replacements will take place
   */
-final case class Scope(localIdentifiers: Code[Val[Collected[Identifier]]], body: Code[Process]) extends Process
+final case class Scope(localIdentifiers: Code[VarArgs[Identifier]], body: Code[Process]) extends Process
 
 /**
   * Behaviorally equivalent to an infinite number of copies of the given body

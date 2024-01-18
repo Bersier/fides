@@ -35,6 +35,8 @@ final case class UnAddElement[T <: ValType]
   */
 final case class Collect[T <: ValType]
 (elementSource: Code[Inp[T]], size: Code[Expr[Integer]]) extends Expr[Collected[T]]
+// todo here, Inp[T] means that multiple values can be received, which is not its usual meaning;
+//  should a different type be used for this? Or simply the channel directly?
 
 /**
   * Outputs the elements of a Collected to @elementSource, and its size to @size.

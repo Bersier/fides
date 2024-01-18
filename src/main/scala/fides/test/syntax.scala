@@ -10,6 +10,8 @@ import scala.collection.concurrent
 import scala.language.implicitConversions
 
 @main def syntax(): Unit =
+  println("Java version: " + System.getProperty("java.version"))
+  println("Scala version: " + dotty.tools.dotc.config.Properties.simpleVersionString)
   given Context = new Context:
     override def prefix: String = ""
     override val names: concurrent.Map[String, Identifier] = concurrent.TrieMap.empty
