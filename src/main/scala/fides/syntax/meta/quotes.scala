@@ -13,7 +13,8 @@ final case class Quoted[+C <: CodeType](code: Code[C]) extends ValQ[Quoted[C]]
   *
   * (At the top-level (outside of a quote), could represent macro code.)
   */
-final case class Escape[C <: CodeType](code: Code[Expr[Quoted[C]] | Xctr[Quoted[C]]]) extends Code[C]
+final case class Escape[S <: CodeType]
+(code: Code[Expr[Quoted[S]] | Xctr[Quoted[S]] | Ptrn[Quoted[S], Quoted[S]]]) extends Code[S]
 // todo should we keep track of the polarity in the extended type?
 
 /**
