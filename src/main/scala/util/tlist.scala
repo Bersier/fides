@@ -3,7 +3,7 @@ package util
 import scala.annotation.targetName
 import scala.collection.LinearSeq
 import scala.compiletime.constValue
-import scala.compiletime.ops.boolean.&&
+import scala.compiletime.ops.boolean.{&&, ||}
 import scala.compiletime.ops.int.+
 
 sealed trait TList[+T] extends LinearSeq[T]:
@@ -50,9 +50,7 @@ type IsSubset[L1 <: TList[?], L2 <: TList[?]] <: Boolean = L1 match
 
 type HasRepeats[L <: TList[?]] <: Boolean = L match
   case TList.Empty => false
-  case TList.Cons[?, h, tail] => Contains[tail, h] match
-    case true => true
-    case false => HasRepeats[tail]
+  case TList.Cons[?, h, tail] => Contains[tail, h] || HasRepeats[tail]
 
 type Contains[L <: TList[?], U] <: Boolean = L match
   case TList.Empty => false
