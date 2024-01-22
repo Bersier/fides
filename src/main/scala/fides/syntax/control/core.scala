@@ -42,7 +42,7 @@ final case class Sandboxed(monitor: Code[Process], sandboxed: Code[Process]) ext
 
 final case class Catchable
 (catchSignal: Code[Expr[Pulse]], body: Code[Process], codeReader: Xctr[Quoted[Process]]) extends Process
-// todo catchable that can be restarted?
+// todo catchable that can be restarted? Readable/Snapshoteable?
 
 final case class Handled(errorHandler: Code[Out[Error[ValType]]], body: Code[Process]) extends Process
 

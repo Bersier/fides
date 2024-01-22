@@ -19,3 +19,5 @@ final case class LaunchSandboxed(
   monitor: Code[Expr[Quoted[Process]]],
   sandboxed: Code[Expr[Quoted[Process]]],
 ) extends Expr[Signed[Quoted[Process]]]
+
+// todo Catch

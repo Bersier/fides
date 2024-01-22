@@ -13,6 +13,8 @@ final case class Forward[T <: ValType](input: Code[Expr[T]], output: Code[Xctr[T
   * Kind-of the dual of values.
   *
   * Aka Sink, Forget
+  *
+  * Can be implemented in terms of the other primitives.
   */
 final case class Ignore() extends Xctr[ValType]
 

@@ -28,3 +28,8 @@ final case class NegateBool(value: Code[Expr[Bool]]) extends Expr[Bool]
   * Outputs true iff the two atoms are the same.
   */
 final case class Equal(first: Code[Expr[Atom]], second: Code[Expr[Atom]]) extends Expr[Bool]
+
+/**
+  * Outputs True with probability 1/2, False with probability 1/2.
+  */
+final case class RandomBit() extends Expr[Bool]
