@@ -6,15 +6,16 @@ import fides.syntax.code.{Code, Expr, Val, ValQ, ValType, Xctr}
 /**
   * A value that is made up of an unordered collection of values.
   */
-sealed trait Collected[T <: ValType] extends ValQ[Collected[T]]:
+sealed trait Collected[T <: ValType] extends ValQ[Collected[T]], ValType:
   def elements: Iterable[Val[T]]
 end Collected
 
-case object Empty extends Collected[Nothing], ValQ[Empty.type]:
+case object Empty extends Collected[Nothing], ValQ[Empty], ValType:
   def elements: Iterable[Val[Nothing]] = Iterable.empty[Val[Nothing]]
 end Empty
+type Empty = Empty.type
 
-final case class NonEmpty[T <: ValType](elements: Val[T]*) extends Collected[T], ValQ[NonEmpty[T]]:
+final case class NonEmpty[T <: ValType](elements: Val[T]*) extends Collected[T], ValQ[NonEmpty[T]], ValType:
   assert(elements.nonEmpty)
 end NonEmpty
 

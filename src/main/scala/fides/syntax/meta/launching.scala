@@ -16,7 +16,6 @@ final val launcher =
     override def prefix: String = ""
     override val names: concurrent.Map[String, Identifier] = concurrent.TrieMap.empty
   Identifier("Launcher")
-// todo could be an object instead of a val
 
 /**
   * Launches a new sandboxed process, and outputs a signed value of the monitor's code, confirming the launch.

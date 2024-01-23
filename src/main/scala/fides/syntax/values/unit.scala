@@ -1,8 +1,8 @@
 package fides.syntax.values
 
-import fides.syntax.code.{Atom, ValQ}
+import fides.syntax.code.{Atom, ValQ, ValType}
 
-sealed trait Pulse extends Atom, ValQ[Pulse]
+sealed trait Pulse extends Atom, ValQ[Pulse], ValType
 
 /**
   * A value that doesn't carry any information beyond causality

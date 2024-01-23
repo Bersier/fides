@@ -5,7 +5,7 @@ import fides.syntax.identifiers.{Inp, Out}
 import fides.syntax.meta.Quoted
 import fides.syntax.values.Pulse
 
-sealed trait Order extends Atom, ValQ[Order]
+sealed trait Order extends Atom, ValQ[Order], ValType
 case object Kill extends Order
 case object Pause extends Order
 case object Start extends Order
@@ -46,7 +46,7 @@ final case class Catchable
 
 final case class Handled(errorHandler: Code[Out[Error[ValType]]], body: Code[Process]) extends Process
 
-final case class Error[+T <: ValType](value: Code[Val[T]]) extends Val[Error[T]]
+final case class Error[+T <: ValType](value: Code[Val[T]]) extends ValQ[Error[T]], ValType
 // todo develop
 
 // todo interrupts? Hot-swapping? Are these cases covered with the current control primitives?

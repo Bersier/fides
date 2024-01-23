@@ -1,6 +1,6 @@
 package fides.syntax.identifiers
 
-import fides.syntax.code.{Atom, Expr, ValQ}
+import fides.syntax.code.{Atom, Expr, ValQ, ValType}
 
 import java.util.concurrent.atomic.AtomicInteger
 import language.experimental.pureFunctions
@@ -13,7 +13,7 @@ import language.experimental.pureFunctions
   *
   * Identifiers are globally unique. Their names are just a convenient representation (that may or may not be unique).
   */
-open class Identifier private[identifiers](val name: String) extends Atom, ValQ[Identifier] derives CanEqual:
+open class Identifier private[identifiers](val name: String) extends Atom, ValQ[Identifier], ValType derives CanEqual:
   override def toString: String = s"#$name"
 object Identifier:
   def apply()(using Context): Identifier = from(constructor)

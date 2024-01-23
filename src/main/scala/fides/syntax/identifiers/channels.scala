@@ -1,6 +1,6 @@
 package fides.syntax.identifiers
 
-import fides.syntax.code.{Code, Expr, Ptrn, Val, ValType, Xctr}
+import fides.syntax.code.{Code, Expr, Ptrn, Val, ValQ, ValType, Xctr}
 import izumi.reflect.Tag
 
 /**
@@ -8,7 +8,7 @@ import izumi.reflect.Tag
   *
   * @tparam T the type of the values that transit through the channel
   */
-final class Channel[T <: ValType : Tag] private(name: String) extends Identifier(name), Val[Channel[T]]:
+final class Channel[T <: ValType : Tag] private(name: String) extends Identifier(name), ValQ[Channel[T]], ValType:
   override def toString: String = s"@$name"
   def valueType: Tag[T] = summon[Tag[T]]
 object Channel:

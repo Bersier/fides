@@ -6,7 +6,7 @@ import fides.syntax.values.Integer
 /**
   * Code as value, used for metaprogramming
   */
-final case class Quoted[+C <: CodeType](code: Code[C]) extends ValQ[Quoted[C]]
+final case class Quoted[+C <: CodeType](code: Code[C]) extends ValQ[Quoted[C]], ValType
 
 /**
   * Allows escaping the body of a Quote.

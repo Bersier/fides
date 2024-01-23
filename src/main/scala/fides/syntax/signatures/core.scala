@@ -11,7 +11,7 @@ import fides.syntax.values.Integer
   * @param signature the identifier corresponding to the key that was used to sign the document
   * @tparam T the type of the signed value
   */
-final case class Signed[+T <: ValType] private(document: Val[T], signature: Identifier) extends ValQ[Signed[T]]
+final case class Signed[+T <: ValType] private(document: Val[T], signature: Identifier) extends ValQ[Signed[T]], ValType
 object Signed:
   /**
     * Signed values can only be created from keys, but only reveal the corresponding identifier.
