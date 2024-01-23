@@ -19,6 +19,7 @@ trait CodeType private[syntax]()
   * Parent type of all the Scala types that represent Fides value types.
   */
 trait ValType private[syntax]()
+// todo extend CodeType? And try replacing Code[Val[T]] by Code[T]
 
 /**
   * Fides code type for processes.
@@ -59,13 +60,14 @@ type Xctr[-T <: ValType] = Ptrn[Nothing, T]
   *
   * @tparam T keeps track of the value type
   */
-sealed trait Val[+T <: ValType] extends Expr[T], Ptrn[T, ValType], Code[Val[T]]
+trait Val[+T <: ValType] extends Expr[T], Ptrn[T, ValType], Code[Val[T]]
 
 /**
-  * This is a tentative flattening of (nested) quotes of values.
+  * Allows flattening of (nested) quotes of (non-quote) values.
   */
-trait ValQ[+T <: ValType] extends Val[T], Code[Quoted[Val[T]]]
-// todo doesn't seem to work in the test...
+transparent trait ValQ[+T <: ValType] extends Quoted[ValQ[T]], Val[T], Code[ValQ[T]]:
+  final def code: ValQ[T] = this
+end ValQ
 
 trait Atom extends ValType
 

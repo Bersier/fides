@@ -1,5 +1,6 @@
 package fides.test
 
+import fides.syntax.connectors.*
 import fides.syntax.identifiers.*
 import fides.syntax.meta.*
 import fides.syntax.signatures.*
@@ -22,11 +23,10 @@ import language.implicitConversions
   println(Sign(Pair(posLoc, extractID), IdentifierKey()))
   println(Sign(Pair(Identifier(), Identifier()), IdentifierKey()))
   println(Sign[Bool](posLoc, IdentifierKey()))
-//  println(UnSign(negLoc, Identifier()))
+  println(UnSign(negLoc, Ignore()))
   println(Sign(Wrap(posLoc), IdentifierKey()))
-//  println(UnSign(Unwrap(negLoc), Identifier()))
+  println(UnSign(UnWrap(negLoc), Ignore()))
   println(SignedMatcher(Integer(0), Identifier(), Channel()))
-//  println(UnSign(Unwrap(negLoc), Escape(Wrap(Identifier()))))
-//  println(UnSign(Unwrap(negLoc), Escape(Wrap(ExtractID(IdentifierKey())))))
+  println(UnSign(UnWrap(negLoc), Escape(Quote(Ignore()))))
   println(UnSign(UnWrap(negLoc), Out(Escape(Wrap(Channel[Identifier]())))))
-  println(UnSign(UnWrap(negLoc), Out(Escape(Wrap(Inp[Channel[Identifier]](Channel()))))))
+  println(UnSign(UnWrap(negLoc), Out(Escape(Inp[Channel[Identifier]](Channel())))))

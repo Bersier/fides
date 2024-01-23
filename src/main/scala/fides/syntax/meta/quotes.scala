@@ -1,12 +1,18 @@
 package fides.syntax.meta
 
-import fides.syntax.code.{Code, CodeType, Expr, Ptrn, Val, ValQ, ValType, Xctr}
+import fides.syntax.code.{Code, CodeType, Expr, Ptrn, Val, ValType, Xctr}
 import fides.syntax.values.Integer
 
 /**
   * Code as value, used for metaprogramming
   */
-final case class Quoted[+C <: CodeType](code: Code[C]) extends ValQ[Quoted[C]], ValType
+trait Quoted[+C <: CodeType] private[syntax]() extends Val[Quoted[C]], ValType:
+  def code: Code[C]
+object Quoted:
+  def apply[C <: CodeType](`$code`: Code[C]): Quoted[C] = new Quoted[C]():
+    val code: Code[C] = `$code`
+    override def toString: String = s"Quoted($code)"
+end Quoted
 
 /**
   * Allows escaping the body of a Quote.
