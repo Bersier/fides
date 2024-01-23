@@ -19,7 +19,6 @@ object Signed:
   def apply[T <: ValType](document: Val[T], signatory: IdentifierKey): Signed[T] =
     new Signed(document, signatory.identifier)
 end Signed
-// todo should we also keep track of the (singleton) type of the signatory? Or not?
 
 // todo what if we disallowed matching Signed in patterns? But what about when it's in code? In the concrete syntax,
 //  we could try to use only symbol for Sign, Signed, Unsign, and SignedMatcher(any level).

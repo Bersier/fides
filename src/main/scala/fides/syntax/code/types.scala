@@ -6,35 +6,6 @@ import compiletime.ops.int.+
 import language.experimental.pureFunctions
 
 /**
-  * Unused so far. Could be used to keep track of the quote context with an additional Code parameter.
-  */
-sealed trait QuoteContext private[syntax]()
-sealed trait Neutral extends QuoteContext
-sealed trait InQuote[C <: QuoteContext, P <: Polarity] extends QuoteContext
-sealed trait Macro[I <: Int] extends QuoteContext
-
-enum Polarity derives CanEqual:
-  case Expr, Xctr, Ptrn
-
-/**
-  * Could be used to type Escape once QuoteContext is used.
-  */
-type EscapeQuoteContext[C <: QuoteContext] <: QuoteContext = C match
-  case Neutral => Macro[0]
-  case InQuote[c, p] => c
-  case Macro[i] => Macro[i + 1]
-
-/**
-  * Could be used to type Escape once QuoteContext is used.
-  */
-type EscapeParamType[S <: CodeType, C <: QuoteContext] = C match
-  case InQuote[c, p] => p match
-    case Polarity.Expr.type => Expr[Quoted[S]]
-    case Polarity.Xctr.type => Xctr[Quoted[S]]
-    case Polarity.Ptrn.type => Ptrn[Quoted[S], Quoted[S]]
-  case _ => Expr[Quoted[S]]
-
-/**
   * General type to represent Fides code
   */
 trait Code[+S <: CodeType] private[syntax]()
@@ -113,3 +84,32 @@ trait ValQ[+T <: ValType] extends Val[T], Code[Quoted[Val[T]]]
 // todo doesn't seem to work in the test...
 
 trait Atom extends ValType
+
+/**
+  * Unused so far. Could be used to keep track of the quote context with an additional Code parameter.
+  */
+sealed trait QuoteContext private[syntax]()
+sealed trait Neutral extends QuoteContext
+sealed trait InQuote[C <: QuoteContext, P <: Polarity] extends QuoteContext
+sealed trait Macro[I <: Int] extends QuoteContext
+
+enum Polarity derives CanEqual:
+  case Expr, Xctr, Ptrn
+
+/**
+  * Could be used to type Escape once QuoteContext is used.
+  */
+type EscapeQuoteContext[C <: QuoteContext] <: QuoteContext = C match
+  case Neutral => Macro[0]
+  case InQuote[c, p] => c
+  case Macro[i] => Macro[i + 1]
+
+/**
+  * Could be used to type Escape once QuoteContext is used.
+  */
+type EscapeParamType[S <: CodeType, C <: QuoteContext] = C match
+  case InQuote[c, p] => p match
+    case Polarity.Expr.type => Expr[Quoted[S]]
+    case Polarity.Xctr.type => Xctr[Quoted[S]]
+    case Polarity.Ptrn.type => Ptrn[Quoted[S], Quoted[S]]
+  case _ => Expr[Quoted[S]]
