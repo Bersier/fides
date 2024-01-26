@@ -44,3 +44,21 @@ import scala.language.implicitConversions
         out = Ignore(),
       )
     ))
+
+  val myCell = Cell(Integer(0), name = "myCell")
+  val myChannel = Channel[Integer]()
+
+  println(
+    Concurrent(
+      VarArgs(
+        Forward(
+          Paired(Integer(1), Cell(False)),
+          UnPair(Out(myChannel), Ignore()),
+        ),
+        Forward(
+          Add(Read(U, myCell), Inp(myChannel)),
+          Write(signal = Ignore(), iD = myCell),
+        ),
+      )
+    )
+  )
