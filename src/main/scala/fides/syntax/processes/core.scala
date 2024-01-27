@@ -2,7 +2,7 @@ package fides.syntax.processes
 
 import fides.syntax.code.{Code, Expr, Process, Val, ValType}
 import fides.syntax.identifiers.{Channel, Identifier}
-import fides.syntax.meta.VarArgs
+import fides.syntax.meta.Args
 
 /**
   * Sends a value to an address.
@@ -13,7 +13,7 @@ import fides.syntax.meta.VarArgs
   * @param message the value to be sent
   * @param recipient address of the recipient
   */
-final case class Send[T <: ValType](message: Code[Expr[T]], recipient: Code[Expr[Channel[T]]]) extends Process
+final case class Send[T <: ValType](message: Code[Expr[T]], recipient: Code[Expr[Channel[? >: T]]]) extends Process
 
 /**
   * A message in transit
@@ -37,7 +37,7 @@ final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Va
   * @param localIdentifiers names whose meaning is only valid within this scope
   * @param body the body of the scope, in which the replacements will take place
   */
-final case class Scope(localIdentifiers: Code[VarArgs[Identifier]], body: Code[Process]) extends Process
+final case class Scope(localIdentifiers: Code[Args[Identifier]], body: Code[Process]) extends Process
 
 /**
   * Behaviorally equivalent to an infinite number of copies of the given body
@@ -49,4 +49,4 @@ final case class Repeated(body: Code[Process]) extends Process
 /**
   * Composes the given processes concurrently.
   */
-final case class Concurrent(processes: Code[VarArgs[Process]]) extends Process
+final case class Concurrent(processes: Code[Args[Process]]) extends Process

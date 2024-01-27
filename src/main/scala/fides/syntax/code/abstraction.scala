@@ -1,7 +1,7 @@
 package fides.syntax.code
 
 import fides.syntax.identifiers.Identifier
-import fides.syntax.meta.VarArgs
+import fides.syntax.meta.Args
 import util.TList
 
 // todo add way to define custom Expr, Xctr, ...? As some light syntactic sugar?
@@ -9,10 +9,10 @@ import util.TList
 //  Static (higher-order) code functions
 
 final case class ExprComponent[T <: ValType]
-(name: Code[ExprCompName], parameters: Code[VarArgs[Identifier]], expr: Code[Expr[T]]) extends Process
+(name: Code[ExprCompName], parameters: Code[Args[Identifier]], expr: Code[Expr[T]]) extends Process
 
 final case class Component
-(name: Code[CompName], parameters: Code[VarArgs[Identifier]], body: Code[Process]) extends Process
+(name: Code[CompName], parameters: Code[Args[Identifier]], body: Code[Process]) extends Process
 
 final case class Application(name: Code[CompName])(arguments: Code[Mapping[?]]) extends Process
 

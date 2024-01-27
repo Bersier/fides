@@ -13,7 +13,7 @@ import scala.language.experimental.pureFunctions
   *
   * Identifiers are globally unique. Their names are just a convenient representation (that may or may not be unique).
   */
-open class Identifier private[identifiers](val name: String) extends Atom, ValQ[Identifier] derives CanEqual:
+open class Identifier protected(val name: String) extends Atom, ValQ[Identifier] derives CanEqual:
   override def toString: String = s"#$name"
 object Identifier:
   def apply()(using Context): Identifier = from(constructor)
@@ -21,7 +21,10 @@ object Identifier:
   def apply(name: String)(using Context): Identifier = from(constructor, name)
 
   private[identifiers] def from[I <: Identifier](constructor: String -> I)(using Context): I =
-    from(constructor, util.symbols(currentSymbolIndex.getAndIncrement()).toString)
+    from(constructor, newName())
+
+  private[identifiers] def newName[I <: Identifier]() =
+    util.symbols(currentSymbolIndex.getAndIncrement()).toString
 
   private[identifiers] def from[I <: Identifier](constructor: String -> I, name: String)(using Context): I =
     val identifier = constructor(qualifiedName(name))

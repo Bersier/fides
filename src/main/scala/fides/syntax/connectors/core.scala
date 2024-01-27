@@ -1,7 +1,7 @@
 package fides.syntax.connectors
 
 import fides.syntax.code.{Code, Expr, Process, ValType, Xctr}
-import fides.syntax.meta.VarArgs
+import fides.syntax.meta.Args
 import fides.syntax.values.Pulse
 
 /**
@@ -21,7 +21,7 @@ final case class Ignore() extends Xctr[ValType]
 /**
   * Spreads a value to multiple recipients.
   */
-final case class Spread[T <: ValType](value: Code[Expr[T]], recipients: Code[VarArgs[Xctr[T]]]) extends Process
+final case class Spread[T <: ValType](value: Code[Expr[T]], recipients: Code[Args[Xctr[T]]]) extends Process
 
 /**
   * Forwards the inputted value once signalled to do so.
@@ -39,10 +39,9 @@ final case class Signal(trigger: Code[Expr[?]]) extends Expr[Pulse]
   *
   * Another way to think about this is that it forwards the value of the expression that "first" reduces to a value.
   */
-final case class Pick[T <: ValType](inputs: Code[VarArgs[Expr[T]]]) extends Expr[T]
-// todo there should be at least one input; have a NonEmptyVarArgs? Same for UnPick.
+final case class Pick[T <: ValType](inputs: Code[Args.Some[Expr[T]]]) extends Expr[T]
 
 /**
   * Internal choice. Non-deterministically forwards the input to one of the outputs.
   */
-final case class UnPick[T <: ValType](recipients: Code[VarArgs[Xctr[T]]]) extends Xctr[T]
+final case class UnPick[T <: ValType](recipients: Code[Args.Some[Xctr[T]]]) extends Xctr[T]

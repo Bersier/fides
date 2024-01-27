@@ -8,28 +8,26 @@ import fides.syntax.identifiers.{Inp, Out}
   */
 sealed trait Collected[T <: ValType] extends ValQ[Collected[T]], ValType:
   def elements: Iterable[Val[T]]
+object Collected:
+  case object None extends Collected[Nothing], ValQ[None], ValType:
+    def elements: Iterable[Val[Nothing]] = Iterable.empty[Val[Nothing]]
+  type None = None.type
+  final case class Some[T <: ValType](elements: Val[T]*) extends Collected[T], ValQ[Some[T]], ValType:
+    assert(elements.nonEmpty)
+  end Some
 end Collected
-
-case object Empty extends Collected[Nothing], ValQ[Empty], ValType:
-  def elements: Iterable[Val[Nothing]] = Iterable.empty[Val[Nothing]]
-end Empty
-type Empty = Empty.type
-
-final case class NonEmpty[T <: ValType](elements: Val[T]*) extends Collected[T], ValQ[NonEmpty[T]], ValType:
-  assert(elements.nonEmpty)
-end NonEmpty
 
 /**
   * Outputs a Collected with one element added to it.
   */
 final case class AddElement[T <: ValType]
-(element: Code[Expr[T]], others: Code[Expr[Collected[T]]]) extends Expr[NonEmpty[T]]
+(element: Code[Expr[T]], others: Code[Expr[Collected[T]]]) extends Expr[Collected.Some[T]]
 
 /**
   * (Non-deterministically) extracts one element from a Collected.
   */
 final case class UnAddElement[T <: ValType]
-(element: Code[Xctr[T]], others: Code[Xctr[Collected[T]]]) extends Xctr[NonEmpty[T]]
+(element: Code[Xctr[T]], others: Code[Xctr[Collected[T]]]) extends Xctr[Collected.Some[T]]
 
 /**
   * Waits for @size elements from @elementSource, then outputs them as a Collected.

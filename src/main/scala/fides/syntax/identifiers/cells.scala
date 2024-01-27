@@ -15,7 +15,7 @@ import izumi.reflect.Tag
   */
 final class Cell[T <: ValType : Tag] private
 (var value: Code[Val[T]], name: String) extends Identifier(name), ValQ[Cell[T]]:
-  override def toString: String = s"\\$$name($value)"
+  override def toString: String = s"$$$name($value)"
   def valueType: Tag[T] = summon[Tag[T]]
 object Cell:
   def apply[T <: ValType](value: Code[Val[T]])(using Context, Tag[T]): Cell[T] =
@@ -43,7 +43,7 @@ final case class Write[T <: ValType](signal: Code[Xctr[Pulse]], iD: Code[Val[Cel
     given CanEqual[Pulse, Code[Expr[Pulse]]] = CanEqual.derived
     val prefix = signal match
       case Ignore() => ""
-      case _        => s"$signal; "
+      case _        => s"$signal"
     s"[$prefix|${internalIDString(iD)}|]"
 end Write
 
