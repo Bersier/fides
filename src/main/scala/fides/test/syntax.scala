@@ -7,8 +7,8 @@ import fides.syntax.signatures.*
 import fides.syntax.values.*
 // todo could 'export' help us reduce the number of imports?
 
-import collection.concurrent
-import language.implicitConversions
+import scala.collection.concurrent
+import scala.language.implicitConversions
 
 @main def syntax(): Unit =
   println("Java version: " + System.getProperty("java.version"))

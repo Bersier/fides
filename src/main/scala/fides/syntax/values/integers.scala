@@ -1,11 +1,11 @@
 package fides.syntax.values
 
-import fides.syntax.code.{Atom, Code, Expr, ValQ, ValType}
+import fides.syntax.code.{Atom, Code, Expr, ValQ}
 
 /**
   * Integer values
   */
-final case class Integer(value: BigInt) extends Atom, ValQ[Integer], ValType
+final case class Integer(value: BigInt) extends Atom, ValQ[Integer]
 
 /**
   * Outputs the sum of the two inputs.

@@ -1,7 +1,7 @@
 package fides.syntax.signatures
 
+import fides.syntax.code.{Code, Expr, Ptrn, Val, ValQ, ValType, Xctr}
 import fides.syntax.identifiers.{Identifier, IdentifierKey}
-import fides.syntax.code.{Code, Expr, Ptrn, Val, ValQ, ValType}
 import fides.syntax.values.Integer
 
 /**
@@ -20,9 +20,8 @@ object Signed:
     new Signed(document, signatory.identifier)
 end Signed
 
-// todo what if we disallowed matching Signed in patterns? But what about when it's in code? In the concrete syntax,
-//  we could try to use only symbol for Sign, Signed, Unsign, and SignedMatcher(any level).
-//  The parser would then have to disambiguate.
+// todo In the concrete syntax, we should use only symbol for Sign, UnSign, and MatchSign
+//  (and similarly for other such triplets). The parser would then have to disambiguate.
 
 /**
   * Since Signed values cannot be created freely, a different type of value is needed for matching.
@@ -50,5 +49,11 @@ final case class Sign[T <: ValType]
 /**
   * Primitive to unsign messages
   */
-final case class UnSign[P <: N, N <: ValType]
+final case class UnSign[T <: ValType]
+(contents: Code[Xctr[T]], signatory: Code[Xctr[Identifier]]) extends Xctr[Signed[T]]
+
+/**
+  * Primitive to match messages.
+  */
+final case class MatchSign[P <: N, N <: ValType]
 (contents: Code[Ptrn[P, N]], signatory: Code[Ptrn[Identifier, Identifier]]) extends Ptrn[Signed[P], Signed[N]]

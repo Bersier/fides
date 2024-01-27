@@ -1,11 +1,11 @@
 package fides.syntax.control
 
-import fides.syntax.code.{Atom, Code, Process, Expr, Val, ValQ, ValType, Xctr}
+import fides.syntax.code.{Atom, Code, Expr, Process, Val, ValQ, ValType, Xctr}
 import fides.syntax.identifiers.{Inp, Out}
 import fides.syntax.meta.Quoted
 import fides.syntax.values.Pulse
 
-sealed trait Order extends Atom, ValQ[Order], ValType
+sealed trait Order extends Atom, ValQ[Order]
 case object Kill extends Order
 case object Pause extends Order
 case object Start extends Order
@@ -16,6 +16,7 @@ case object Start extends Order
   * A controllable process can be paused, (re)started, and killed.
   */
 final case class Awake(leash: Code[Inp[Order]], body: Code[Process]) extends Process
+// todo shouldn't there be a way to know when an order is completed?
 
 /**
   * A controllable process that is asleep
@@ -42,7 +43,7 @@ final case class Sandboxed(monitor: Code[Process], sandboxed: Code[Process]) ext
 
 final case class Catchable
 (catchSignal: Code[Expr[Pulse]], body: Code[Process], codeReader: Xctr[Quoted[Process]]) extends Process
-// todo catchable that can be restarted? Readable/Snapshoteable?
+// todo catchable that can be restarted? Observable?
 
 final case class Handled(errorHandler: Code[Out[Error[ValType]]], body: Code[Process]) extends Process
 

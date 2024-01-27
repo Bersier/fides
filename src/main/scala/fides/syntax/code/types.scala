@@ -2,8 +2,8 @@ package fides.syntax.code
 
 import fides.syntax.meta.Quoted
 
-import compiletime.ops.int.+
-import language.experimental.pureFunctions
+import scala.compiletime.ops.int.+
+import scala.language.experimental.pureFunctions
 
 /**
   * General type to represent Fides code
@@ -19,7 +19,6 @@ trait CodeType private[syntax]()
   * Parent type of all the Scala types that represent Fides value types.
   */
 trait ValType private[syntax]()
-// todo extend CodeType? And try replacing Code[Val[T]] by Code[T]
 
 /**
   * Fides code type for processes.

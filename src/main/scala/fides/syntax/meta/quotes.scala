@@ -6,11 +6,11 @@ import fides.syntax.values.Integer
 /**
   * Code as value, used for metaprogramming
   */
-trait Quoted[+C <: CodeType] private[syntax]() extends Val[Quoted[C]], ValType:
-  def code: Code[C]
+trait Quoted[+S <: CodeType] private[syntax]() extends Val[Quoted[S]], ValType:
+  def code: Code[S]
 object Quoted:
-  def apply[C <: CodeType](`$code`: Code[C]): Quoted[C] = new Quoted[C]():
-    val code: Code[C] = `$code`
+  def apply[S <: CodeType](`$code`: Code[S]): Quoted[S] = new Quoted[S]():
+    val code: Code[S] = `$code`
     override def toString: String = s"Quoted($code)"
 end Quoted
 
@@ -26,18 +26,18 @@ final case class Escape[S <: CodeType]
 /**
   * Allows matching an escape(matcher). See also SignedMatcher.
   */
-final case class EscapeMatcher[C <: CodeType]
-(level: Code[Val[Integer]], code: Code[Expr[Quoted[C]] | Xctr[Quoted[C]]]) extends Code[C]
-
+final case class EscapeMatcher[S <: CodeType]
+(level: Code[Val[Integer]], code: Code[Expr[Quoted[S]] | Xctr[Quoted[S]] | Ptrn[Quoted[S], Quoted[S]]]) extends Code[S]
+// todo EscapeMatcher could be merged with Escape (and similarly for other matchers)
 
 /**
   * Analoguous to s-Strings in Scala, but for code
   *
   * Once all the Escape inside @code have been evaluated and spliced in, reduces to a Quoted.
   */
-final case class Quote[C <: CodeType](code: Code[C]) extends Expr[Quoted[C]]
+final case class Quote[S <: CodeType](code: Code[S]) extends Expr[Quoted[S]]
 
 /**
   * Code extractor.
   */
-final case class UnQuote[C <: CodeType](code: Code[C]) extends Code[Ptrn[Quoted[C], ValType]]
+final case class MatchQuote[S <: CodeType](code: Code[S]) extends Code[Ptrn[Quoted[S], ValType]]

@@ -1,6 +1,6 @@
 package fides.syntax.connectors
 
-import fides.syntax.code.{Atom, Code, CodeType, Process, Expr, Ptrn, Val, ValType, Xctr}
+import fides.syntax.code.{Atom, Code, CodeType, Expr, Process, Ptrn, Val, ValType, Xctr}
 import fides.syntax.meta.VarArgs
 
 /**

@@ -1,7 +1,7 @@
 package fides.syntax.values
 
-import fides.syntax.identifiers.{Inp, Out}
 import fides.syntax.code.{Code, Expr, Val, ValQ, ValType, Xctr}
+import fides.syntax.identifiers.{Inp, Out}
 
 /**
   * A value that is made up of an unordered collection of values.

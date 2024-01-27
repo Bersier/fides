@@ -1,7 +1,7 @@
 package fides.syntax.identifiers
 
-import fides.syntax.connectors.Ignore
 import fides.syntax.code.{Code, Expr, Val, ValQ, ValType, Xctr}
+import fides.syntax.connectors.Ignore
 import fides.syntax.values.{Pulse, U}
 import izumi.reflect.Tag
 
@@ -14,7 +14,7 @@ import izumi.reflect.Tag
   * @tparam T the type of the values that get stored in the cell
   */
 final class Cell[T <: ValType : Tag] private
-(var value: Code[Val[T]], name: String) extends Identifier(name), ValQ[Cell[T]], ValType:
+(var value: Code[Val[T]], name: String) extends Identifier(name), ValQ[Cell[T]]:
   override def toString: String = s"\\$$name($value)"
   def valueType: Tag[T] = summon[Tag[T]]
 object Cell:
@@ -33,6 +33,7 @@ final case class Read[T <: ValType](trigger: Code[Expr[Pulse]], iD: Code[Val[Cel
     val prefix = Some(trigger).filter(_ != U).map(t => s"$t; ").getOrElse("")
     s"[$prefix${internalIDString(iD)}]"
 end Read
+// todo should dynamic reading and writing be allowed?
 
 /**
   * Unconditionally overwrites the value contained in the cell, and signals completion.

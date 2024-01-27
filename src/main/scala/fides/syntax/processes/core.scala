@@ -1,6 +1,6 @@
 package fides.syntax.processes
 
-import fides.syntax.code.{Code, Process, Expr, Val, ValType}
+import fides.syntax.code.{Code, Expr, Process, Val, ValType}
 import fides.syntax.identifiers.{Channel, Identifier}
 import fides.syntax.meta.VarArgs
 

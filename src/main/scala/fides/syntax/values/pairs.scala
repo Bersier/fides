@@ -1,6 +1,6 @@
 package fides.syntax.values
 
-import fides.syntax.code.{Code, Expr, Ptrn, Val, ValQ, ValType}
+import fides.syntax.code.{Code, Expr, Ptrn, Val, ValQ, ValType, Xctr}
 
 /**
   * A value that is made up of two values.
@@ -17,5 +17,11 @@ final case class Pair[T1 <: ValType, T2 <: ValType]
 /**
   * Extracts the elements of a pair.
   */
-final case class UnPair[P1 <: N1, P2 <: N2, N1 <: ValType, N2 <: ValType]
+final case class UnPair[T1 <: ValType, T2 <: ValType]
+(first: Code[Xctr[T1]], second: Code[Xctr[T2]]) extends Xctr[Paired[T1, T2]]
+
+/**
+  * Pair pattern.
+  */
+final case class MatchPair[P1 <: N1, P2 <: N2, N1 <: ValType, N2 <: ValType]
 (first: Code[Ptrn[P1, N1]], second: Code[Ptrn[P2, N2]]) extends Ptrn[Paired[P1, P2], Paired[N1, N2]]

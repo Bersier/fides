@@ -8,7 +8,7 @@ import izumi.reflect.Tag
   *
   * @tparam T the type of the values that transit through the channel
   */
-final class Channel[T <: ValType : Tag] private(name: String) extends Identifier(name), ValQ[Channel[T]], ValType:
+final class Channel[T <: ValType : Tag] private(name: String) extends Identifier(name), ValQ[Channel[T]]:
   override def toString: String = s"@$name"
   def valueType: Tag[T] = summon[Tag[T]]
 object Channel:
@@ -46,5 +46,6 @@ end Out
 final case class OutPtrn[+T <: ValType](iD: Code[Val[Channel[? <: T]]]) extends Ptrn[T, ValType]:
   override def toString: String = s"<:${internalIDString(iD)}:>"
 end OutPtrn
+// todo replace by MatchType
 
 // todo should we consider some kind of limited Broadcast capability?

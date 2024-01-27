@@ -4,7 +4,7 @@ import fides.syntax.code.{Code, Expr, Process}
 import fides.syntax.identifiers.{Context, Identifier}
 import fides.syntax.signatures.Signed
 
-import collection.concurrent
+import scala.collection.concurrent
 
 /**
   * Launches the inputted code as a new process, and outputs a signed value of the code, confirming the launch.
