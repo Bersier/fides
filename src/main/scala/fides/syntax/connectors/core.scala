@@ -7,7 +7,7 @@ import fides.syntax.values.Pulse
 /**
   * A hard-coded connection between one input and one output
   */
-final case class Forward[T <: ValType](input: Code[Expr[T]], output: Code[Xctr[T]]) extends Process
+final case class Forward[T <: ValType](inp: Code[Expr[T]], out: Code[Xctr[T]]) extends Process
 
 /**
   * Kind-of the dual of values.

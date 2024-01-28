@@ -3,12 +3,16 @@ package fides.syntax.identifiers
 import fides.syntax.code.{Code, Expr, Ptrn, Val, ValQ, ValType, Xctr}
 import izumi.reflect.Tag
 
+sealed trait InpChan[+T <: ValType] extends Identifier, ValQ[InpChan[T]]
+sealed trait OutChan[-T <: ValType] extends Identifier, ValQ[OutChan[T]]
+
 /**
   * A type of location used for channels
   *
   * @tparam T the type of the values that transit through the channel
   */
-final class Channel[T <: ValType : Tag] private(name: String) extends Identifier(name), ValQ[Channel[T]]:
+final class Channel[T <: ValType : Tag] private
+(name: String) extends Identifier(name), InpChan[T], OutChan[T], ValQ[Channel[T]]:
   override def toString: String = s"@$name"
   def valueType: Tag[T] = summon[Tag[T]]
 object Channel:
@@ -27,7 +31,7 @@ end Channel
   *
   * Dual of Out
   */
-final case class Inp[+T <: ValType](iD: Code[Val[Channel[? <: T]]]) extends Expr[T], Code[Inp[T]]:
+final case class Inp[+T <: ValType](iD: Code[Val[InpChan[? <: T]]]) extends Expr[T]:
   override def toString: String = s"<${internalIDString(iD)}>"
 end Inp
 
@@ -38,7 +42,7 @@ end Inp
   *
   * Dual of Inp
   */
-final case class Out[-T <: ValType](iD: Code[Val[Channel[? >: T]]]) extends Xctr[T], Code[Out[T]]:
+final case class Out[-T <: ValType](iD: Code[Val[OutChan[? >: T]]]) extends Xctr[T]:
   override def toString: String = s"<|${internalIDString(iD)}|>"
 end Out
 
@@ -49,7 +53,7 @@ end Out
   * so that, when used in a pattern,
   * whenever the value that would be passed to it does not match @T, the pattern will fail.
   */
-final case class OutPtrn[+T <: ValType](iD: Code[Val[Channel[? <: T]]]) extends Ptrn[T, ValType]:
+final case class OutPtrn[+T <: ValType](iD: Code[Val[OutChan[? <: T]]]) extends Ptrn[T, ValType]:
   override def toString: String = s"<:${internalIDString(iD)}:>"
 end OutPtrn
 // todo replace by MatchType

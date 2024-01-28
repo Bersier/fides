@@ -1,7 +1,7 @@
 package fides.syntax.values
 
 import fides.syntax.code.{Code, Expr, Val, ValQ, ValType, Xctr}
-import fides.syntax.identifiers.{Inp, Out}
+import fides.syntax.identifiers.{InpChan, OutChan}
 
 /**
   * A value that is made up of an unordered collection of values.
@@ -33,12 +33,10 @@ final case class UnAddElement[T <: ValType]
   * Waits for @size elements from @elementSource, then outputs them as a Collected.
   */
 final case class Collect[T <: ValType]
-(elementSource: Code[Inp[T]], size: Code[Expr[Integer]]) extends Expr[Collected[T]]
-// todo here, Inp[T] means that multiple values can be received, which is not its usual meaning;
-//  should a different type be used for this? Or simply the channel directly?
+(elementSource: Code[InpChan[T]], size: Code[Expr[Integer]]) extends Expr[Collected[T]]
 
 /**
   * Outputs the elements of a Collected to @elementSource, and its size to @size.
   */
 final case class UnCollect[T <: ValType]
-(elementSource: Code[Out[T]], size: Code[Xctr[Integer]]) extends Xctr[Collected[T]]
+(elementSource: Code[OutChan[T]], size: Code[Xctr[Integer]]) extends Xctr[Collected[T]]

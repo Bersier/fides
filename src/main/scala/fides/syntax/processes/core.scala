@@ -1,7 +1,7 @@
 package fides.syntax.processes
 
 import fides.syntax.code.{Code, Expr, Process, Val, ValType}
-import fides.syntax.identifiers.{Channel, Identifier}
+import fides.syntax.identifiers.{Identifier, OutChan}
 import fides.syntax.meta.Args
 
 /**
@@ -13,7 +13,7 @@ import fides.syntax.meta.Args
   * @param message the value to be sent
   * @param recipient address of the recipient
   */
-final case class Send[T <: ValType](message: Code[Expr[T]], recipient: Code[Expr[Channel[? >: T]]]) extends Process
+final case class Send[T <: ValType](message: Code[Expr[T]], recipient: Code[Expr[OutChan[? >: T]]]) extends Process
 
 /**
   * A message in transit
@@ -26,7 +26,7 @@ final case class Send[T <: ValType](message: Code[Expr[T]], recipient: Code[Expr
   * @param message the contents of the message
   * @param recipient the address of the recipient
   */
-final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Val[Channel[T]]]) extends Process
+final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Val[OutChan[? >: T]]]) extends Process
 
 /**
   * A name scope

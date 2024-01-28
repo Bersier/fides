@@ -1,7 +1,7 @@
 package fides.syntax.control
 
 import fides.syntax.code.{Atom, Code, Expr, Process, Val, ValQ, ValType, Xctr}
-import fides.syntax.identifiers.{Inp, Out}
+import fides.syntax.identifiers.{InpChan, OutChan}
 import fides.syntax.meta.Quoted
 import fides.syntax.values.Pulse
 
@@ -15,7 +15,7 @@ case object Start extends Order
   *
   * A controllable process can be paused, (re)started, and killed.
   */
-final case class Awake(leash: Code[Inp[Order]], body: Code[Process]) extends Process
+final case class Awake(leash: Code[InpChan[Order]], body: Code[Process]) extends Process
 // todo shouldn't there be a way to know when an order is completed?
 
 /**
@@ -23,7 +23,7 @@ final case class Awake(leash: Code[Inp[Order]], body: Code[Process]) extends Pro
   *
   * A controllable process can be paused, (re)started, and killed.
   */
-final case class Asleep(leash: Code[Inp[Order]], body: Code[Process]) extends Process
+final case class Asleep(leash: Code[InpChan[Order]], body: Code[Process]) extends Process
 
 /**
   * Upon reception of a pulse, the body's execution is started.
@@ -45,7 +45,7 @@ final case class Catchable
 (catchSignal: Code[Expr[Pulse]], body: Code[Process], codeReader: Xctr[Quoted[Process]]) extends Process
 // todo catchable that can be restarted? Observable?
 
-final case class Handled(errorHandler: Code[Out[Error[ValType]]], body: Code[Process]) extends Process
+final case class Handled(errorHandler: Code[OutChan[Error[ValType]]], body: Code[Process]) extends Process
 
 final case class Error[+T <: ValType](value: Code[Val[T]]) extends ValQ[Error[T]], ValType
 // todo develop
