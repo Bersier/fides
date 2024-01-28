@@ -1,6 +1,6 @@
 package fides.syntax.identifiers
 
-import fides.syntax.code.{Atom, Expr, ValQ, ValType}
+import fides.syntax.code.{Atom, Expr, ValQ}
 
 import java.util.concurrent.atomic.AtomicInteger
 import scala.language.experimental.pureFunctions

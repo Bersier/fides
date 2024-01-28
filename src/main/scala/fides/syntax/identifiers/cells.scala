@@ -2,7 +2,7 @@ package fides.syntax.identifiers
 
 import fides.syntax.code.{Code, Expr, Val, ValQ, ValType, Xctr}
 import fides.syntax.connectors.Ignore
-import fides.syntax.values.{Pulse, U}
+import fides.syntax.values.Pulse
 import izumi.reflect.Tag
 
 /**
@@ -30,7 +30,7 @@ end Cell
 final case class Read[T <: ValType](trigger: Code[Expr[Pulse]], iD: Code[Val[Cell[T]]]) extends Expr[T]:
   override def toString: String =
     given CanEqual[Code[Expr[Pulse]], Pulse] = CanEqual.derived
-    val prefix = Some(trigger).filter(_ != U).map(t => s"$t; ").getOrElse("")
+    val prefix = Some(trigger).filter(_ != Pulse).map(t => s"$t; ").getOrElse("")
     s"[$prefix${internalIDString(iD)}]"
 end Read
 // todo should dynamic reading and writing be allowed?
