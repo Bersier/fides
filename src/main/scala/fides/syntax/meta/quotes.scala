@@ -28,6 +28,9 @@ end Quoted
   * (At the top-level (outside of a quote), could represent macro code.)
   */
 final case class Escape[S <: CodeType](code: Code[Expr[Quoted[S]]]) extends Code[S]
+// todo Should escapes allow the formation of arbitrary code (patterns)? In that case, an escape might have to be tied
+//  to its corresponding quote, perhaps via some location. Currently, Escape and MatchEscape don't specify "where to
+//  escape to", so nested Quotes or MatchQuotes cannot be escaped properly.
 
 /**
   * Allows escaping the body of a [[MatchQuote]].
