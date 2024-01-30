@@ -29,7 +29,10 @@ object Identifier:
   private[identifiers] def from[I <: Identifier](constructor: String -> I, name: String)(using Context): I =
     val identifier = constructor(qualifiedName(name))
     val previous   = summon[Context].names.putIfAbsent(name, identifier)
-    require(previous.isEmpty, s"$name is already used for ${previous.toString}_${previous.get.hashCode().toHexString}")
+    require(
+      requirement = previous.isEmpty,
+      message = s"$name is already used for ${previous.get.toString}_${previous.get.hashCode().toHexString}",
+    )
     identifier
 
   private def qualifiedName(name: String)(using Context): String =

@@ -8,34 +8,42 @@ import compiletime.ops.int.+
 
 sealed trait TList[+T] extends LinearSeq[T]:
   type Length <: Int
+  @targetName("cons") def ::[U >: T, H <: U](head: H): TList.Cons[U, H, this.type] = TList.Cons(head, this)
+  override def map[U](f: T => U): TList[U] =
+    throw new AssertionError("Implemented only to refine map's return type (otherwise, Scala won't allow it).")
+  // todo add type-safe zip, that doesn't silently ignore elements?
 
 object TList:
-  final case class Empty() extends TList[Nothing]:
+  case object Empty extends TList[Nothing]:
     type Length = 0
     override inline def apply(i: Int): Nothing = throw new IndexOutOfBoundsException(s"Off by $i")
-    @targetName("cons") def ::[H](head: H): Cons[H, H, Empty] = Cons(head, this)
+    @targetName("cons") override def ::[U, H <: U](head: H): Cons[H, H, Empty] = Cons(head, this)
     override def iterator: Iterator[Nothing] = Iterator.empty
     override def length: 0 = 0
     override def forall(p: Nothing => Boolean): true = true
     override def isEmpty: true = true
     override def head: Nothing = throw new NoSuchElementException("head of empty list")
     override def tail: Nothing = throw new NoSuchElementException("tail of empty list")
+    override def map[U](f: Nothing => U): this.type = this
+  type Empty = Empty.type
 
   final case class Cons[+T, +H <: T, +Tail <: TList[T]](override val head: H, override val tail: Tail) extends TList[T]:
     type Length = tail.Length + 1
     override inline def apply(i: Int): T = if i == 0 then head else tail(i - 1)
-    @targetName("cons") def ::[U >: T, E <: U](head: E): Cons[U, E, Cons[T, H, Tail]] = Cons(head, this)
     override def iterator: Iterator[T] = new Iterator[T]:
       private var underlying: TList[T] = Cons.this
       override def hasNext: Boolean = underlying match
-        case Empty()    => false
+        case _: Empty   => false
         case Cons(_, _) => true
       override def next: T = underlying match
-        case Empty()    => throw new NoSuchElementException("next on empty iterator")
+        case _: Empty   => throw new NoSuchElementException("next on empty iterator")
         case Cons(h, t) => underlying = t; h
     override def length: Length = (tail.length + 1).asInstanceOf[Length]
     override def forall(p: T => Boolean): Boolean = p(head) && tail.forall(p)
     override def isEmpty: false = false
+    override def map[U](f: T => U): TList[U] = Cons(f(head), tail.map(f))
+  end Cons
+end TList
 
 /**
   * Assumes that neither L1 nor L2 have repeated elements.

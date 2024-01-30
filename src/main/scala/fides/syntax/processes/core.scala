@@ -27,6 +27,7 @@ final case class Send[T <: ValType](message: Code[Expr[T]], recipient: Code[Expr
   * @param recipient the address of the recipient
   */
 final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Val[OutChan[? >: T]]]) extends Process
+// todo delete?
 
 /**
   * A name scope

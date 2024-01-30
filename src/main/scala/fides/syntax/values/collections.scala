@@ -30,13 +30,13 @@ final case class UnAddElement[T <: ValType]
 (element: Code[Xctr[T]], others: Code[Xctr[Collected[T]]]) extends Xctr[Collected.Some[T]]
 
 /**
-  * Waits for @size elements from @elementSource, then outputs them as a Collected.
+  * Waits for [[size]] elements from [[elementSource]], then outputs them as a Collected.
   */
 final case class Collect[T <: ValType]
 (elementSource: Code[InpChan[T]], size: Code[Expr[Integer]]) extends Expr[Collected[T]]
 
 /**
-  * Outputs the elements of a Collected to @elementSource, and its size to @size.
+  * Outputs the elements of a Collected to [[elementSource]], and its size to [[size]].
   */
 final case class UnCollect[T <: ValType]
 (elementSource: Code[OutChan[T]], size: Code[Xctr[Integer]]) extends Xctr[Collected[T]]

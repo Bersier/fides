@@ -27,7 +27,7 @@ end Channel
 //  Or maybe channel keys should be used when metaprogramming Inps?
 
 /**
-  * Absorbs from the location referred to by @id. Reduces to the received val after reception.
+  * Absorbs from the location referred to by [[iD]]. Reduces to the received val after reception.
   *
   * Dual of Out
   */
@@ -36,7 +36,7 @@ final case class Inp[+T <: ValType](iD: Code[Val[InpChan[? <: T]]]) extends Expr
 end Inp
 
 /**
-  * Emits to the location referred to by @id, once it has a value.
+  * Emits to the location referred to by [[iD]], once it has a value.
   *
   * Should really be called UnInp. But, for convenience's sake, an exception to the naming convention is made.
   *
@@ -47,11 +47,11 @@ final case class Out[-T <: ValType](iD: Code[Val[OutChan[? >: T]]]) extends Xctr
 end Out
 
 /**
-  * Emits to the location referred to by @id, once it has a matching value.
+  * Emits to the location referred to by [[iD]], once it has a matching value.
   *
-  * Matches only if the type of val to be outputted is a subtype of @T,
+  * Matches only if the type of val to be outputted is a subtype of [[T]],
   * so that, when used in a pattern,
-  * whenever the value that would be passed to it does not match @T, the pattern will fail.
+  * whenever the value that would be passed to it does not match [[T]], the pattern will fail.
   */
 final case class OutPtrn[+T <: ValType](iD: Code[Val[OutChan[? <: T]]]) extends Ptrn[T, ValType]:
   override def toString: String = s"<:${internalIDString(iD)}:>"

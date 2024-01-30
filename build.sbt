@@ -3,9 +3,12 @@ lazy val root = project
   .settings(
     name := "Fides",
     scalaVersion := "3.4.1-RC1-bin-20240126-1716bcd-NIGHTLY",
-    libraryDependencies += "org.scala-lang" %% "scala3-staging" % scalaVersion.value,
     libraryDependencies += "dev.zio" %% "zio" % "2.0.21",
     libraryDependencies += "dev.zio" %% "zio-streams" % "2.0.21",
+    libraryDependencies += "org.scala-lang" %% "scala3-staging" % scalaVersion.value,
+//    libraryDependencies += "org.typelevel" %% "cats-core" % "2.10.0",
+//    libraryDependencies += "org.typelevel" %% "kittens" % "3.2.0",
+//    libraryDependencies += "org.typelevel" %% "shapeless3-deriving" % "3.4.0",
     // See https://github.com/lampepfl/dotty/blob/main/compiler/src/dotty/tools/dotc/config/ScalaSettings.scala
     scalacOptions ++= Seq(
 //      "-Vprofile",
