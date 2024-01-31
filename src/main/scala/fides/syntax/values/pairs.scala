@@ -12,19 +12,29 @@ final class PairC[V1 <: ValType, V2 <: ValType](
   type T2 = second.type
 end PairC
 
+final case class PairE[V1 <: ValType, V2 <: ValType, T1 <: Polar[V1], T2 <: Polar[V2]](
+  one: T1,
+  two: T2,
+)(using CodeTC[PairE[V1, V2, T1, T2], ?]) extends Polar[Paired[V1, V2]]
+
 // todo how to merge variants in concrete syntax at metaprogramming level?
 
 final case class PairD[T1, T2](one: T1, two: T2)(using CodeTC[PairD[T1, T2], ?])
 // todo multiple givens; pick first that applies?
+
+sealed trait Paired[+T1 <: ValType, +T2 <: ValType] extends ValType
 
 given [T1, T2, V1 <: ValType, V2 <: ValType](using
   CodeTC[T1, Val[V1]],
   CodeTC[T2, Val[V2]],
 ): CodeTC[PairD[T1, T2], Val[Paired[V1, V2]]]()
 
-sealed trait Paired[+T1 <: ValType, +T2 <: ValType] extends ValType
+given [V1 <: ValType, V2 <: ValType, T1 <: Polar[V1], T2 <: Polar[V2]](using
+  CodeTC[T1, Val[V1]],
+  CodeTC[T2, Val[V2]],
+): CodeTC[PairE[V1, V2, T1, T2], Val[Paired[V1, V2]]]()
 
-given [One, Two, V1 <: ValType, V2 <: ValType](using
+given [V1 <: ValType, V2 <: ValType, One <: Polar[V1], Two <: Polar[V2]](using
   CodeTC[One, Val[V1]],
   CodeTC[Two, Val[V2]],
 ): CodeTC[PairC[V1, V2]{ type T1 = One; type T2 = Two }, Val[Paired[V1, V2]]]()
