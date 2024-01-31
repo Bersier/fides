@@ -41,8 +41,11 @@ final case class Mortal(killSignal: Code[Expr[Pulse]], body: Code[Process]) exte
   */
 final case class Sandboxed(monitor: Code[Process], sandboxed: Code[Process]) extends Process
 
-final case class Catchable
-(catchSignal: Code[Expr[Pulse]], body: Code[Process], codeReader: Xctr[Quoted[Process]]) extends Process
+final case class Catchable(
+  catchSignal: Code[Expr[Pulse]],
+  body: Code[Process],
+  codeReader: Xctr[Quoted[Process]],
+) extends Process
 // todo catchable that can be restarted? Observable?
 
 final case class Handled(errorHandler: Code[OutChan[Error[ValType]]], body: Code[Process]) extends Process

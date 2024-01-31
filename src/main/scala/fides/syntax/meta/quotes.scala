@@ -40,9 +40,12 @@ final case class MatchEscape[S <: CodeType](code: Code[Ptrn[Quoted[S], Quoted[S]
 /**
   * Allows matching a [[MatchEscape]](Matcher). See also [[SignedMatcher]].
   */
-final case class MatchEscapeMatcher[S <: CodeType]
-(level: Code[Val[Integer]], code: Code[Expr[Quoted[S]] | Xctr[Quoted[S]] | Ptrn[Quoted[S], Quoted[S]]]) extends Code[S]
-// todo EscapeMatcher could be merged with Escape (and similarly for other matchers)
+final case class MatchEscapeMatcher[S <: CodeType](
+  code: Code[Ptrn[Quoted[S], Quoted[S]]],
+  level: Code[Val[Integer]] = Integer(0),
+) extends Code[S]
+// todo EscapeMatcher could be merged with Escape (which would then have an additional level parameter)
+//  (and similarly for other matchers)
 
 /**
   * Analoguous to s-Strings in Scala, but for code

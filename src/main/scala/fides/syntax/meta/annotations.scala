@@ -9,8 +9,11 @@ import fides.syntax.values.Integer
   */
 final case class Annotated[S <: CodeType, T <: ValType](code: Code[S], annotation: Code[Val[T]]) extends Code[S]
 
-final case class AnnotatedMatcher[S <: CodeType, T <: ValType]
-(level: Code[Val[Integer]], code: Code[S], annotation: Code[Val[T]]) extends Code[S]
+final case class AnnotatedMatcher[S <: CodeType, T <: ValType](
+  code: Code[S],
+  annotation: Code[Val[T]],
+  level: Code[Val[Integer]] = Integer(0),
+) extends Code[S]
 
 /**
   * Removes all the annotations from a Quoted.

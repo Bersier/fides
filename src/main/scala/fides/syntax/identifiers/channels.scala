@@ -11,8 +11,9 @@ sealed trait OutChan[-T <: ValType] extends Identifier, ValQ[OutChan[T]]
   *
   * @tparam T the type of the values that transit through the channel
   */
-final class Channel[T <: ValType : Tag] private
-(name: String) extends Identifier(name), InpChan[T], OutChan[T], ValQ[Channel[T]]:
+final class Channel[T <: ValType : Tag] private(
+  name: String,
+) extends Identifier(name), InpChan[T], OutChan[T], ValQ[Channel[T]]:
   override def toString: String = s"@$name"
   def valueType: Tag[T] = summon[Tag[T]]
 object Channel:

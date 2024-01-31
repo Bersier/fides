@@ -10,9 +10,8 @@ import fides.syntax.values.Pulse
 final case class Match[T <: ValType](
   pattern: Code[Ptrn[T, T]],
   matchSignal: Code[Xctr[Pulse]] = Ignore(),
-  alternative: Code[Xctr[T]] = Ignore()
+  alternative: Code[Xctr[T]] = Ignore(),
 ) extends Xctr[T]
-// todo reformat other defs like this one
 
 final case class Switch[T <: ValType, A <: Atom](
   input  : Code[Expr[T]],
@@ -21,5 +20,7 @@ final case class Switch[T <: ValType, A <: Atom](
   default: Code[Xctr[T]] = Ignore(),
 ) extends Process
 
-final case class Case[T <: ValType, A <: Atom]
-(testValue: Code[Val[A]], exctractor: Code[Xctr[T]]) extends Code[Case[T, A]], CodeType
+final case class Case[T <: ValType, A <: Atom](
+  testValue: Code[Val[A]],
+  exctractor: Code[Xctr[T]],
+) extends Code[Case[T, A]], CodeType

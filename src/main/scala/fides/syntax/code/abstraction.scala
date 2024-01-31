@@ -8,11 +8,17 @@ import util.TList
 //  Make the right abstraction accessible?
 //  Static (higher-order) code functions
 
-final case class ExprComponent[T <: ValType]
-(name: Code[ExprCompName], parameters: Code[Args[Identifier]], expr: Code[Expr[T]]) extends Process
+final case class ExprComponent[T <: ValType](
+  name: Code[ExprCompName],
+  parameters: Code[Args[Identifier]],
+  expr: Code[Expr[T]],
+) extends Process
 
-final case class Component
-(name: Code[CompName], parameters: Code[Args[Identifier]], body: Code[Process]) extends Process
+final case class Component(
+  name: Code[CompName],
+  parameters: Code[Args[Identifier]],
+  body: Code[Process],
+) extends Process
 
 final case class Application(name: Code[CompName])(arguments: Code[Mapping[?]]) extends Process
 

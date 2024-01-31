@@ -30,13 +30,16 @@ end Signed
   * This is similar to having to use a backslash in a regex to escape another backslash
   * (except that the number of backslashes needed grows exponentially with how meta the regex is).
   *
-  * SignedMatcher(0, m, s) matches Signed(m, s).
-  * For level > 0, SignedMatcher(level, m, s) matches SignedMatcher(level - 1, m, s).
+  * [[SignedMatcher]](0, m, s) matches [[Signed]](m, s).
+  * For level > 0, [[SignedMatcher]](level, m, s) matches [[SignedMatcher]](level - 1, m, s).
   *
   * @tparam T keeps track of the value type
   */
-final case class SignedMatcher[T <: ValType]
-(level: Code[Val[Integer]], document: Code[Val[T]], signature: Code[Val[Identifier]]) extends ValQ[Signed[T]]
+final case class SignedMatcher[T <: ValType](
+  document: Code[Val[T]],
+  signature: Code[Val[Identifier]],
+  level: Code[Val[Integer]] = Integer(0),
+) extends ValQ[Signed[T]]
 // todo should only be allowed in code patterns (although maybe it's not such a big deal if it can be used elsewhere)
 // todo level should be >= 0
 // todo delete? Can it always be simulated with MatchEscape(MatchWrap(MatchSign(...)))?
@@ -44,17 +47,23 @@ final case class SignedMatcher[T <: ValType]
 /**
   * Primitive to sign messages
   */
-final case class Sign[T <: ValType]
-(contents: Code[Expr[T]], signatory: Code[Expr[IdentifierKey]]) extends Expr[Signed[T]]
+final case class Sign[T <: ValType](
+  contents: Code[Expr[T]],
+  signatory: Code[Expr[IdentifierKey]],
+) extends Expr[Signed[T]]
 
 /**
   * Primitive to unsign messages
   */
-final case class UnSign[T <: ValType]
-(contents: Code[Xctr[T]], signatory: Code[Xctr[Identifier]]) extends Xctr[Signed[T]]
+final case class UnSign[T <: ValType](
+  contents: Code[Xctr[T]],
+  signatory: Code[Xctr[Identifier]],
+) extends Xctr[Signed[T]]
 
 /**
   * Primitive to match messages.
   */
-final case class MatchSign[P <: N, N <: ValType]
-(contents: Code[Ptrn[P, N]], signatory: Code[Ptrn[Identifier, Identifier]]) extends Ptrn[Signed[P], Signed[N]]
+final case class MatchSign[P <: N, N <: ValType](
+  contents: Code[Ptrn[P, N]],
+  signatory: Code[Ptrn[Identifier, Identifier]],
+) extends Ptrn[Signed[P], Signed[N]]

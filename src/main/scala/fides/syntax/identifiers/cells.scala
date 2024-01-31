@@ -13,8 +13,10 @@ import izumi.reflect.Tag
   *
   * @tparam T the type of the values that get stored in the cell
   */
-final class Cell[T <: ValType : Tag] private
-(var value: Code[Val[T]], name: String) extends Identifier(name), ValQ[Cell[T]], Process:
+final class Cell[T <: ValType : Tag] private(
+  var value: Code[Val[T]],
+  name: String,
+) extends Identifier(name), ValQ[Cell[T]], Process:
   override def toString: String = s"$$$name($value)"
   def valueType: Tag[T] = summon[Tag[T]]
 object Cell:
@@ -61,5 +63,8 @@ end Write
   * only if they are the same, updates the value of the cell to the inputted new value, and
   * outputs the previous value of the cell.
   */
-final case class CompareAndSwap[T <: ValType]
-(testValue: Code[Expr[T]], newValue: Code[Expr[T]], iD: Code[Val[Cell[T]]]) extends Expr[T]
+final case class CompareAndSwap[T <: ValType](
+  testValue: Code[Expr[T]],
+  newValue: Code[Expr[T]],
+  iD: Code[Val[Cell[T]]],
+) extends Expr[T]

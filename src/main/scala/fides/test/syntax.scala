@@ -28,7 +28,7 @@ import scala.language.implicitConversions
   println(UnSign(negLoc, Ignore()))
   println(Sign(Wrap(posLoc), IdentifierKey()))
   println(UnSign(UnWrap(negLoc), Ignore()))
-  println(SignedMatcher(Integer(0), Identifier(), Channel()))
+  println(SignedMatcher(Identifier(), Channel()))
   println(UnSign(UnWrap(negLoc), Escape(Quote(Ignore()))))
   println(UnSign(UnWrap(negLoc), Out(Escape(Wrap(Channel[Identifier]())))))
   println(UnSign(UnWrap(negLoc), Out(Escape(Inp[Channel[Identifier]](Channel())))))
