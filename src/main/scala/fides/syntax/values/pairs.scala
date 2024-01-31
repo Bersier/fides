@@ -1,58 +1,21 @@
 package fides.syntax.values
 
-import fides.syntax.code.{Code, CodeTC, Expr, Polar, Ptrn, Val, ValType, Xctr}
+import fides.syntax.code.{Code, CodeTC, CodeType, Expr, Polar, Ptrn, Val, ValType, Xctr}
 
-final class PairC[V1 <: ValType, V2 <: ValType](
-  one: Polar[V1],
-  two: Polar[V2],
-)(using CodeTC[PairC[V1, V2]{ type T1 = one.type; type T2 = two.type }, ?]) extends Polar[Paired[V1, V2]]:
-  val first = one
-  val second = two
-  type T1 = first.type
-  type T2 = second.type
-end PairC
-
-final case class PairE[V1 <: ValType, V2 <: ValType, T1 <: Polar[V1], T2 <: Polar[V2]](
-  one: T1,
-  two: T2,
-)(using CodeTC[PairE[V1, V2, T1, T2], ?]) extends Polar[Paired[V1, V2]]
-
-// todo how to merge variants in concrete syntax at metaprogramming level?
-
-final case class PairD[T1, T2](one: T1, two: T2)(using CodeTC[PairD[T1, T2], ?])
+final case class PairC[T1, T2](one: T1, two: T2)(using CodeTC[PairC[T1, T2], CodeType])
 // todo multiple givens; pick first that applies?
 
 sealed trait Paired[+T1 <: ValType, +T2 <: ValType] extends ValType
 
-given [T1, T2, V1 <: ValType, V2 <: ValType](using
-  CodeTC[T1, Val[V1]],
-  CodeTC[T2, Val[V2]],
-): CodeTC[PairD[T1, T2], Val[Paired[V1, V2]]]()
+given [T1, T2, V1 <: ValType, V2 <: ValType, P <: [V <: ValType] =>> CodeType : Polar](using
+  CodeTC[T1, P[V1]],
+  CodeTC[T2, P[V2]],
+): CodeTC[PairC[T1, T2], P[Paired[V1, V2]]]()
 
-given [V1 <: ValType, V2 <: ValType, T1 <: Polar[V1], T2 <: Polar[V2]](using
-  CodeTC[T1, Val[V1]],
-  CodeTC[T2, Val[V2]],
-): CodeTC[PairE[V1, V2, T1, T2], Val[Paired[V1, V2]]]()
-
-given [V1 <: ValType, V2 <: ValType, One <: Polar[V1], Two <: Polar[V2]](using
-  CodeTC[One, Val[V1]],
-  CodeTC[Two, Val[V2]],
-): CodeTC[PairC[V1, V2]{ type T1 = One; type T2 = Two }, Val[Paired[V1, V2]]]()
-
-given [One, Two, V1 <: ValType, V2 <: ValType](using
-  CodeTC[One, Expr[V1]],
-  CodeTC[Two, Expr[V2]],
-): CodeTC[PairC[V1, V2]{ type T1 = One; type T2 = Two }, Expr[Paired[V1, V2]]]()
-
-given [One, Two, V1 <: ValType, V2 <: ValType](using
-  CodeTC[One, Xctr[V1]],
-  CodeTC[Two, Xctr[V2]],
-): CodeTC[PairC[V1, V2]{ type T1 = One; type T2 = Two }, Xctr[Paired[V1, V2]]]()
-
-given [One, Two, P1 <: N1, P2 <: N2, N1 <: ValType, N2 <: ValType](using
-  CodeTC[One, Ptrn[P1, N1]],
-  CodeTC[Two, Ptrn[P2, N2]],
-): CodeTC[PairC[?, ?]{ type T1 = One; type T2 = Two }, Ptrn[Paired[P1, P2], Paired[N1, N2]]]()
+given [T1, T2, P1 <: N1, P2 <: N2, N1 <: ValType, N2 <: ValType](using
+  CodeTC[T1, Ptrn[P1, N1]],
+  CodeTC[T2, Ptrn[P2, N2]],
+): CodeTC[PairC[T1, T2], Ptrn[Paired[P1, P2], Paired[N1, N2]]]()
 
 /**
   * Pairs two values together.

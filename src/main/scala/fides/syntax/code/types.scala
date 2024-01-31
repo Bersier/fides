@@ -11,7 +11,10 @@ import scala.language.experimental.pureFunctions
 trait Code[+S <: CodeType] private[syntax]()
 // todo add QuoteContext type parameter
 
-trait Polar[V <: ValType] private[syntax]()
+sealed trait Polar[P <: [V <: ValType] =>> CodeType]
+given Polar[Val]()
+given Polar[Expr]()
+given Polar[Xctr]()
 
 trait CodeTC[-R, +S <: CodeType] private[syntax]()
 
