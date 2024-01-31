@@ -6,6 +6,8 @@ import fides.syntax.values.Pulse
 
 /**
   * A hard-coded connection between one input and one output
+  *
+  * Equivalent to [[Spread]]([[inp]], [[Args]]([[out]])).
   */
 final case class Forward[T <: ValType](inp: Code[Expr[T]], out: Code[Xctr[T]]) extends Process
 

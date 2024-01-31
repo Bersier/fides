@@ -13,7 +13,7 @@ import fides.syntax.meta.Args
   * @param message the value to be sent
   * @param recipient address of the recipient
   */
-final case class Send[T <: ValType](message: Code[Expr[T]], recipient: Code[Expr[OutChan[? >: T]]]) extends Process
+final case class Send[T <: ValType](contents: Code[Expr[T]], recipient: Code[Expr[OutChan[? >: T]]]) extends Process
 
 /**
   * A message in transit
@@ -26,7 +26,7 @@ final case class Send[T <: ValType](message: Code[Expr[T]], recipient: Code[Expr
   * @param message the contents of the message
   * @param recipient the address of the recipient
   */
-final case class Message[T <: ValType](message: Code[Val[T]], recipient: Code[Val[OutChan[? >: T]]]) extends Process
+final case class Message[T <: ValType](contents: Code[Val[T]], recipient: Code[Val[OutChan[? >: T]]]) extends Process
 // todo delete?
 
 /**
