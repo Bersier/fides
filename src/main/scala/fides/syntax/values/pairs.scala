@@ -1,11 +1,9 @@
 package fides.syntax.values
 
-import fides.syntax.code.{Code, CodeTC, CodeType, Expr, Polar, Ptrn, Val, ValType, Xctr}
+import fides.syntax.code.{Code, CodeTC, CodeType, Expr, Paired, Polar, Ptrn, ValType, Xctr}
 
 final case class PairC[T1, T2](one: T1, two: T2)(using CodeTC[PairC[T1, T2], CodeType])
 // todo multiple givens; pick first that applies?
-
-sealed trait Paired[+T1 <: ValType, +T2 <: ValType] extends ValType
 
 given [T1, T2, V1 <: ValType, V2 <: ValType, P <: [V <: ValType] =>> CodeType : Polar](using
   CodeTC[T1, P[V1]],

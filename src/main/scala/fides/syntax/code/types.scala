@@ -27,6 +27,7 @@ trait CodeType private[syntax]()
   * Parent type of all the Scala types that represent Fides value types.
   */
 trait ValType private[syntax]()
+sealed trait Paired[+T1 <: ValType, +T2 <: ValType] extends ValType
 
 /**
   * Fides code type for processes.
