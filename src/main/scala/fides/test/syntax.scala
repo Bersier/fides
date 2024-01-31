@@ -7,7 +7,6 @@ import fides.syntax.meta.*
 import fides.syntax.processes.*
 import fides.syntax.signatures.*
 import fides.syntax.values.*
-// todo could 'export' help us reduce the number of imports?
 
 import scala.collection.concurrent
 import scala.language.implicitConversions

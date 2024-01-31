@@ -20,7 +20,7 @@ object Signed:
     new Signed(document, signatory.identifier)
 end Signed
 
-// todo In the concrete syntax, we should use only symbol for Sign, UnSign, and MatchSign
+// todo In the concrete syntax, we should use only one symbol for Sign, UnSign, and MatchSign
 //  (and similarly for other such triplets). The parser would then have to disambiguate.
 
 /**

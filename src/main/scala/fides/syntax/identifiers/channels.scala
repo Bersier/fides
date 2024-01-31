@@ -20,9 +20,6 @@ object Channel:
   def apply[T <: ValType]()(using Context, Tag[T]): Channel[T] = Identifier.from(new Channel(_))
   def apply[T <: ValType](name: String)(using Context, Tag[T]): Channel[T] = Identifier.from(new Channel(_), name)
 end Channel
-// todo At the code level, Channel's type parameter should be invariant,
-//  but at the Fides value level, it should be contravariant. Except when used in a metaprogramming context!
-//  trait StaticChannel[T <: ValType : Tag] extends Code[StaticChannel[T]], CodeType
 
 // todo What happens to channel names in Inp in quoted code, when the latter is launched? Is there auto renaming?
 //  Or maybe channel keys should be used when metaprogramming Inps?
