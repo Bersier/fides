@@ -11,6 +11,10 @@ import scala.language.experimental.pureFunctions
 trait Code[+S <: CodeType] private[syntax]()
 // todo add QuoteContext type parameter
 
+trait Polar[V <: ValType] private[syntax]()
+
+trait CodeTC[-R, +S <: CodeType] private[syntax]()
+
 /**
   * Parent type of all the Scala types that represent the different types of possible Fides code.
   */
