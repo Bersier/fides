@@ -3,8 +3,6 @@ package fides.syntax.meta
 import fides.syntax.code.{Code, CodeType, Expr, Ptrn, Val, ValType, Xctr}
 import fides.syntax.values.Integer
 
-// todo disallow escaping Quoted? Quoted should be identified with Quote in the concrete syntax. However, it is not
-//  in the current syntax. So escaping from a Quote doesn't make sense (right?).
 // todo could escaped Quoted of vals be automatially unquoted? Currently, we auto-quote ValQs, but not the other way
 //  around. This leads to confusing asymmetric code. We should either have both, or none.
 // todo could an Xctr be in a position where it could fail in a pattern? It shouldn't, right? For example, in a
@@ -23,22 +21,37 @@ object Quoted:
 end Quoted
 
 /**
-  * Allows escaping the body of a [[Quote]].
+  * Allows escaping the body of a [[Quote]]. Ignores nested [[Quote]]s
+  * (as well as nested [[Quoted]] and [[MatchQuote]]). Directly escapes the whole quote.
+  *
+  * Doesn't have a special meaning within [[MatchQuote]]s.
   *
   * (At the top-level (outside of a quote), could represent macro code.)
   */
 final case class Escape[S <: CodeType](code: Code[Expr[Quoted[S]]]) extends Code[S]
-// todo Should escapes allow the formation of arbitrary code (patterns)? In that case, an escape might have to be tied
-//  to its corresponding quote, perhaps via some location. Currently, Escape and MatchEscape don't specify "where to
-//  escape to", so nested Quotes or MatchQuotes cannot be escaped properly.
 
 /**
-  * Allows escaping the body of a [[MatchQuote]].
+  * Represents an [[Escape]] within a (nested) [[Quote]], so it is simply treated like code of an [[Escape]],
+  * without actually escaping.
+  *
+  * Upon launching of the [[Quoted]], [[QuotedEscape]] of level zero is converted to an [[Escape]].
+  * Higher-level [[QuotedEscape]]s have their level lowered by one.
+  */
+final case class QuotedEscape[S <: CodeType](
+  code: Code[Expr[Quoted[S]]],
+  level: Code[Val[Integer]] = Integer(0),
+) extends Code[S]
+
+/**
+  * Allows escaping the body of a [[MatchQuote]]. Ignores nested [[MatchQuote]]s
+  * (as well as nested [[Quoted]] and [[Quote]]).
+  *
+  * Doesn't have a special meaning within [[Quote]]s.
   */
 final case class MatchEscape[S <: CodeType](code: Code[Ptrn[Quoted[S], Quoted[S]]]) extends Code[S]
 
 /**
-  * Allows matching a [[MatchEscape]](Matcher). See also [[SignedMatcher]].
+  * Allows matching a [[MatchEscape]](Matcher) within a [[MatchQuote]]. See also [[SignedMatcher]].
   */
 final case class MatchEscapeMatcher[S <: CodeType](
   code: Code[Ptrn[Quoted[S], Quoted[S]]],
