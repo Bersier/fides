@@ -1,6 +1,6 @@
 package fides.syntax.meta
 
-import fides.syntax.code.{Code, CodeType, Expr, Ptrn, Val, ValType, Xctr}
+import fides.syntax.code.{Code, CodeType, Expr, Ptrn, Val, ValType}
 import fides.syntax.values.Integer
 
 // todo could escaped Quoted of vals be automatially unquoted? Currently, we auto-quote ValQs, but not the other way

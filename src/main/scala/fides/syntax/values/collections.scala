@@ -37,7 +37,7 @@ final case class UnAddElement[T <: ValType](
   * Waits for [[size]] elements from [[elementSource]], then outputs them as a Collected.
   */
 final case class Collect[T <: ValType](
-  elementSource: Code[InpChan[T]],
+  elementSource: Code[Val[InpChan[T]]],
   size: Code[Expr[Integer]],
 ) extends Expr[Collected[T]]
 
@@ -45,6 +45,6 @@ final case class Collect[T <: ValType](
   * Outputs the elements of a Collected to [[elementSource]], and its size to [[size]].
   */
 final case class UnCollect[T <: ValType](
-  elementSource: Code[OutChan[T]],
+  elementSource: Code[Val[OutChan[T]]],
   size: Code[Xctr[Integer]],
 ) extends Xctr[Collected[T]]
