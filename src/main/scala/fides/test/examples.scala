@@ -29,13 +29,6 @@ def unPairExample(using Context): Code[?] =
     UnPair(Out(myChannel), Ignore()),
   )
 
-def writeToCellExample(using Context): Code[?] =
-  val myCell    = Cell(Integer(0), name = "myCell")
-  Forward(
-    Add(Read(Pulse, myCell), Integer(10)),
-    Write(signal = Ignore(), iD = myCell),
-  )
-
 def staticAndDynamicSendExample(using Context): Code[?] =
   val channel1  = Channel[Bool]()
   val channel2  = Channel[Channel[Bool]]()
@@ -46,7 +39,7 @@ def staticAndDynamicSendExample(using Context): Code[?] =
         out = Out(channel2),
       ),
       Send(
-        message = True,
+        contents = True,
         recipient = Inp(channel2),
       ),
     )
@@ -60,7 +53,7 @@ def unSignExample(using Context): Code[?] =
   Concurrent(
     Args(
       Send(
-        message = Sign(
+        contents = Sign(
           contents = Integer(4),
           signatory = myKey,
         ),
@@ -76,78 +69,69 @@ def unSignExample(using Context): Code[?] =
     )
   )
 
-def quoteExample(using Context): Code[?] =
-  val channelC = Channel[Channel[Str]]()
-  Quote(
+def collectExample(using Context): Code[?] =
+  val sourceChannel = Channel[Bool]()
+  val sizeChannel = Channel[Integer]()
+  Collect(
+    elementSource = sourceChannel,
+    size = Inp(sizeChannel),
+  )
+
+def randomBitGeneratorExample(using Context): Code[?] =
+  val randomBitChannel = Channel[Bool]()
+  Repeated(
+    Forward(
+      RandomBit(),
+      Out(randomBitChannel)
+    )
+  )
+
+def serviceExample(using Context): Code[?] =
+  val addressChannel = Channel[Channel[Bool]]()
+  Repeated(
     Send(
-      message = Str("Hello World!"),
-      recipient = Escape(Wrap(Inp(channelC))), // Escape(Inp(channelC)) has an automatic wrap because of ValQ
+      contents = RandomBit(),
+      recipient = Inp(addressChannel)
     )
   )
 
-def unQuoteExample(using Context): Code[?] =
-  val channelS = Channel[Str]()
-  val channelQ = Channel[Quoted[Channel[Str]]]()
-  Forward(
-    inp = Quote(
-      Send(
-        message = Str("Hello World!"),
-        recipient = channelS,
-      )
-    ),
-    out = Match(
-      pattern = MatchQuote(
-        Send(
-          message = Escape(UnWrap(Out(channelS))),
-          recipient = Escape(UnWrap(Out(channelQ))), // UnWrap not needed because the channel takes Quoted, ValQ?
-        )
+/**
+  This example simulates if-then-else
+  */
+def switchExample(using Context): Code[?] =
+  val channel1 = Channel[Pulse]()
+  val channel2 = Channel[Pulse]()
+  Switch(
+    input = Pulse,
+    testee = True,
+    cases = Args(
+      Case(
+        testValue = True,
+        extractor = Out(channel1)
       ),
-      signal = Ignore(),
-      alternative = Ignore()
-    ),
-  )
-
-def signedMatcherExample(using Context): Code[?] =
-  val myKey     = ChannelKey[Integer]()
-  val myChannel = myKey.identifier
-  val signalChannel = Channel[Pulse]()
-  Spread(
-    value = Quote(
-      Escape(
-        Sign(
-          contents = Integer(4),
-          signatory = myKey,
-        )
+      Case(
+        testValue = False,
+        extractor = Out(channel2)
       )
-    ),
-    recipients = Args(
-      Match(
-        pattern = MatchQuote(
-          SignedMatcher(
-            level = Integer(0),
-            document = Escape(UnWrap(Out(myChannel))),
-            signature = myChannel,
-          )
-        ),
-        signal = Out(signalChannel),
-        alternative = Ignore()
-      ),
-      Match(
-        pattern = MatchQuote(
-          Escape(
-            MatchWrap(
-              MatchSign(
-                contents = Out(myChannel),
-                signatory = myChannel,
-              )
-            )
-          )
-        ),
-        signal = Out(signalChannel),
-        alternative = Ignore()
-      ),  
     )
   )
 
+def hotSwappingExample(using Context): Code[?] =
+  ???
 
-def escapeMatcher(using Context): Code[?] = ???
+//def loopExample(using Context): Code[?] =
+//  val collectionChannel = Channel[Collected.Some[Integer]]()
+//  val collectionChannel2 = Channel[Collected[Integer]]()
+//  Forward(
+//    Inp(collectionChannel),
+//    UnAddElement(
+//      element = Out(Channel()),
+//      others = Match(
+//        pattern = UnAddElement(Ignore(), Ignore()),
+//        matchedValue = Out(collectionChannel),
+//        // todo Match doesn't refine the type based on which option is not possible in the alternative
+//      )
+//    )
+//  )
+
+

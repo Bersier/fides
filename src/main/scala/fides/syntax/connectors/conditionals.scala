@@ -9,7 +9,7 @@ import fides.syntax.values.Pulse
   */
 final case class Match[T <: ValType](
   pattern: Code[Ptrn[T, T]],
-  matchSignal: Code[Xctr[Pulse]] = Ignore(),
+  matchedValue: Code[Xctr[T]] = Ignore(),
   alternative: Code[Xctr[T]] = Ignore(),
 ) extends Xctr[T]
 
@@ -22,5 +22,5 @@ final case class Switch[T <: ValType, A <: Atom](
 
 final case class Case[T <: ValType, A <: Atom](
   testValue: Code[Val[A]],
-  exctractor: Code[Xctr[T]],
+  extractor: Code[Xctr[T]],
 ) extends Code[Case[T, A]], CodeType
