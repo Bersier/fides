@@ -42,13 +42,13 @@ def unQuoteExample(using Context): Code[?] =
   * [[SignedMatcher]] can be reproduced by using [[MatchEscape]], [[MatchWrap]]  and [[MatchSign]]
   */
 def signedMatcherExample(using Context): Code[?] =
-  val myKey     = ChannelKey[Integer]()
+  val myKey     = ChannelKey[WholeNumber]()
   val myChannel = myKey.identifier
   Spread(
     Quote(
       Escape(
         Sign(
-          contents = Integer(4),
+          contents = WholeNumber(4),
           signatory = myKey,
         )
       )
@@ -81,13 +81,13 @@ def signedMatcherExample(using Context): Code[?] =
   * There is a problem with [[MatchEscape]] that the type matched is not tracked then a wrong type can be used in the code
   */
 def matchEscapeProblem(using Context): Code[?] =
-  val myKey     = ChannelKey[Integer]()
+  val myKey     = ChannelKey[WholeNumber]()
   val myChannel = myKey.identifier
   Spread(
     Quote(
       Escape(
         Sign(
-          contents = Integer(4),
+          contents = WholeNumber(4),
           signatory = myKey,
         )
       )
@@ -111,19 +111,19 @@ def matchEscapeMatcherExample(using Context): Code[?] =
     ),
     Match(
       MatchQuote(
-        MatchEscapeMatcher(Out(Channel[Quoted[Integer]]())), // problem: it doesn't know the type for Quoted
+        MatchEscapeMatcher(Out(Channel[Quoted[WholeNumber]]())), // problem: it doesn't know the type for Quoted
       ),
     )
   )
 
 def multiquoteExample(using Context): Code[?] =
-  val myIntChannel = Channel[Integer]()
+  val myIntChannel = Channel[WholeNumber]()
   Quote(
     Send(
       contents = Quote(
         Add(
           QuotedEscape(Inp(myIntChannel)),
-          Escape(Negate(Integer(5)))
+          Escape(Negate(WholeNumber(5)))
         )
       ),
       recipient = Inp(Channel())

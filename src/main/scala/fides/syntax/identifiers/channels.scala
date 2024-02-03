@@ -29,7 +29,7 @@ end Channel
   *
   * Dual of Out
   */
-final case class Inp[+T <: ValType](iD: Code[Val[InpChan[? <: T]]]) extends Expr[T]:
+final case class Inp[+T <: ValType](iD: Code[Val[InpChan[T]]]) extends Expr[T]:
   override def toString: String = s"<${internalIDString(iD)}>"
 end Inp
 
@@ -40,7 +40,7 @@ end Inp
   *
   * Dual of Inp
   */
-final case class Out[-T <: ValType](iD: Code[Val[OutChan[? >: T]]]) extends Xctr[T]:
+final case class Out[-T <: ValType](iD: Code[Val[OutChan[T]]]) extends Xctr[T]:
   override def toString: String = s"<|${internalIDString(iD)}|>"
 end Out
 

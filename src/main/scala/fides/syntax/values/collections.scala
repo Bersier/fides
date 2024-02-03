@@ -38,7 +38,7 @@ final case class UnAddElement[T <: ValType](
   */
 final case class Collect[T <: ValType](
   elementSource: Code[Val[InpChan[T]]],
-  size: Code[Expr[Integer]],
+  size: Code[Expr[WholeNumber]],
 ) extends Expr[Collected[T]]
 
 /**
@@ -46,5 +46,5 @@ final case class Collect[T <: ValType](
   */
 final case class UnCollect[T <: ValType](
   elementSource: Code[Val[OutChan[T]]],
-  size: Code[Xctr[Integer]],
+  size: Code[Xctr[WholeNumber]],
 ) extends Xctr[Collected[T]]

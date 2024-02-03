@@ -37,7 +37,7 @@ final case class Hold[T <: ValType](signal: Code[Expr[Pulse]], value: Code[Expr[
 final case class Signal(trigger: Code[Expr[?]]) extends Expr[Pulse]
 
 /**
-  * Forwards one of the inputs. It is guaranteed to forward a value if any of the inputs yields a value.
+  * Forwards one of the inputs. Is guaranteed to forward a value if any of the inputs yields a value.
   *
   * Another way to think about this is that it forwards the value of the expression that "first" reduces to a value.
   */

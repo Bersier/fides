@@ -2,7 +2,7 @@ package fides.syntax.signatures
 
 import fides.syntax.code.{Code, Expr, Ptrn, Val, ValQ, ValType, Xctr}
 import fides.syntax.identifiers.{Identifier, IdentifierKey}
-import fides.syntax.values.Integer
+import fides.syntax.values.NaturalNumber
 
 /**
   * Signed values are guaranteed to have been created using a key corresponding to [[signature]].
@@ -38,10 +38,9 @@ end Signed
 final case class SignedMatcher[T <: ValType](
   document: Code[Val[T]],
   signature: Code[Val[Identifier]],
-  level: Code[Val[Integer]] = Integer(0),
+  level: Code[Val[NaturalNumber]] = NaturalNumber(0),
 ) extends ValQ[Signed[T]]
 // todo should only be allowed in code patterns (although maybe it's not such a big deal if it can be used elsewhere)
-// todo level should be >= 0
 // todo delete? Can it always be simulated with MatchEscape(MatchWrap(MatchSign(...)))?
 
 /**

@@ -1,7 +1,7 @@
 package fides.syntax.meta
 
 import fides.syntax.code.{Code, CodeType, Expr, Ptrn, Val, ValType}
-import fides.syntax.values.Integer
+import fides.syntax.values.NaturalNumber
 
 // todo could escaped Quoted of vals be automatially unquoted? Currently, we auto-quote ValQs, but not the other way
 //  around. This leads to confusing asymmetric code. We should either have both, or none.
@@ -39,7 +39,7 @@ final case class Escape[S <: CodeType](code: Code[Expr[Quoted[S]]]) extends Code
   */
 final case class QuotedEscape[S <: CodeType](
   code: Code[Expr[Quoted[S]]],
-  level: Code[Val[Integer]] = Integer(0),
+  level: Code[Val[NaturalNumber]] = NaturalNumber(0),
 ) extends Code[S]
 
 /**
@@ -55,7 +55,7 @@ final case class MatchEscape[S <: CodeType](code: Code[Ptrn[Quoted[S], Quoted[S]
   */
 final case class MatchEscapeMatcher[S <: CodeType](
   code: Code[Ptrn[Quoted[S], Quoted[S]]],
-  level: Code[Val[Integer]] = Integer(0),
+  level: Code[Val[NaturalNumber]] = NaturalNumber(0),
 ) extends Code[S]
 // todo EscapeMatcher could be merged with Escape (which would then have an additional level parameter)
 //  (and similarly for other matchers)

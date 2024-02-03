@@ -1,7 +1,7 @@
 package fides.syntax.meta
 
 import fides.syntax.code.{Code, CodeType, Expr, Val, ValType}
-import fides.syntax.values.Integer
+import fides.syntax.values.NaturalNumber
 
 /**
   * An annotated piece of code. The annotation does not change the semantics of the code.
@@ -12,7 +12,7 @@ final case class Annotated[S <: CodeType, T <: ValType](code: Code[S], annotatio
 final case class AnnotatedMatcher[S <: CodeType, T <: ValType](
   code: Code[S],
   annotation: Code[Val[T]],
-  level: Code[Val[Integer]] = Integer(0),
+  level: Code[Val[NaturalNumber]] = NaturalNumber(0),
 ) extends Code[S]
 
 /**

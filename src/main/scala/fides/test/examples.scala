@@ -23,9 +23,9 @@ def outChanExample(using Context): Code[?] =
   ))
 
 def unPairExample(using Context): Code[?] =
-  val myChannel = Channel[Integer](name = "myChannel")
+  val myChannel = Channel[WholeNumber](name = "myChannel")
   Forward(
-    Paired(Integer(1), Cell(False)),
+    Paired(WholeNumber(1), Cell(False)),
     UnPair(Out(myChannel), Ignore()),
   )
 
@@ -46,15 +46,15 @@ def staticAndDynamicSendExample(using Context): Code[?] =
   )
 
 def unSignExample(using Context): Code[?] =
-  val myKey = ChannelKey[Integer]()
+  val myKey = ChannelKey[WholeNumber]()
   val myChannel = myKey.identifier
-  val channelS = Channel[Signed[Integer]]()
+  val channelS = Channel[Signed[WholeNumber]]()
   val channelI  = Channel[Identifier]()
   Concurrent(
     Args(
       Send(
         contents = Sign(
-          contents = Integer(4),
+          contents = WholeNumber(4),
           signatory = myKey,
         ),
         recipient = channelS,
@@ -71,7 +71,7 @@ def unSignExample(using Context): Code[?] =
 
 def collectExample(using Context): Code[?] =
   val sourceChannel = Channel[Bool]()
-  val sizeChannel = Channel[Integer]()
+  val sizeChannel = Channel[WholeNumber]()
   Collect(
     elementSource = sourceChannel,
     size = Inp(sizeChannel),
@@ -120,16 +120,31 @@ def hotSwappingExample(using Context): Code[?] =
   ???
 
 //def loopExample(using Context): Code[?] =
-//  val collectionChannel = Channel[Collected.Some[Integer]]()
-//  val collectionChannel2 = Channel[Collected[Integer]]()
+//  val collectionChannel = Channel[Collected.Some[WholeNumber]]()
+//  val collectionChannel2 = Channel[Collected[WholeNumber]]()
 //  Forward(
 //    Inp(collectionChannel),
 //    UnAddElement(
 //      element = Out(Channel()),
 //      others = Match(
 //        pattern = UnAddElement(Ignore(), Ignore()),
+//        // Ptrn[Nothing, Collected.Some[T]]
 //        matchedValue = Out(collectionChannel),
-//        // todo Match doesn't refine the type based on which option is not possible in the alternative
+//      )
+//    )
+//  )
+
+// todo delete
+//def loopExample2(using Context): Code[?] =
+//  val collectionChannel = Channel[Collected.Some[WholeNumber]]()
+//  val collectionChannel2 = Channel[Collected[WholeNumber]]()
+//  Forward(
+//    Inp(collectionChannel),
+//    UnAddElement(
+//      element = Out(Channel()),
+//      others = Match(
+//        pattern = Collected.None,
+//        alternative = Out(collectionChannel),
 //      )
 //    )
 //  )

@@ -29,9 +29,19 @@ final case class UnPair[T1 <: ValType, T2 <: ValType](
 /**
   * Pair pattern.
   */
-final case class MatchPair[P1 <: N1, P2 <: N2, N1 <: ValType, N2 <: ValType](
+final case class MatchPair[
+  P1 <: N1,
+  P2 <: N2,
+  N1 <: ValType,
+  N2 <: ValType,
+  L <: Paired[P1, P2],
+  U >: Paired[N1, N2] <: ValType,
+](
   first: Code[Ptrn[P1, N1]],
   second: Code[Ptrn[P2, N2]],
-) extends Ptrn[Paired[P1, P2], Paired[N1, N2]]
+)(using
+  U & Paired[ValType, ValType] <:< Paired[N1, N2],
+  Paired[P1, P2] <:< L | Paired[Nothing, Nothing],
+) extends Ptrn[L, U]
 
 // todo Try using type classes to show the four different cases, while having only one class (Pair).
