@@ -29,6 +29,14 @@ def unPairExample(using Context): Code[?] =
     UnPair(Out(myChannel), Ignore()),
   )
 
+def unPairExample2(using Context): Code[?] =
+  val myChannel = Channel[WholeNumber](name = "myChannel")
+  Forward(
+    Paired(WholeNumber(1), Cell(False)), // Paired[WholeNumber, Cell[Bool]]
+    MatchPair[Nothing, Nothing, WholeNumber, ValType, Nothing, Paired[WholeNumber, ValType]](Out(myChannel), Ignore()),
+    // todo why can the compiler not infer this type properly?
+  )
+
 def staticAndDynamicSendExample(using Context): Code[?] =
   val channel1  = Channel[Bool]()
   val channel2  = Channel[Channel[Bool]]()
@@ -134,7 +142,9 @@ def hotSwappingExample(using Context): Code[?] =
 //    )
 //  )
 
-// todo delete
+// todo Try to figure out why this example doesn't work even when using
+//  1. Match2 and Collected2
+//  2. Match3 and Collected
 //def loopExample2(using Context): Code[?] =
 //  val collectionChannel = Channel[Collected.Some[WholeNumber]]()
 //  val collectionChannel2 = Channel[Collected[WholeNumber]]()
@@ -148,5 +158,3 @@ def hotSwappingExample(using Context): Code[?] =
 //      )
 //    )
 //  )
-
-

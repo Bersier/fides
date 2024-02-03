@@ -15,11 +15,18 @@ final case class Match[T <: ValType](
   alternative: Code[Xctr[T]] = Ignore(),
 ) extends Xctr[T]
 
-// todo no given instance of (T <:< (pattern$1 : fides.syntax.meta.MatchQuote[S]) | T) was found...
-//    alternative: Code[Xctr[S]] = Ignore())(using T <:< pattern.type | S) extends Xctr[T]
+final case class Match2[T <: ValType, A <: T](
+  pattern: Code[Ptrn[T, T]],
+  matchedValue: Code[Xctr[T]] = Ignore(),
+  alternative: Code[Xctr[A]] = Ignore(),
+)(using T <:< (pattern.type | A)) extends Xctr[T]
 
-// todo delete; match types never seem to work. The plan was to use this to refine the type of a match alternative to
-//  Code[Xctr[AltType[T, pattern.type]]]
+final class Match3[T <: ValType](
+  val pattern: Code[Ptrn[T, T]],
+  val matchedValue: Code[Xctr[T]] = Ignore(),
+  val alternative: Code[Xctr[AltType[T, pattern.type]]] = Ignore(),
+) extends Xctr[T]
+
 private type AltType[T <: ValType, P <: Code[Ptrn[T, T]]] <: T = T match
   case Collected[?] => P match
     case Collected.None => Collected.Some[?] & T

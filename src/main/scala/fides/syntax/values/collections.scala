@@ -9,13 +9,27 @@ import fides.syntax.identifiers.{InpChan, OutChan}
 sealed trait Collected[T <: ValType] extends ValQ[Collected[T]], ValType:
   def elements: Iterable[Val[T]]
 object Collected:
-  case object None extends Collected[Nothing], ValQ[None], ValType:
+  case object None extends Collected[Nothing], ValQ[None]:
     def elements: Iterable[Val[Nothing]] = Iterable.empty[Val[Nothing]]
   type None = None.type
-  final case class Some[T <: ValType](elements: Val[T]*) extends Collected[T], ValQ[Some[T]], ValType:
+  final case class Some[T <: ValType](elements: Val[T]*) extends Collected[T], ValQ[Some[T]]:
     assert(elements.nonEmpty)
   end Some
 end Collected
+
+type Collected2[T <: ValType] = Collected2.None | Collected2.Some[T]
+object Collected2:
+  case object None extends ValQ[None], ValType:
+    def elements: Iterable[Val[Nothing]] = Iterable.empty[Val[Nothing]]
+  type None = None.type
+  final case class Some[T <: ValType](elements: Val[T]*) extends ValQ[Some[T]], ValType:
+    assert(elements.nonEmpty)
+  end Some
+  extension [T <: ValType](c: Collected2[T])
+    inline def elements: Iterable[Val[T]] = inline c match
+      case _: None => None.elements
+      case s: Some[T] => s.elements
+end Collected2
 
 /**
   * Outputs a Collected with one element added to it.

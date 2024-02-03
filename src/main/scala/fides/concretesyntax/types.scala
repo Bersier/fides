@@ -82,7 +82,7 @@ object ShowableTerm:
       case _ => error("ShowableTerm derivation is currently only supported for product types.")
 end ShowableTerm
 
-given [T <: ValType]: ShowableTerm[Match[T]] with
+given ShowableTerm[Match[?]] with
   def outerPrecedence: Precedence = Precedences.space
   def innerPrecedence: Precedence = Precedences.space
   def polarity: Char = '-'

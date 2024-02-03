@@ -40,8 +40,10 @@ final case class MatchPair[
   first: Code[Ptrn[P1, N1]],
   second: Code[Ptrn[P2, N2]],
 )(using
-  U & Paired[ValType, ValType] <:< Paired[N1, N2],
-  Paired[P1, P2] <:< L | Paired[Nothing, Nothing],
+  (U & Paired[ValType, ValType]) <:< Paired[N1, N2],
+  Paired[P1, P2] <:< (L | Paired[Nothing, Nothing]),
 ) extends Ptrn[L, U]
+// todo we probably need sealed types for the compiler to be able to provide those implicits reliably
 
 // todo Try using type classes to show the four different cases, while having only one class (Pair).
+//  (See type-class-syntax branch.)
