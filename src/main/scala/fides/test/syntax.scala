@@ -32,15 +32,6 @@ import scala.language.implicitConversions
   println(UnSign(UnWrap(negLoc), Out(Escape(Wrap(Channel[Identifier]())))))
   println(UnSign(UnWrap(negLoc), Out(Escape(Inp[Channel[Identifier]](Channel())))))
 
-  println:
-    val channel = Channel[OutChan[Bool]]()
-    Concurrent(Args(
-      Forward(
-        inp = Channel[ValType](),
-        out = Out(channel),
-      ),
-      Forward(
-        inp = Quoted(Out(Escape(Inp(channel)))),
-        out = Ignore(),
-      )
-    ))
+
+
+
