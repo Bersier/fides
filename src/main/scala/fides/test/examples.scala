@@ -34,7 +34,7 @@ def unPairExample2(using Context): Code[?] =
   Forward(
     Paired(WholeNumber(1), Cell(False)), // Paired[WholeNumber, Cell[Bool]]
     MatchPair[Nothing, Nothing, WholeNumber, ValType, Nothing, Paired[WholeNumber, ValType]](Out(myChannel), Ignore()),
-    // todo why can the compiler not infer this type properly?
+    // todo why can the compiler not infer these type arguments properly?
   )
 
 def staticAndDynamicSendExample(using Context): Code[?] =
@@ -152,7 +152,7 @@ def hotSwappingExample(using Context): Code[?] =
 //    Inp(collectionChannel),
 //    UnAddElement(
 //      element = Out(Channel()),
-//      others = Match(
+//      others = Match3(
 //        pattern = Collected.None,
 //        alternative = Out(collectionChannel),
 //      )
