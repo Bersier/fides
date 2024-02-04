@@ -1,6 +1,6 @@
 package fides.syntax.values
 
-import fides.syntax.code.{Atom, ValQ}
+import fides.syntax.code.{Atom, ValQ, ValType}
 
 /**
   * A value that doesn't carry any information beyond causality
@@ -10,3 +10,8 @@ import fides.syntax.code.{Atom, ValQ}
   */
 case object Pulse extends Atom, ValQ[Pulse]
 type Pulse = Pulse.type
+
+/**
+  * Added mainly for convenience, so annotations and error messages can be readily readable.
+  */
+final case class Str(value: String) extends ValQ[Str], ValType

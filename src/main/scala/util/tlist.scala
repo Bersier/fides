@@ -1,10 +1,10 @@
 package util
 
-import annotation.targetName
-import collection.LinearSeq
-import compiletime.constValue
-import compiletime.ops.boolean.{&&, ||}
-import compiletime.ops.int.+
+import scala.annotation.targetName
+import scala.collection.LinearSeq
+import scala.compiletime.constValue
+import scala.compiletime.ops.boolean.{&&, ||}
+import scala.compiletime.ops.int.+
 
 sealed trait TList[+T] extends LinearSeq[T]:
   type Length <: Int

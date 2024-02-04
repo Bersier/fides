@@ -1,7 +1,6 @@
 package fides.concretesyntax
 
 import fides.concretesyntax.Precedences.Precedence
-import fides.syntax.code.ValType
 import fides.syntax.connectors.Match
 import util.TList
 

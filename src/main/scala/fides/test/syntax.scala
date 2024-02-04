@@ -4,7 +4,6 @@ import fides.syntax.code.*
 import fides.syntax.connectors.*
 import fides.syntax.identifiers.*
 import fides.syntax.meta.*
-import fides.syntax.processes.*
 import fides.syntax.signatures.*
 import fides.syntax.values.*
 
