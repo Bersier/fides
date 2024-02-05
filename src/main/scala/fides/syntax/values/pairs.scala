@@ -40,7 +40,7 @@ final case class MatchPair[
   first: Code[Ptrn[P1, N1]],
   second: Code[Ptrn[P2, N2]],
 )(using
-  (U & Paired[ValType, ValType]) <:< Paired[N1, N2], // Unification(U, Paired(N1, N2))
+  (U & Paired[ValType, ValType]) <:< Paired[N1, N2],
   Paired[P1, P2] <:< (L | Paired[Nothing, Nothing]),
 ) extends Ptrn[L, U]
 // todo we probably need sealed types for the compiler to be able to provide those implicits reliably

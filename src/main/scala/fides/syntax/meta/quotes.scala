@@ -49,6 +49,7 @@ final case class QuotedEscape[S <: CodeType](
   * Doesn't have a special meaning within [[Quote]]s.
   */
 final case class MatchEscape[S <: CodeType](code: Code[Ptrn[Quoted[S], Quoted[S]]]) extends Code[S]
+// todo lossy type
 
 /**
   * Allows matching a [[MatchEscape]](Matcher) within a [[MatchQuote]]. See also [[SignedMatcher]].
@@ -71,3 +72,4 @@ final case class Quote[S <: CodeType](code: Code[S]) extends Expr[Quoted[S]]
   * Code extractor.
   */
 final case class MatchQuote[S <: CodeType](code: Code[S]) extends Code[Ptrn[Quoted[S], ValType]]
+// todo lossy type

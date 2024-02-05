@@ -10,6 +10,7 @@ import scala.language.experimental.pureFunctions
   */
 trait Code[+S <: CodeType] private[syntax]()
 // todo add QuoteContext type parameter
+// todo CodePtrn, CodeExpr, CodeVal
 
 /**
   * Parent type of all the Scala types that represent the different types of possible Fides code.
@@ -26,6 +27,11 @@ trait ValType private[syntax]()
   */
 trait Process extends CodeType, Code[Process]
 
+// todo Polar[L <: Polarity, +P <: N, -N <: ValType]
+//  Is it an issue that Polar[+, P, T] doesn't make sense when T != ValType?
+//  And with this style, it is not possible to type e.g. UnWrap differently from Wrap.
+//  And look at previous attempt.
+
 /**
   * Fides code type for expressions. While expressions are really just a special type of process with a single output,
   * they behave differently from a syntactic point of view, as [where their only output goes] is not represented
@@ -41,6 +47,9 @@ trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
   *
   * Patterns do behave differently when they don't have connections: they may lead to a match failure. They are not
   * just syntactic sugar for single-input processes.
+  *
+  * @tparam P related to refutable patterns
+  * @tparam N related to non-refutable patterns
   */
 trait Ptrn[+P <: N, -N <: ValType] extends CodeType, Code[Ptrn[P, N]]
 
