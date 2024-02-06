@@ -2,16 +2,17 @@ package util
 
 import scala.annotation.targetName
 import scala.collection.LinearSeq
-import scala.compiletime.constValue
 import scala.compiletime.ops.boolean.{&&, ||}
 import scala.compiletime.ops.int.+
 
+
 sealed trait TList[+T] extends LinearSeq[T]:
   type Length <: Int
+  protected type TListL[U] = TList[U] { type Length = TList.this.Length }
   @targetName("cons") def ::[U >: T, H <: U](head: H): TList.Cons[U, H, this.type] = TList.Cons(head, this)
   override def map[U](f: T => U): TList[U] =
     throw new AssertionError("Implemented only to refine map's return type (otherwise, Scala won't allow it).")
-  // todo add type-safe zip, that doesn't silently ignore elements?
+  def safeZip[U](that: TListL[U]): TListL[(T, U)]
 
 object TList:
   case object Empty extends TList[Nothing]:
@@ -25,23 +26,27 @@ object TList:
     override def head: Nothing = throw new NoSuchElementException("head of empty list")
     override def tail: Nothing = throw new NoSuchElementException("tail of empty list")
     override def map[U](f: Nothing => U): this.type = this
+    def safeZip[U](that: TListL[U]): Empty = Empty
   type Empty = Empty.type
 
-  final case class Cons[+T, +H <: T, +Tail <: TList[T]](override val head: H, override val tail: Tail) extends TList[T]:
+  final case class Cons[+E, +H <: E, +Tail <: TList[E]](override val head: H, override val tail: Tail) extends TList[E]:
     type Length = tail.Length + 1
-    override inline def apply(i: Int): T = if i == 0 then head else tail(i - 1)
-    override def iterator: Iterator[T] = new Iterator[T]:
-      private var underlying: TList[T] = Cons.this
+    override inline def apply(i: Int): E = if i == 0 then head else tail(i - 1)
+    override def iterator: Iterator[E] = new Iterator[E]:
+      private var underlying: TList[E] = Cons.this
       override def hasNext: Boolean = underlying match
         case _: Empty   => false
         case Cons(_, _) => true
-      override def next: T = underlying match
+      override def next: E = underlying match
         case _: Empty   => throw new NoSuchElementException("next on empty iterator")
         case Cons(h, t) => underlying = t; h
     override def length: Length = (tail.length + 1).asInstanceOf[Length]
-    override def forall(p: T => Boolean): Boolean = p(head) && tail.forall(p)
+    override def forall(p: E => Boolean): Boolean = p(head) && tail.forall(p)
     override def isEmpty: false = false
-    override def map[U](f: T => U): TList[U] = Cons(f(head), tail.map(f))
+    override def map[U](f: E => U): TList[U] = Cons(f(head), tail.map(f))
+    def safeZip[U](other: TListL[U]): TListL[(E, U)] = other match
+      case Cons(h, t) => Cons((head, h), tail.safeZip(t.asInstanceOf[tail.TListL[U]]))
+      case _ => throw AssertionError("Impossible")
   end Cons
 end TList
 

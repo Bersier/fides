@@ -38,7 +38,7 @@ final case class Message[T <: ValType](contents: Code[Val[T]], recipient: Code[V
   * @param localIdentifiers names whose meaning is only valid within this scope
   * @param body the body of the scope, in which the replacements will take place
   */
-final case class Scope(localIdentifiers: Code[Args[Identifier]], body: Code[Process]) extends Process
+final case class Scope(localIdentifiers: Code[Args[Val[Identifier]]], body: Code[Process]) extends Process
 
 /**
   * Behaviorally equivalent to an infinite number of copies of the given body
