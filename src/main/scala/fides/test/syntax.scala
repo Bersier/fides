@@ -10,15 +10,16 @@ import fides.syntax.values.*
 import scala.collection.concurrent
 import scala.language.implicitConversions
 
+// todo syntax examples should go into test.syntax package
 @main def syntax(): Unit =
   println("Java version: " + System.getProperty("java.version"))
   println("Scala version: " + dotty.tools.dotc.config.Properties.simpleVersionString)
   given Context = new Context:
     override def prefix: String = ""
-    override val names: concurrent.Map[String, Identifier] = concurrent.TrieMap.empty
+    override val names: concurrent.Map[String, Location] = concurrent.TrieMap.empty
 
-  val posLoc = Inp(Channel[Bool]())
-  val negLoc = Out(Channel[Bool]())
+  val posLoc = Inp(InpChan[Bool]())
+  val negLoc = Out(OutChan[Bool]())
   val extractID = ExtractIdentifier(IdentifierKey())
   println(Sign(Pair(posLoc, extractID), IdentifierKey()))
   println(Sign(Pair(Identifier(), Identifier()), IdentifierKey()))
@@ -26,10 +27,10 @@ import scala.language.implicitConversions
   println(UnSign(negLoc, Ignore()))
   println(Sign(Wrap(posLoc), IdentifierKey()))
   println(UnSign(UnWrap(negLoc), Ignore()))
-  println(SignedMatcher(Identifier(), Channel()))
+  println(SignedMatcher(Identifier(), OutChan()))
   println(UnSign(UnWrap(negLoc), Escape(Quote(Ignore()))))
-  println(UnSign(UnWrap(negLoc), Out(Escape(Wrap(Channel[Identifier]())))))
-  println(UnSign(UnWrap(negLoc), Out(Escape(Inp[Channel[Identifier]](Channel())))))
+  println(UnSign(UnWrap(negLoc), Out(Escape(Wrap(OutChan[Identifier]())))))
+  println(UnSign(UnWrap(negLoc), Out(Escape(Inp[OutChan[Identifier]](Channel())))))
 
 
 

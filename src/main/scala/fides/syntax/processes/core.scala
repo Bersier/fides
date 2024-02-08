@@ -1,7 +1,7 @@
 package fides.syntax.processes
 
-import fides.syntax.code.{Code, Expr, Process, Val, ValType, Xctr}
-import fides.syntax.identifiers.{Identifier, InpChan, OutChan}
+import fides.syntax.code.{Code, Expr, Process, Val, ValType}
+import fides.syntax.identifiers.{Identifier, OutChan}
 import fides.syntax.meta.Args
 
 /**
@@ -14,9 +14,6 @@ import fides.syntax.meta.Args
   * @param recipient address of the recipient
   */
 final case class Send[T <: ValType](contents: Code[Expr[T]], recipient: Code[Expr[OutChan[T]]]) extends Process
-
-final case class Receive[T <: ValType](sender: Code[Expr[InpChan[T]]], contents: Code[Xctr[T]]) extends Process
-// todo delete
 
 /**
   * A message in transit

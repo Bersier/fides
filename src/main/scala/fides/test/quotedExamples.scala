@@ -10,7 +10,7 @@ import fides.syntax.values.*
 
 
 def quoteExample(using Context): Code[?] =
-  val channelC = Channel[Channel[Str]]()
+  val channelC = InpChan[OutChan[Str]]()
   Quote(
     Send(
       contents = Str("Hello World!"),
@@ -19,8 +19,8 @@ def quoteExample(using Context): Code[?] =
   )
 
 def unQuoteExample(using Context): Code[?] =
-  val channelS = Channel[Str]()
-  val channelQ = Channel[Quoted[Channel[Str]]]()
+  val channelS = OutChan[Str]()
+  val channelQ = OutChan[Quoted[OutChan[Str]]]()
   Forward(
     Quote(
       Send(
@@ -96,7 +96,7 @@ def matchEscapeProblem(using Context): Code[?] =
       Match(
         MatchQuote(
           SignedMatcher(
-            document = MatchEscape(UnWrap(Out(Channel[Pulse]()))), // should fail but it doesn't since out is an Xctr
+            document = MatchEscape(UnWrap(Out(OutChan[Pulse]()))), // should fail but it doesn't because of lossy typing
             signature = myChannel,
           )
         )
@@ -111,13 +111,13 @@ def matchEscapeMatcherExample(using Context): Code[?] =
     ),
     Match(
       MatchQuote(
-        MatchEscapeMatcher(Out(Channel[Quoted[WholeNumber]]())), // problem: it doesn't know the type for Quoted
+        MatchEscapeMatcher(Out(OutChan[Quoted[WholeNumber]]())), // problem: it doesn't know the type for Quoted
       ),
     )
   )
 
 def multiquoteExample(using Context): Code[?] =
-  val myIntChannel = Channel[WholeNumber]()
+  val myIntChannel = InpChan[WholeNumber]()
   Quote(
     Send(
       contents = Quote(
@@ -126,6 +126,6 @@ def multiquoteExample(using Context): Code[?] =
           Escape(Negate(WholeNumber(5)))
         )
       ),
-      recipient = Inp(Channel())
+      recipient = Inp(InpChan())
     )
   )

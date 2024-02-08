@@ -1,7 +1,7 @@
 package fides.syntax.meta
 
 import fides.syntax.code.{Code, Expr, Process}
-import fides.syntax.identifiers.{Context, Identifier}
+import fides.syntax.identifiers.{Context, Identifier, Location}
 import fides.syntax.signatures.Signed
 
 import scala.collection.concurrent
@@ -14,7 +14,7 @@ final case class Launch(code: Code[Expr[Quoted[Process]]]) extends Expr[Signed[Q
 final val launcher =
   given Context = new Context:
     override def prefix: String = ""
-    override val names: concurrent.Map[String, Identifier] = concurrent.TrieMap.empty
+    override val names: concurrent.Map[String, Location] = concurrent.TrieMap.empty
   Identifier("Launcher")
 
 /**

@@ -5,12 +5,15 @@ import fides.syntax.code.{Atom, Code, Expr, ValQ}
 /**
   * Integer values
   */
-sealed class WholeNumber(val value: BigInt) extends Atom, ValQ[WholeNumber]
+sealed class WholeNumber(val value: BigInt) extends Atom, ValQ[WholeNumber]:
+  override def toString: String = value.toString()
+end WholeNumber
 
 /**
   * Natural number values
   */
 final class NaturalNumber(value: BigInt) extends WholeNumber(value), ValQ[NaturalNumber]:
+  override def toString: String = value.toString()
   assert(value >= 0)
 end NaturalNumber
 

@@ -2,9 +2,6 @@ package fides.syntax.identifiers
 
 import fides.syntax.code.{Atom, Expr, ValQ}
 
-import java.util.concurrent.atomic.AtomicInteger
-import scala.language.experimental.pureFunctions
-
 // todo use context functions?
 
 /**
@@ -13,34 +10,11 @@ import scala.language.experimental.pureFunctions
   *
   * Identifiers are globally unique. Their names are just a convenient representation (that may or may not be unique).
   */
-open class Identifier protected(val name: String) extends Atom, ValQ[Identifier] derives CanEqual:
+open class Identifier protected(name: String) extends Atom, ValQ[Identifier], Location(name) derives CanEqual:
   override def toString: String = s"#$name"
 object Identifier:
-  def apply()(using Context): Identifier = from(constructor)
-
-  def apply(name: String)(using Context): Identifier = from(constructor, name)
-
-  private[identifiers] def from[I <: Identifier](constructor: String -> I)(using Context): I =
-    from(constructor, newName())
-
-  private[identifiers] def newName[I <: Identifier]() =
-    util.symbols(currentSymbolIndex.getAndIncrement()).toString
-
-  private[identifiers] def from[I <: Identifier](constructor: String -> I, name: String)(using Context): I =
-    val identifier = constructor(qualifiedName(name))
-    val previous   = summon[Context].names.putIfAbsent(name, identifier)
-    require(
-      requirement = previous.isEmpty,
-      message = s"$name is already used for ${previous.get.toString}_${previous.get.hashCode().toHexString}",
-    )
-    identifier
-
-  private def qualifiedName(name: String)(using Context): String =
-    val globalPrefix = Some(summon[Context].prefix).filter(_.nonEmpty).map(_ + ".").getOrElse("")
-    s"$globalPrefix$name"
-
-  private val currentSymbolIndex = AtomicInteger(0)
-  private val constructor: String -> Identifier = new Identifier(_)
+  def apply()(using Context): Identifier = Location.from(new Identifier(_))
+  def apply(name: String)(using Context): Identifier = Location.from(new Identifier(_), name)
 end Identifier
 // todo have more specific identifier types? Or user-defined ones?
 

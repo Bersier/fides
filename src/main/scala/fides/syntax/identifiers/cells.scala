@@ -21,34 +21,22 @@ final class Cell[T <: ValType : Tag] private(
   def valueType: Tag[T] = summon[Tag[T]]
 object Cell:
   def apply[T <: ValType](value: Code[Val[T]])(using Context, Tag[T]): Cell[T] =
-    Identifier.from(new Cell(value, _))
+    Location.from(new Cell(value, _))
   def apply[T <: ValType](value: Code[Val[T]], name: String)(using Context, Tag[T]): Cell[T] =
-    Identifier.from(new Cell(value, _), name)
+    Location.from(new Cell(value, _), name)
 end Cell
 // todo Cell as a process...
 
 /**
   * Reads the value contained in the cell once the trigger value is available.
   */
-final case class Read[T <: ValType](trigger: Code[Expr[Pulse]], iD: Code[Val[Cell[T]]]) extends Expr[T]:
-  override def toString: String =
-    given CanEqual[Code[Expr[Pulse]], Pulse] = CanEqual.derived
-    val prefix = Some(trigger).filter(_ != Pulse).map(t => s"$t; ").getOrElse("")
-    s"[$prefix${internalIDString(iD)}]"
-end Read
+final case class Read[T <: ValType](trigger: Code[Expr[Pulse]], iD: Code[Val[Cell[T]]]) extends Expr[T]
 // todo should dynamic reading and writing be allowed?
 
 /**
   * Unconditionally overwrites the value contained in the cell, and signals completion.
   */
-final case class Write[T <: ValType](signal: Code[Xctr[Pulse]], iD: Code[Val[Cell[T]]]) extends Xctr[T]:
-  override def toString: String =
-    given CanEqual[Pulse, Code[Expr[Pulse]]] = CanEqual.derived
-    val prefix = signal match
-      case Ignore() => ""
-      case _        => s"$signal"
-    s"[$prefix|${internalIDString(iD)}|]"
-end Write
+final case class Write[T <: ValType](signal: Code[Xctr[Pulse]], iD: Code[Val[Cell[T]]]) extends Xctr[T]
 
 /**
   * Atomically

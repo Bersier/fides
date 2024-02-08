@@ -11,13 +11,13 @@ sealed class IdentifierKey(name: String)(using Context) extends ValQ[IdentifierK
   lazy val identifier: Identifier = Identifier(name)
   override def toString: String = s"Key(${identifier.name})"
 object IdentifierKey:
-  def apply()(using Context): IdentifierKey = new IdentifierKey(Identifier.newName())
+  def apply()(using Context): IdentifierKey = new IdentifierKey(Location.newName())
 end IdentifierKey
 
 final class ChannelKey[T <: ValType : Tag](name: String)(using Context) extends IdentifierKey(""):
-  override lazy val identifier: Channel[T] = Channel(name)
+  override lazy val identifier: OutChan[T] = OutChan(Channel(name))
 object ChannelKey:
-  def apply[T <: ValType : Tag]()(using Context): ChannelKey[T] = new ChannelKey(Identifier.newName())
+  def apply[T <: ValType : Tag]()(using Context): ChannelKey[T] = new ChannelKey(Location.newName())
 end ChannelKey
 
 /**

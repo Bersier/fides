@@ -9,11 +9,11 @@ import fides.syntax.signatures.*
 import fides.syntax.values.*
 
 def outChanExample(using Context): Code[?] =
+  import scala.language.implicitConversions
   val channel = Channel[OutChan[Bool]]()
-  // Channel[ValType] <: OutChan[Bool]
   Concurrent(Args(
     Forward(
-      inp = Channel[ValType](),
+      inp = OutChan[ValType](),
       out = Out(channel),
     ),
     Forward(
@@ -23,14 +23,14 @@ def outChanExample(using Context): Code[?] =
   ))
 
 def unPairExample(using Context): Code[?] =
-  val myChannel = Channel[WholeNumber](name = "myChannel")
+  val myChannel = OutChan[WholeNumber](name = "myChannel")
   Forward(
     Paired(WholeNumber(1), Cell(False)),
     UnPair(Out(myChannel), Ignore()),
   )
 
 def unPairExample2(using Context): Code[?] =
-  val myChannel = Channel[WholeNumber](name = "myChannel")
+  val myChannel = OutChan[WholeNumber](name = "myChannel")
   Forward(
     Paired(WholeNumber(1), Cell(False)), // Paired[WholeNumber, Cell[Bool]]
     MatchPair[Nothing, Nothing, WholeNumber, ValType, Nothing, Paired[WholeNumber, ValType]](Out(myChannel), Ignore()),
@@ -38,8 +38,9 @@ def unPairExample2(using Context): Code[?] =
   )
 
 def staticAndDynamicSendExample(using Context): Code[?] =
-  val channel1  = Channel[Bool]()
-  val channel2  = Channel[Channel[Bool]]()
+  import scala.language.implicitConversions
+  val channel1  = OutChan[Bool]()
+  val channel2  = Channel[OutChan[Bool]]()
   Concurrent(
     Args(
       Forward(
@@ -54,10 +55,11 @@ def staticAndDynamicSendExample(using Context): Code[?] =
   )
 
 def unSignExample(using Context): Code[?] =
+  import scala.language.implicitConversions
   val myKey = ChannelKey[WholeNumber]()
   val myChannel = myKey.identifier
   val channelS = Channel[Signed[WholeNumber]]()
-  val channelI  = Channel[Identifier]()
+  val channelI  = OutChan[Identifier]()
   Concurrent(
     Args(
       Send(
@@ -78,15 +80,15 @@ def unSignExample(using Context): Code[?] =
   )
 
 def collectExample(using Context): Code[?] =
-  val sourceChannel = Channel[Bool]()
-  val sizeChannel = Channel[WholeNumber]()
+  val sourceChannel = InpChan[Bool]()
+  val sizeChannel = InpChan[WholeNumber]()
   Collect(
     elementSource = sourceChannel,
     size = Inp(sizeChannel),
   )
 
 def randomBitGeneratorExample(using Context): Code[?] =
-  val randomBitChannel = Channel[Bool]()
+  val randomBitChannel = OutChan[Bool]()
   Repeated(
     Forward(
       RandomBit(),
@@ -95,7 +97,7 @@ def randomBitGeneratorExample(using Context): Code[?] =
   )
 
 def serviceExample(using Context): Code[?] =
-  val addressChannel = Channel[Channel[Bool]]()
+  val addressChannel = InpChan[OutChan[Bool]]()
   Repeated(
     Send(
       contents = RandomBit(),
@@ -107,8 +109,8 @@ def serviceExample(using Context): Code[?] =
   This example simulates if-then-else
   */
 def switchExample(using Context): Code[?] =
-  val channel1 = Channel[Pulse]()
-  val channel2 = Channel[Pulse]()
+  val channel1 = OutChan[Pulse]()
+  val channel2 = OutChan[Pulse]()
   Switch(
     input = Pulse,
     testee = True,
