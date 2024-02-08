@@ -1,21 +1,15 @@
 package fides.syntax.meta
 
 import fides.syntax.code.{Code, Expr, Process}
-import fides.syntax.identifiers.{Context, Identifier, Location}
+import fides.syntax.identifiers.Identifier
 import fides.syntax.signatures.Signed
-
-import scala.collection.concurrent
 
 /**
   * Launches the inputted code as a new process, and outputs a signed value of the code, confirming the launch.
   */
 final case class Launch(code: Code[Expr[Quoted[Process]]]) extends Expr[Signed[Quoted[Process]]]
 
-final val launcher =
-  given Context = new Context:
-    override def prefix: String = ""
-    override val names: concurrent.Map[String, Location] = concurrent.TrieMap.empty
-  Identifier("Launcher")
+case object Launcher extends Identifier("Launcher")
 
 /**
   * Launches a new sandboxed process, and outputs a signed value of the monitor's code, confirming the launch.

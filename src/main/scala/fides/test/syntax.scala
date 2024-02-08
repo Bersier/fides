@@ -16,7 +16,6 @@ import scala.language.implicitConversions
   println("Scala version: " + dotty.tools.dotc.config.Properties.simpleVersionString)
   given Context = new Context:
     override def prefix: String = ""
-    override val names: concurrent.Map[String, Location] = concurrent.TrieMap.empty
 
   val posLoc = Inp(InpChan[Bool]())
   val negLoc = Out(OutChan[Bool]())
