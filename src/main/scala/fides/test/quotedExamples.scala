@@ -48,7 +48,7 @@ def signedMatcherExample(using Context): Code[?] =
     Quote(
       Escape(
         Sign(
-          contents = WholeNumber(4),
+          document = WholeNumber(4),
           signatory = myKey,
         )
       )
@@ -67,8 +67,8 @@ def signedMatcherExample(using Context): Code[?] =
           MatchEscape(
             MatchWrap(
               MatchSign(
-                contents = Out(myChannel),
-                signatory = myChannel,
+                document = Out(myChannel),
+                signature = myChannel,
               )
             )
           )
@@ -87,7 +87,7 @@ def matchEscapeProblem(using Context): Code[?] =
     Quote(
       Escape(
         Sign(
-          contents = WholeNumber(4),
+          document = WholeNumber(4),
           signatory = myKey,
         )
       )

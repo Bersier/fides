@@ -43,3 +43,4 @@ final case class UnZipNonEmpty[S <: CodeType](
 final case class MatchZip[S <: CodeType](
   pieces: Code[Ptrn[Collected[Quoted[S]], Collected[Quoted[S]]]],
 ) extends Ptrn[Quoted[Args[S]], Quoted[Args[S]]]
+// todo should this really be allowed?

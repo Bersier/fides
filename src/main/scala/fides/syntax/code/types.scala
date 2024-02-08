@@ -48,8 +48,10 @@ trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
   * Patterns do behave differently when they don't have connections: they may lead to a match failure. They are not
   * just syntactic sugar for single-input processes.
   *
-  * @tparam P related to refutable patterns
-  * @tparam N related to non-refutable patterns
+  * Given a value v, if its singleton type is a supertype of [[P]], this pattern will match it.
+  *
+  * @tparam N all values of that type are allowed to be matched against this pattern
+  * @tparam P the type of the pattern, when interpreted as a value to be matched against
   */
 trait Ptrn[+P <: N, -N <: ValType] extends CodeType, Code[Ptrn[P, N]]
 

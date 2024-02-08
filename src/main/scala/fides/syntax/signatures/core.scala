@@ -15,8 +15,10 @@ final case class Signed[+T <: ValType] private(document: Val[T], signature: Iden
 object Signed:
   /**
     * Signed values can only be created from keys, but only reveal the corresponding identifier.
+    *
+    * todo This is not meant to be used as part of the syntax...
     */
-  def apply[T <: ValType](document: Val[T], signatory: IdentifierKey): Signed[T] =
+  def newInstance[T <: ValType](document: Val[T], signatory: IdentifierKey): Signed[T] =
     new Signed(document, signatory.identifier)
 end Signed
 
@@ -44,25 +46,26 @@ final case class SignedMatcher[T <: ValType](
 // todo delete? Can it always be simulated with MatchEscape(MatchWrap(MatchSign(...)))?
 
 /**
-  * Primitive to sign messages
+  * Primitive to sign values
   */
 final case class Sign[T <: ValType](
-  contents: Code[Expr[T]],
+  document: Code[Expr[T]],
   signatory: Code[Expr[IdentifierKey]],
 ) extends Expr[Signed[T]]
 
 /**
-  * Primitive to unsign messages
+  * Primitive to unsign values
   */
 final case class UnSign[T <: ValType](
-  contents: Code[Xctr[T]],
-  signatory: Code[Xctr[Identifier]],
+  document: Code[Xctr[T]],
+  signature: Code[Xctr[Identifier]],
 ) extends Xctr[Signed[T]]
 
 /**
-  * Primitive to match messages.
+  * Primitive to match signed values
   */
 final case class MatchSign[P <: N, N <: ValType](
-  contents: Code[Ptrn[P, N]],
-  signatory: Code[Ptrn[Identifier, Identifier]],
+  document: Code[Ptrn[P, N]],
+  signature: Code[Ptrn[Identifier, Identifier]],
 ) extends Ptrn[Signed[P], Signed[N]]
+// todo should this really be allowed?

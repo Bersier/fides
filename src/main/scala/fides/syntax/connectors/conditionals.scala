@@ -9,11 +9,15 @@ import fides.syntax.values.Collected
   *
   * Unfortunately, it doesn't seem possible to refine the type of [[alternative]] in Scala.
   */
-final case class Match[T <: ValType](
-  pattern: Code[Ptrn[T, T]],
-  matchedValue: Code[Xctr[T]] = Ignore(),
-  alternative: Code[Xctr[T]] = Ignore(),
-) extends Xctr[T]
+final case class Match[T <: ValType](pattern: Code[Ptrn[T, T]], alternative: Code[Xctr[T]] = Ignore()) extends Xctr[T]
+
+/**
+  * Upon matching, copies the matched value to [[matchedValue]].
+  */
+final case class CopyMatch[P <: N, N <: ValType](
+  pattern: Code[Ptrn[P, N]],
+  matchedValue: Code[Xctr[N]],
+) extends Ptrn[P, N]
 
 final case class Match2[T <: ValType, A <: T](
   pattern: Code[Ptrn[T, T]],

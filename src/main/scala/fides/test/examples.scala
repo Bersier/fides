@@ -62,7 +62,7 @@ def unSignExample(using Context): Code[?] =
     Args(
       Send(
         contents = Sign(
-          contents = WholeNumber(4),
+          document = WholeNumber(4),
           signatory = myKey,
         ),
         recipient = channelS,
@@ -70,8 +70,8 @@ def unSignExample(using Context): Code[?] =
       Forward(
         inp = Inp(channelS),
         out = UnSign(
-          contents = Out(myChannel),
-          signatory = Out(channelI),
+          document = Out(myChannel),
+          signature = Out(channelI),
         ),
       )
     )
