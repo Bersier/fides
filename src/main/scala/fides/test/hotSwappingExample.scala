@@ -9,7 +9,7 @@ import fides.syntax.processes.*
 import fides.syntax.values.*
 import izumi.reflect.Tag
   
-def randomBitService(channel: Channel[Channel[Bool]])(using Context): Code[Process] =
+def randomBitService(channel: InpChan[OutChan[Bool]])(using Context): Code[Process] =
   Repeated(
     Send(
       contents = RandomBit(),
@@ -18,7 +18,7 @@ def randomBitService(channel: Channel[Channel[Bool]])(using Context): Code[Proce
   )
 
 def launchExample(using Context): Code[?] =
-  val serviceChannel = Channel[Channel[Bool]]()
+  val serviceChannel = InpChan[OutChan[Bool]]()
   Concurrent(Args(
     Forward(
       Launch(code = Quote(randomBitService(serviceChannel))), 
@@ -28,6 +28,7 @@ def launchExample(using Context): Code[?] =
 
 def ifThenElse(testee: Code[Expr[Bool]], trueBranch: Code[Process], falseBranch: Code[Process])
   (using Context): Code[?] =
+  import scala.language.implicitConversions
   val trueSignal = Channel[Pulse]()
   val falseSignal = Channel[Pulse]()
   Concurrent(Args(
@@ -50,6 +51,7 @@ def ifThenElse(testee: Code[Expr[Bool]], trueBranch: Code[Process], falseBranch:
   ))
   
 def dynamicCollection[T <: ValType : Tag](put: InpChan[T], pop: InpChan[OutChan[T]])(using Context): Code[Process] =
+  import scala.language.implicitConversions
   val element = Channel[T]()
   val signal = Channel[T]()
   Repeated(

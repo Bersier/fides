@@ -10,7 +10,7 @@ import fides.syntax.values.*
 
 
 def quoteExample(using Context): Code[?] =
-  val channelC = Channel[Channel[Str]]()
+  val channelC = InpChan[OutChan[Str]]()
   Quote(
     Send(
       contents = Str("Hello World!"),
@@ -19,6 +19,7 @@ def quoteExample(using Context): Code[?] =
   )
 
 def unQuoteExample(using Context): Code[?] =
+  import scala.language.implicitConversions
   val channelS = Channel[Str]()
   val channelQ = Channel[Quoted[Channel[Str]]]()
   Forward(
@@ -65,10 +66,7 @@ def simulateSignedMatcherExample(using Context): Code[?] =
       MatchQuote(
         MatchEscape(
           MatchWrap(
-            MatchSign(
-              contents = Out(myChannel),
-              signatory = myChannel,
-            )
+            MatchSign(Out(myChannel), signature = myChannel)
           )
         )
       )
@@ -76,6 +74,7 @@ def simulateSignedMatcherExample(using Context): Code[?] =
   )
 
 def simulateSignedMatcherExample2(using Context): Code[?] =
+  import scala.language.implicitConversions
   val myKey = ChannelKey[WholeNumber]()
   val myChannel = myKey.identifier
   val matchSignChannel = Channel[Signed[WholeNumber]]()
@@ -89,10 +88,7 @@ def simulateSignedMatcherExample2(using Context): Code[?] =
     Forward(
       Inp(matchSignChannel),
       Match(
-        MatchSign(
-          contents = Out(myChannel),
-          signatory = myChannel,
-        ),
+        MatchSign(Out(myChannel), myChannel),
       ),
     ),
   ))
@@ -107,17 +103,14 @@ def matchEscapeProblem(using Context): Code[?] =
   Spread(
     Quote(
       Escape(
-        Sign(
-          contents = WholeNumber(4),
-          signatory = myKey,
-        )
+        Sign(WholeNumber(4), myKey)
       )
     ),
     Args(
       Match(
         MatchQuote(
           SignedMatcher(
-            document = MatchEscape(UnWrap(Out(Channel[Pulse]()))), // should fail but it doesn't since out is an Xctr
+            document = MatchEscape(UnWrap(Out(OutChan[Pulse]()))), // should fail but it doesn't since out is an Xctr
             signature = myChannel,
           )
         )
@@ -132,13 +125,13 @@ def matchEscapeMatcherExample(using Context): Code[?] =
     ),
     Match(
       MatchQuote(
-        MatchEscapeMatcher(Out(Channel[Quoted[WholeNumber]]())), // problem: it doesn't know the type for Quoted
+        MatchEscapeMatcher(Out(OutChan[Quoted[WholeNumber]]())), // problem: it doesn't know the type for Quoted
       ),
     )
   )
 
 def multiquoteExample(using Context): Code[?] =
-  val myIntChannel = Channel[WholeNumber]()
+  val myIntChannel = InpChan[WholeNumber]()
   Quote(
     Send(
       contents = Quote(
@@ -147,6 +140,6 @@ def multiquoteExample(using Context): Code[?] =
           Escape(Negate(WholeNumber(5)))
         )
       ),
-      recipient = Inp(Channel())
+      recipient = Inp(InpChan())
     )
   )
