@@ -2,18 +2,21 @@ package fides.test
 
 import fides.syntax.code.*
 import fides.syntax.connectors.*
+import fides.syntax.control.*
 import fides.syntax.identifiers.*
 import fides.syntax.meta.*
 import fides.syntax.processes.*
 import fides.syntax.signatures.*
 import fides.syntax.values.*
 
+import java.util
+
 def outChanExample(using Context): Code[?] =
-  import scala.language.implicitConversions
   val channel = Channel[OutChan[Bool]]()
+  // Channel[ValType] <: OutChan[Bool]
   Concurrent(Args(
     Forward(
-      inp = OutChan[ValType](),
+      inp = Channel[ValType](),
       out = Out(channel),
     ),
     Forward(
@@ -23,14 +26,14 @@ def outChanExample(using Context): Code[?] =
   ))
 
 def unPairExample(using Context): Code[?] =
-  val myChannel = OutChan[WholeNumber](name = "myChannel")
+  val myChannel = Channel[WholeNumber](name = "myChannel")
   Forward(
     Paired(WholeNumber(1), Cell(False)),
     UnPair(Out(myChannel), Ignore()),
   )
 
 def unPairExample2(using Context): Code[?] =
-  val myChannel = OutChan[WholeNumber](name = "myChannel")
+  val myChannel = Channel[WholeNumber](name = "myChannel")
   Forward(
     Paired(WholeNumber(1), Cell(False)), // Paired[WholeNumber, Cell[Bool]]
     MatchPair[Nothing, Nothing, WholeNumber, ValType, Nothing, Paired[WholeNumber, ValType]](Out(myChannel), Ignore()),
@@ -38,9 +41,8 @@ def unPairExample2(using Context): Code[?] =
   )
 
 def staticAndDynamicSendExample(using Context): Code[?] =
-  import scala.language.implicitConversions
-  val channel1  = OutChan[Bool]()
-  val channel2  = Channel[OutChan[Bool]]()
+  val channel1  = Channel[Bool]()
+  val channel2  = Channel[Channel[Bool]]()
   Concurrent(
     Args(
       Forward(
@@ -55,16 +57,15 @@ def staticAndDynamicSendExample(using Context): Code[?] =
   )
 
 def unSignExample(using Context): Code[?] =
-  import scala.language.implicitConversions
   val myKey = ChannelKey[WholeNumber]()
   val myChannel = myKey.identifier
   val channelS = Channel[Signed[WholeNumber]]()
-  val channelI  = OutChan[Identifier]()
+  val channelI  = Channel[Identifier]()
   Concurrent(
     Args(
       Send(
         contents = Sign(
-          document = WholeNumber(4),
+          contents = WholeNumber(4),
           signatory = myKey,
         ),
         recipient = channelS,
@@ -72,62 +73,26 @@ def unSignExample(using Context): Code[?] =
       Forward(
         inp = Inp(channelS),
         out = UnSign(
-          document = Out(myChannel),
-          signature = Out(channelI),
+          contents = Out(myChannel),
+          signatory = Out(channelI),
         ),
       )
     )
   )
 
 def collectExample(using Context): Code[?] =
-  val sourceChannel = InpChan[Bool]()
-  val sizeChannel = InpChan[WholeNumber]()
+  val sourceChannel = Channel[Bool]()
+  val sizeChannel = Channel[WholeNumber]()
   Collect(
     elementSource = sourceChannel,
     size = Inp(sizeChannel),
   )
 
-def randomBitGeneratorExample(using Context): Code[?] =
-  val randomBitChannel = OutChan[Bool]()
-  Repeated(
-    Forward(
-      RandomBit(),
-      Out(randomBitChannel)
-    )
+def patternMeaningExample(pattern: Code[Ptrn[Atom, ValType]])(using Context): Code[?] =
+  Forward[Bool](
+    Inp(Channel[Bool]()),
+    Match[Atom](pattern),
   )
-
-def serviceExample(using Context): Code[?] =
-  val addressChannel = InpChan[OutChan[Bool]]()
-  Repeated(
-    Send(
-      contents = RandomBit(),
-      recipient = Inp(addressChannel)
-    )
-  )
-
-/**
-  This example simulates if-then-else
-  */
-def switchExample(using Context): Code[?] =
-  val channel1 = OutChan[Pulse]()
-  val channel2 = OutChan[Pulse]()
-  Switch(
-    input = Pulse,
-    testee = True,
-    cases = Args(
-      Case(
-        testValue = True,
-        extractor = Out(channel1)
-      ),
-      Case(
-        testValue = False,
-        extractor = Out(channel2)
-      )
-    )
-  )
-
-def hotSwappingExample(using Context): Code[?] =
-  ???
 
 //def loopExample(using Context): Code[?] =
 //  val collectionChannel = Channel[Collected.Some[WholeNumber]]()

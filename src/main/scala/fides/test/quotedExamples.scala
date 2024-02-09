@@ -10,7 +10,7 @@ import fides.syntax.values.*
 
 
 def quoteExample(using Context): Code[?] =
-  val channelC = InpChan[OutChan[Str]]()
+  val channelC = Channel[Channel[Str]]()
   Quote(
     Send(
       contents = Str("Hello World!"),
@@ -19,8 +19,8 @@ def quoteExample(using Context): Code[?] =
   )
 
 def unQuoteExample(using Context): Code[?] =
-  val channelS = OutChan[Str]()
-  val channelQ = OutChan[Quoted[OutChan[Str]]]()
+  val channelS = Channel[Str]()
+  val channelQ = Channel[Quoted[Channel[Str]]]()
   Forward(
     Quote(
       Send(
@@ -44,38 +44,59 @@ def unQuoteExample(using Context): Code[?] =
 def signedMatcherExample(using Context): Code[?] =
   val myKey     = ChannelKey[WholeNumber]()
   val myChannel = myKey.identifier
-  Spread(
-    Quote(
-      Escape(
-        Sign(
-          document = WholeNumber(4),
-          signatory = myKey,
+  Forward(
+    Quote(Escape(Sign(WholeNumber(4), myKey))),
+    Match(
+      MatchQuote(
+        SignedMatcher(
+          document = MatchEscape(UnWrap(Out(myChannel))),
+          signature = myChannel,
         )
       )
-    ),
-    Args(
-      Match(
-        MatchQuote(
-          SignedMatcher(
-            document = MatchEscape(UnWrap(Out(myChannel))),
-            signature = myChannel,
-          )
-        )
-      ),
-      Match(
-        MatchQuote(
-          MatchEscape(
-            MatchWrap(
-              MatchSign(
-                document = Out(myChannel),
-                signature = myChannel,
-              )
+    )
+  )
+
+def simulateSignedMatcherExample(using Context): Code[?] =
+  val myKey = ChannelKey[WholeNumber]()
+  val myChannel = myKey.identifier
+  Forward(
+    Quote(Escape(Sign(WholeNumber(4), myKey))),
+    Match(
+      MatchQuote(
+        MatchEscape(
+          MatchWrap(
+            MatchSign(
+              contents = Out(myChannel),
+              signatory = myChannel,
             )
           )
         )
-      ),
+      )
     )
   )
+
+def simulateSignedMatcherExample2(using Context): Code[?] =
+  val myKey = ChannelKey[WholeNumber]()
+  val myChannel = myKey.identifier
+  val matchSignChannel = Channel[Signed[WholeNumber]]()
+  Concurrent(Args(
+    Forward(
+      Quote(Escape(Sign(WholeNumber(4), myKey))),
+      Match(
+        MatchQuote(MatchEscape(UnWrap(Out(matchSignChannel))))
+      ),
+    ),
+    Forward(
+      Inp(matchSignChannel),
+      Match(
+        MatchSign(
+          contents = Out(myChannel),
+          signatory = myChannel,
+        ),
+      ),
+    ),
+  ))
+
 
 /**
   * There is a problem with [[MatchEscape]] that the type matched is not tracked then a wrong type can be used in the code
@@ -87,7 +108,7 @@ def matchEscapeProblem(using Context): Code[?] =
     Quote(
       Escape(
         Sign(
-          document = WholeNumber(4),
+          contents = WholeNumber(4),
           signatory = myKey,
         )
       )
@@ -96,7 +117,7 @@ def matchEscapeProblem(using Context): Code[?] =
       Match(
         MatchQuote(
           SignedMatcher(
-            document = MatchEscape(UnWrap(Out(OutChan[Pulse]()))), // should fail but it doesn't because of lossy typing
+            document = MatchEscape(UnWrap(Out(Channel[Pulse]()))), // should fail but it doesn't since out is an Xctr
             signature = myChannel,
           )
         )
@@ -111,13 +132,13 @@ def matchEscapeMatcherExample(using Context): Code[?] =
     ),
     Match(
       MatchQuote(
-        MatchEscapeMatcher(Out(OutChan[Quoted[WholeNumber]]())), // problem: it doesn't know the type for Quoted
+        MatchEscapeMatcher(Out(Channel[Quoted[WholeNumber]]())), // problem: it doesn't know the type for Quoted
       ),
     )
   )
 
 def multiquoteExample(using Context): Code[?] =
-  val myIntChannel = InpChan[WholeNumber]()
+  val myIntChannel = Channel[WholeNumber]()
   Quote(
     Send(
       contents = Quote(
@@ -126,6 +147,6 @@ def multiquoteExample(using Context): Code[?] =
           Escape(Negate(WholeNumber(5)))
         )
       ),
-      recipient = Inp(InpChan())
+      recipient = Inp(Channel())
     )
   )
