@@ -5,9 +5,14 @@ import fides.syntax.identifiers.Identifier
 import fides.syntax.signatures.Signed
 
 /**
-  * Launches the inputted code as a new process, and outputs a signed value of the code, confirming the launch.
+  * Launches [[code]] as a new process, and outputs a signed value of the code, confirming the launch.
+  *
+  * In the code, all the the [[Channel]]s used in [[InpChan]]s undergo automatic renaming.
+  * The new names are visible in the outputted code certificate.
   */
 final case class Launch(code: Code[Expr[Quoted[Process]]]) extends Expr[Signed[Quoted[Process]]]
+// todo having to look at the code certificate to find the new names is not convenient...
+//  should the Launcher additionally output a list of renamings?
 
 case object Launcher extends Identifier("Launcher")
 

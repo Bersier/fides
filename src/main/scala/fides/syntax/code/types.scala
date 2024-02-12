@@ -30,7 +30,6 @@ trait Process extends CodeType, Code[Process]
 // todo Polar[L <: Polarity, +P <: N, -N <: ValType]
 //  Is it an issue that Polar[+, P, T] doesn't make sense when T != ValType?
 //  And with this style, it is not possible to type e.g. UnWrap differently from Wrap.
-//  And look at previous attempt.
 
 /**
   * Fides code type for expressions. While expressions are really just a special type of process with a single output,
