@@ -2,6 +2,7 @@ package fides.test
 
 import fides.syntax.code.*
 import fides.syntax.connectors.*
+import fides.syntax.control.*
 import fides.syntax.identifiers.*
 import fides.syntax.meta.*
 import fides.syntax.processes.*
@@ -93,6 +94,48 @@ def patternMeaningExample(pattern: Code[Ptrn[Atom, ValType]])(using Context): Co
     Inp(Channel[Bool]()),
     Match[Atom](pattern),
   )
+
+def ifThenElse(testee: Code[Expr[Bool]], trueBranch: Code[Process], falseBranch: Code[Process])
+  (using Context): Code[Process] =
+  import scala.language.implicitConversions
+  val trueSignal = Channel[Pulse]()
+  val falseSignal = Channel[Pulse]()
+  Concurrent(Args(
+    Switch(
+      input = Pulse,
+      testee = testee,
+      cases = Args(
+        Case(
+          testValue = True,
+          extractor = Out(trueSignal)
+        ),
+        Case(
+          testValue = False,
+          extractor = Out(falseSignal)
+        )
+      )
+    ),
+    OnHold(startSignal = Inp(trueSignal), body = trueBranch),
+    OnHold(startSignal = Inp(falseSignal), body = falseBranch),
+  ))
+
+def ifTrue(testee: Code[Expr[Bool]], code: Code[Process])
+  (using Context): Code[Process] =
+  import scala.language.implicitConversions
+  val signal = Channel[Pulse]()
+  Concurrent(Args(
+    Switch(
+      input = Pulse,
+      testee = testee,
+      cases = Args(
+        Case(
+          testValue = True,
+          extractor = Out(signal)
+        )
+      )
+    ),
+    OnHold(Inp(signal), code)
+  ))
 
 //def loopExample(using Context): Code[?] =
 //  val collectionChannel = Channel[Collected.Some[WholeNumber]]()
