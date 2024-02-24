@@ -33,6 +33,8 @@ def unPairExample2(using Context): Code[?] =
   val myChannel = OutChan[WholeNumber](name = "myChannel")
   Forward(
     Paired(WholeNumber(1), Cell(False)), // Paired[WholeNumber, Cell[Bool]]
+    //matchPair[Nothing](Out(myChannel), Ignore()), // todo delete
+    //matchPair2()[Nothing](Out(myChannel), Ignore()), // todo delete
     MatchPair[Nothing, Nothing, WholeNumber, ValType, Nothing, Paired[WholeNumber, ValType]](Out(myChannel), Ignore()),
     // todo why can the compiler not infer these type arguments properly?
   )

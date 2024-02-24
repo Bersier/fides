@@ -26,6 +26,51 @@ final case class UnPair[T1 <: ValType, T2 <: ValType](
   second: Code[Xctr[T2]],
 ) extends Xctr[Paired[T1, T2]]
 
+// todo delete
+def matchPair2[
+  P1 <: N1,
+  P2 <: N2,
+  N1 <: ValType,
+  N2 <: ValType,
+  U >: Paired[N1, N2] <: ValType,
+](): [L <: Paired[P1, P2]] => (
+  Paired[P1, P2] <:< (L | Paired[Nothing, Nothing]),
+  (U & Paired[ValType, ValType]) <:< Paired[N1, N2],
+) ?=> (Code[Ptrn[P1, N1]], Code[Ptrn[P2, N2]]) => Ptrn[L, U] = [L <: Paired[P1, P2]] => (
+  lP: Paired[P1, P2] <:< (L | Paired[Nothing, Nothing]),
+  uP: (U & Paired[ValType, ValType]) <:< Paired[N1, N2],
+) ?=> (t1: Code[Ptrn[P1, N1]], t2: Code[Ptrn[P2, N2]]) => MatchPair[P1, P2, N1, N2, L, U](t1, t2)
+
+// todo delete
+//def matchPair[L <: ValType]: [
+//  P1 <: N1,
+//  P2 <: N2,
+//  N1 <: ValType,
+//  N2 <: ValType,
+//  U >: Paired[N1, N2] | L <: ValType,
+//] => (
+//  Paired[P1, P2] <:< (L | Paired[Nothing, Nothing]),
+//  (U & Paired[ValType, ValType]) <:< Paired[N1, N2],
+//  L <:< Paired[P1, P2],
+//) ?=> (Code[Ptrn[P1, N1]], Code[Ptrn[P2, N2]]) => Ptrn[L, U] = [
+//  P1 <: N1,
+//  P2 <: N2,
+//  N1 <: ValType,
+//  N2 <: ValType,
+//  U >: Paired[N1, N2] | L  <: ValType,
+//] => (
+//  lP: Paired[P1, P2] <:< (L | Paired[Nothing, Nothing]),
+//  uP: (U & Paired[ValType, ValType]) <:< Paired[N1, N2],
+//  lQ: L <:< Paired[P1, P2],
+//) ?=> (t1: Code[Ptrn[P1, N1]], t2: Code[Ptrn[P2, N2]]) => MatchPair[
+//  P1,
+//  P2,
+//  N1,
+//  N2,
+//  L,
+//  U,
+//](t1, t2)
+
 /**
   * Pair pattern.
   */
@@ -40,8 +85,8 @@ final case class MatchPair[
   first: Code[Ptrn[P1, N1]],
   second: Code[Ptrn[P2, N2]],
 )(using
-  (U & Paired[ValType, ValType]) <:< Paired[N1, N2],
   Paired[P1, P2] <:< (L | Paired[Nothing, Nothing]),
+  (U & Paired[ValType, ValType]) <:< Paired[N1, N2],
 ) extends Ptrn[L, U]
 // todo we probably need sealed types for the compiler to be able to provide those implicits reliably
 

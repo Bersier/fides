@@ -4,6 +4,8 @@ import fides.syntax.identifiers.Identifier
 import fides.syntax.meta.Args
 import util.TList
 
+// todo use lazy HOAS approach?
+
 // todo add way to define custom Expr, Xctr, ...? As some light syntactic sugar?
 //  Make the right abstraction accessible?
 //  Static (higher-order) code functions
