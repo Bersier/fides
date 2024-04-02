@@ -29,12 +29,16 @@ def unPairExample(using Context): Code[?] =
     UnPair(Out(myChannel), Ignore()),
   )
 
+/**
+  * See https://github.com/scala/scala3/issues/19610 as to why the type arguments need to be specified explicitly.
+  * See also
+  * docs.google.com/document/d/1dRY4EBGkJ8NSgq6xK_2lBz1yUl4c--4kSRD377TXEXg/edit#heading=h.7p6a1h1490aw
+  */
 def unPairExample2(using Context): Code[?] =
   val myChannel = OutChan[WholeNumber](name = "myChannel")
   Forward(
     Paired(WholeNumber(1), Cell(False)), // Paired[WholeNumber, Cell[Bool]]
     MatchPair[Nothing, Nothing, WholeNumber, ValType, Nothing, Paired[WholeNumber, ValType]](Out(myChannel), Ignore()),
-    // todo why can the compiler not infer these type arguments properly?
   )
 
 def staticAndDynamicSendExample(using Context): Code[?] =
@@ -147,6 +151,7 @@ def hotSwappingExample(using Context): Code[?] =
 // todo Try to figure out why this example doesn't work even when using
 //  1. Match2 and Collected2
 //  2. Match3 and Collected
+//  (See also github.com/scala/scala3/issues/19607, and possibly github.com/scala/scala3/issues/19611)
 //def loopExample2(using Context): Code[?] =
 //  val collectionChannel = Channel[Collected.Some[WholeNumber]]()
 //  val collectionChannel2 = Channel[Collected[WholeNumber]]()

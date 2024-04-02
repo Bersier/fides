@@ -3,20 +3,14 @@ package fides.syntax.meta
 import fides.syntax.code.{Code, CodeType, Expr, Ptrn, Val, ValType}
 import fides.syntax.values.NaturalNumber
 
-// todo could escaped Quoted of vals be automatially unquoted? Currently, we auto-quote ValQs, but not the other way
-//  around. This leads to confusing asymmetric code. We should either have both, or none.
-// todo could an Xctr be in a position where it could fail in a pattern? It shouldn't, right? For example, in a
-//  MatchQuote, an Escape could contain an Out(chanA), where there is no way for the type-checker to know that the
-//  passed value will not fit the type expected by chanA...
-
 /**
   * Code as value, used for metaprogramming
   */
 trait Quoted[+S <: CodeType] private[syntax]() extends Val[Quoted[S]], ValType:
   def code: Code[S]
 object Quoted:
-  def apply[S <: CodeType](`$code`: Code[S]): Quoted[S] = new Quoted[S]():
-    val code: Code[S] = `$code`
+  def apply[S <: CodeType](codeParam: Code[S]): Quoted[S] = new Quoted[S]():
+    val code: Code[S] = codeParam
     override def toString: String = s"Quoted($code)"
 end Quoted
 

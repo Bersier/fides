@@ -25,13 +25,11 @@ object Cell:
   def apply[T <: ValType](value: Code[Val[T]], name: String)(using Context, Tag[T]): Cell[T] =
     Location.from(new Cell(value, _), name)
 end Cell
-// todo Cell as a process...
 
 /**
   * Reads the value contained in the cell once the trigger value is available.
   */
 final case class Read[T <: ValType](trigger: Code[Expr[Pulse]], iD: Code[Val[Cell[T]]]) extends Expr[T]
-// todo should dynamic reading and writing be allowed?
 
 /**
   * Unconditionally overwrites the value contained in the cell, and signals completion.

@@ -78,6 +78,7 @@ trait Val[+T <: ValType] extends Expr[T], Ptrn[T, ValType], Code[Val[T]]
 transparent trait ValQ[+T <: ValType] extends Quoted[ValQ[T]], Val[T], Code[ValQ[T]]:
   final def code: ValQ[T] = this
 end ValQ
+// todo delete
 
 trait Atom extends ValType
 

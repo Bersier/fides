@@ -16,7 +16,6 @@ object Identifier:
   def apply()(using Context): Identifier = Location.from(new Identifier(_))
   def apply(name: String)(using Context): Identifier = Location.from(new Identifier(_), name)
 end Identifier
-// todo have more specific identifier types? Or user-defined ones?
 
 /**
   * Outputs a new identifier. Can be simulated with a scope with one placeholder. Added for convenience.
