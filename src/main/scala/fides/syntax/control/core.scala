@@ -1,10 +1,10 @@
 package fides.syntax.control
 
-import fides.syntax.code.{Atom, Code, Expr, Process, Val, ValQ, ValType, Xctr}
+import fides.syntax.code.{Atom, Code, Expr, Process, Val, ValType, Xctr}
 import fides.syntax.identifiers.{Cell, OutChan}
 import fides.syntax.values.{Bool, Pulse}
 
-sealed trait Order extends Atom, ValQ[Order]
+sealed trait Order extends Atom, Val[Order]
 case object Kill extends Order
 case object Pause extends Order
 case object Start extends Order
@@ -45,5 +45,5 @@ final case class Sandboxed(monitor: Code[Process], sandboxed: Code[Process]) ext
 
 final case class Handled(errorHandler: Code[Val[OutChan[Error[ValType]]]], body: Code[Process]) extends Process
 
-final case class Error[+T <: ValType](value: Code[Val[T]]) extends ValQ[Error[T]], ValType
+final case class Error[+T <: ValType](value: Code[Val[T]]) extends Val[Error[T]], ValType
 // todo develop

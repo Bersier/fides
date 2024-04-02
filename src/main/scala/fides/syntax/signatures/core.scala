@@ -1,6 +1,6 @@
 package fides.syntax.signatures
 
-import fides.syntax.code.{Code, Expr, Ptrn, Val, ValQ, ValType, Xctr}
+import fides.syntax.code.{Code, Expr, Ptrn, Val, ValType, Xctr}
 import fides.syntax.identifiers.{Identifier, IdentifierKey}
 import fides.syntax.values.NaturalNumber
 
@@ -11,7 +11,7 @@ import fides.syntax.values.NaturalNumber
   * @param signature the identifier corresponding to the key that was used to sign the document
   * @tparam T the type of the signed value
   */
-final case class Signed[+T <: ValType] private(document: Val[T], signature: Identifier) extends ValQ[Signed[T]], ValType
+final case class Signed[+T <: ValType] private(document: Val[T], signature: Identifier) extends Val[Signed[T]], ValType
 object Signed:
   /**
     * Signed values can only be created from keys, but only reveal the corresponding identifier.
@@ -38,7 +38,7 @@ final case class SignedMatcher[T <: ValType](
   document: Code[Val[T]],
   signature: Code[Val[Identifier]],
   level: Code[Val[NaturalNumber]] = NaturalNumber(0),
-) extends ValQ[Signed[T]]
+) extends Val[Signed[T]]
 // todo should only be allowed in code patterns (although maybe it's not such a big deal if it can be used elsewhere)
 // todo delete? Can it always be simulated with MatchEscape(MatchWrap(MatchSign(...)))?
 

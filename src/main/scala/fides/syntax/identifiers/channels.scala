@@ -1,6 +1,6 @@
 package fides.syntax.identifiers
 
-import fides.syntax.code.{Code, CodeType, Expr, Val, ValQ, ValType, Xctr}
+import fides.syntax.code.{Code, CodeType, Expr, Val, ValType, Xctr}
 import izumi.reflect.Tag
 
 /**
@@ -40,7 +40,7 @@ object InpChan:
 end InpChan
 // todo change type of c to Code[Channel[? <: T]] (same question for OutChan)?
 
-final case class OutChan[-T <: ValType](c: Channel[? >: T]) extends Identifier(c.name), ValQ[OutChan[T]]:
+final case class OutChan[-T <: ValType](c: Channel[? >: T]) extends Identifier(c.name), Val[OutChan[T]]:
   override def toString: String = c.toString
 object OutChan:
   def apply[T <: ValType]()(using Context, Tag[T]): OutChan[T] = new OutChan(Channel())

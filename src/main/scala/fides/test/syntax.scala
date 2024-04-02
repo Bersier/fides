@@ -7,7 +7,6 @@ import fides.syntax.meta.*
 import fides.syntax.signatures.*
 import fides.syntax.values.*
 
-import scala.collection.concurrent
 import scala.language.implicitConversions
 
 // todo syntax examples should go into test.syntax package
@@ -29,7 +28,7 @@ import scala.language.implicitConversions
   println(SignedMatcher(Identifier(), OutChan()))
   println(UnSign(UnWrap(negLoc), Escape(Quote(Ignore()))))
   println(UnSign(UnWrap(negLoc), Out(Escape(Wrap(OutChan[Identifier]())))))
-  println(UnSign(UnWrap(negLoc), Out(Escape(Inp[OutChan[Identifier]](Channel())))))
+  println(UnSign(UnWrap(negLoc), Out(Escape(Wrap(Inp[OutChan[Identifier]](Channel()))))))
 
 
 

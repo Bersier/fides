@@ -72,14 +72,6 @@ type Xctr[-T <: ValType] = Ptrn[Nothing, T]
   */
 trait Val[+T <: ValType] extends Expr[T], Ptrn[T, ValType], Code[Val[T]]
 
-/**
-  * Allows flattening of (nested) quotes of (non-quote) values.
-  */
-transparent trait ValQ[+T <: ValType] extends Quoted[ValQ[T]], Val[T], Code[ValQ[T]]:
-  final def code: ValQ[T] = this
-end ValQ
-// todo delete
-
 trait Atom extends ValType
 
 /**

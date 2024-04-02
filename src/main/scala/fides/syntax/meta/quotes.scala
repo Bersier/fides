@@ -6,13 +6,7 @@ import fides.syntax.values.NaturalNumber
 /**
   * Code as value, used for metaprogramming
   */
-trait Quoted[+S <: CodeType] private[syntax]() extends Val[Quoted[S]], ValType:
-  def code: Code[S]
-object Quoted:
-  def apply[S <: CodeType](codeParam: Code[S]): Quoted[S] = new Quoted[S]():
-    val code: Code[S] = codeParam
-    override def toString: String = s"Quoted($code)"
-end Quoted
+final case class Quoted[+S <: CodeType](code: Code[S]) extends Val[Quoted[S]], ValType
 
 /**
   * Allows escaping the body of a [[Quote]]. Ignores nested [[Quote]]s

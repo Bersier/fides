@@ -14,7 +14,7 @@ def quoteExample(using Context): Code[?] =
   Quote(
     Send(
       contents = Str("Hello World!"),
-      recipient = Escape(Wrap(Inp(channelC))), // Escape(Inp(channelC)) has an automatic wrap because of ValQ
+      recipient = Escape(Wrap(Inp(channelC))), // Escape(Inp(channelC)) has an automatic wrap because of Val
     )
   )
 
@@ -32,7 +32,7 @@ def unQuoteExample(using Context): Code[?] =
       MatchQuote(
         Send(
           contents = MatchEscape(UnWrap(Out(channelS))),
-          recipient = MatchEscape(UnWrap(Out(channelQ))), // UnWrap not needed because the channel takes Quoted, ValQ?
+          recipient = MatchEscape(UnWrap(Out(channelQ))), // UnWrap not needed because the channel takes Quoted, Val?
         )
       )
     ),
@@ -46,12 +46,12 @@ def signedMatcherExample(using Context): Code[?] =
   val myChannel = myKey.identifier
   Spread(
     Quote(
-      Escape(
+      Escape(Wrap(
         Sign(
           document = WholeNumber(4),
           signatory = myKey,
-        )
-      )
+        ),
+      ))
     ),
     Args(
       Match(
@@ -85,12 +85,12 @@ def matchEscapeProblem(using Context): Code[?] =
   val myChannel = myKey.identifier
   Spread(
     Quote(
-      Escape(
+      Escape(Wrap(
         Sign(
           document = WholeNumber(4),
           signatory = myKey,
-        )
-      )
+        ),
+      ))
     ),
     Args(
       Match(
@@ -107,7 +107,7 @@ def matchEscapeProblem(using Context): Code[?] =
 def matchEscapeMatcherExample(using Context): Code[?] =
   Forward(
     Quote(
-      MatchEscape(True),
+      MatchEscape(Quoted(True)),
     ),
     Match(
       MatchQuote(
@@ -122,8 +122,8 @@ def multiquoteExample(using Context): Code[?] =
     Send(
       contents = Quote(
         Add(
-          QuotedEscape(Inp(myIntChannel)),
-          Escape(Negate(WholeNumber(5)))
+          QuotedEscape(Wrap(Inp(myIntChannel))),
+          Escape(Wrap(Negate(WholeNumber(5)))),
         )
       ),
       recipient = Inp(InpChan())

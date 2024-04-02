@@ -17,7 +17,7 @@ def outChanExample(using Context): Code[?] =
       out = Out(channel),
     ),
     Forward(
-      inp = Quoted(Out(Escape(Inp(channel)))),
+      inp = Quoted(Out(Escape(Wrap(Inp(channel))))),
       out = Ignore(),
     )
   ))

@@ -1,6 +1,6 @@
 package fides.syntax.values
 
-import fides.syntax.code.{Code, Expr, Ptrn, Val, ValQ, ValType, Xctr}
+import fides.syntax.code.{Code, Expr, Ptrn, Val, ValType, Xctr}
 
 /**
   * A value that is made up of two values.
@@ -8,7 +8,7 @@ import fides.syntax.code.{Code, Expr, Ptrn, Val, ValQ, ValType, Xctr}
 final case class Paired[+T1 <: ValType, +T2 <: ValType](
   first: Code[Val[T1]],
   second: Code[Val[T2]],
-) extends ValQ[Paired[T1, T2]], ValType
+) extends Val[Paired[T1, T2]], ValType
 
 /**
   * Pairs two values together.

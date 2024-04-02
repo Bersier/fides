@@ -1,28 +1,28 @@
 package fides.syntax.values
 
-import fides.syntax.code.{Code, Expr, Val, ValQ, ValType, Xctr}
+import fides.syntax.code.{Code, Expr, Val, ValType, Xctr}
 import fides.syntax.identifiers.{InpChan, OutChan}
 
 /**
   * A value that is made up of an unordered collection of values.
   */
-sealed trait Collected[T <: ValType] extends ValQ[Collected[T]], ValType:
+sealed trait Collected[T <: ValType] extends Val[Collected[T]], ValType:
   def elements: Iterable[Val[T]]
 object Collected:
-  case object None extends Collected[Nothing], ValQ[None]:
+  case object None extends Collected[Nothing], Val[None]:
     def elements: Iterable[Val[Nothing]] = Iterable.empty[Val[Nothing]]
   type None = None.type
-  final case class Some[T <: ValType](elements: Val[T]*) extends Collected[T], ValQ[Some[T]]:
+  final case class Some[T <: ValType](elements: Val[T]*) extends Collected[T], Val[Some[T]]:
     assert(elements.nonEmpty)
   end Some
 end Collected
 
 type Collected2[T <: ValType] = Collected2.None | Collected2.Some[T]
 object Collected2:
-  case object None extends ValQ[None], ValType:
+  case object None extends Val[None], ValType:
     def elements: Iterable[Val[Nothing]] = Iterable.empty[Val[Nothing]]
   type None = None.type
-  final case class Some[T <: ValType](elements: Val[T]*) extends ValQ[Some[T]], ValType:
+  final case class Some[T <: ValType](elements: Val[T]*) extends Val[Some[T]], ValType:
     assert(elements.nonEmpty)
   end Some
   extension [T <: ValType](c: Collected2[T])

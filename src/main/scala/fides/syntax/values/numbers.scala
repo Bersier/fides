@@ -1,18 +1,18 @@
 package fides.syntax.values
 
-import fides.syntax.code.{Atom, Code, Expr, ValQ}
+import fides.syntax.code.{Atom, Code, Expr, Val}
 
 /**
   * Integer values
   */
-sealed class WholeNumber(val value: BigInt) extends Atom, ValQ[WholeNumber]:
+sealed class WholeNumber(val value: BigInt) extends Atom, Val[WholeNumber]:
   override def toString: String = value.toString()
 end WholeNumber
 
 /**
   * Natural number values
   */
-final class NaturalNumber(value: BigInt) extends WholeNumber(value), ValQ[NaturalNumber]:
+final class NaturalNumber(value: BigInt) extends WholeNumber(value), Val[NaturalNumber]:
   override def toString: String = value.toString()
   assert(value >= 0)
 end NaturalNumber

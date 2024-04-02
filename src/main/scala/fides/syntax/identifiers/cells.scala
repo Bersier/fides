@@ -1,6 +1,6 @@
 package fides.syntax.identifiers
 
-import fides.syntax.code.{Code, Expr, Process, Val, ValQ, ValType, Xctr}
+import fides.syntax.code.{Code, Expr, Process, Val, ValType, Xctr}
 import fides.syntax.connectors.Ignore
 import fides.syntax.values.Pulse
 import izumi.reflect.Tag
@@ -16,7 +16,7 @@ import izumi.reflect.Tag
 final class Cell[T <: ValType : Tag] private(
   var value: Code[Val[T]],
   name: String,
-) extends Identifier(name), ValQ[Cell[T]], Process:
+) extends Identifier(name), Val[Cell[T]], Process:
   override def toString: String = s"$$$name($value)"
   def valueType: Tag[T] = summon[Tag[T]]
 object Cell:

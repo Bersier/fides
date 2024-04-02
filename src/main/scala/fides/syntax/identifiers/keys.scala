@@ -1,13 +1,13 @@
 package fides.syntax.identifiers
 
-import fides.syntax.code.{Code, Expr, ValQ, ValType}
+import fides.syntax.code.{Code, Expr, Val, ValType}
 import izumi.reflect.Tag
 
 /**
   * A key has a corresponding identifier. The identifer can be obtained from the key, but not vice versa
   * (there might not even exist a corresponding key for some identifiers).
   */
-sealed class IdentifierKey(name: String)(using Context) extends ValQ[IdentifierKey], ValType:
+sealed class IdentifierKey(name: String)(using Context) extends Val[IdentifierKey], ValType:
   lazy val identifier: Identifier = Identifier(name)
   override def toString: String = s"Key(${identifier.name})"
 object IdentifierKey:
