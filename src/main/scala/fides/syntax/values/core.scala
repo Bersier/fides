@@ -16,6 +16,7 @@ type Pulse = Pulse.type
   * Value that represents a Fides type
   */
 final case class TypeVal[T <: ValType](t: Tag[T]) extends Atom, Val[TypeVal[T]]
+// todo does this need to be a value? Can it not simply be a syntactic type?
 
 /**
   * Added mainly for convenience, so annotations and error messages can be readily readable.

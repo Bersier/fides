@@ -6,6 +6,9 @@ import util.TList
 
 // todo use lazy HOAS approach?
 
+// todo polymorphic abstractions?
+//  Variance? Type bounds ?!
+
 final case class ExprComponent[T <: ValType](
   name: Code[ExprCompName],
   parameters: Code[Args[Identifier]],

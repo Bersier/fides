@@ -28,6 +28,11 @@ final case class UnPair[T1 <: ValType, T2 <: ValType](
 
 /**
   * Pair pattern.
+  *
+  * @tparam L defined by the unification equation: L | Paired[Nothing, Nothing] =:= Paired[P1, P2].
+  *           This equation is encoded in its bound as well as the first implicit parameter.
+  * @tparam U defined by the unification equation: U & Paired[ValType, ValType] =:= Paired[N1, N2].
+  *           This equation is encoded in its bound as well as the second implicit paramter.
   */
 final case class MatchPair[
   P1 <: N1,
