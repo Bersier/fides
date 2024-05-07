@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fides.iml" filepath="$PROJECT_DIR$/.idea/modules/Fides.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fides-build.iml" filepath="$PROJECT_DIR$/.idea/modules/Fides-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fides.Fides-build.iml" filepath="$PROJECT_DIR$/.idea/modules/Fides.Fides-build.iml" />
     </modules>
   </component>
 </project>

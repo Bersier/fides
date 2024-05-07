@@ -3,9 +3,9 @@ lazy val root = project
   .settings(
     name := "Fides",
     // See https://repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/
-    scalaVersion := "3.4.2-RC1-bin-20240324-a6c40b1-NIGHTLY",
-    libraryDependencies += "dev.zio" %% "zio" % "2.0.21",
-    libraryDependencies += "dev.zio" %% "zio-streams" % "2.0.21",
+    scalaVersion := "3.4.2-RC1",
+    libraryDependencies += "dev.zio" %% "zio" % "2.0.22",
+    libraryDependencies += "dev.zio" %% "zio-streams" % "2.0.22",
     libraryDependencies += "org.scala-lang" %% "scala3-staging" % scalaVersion.value,
 //    libraryDependencies += "org.typelevel" %% "cats-core" % "2.10.0",
 //    libraryDependencies += "org.typelevel" %% "kittens" % "3.2.0",
@@ -30,6 +30,7 @@ lazy val root = project
       "-Ysafe-init",
       "-Ysafe-init-global",
       "-deprecation",
+      "-experimental",
       "-explain",
       "-feature",
       "-language:strictEquality",
