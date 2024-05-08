@@ -47,7 +47,8 @@ object Bindings:
     * In the example above, `{...}` is a made up notation for typeful dictionaries, analogous to `(...)` for typeful
     * lists (aka tuples).
     * <br><br>
-    * [[Env]] represents typeful dictionaries whose keys are [[ID]]s (ideally singleton types).
+    * [[Env]] represents typeful dictionaries whose keys are [[ID]]s (ideally singleton types) and whose values have a
+    * known upper type bound.
     *
     * @tparam L internally, the bindings are represented as a sorted list of key-value pairs, without duplicates
     */
@@ -58,6 +59,18 @@ object Bindings:
 
   extension [D <: TList[V[U]], U](self: Env[D])
     def size: Int = self.length
+
+    // todo write `at` def with precise type
+
+    def at(key: ID[Int]): Option[U] =
+      def valueIn(list: TList[V[U]]): Option[U] = list match
+        case TList.Empty => None
+        case TList.Cons((k, v), tail) =>
+          if key < k then None else
+          if key > k then valueIn(tail)
+          else Some(v)
+        case _ => throw AssertionError("Impossible case; added to silence spurious warning")
+      valueIn(self)
 
     @targetName("extended")
     def +[E >: U, A <: E, I <: Int & Singleton]
@@ -107,6 +120,15 @@ object Bindings:
             else if v1 == v2 then (k1, v1) :: merged(tail1, tail2)
             else throw AssertionError("Ambiguous key")
       merged(self, other)
+
+  // todo
+  type At[E, L <: TList[V[E]], K <: Int] <: Option[E] = L match
+    case TList.Empty => None.type
+    case TList.Cons[V[E], (k, a), tail] => K < k match
+      case true => None.type
+      case false => k < K match
+        case true => At[E, tail, K]
+//        case false => Some[a]
 
   type Extended[E, L <: TList[V[E]], K <: Int, A <: E] <: TList.Cons[V[E], ?, ?] = L match
     case TList.Empty => TList.Cons[V[A], (K, A), TList.Empty]
