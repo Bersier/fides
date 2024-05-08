@@ -5,13 +5,13 @@ import scala.collection.LinearSeq
 import scala.compiletime.ops.int.+
 
 
-sealed trait TList[+T] extends LinearSeq[T]:
+sealed trait TList[+E] extends LinearSeq[E]:
   type Length <: Int
   protected type TListL[U] = TList[U] { type Length = TList.this.Length }
-  @targetName("cons") def ::[U >: T, H <: U](head: H): TList.Cons[U, H, this.type] = TList.Cons(head, this)
-  override def map[U](f: T => U): TListL[U] =
+  @targetName("cons") def ::[U >: E, H <: U](head: H): TList.Cons[U, H, this.type] = TList.Cons(head, this)
+  override def map[U](f: E => U): TListL[U] =
     throw new AssertionError("Implemented only to refine map's return type (otherwise, Scala won't allow it).")
-  def safeZip[U](that: TListL[U]): TListL[(T, U)]
+  def safeZip[U](that: TListL[U]): TListL[(E, U)]
 
 object TList:
   case object Empty extends TList[Nothing]:

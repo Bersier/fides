@@ -68,7 +68,7 @@ type Parsed[S <: String, I <: Int, A <: String] <: (String, String) = Matches[S,
         case false => Parsed[Substring[S, 1, Length[S]], I, A ++ Substring[S, 0, 1]]
       case _ => Parsed[Substring[S, 1, Length[S]], I, A ++ Substring[S, 0, 1]]
 
-def emptyContext(): Unit =
+private def picklingTest(): Unit =
   summon[Encoded[(0, "Hel\"lo")] =:= "Tuple(0, Tuple(String(Hel\"lo), EmptyTuple))"]
   summon[Decoded["String(Hello)"] =:= "Hello"]
 

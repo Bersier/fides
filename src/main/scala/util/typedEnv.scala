@@ -5,7 +5,7 @@ import scala.collection.concurrent
 import scala.annotation.targetName
 import scala.compiletime.ops.int.<
 
-object TDicts:
+object Bindings:
   opaque type ID[+I <: Int] = I // todo convert to (value) class?
   object ID:
     def newInstance: ID[Int] =
@@ -22,17 +22,46 @@ object TDicts:
     given CanEqual[ID[Int], ID[Int]] = CanEqual.derived
   end ID
 
-  opaque type TDict[+T <: TList[V[?]]] = T
-  object TDict:
-    def empty: TDict[TList.Empty] = TList.Empty
-  end TDict
+  /**
+    * Typeful representation of a binding environment/context
+    * <br><br>
+    * Similarly to how [[TList]] is a much more typeful version of [[collection.LinearSeq]], [[Env]] is a much more
+    * typeful version of [[Map]]`[`[[ID]]`, ?]`.
+    *
+    * [[TList]], by the way, is very similar to [[Tuple]], except that it additionally keeps track of an upper bound,
+    * which allows it to extend [[collection.LinearSeq]].
+    *
+    * A normal list only keeps track of one type argument, while a tuple keeps track of the type of each of its
+    * components. For example, compare:
+    * {{{
+    * List(None, Some(1)): List[Option[Int]]
+    * (None, Some(1)): (None, Some[Int])
+    * }}}
+    *
+    * Similarly, a dictionary only keeps track of one key and one value type argument, while a hypothetical typeful
+    * dictionary would have a type that is itself a dictionary type. For example, compare:
+    * {{{
+    * Map('a' -> None, 'b' -> Some(1)): Map[Char, Option[Int]]
+    * {'a' -> None, 'b' -> Some(1)}: {'a' -> None, 'b' -> Some[Int]}
+    * }}}
+    * In the example above, `{...}` is a made up notation for typeful dictionaries, analogous to `(...)` for typeful
+    * lists (aka tuples).
+    * <br><br>
+    * [[Env]] represents typeful dictionaries whose keys are [[ID]]s (ideally singleton types).
+    *
+    * @tparam L internally, the bindings are represented as a sorted list of key-value pairs, without duplicates
+    */
+  opaque type Env[+L <: TList[V[?]]] = L // todo extend Map[ID[Int], L.E]
+  object Env:
+    def empty: Env[TList.Empty] = TList.Empty
+  end Env
 
-  extension [D <: TList[V[U]], U](self: TDict[D])
+  extension [D <: TList[V[U]], U](self: Env[D])
     def size: Int = self.length
 
     @targetName("extended")
     def +[E >: U, A <: E, I <: Int & Singleton]
-    (key: ID[I], value: A)(using ContainsKey[D, I] =:= false): TDict[Extended[E, D, I, A]] =
+    (key: ID[I], value: A)(using ContainsKey[D, I] =:= false): Env[Extended[E, D, I, A]] =
       def extended(list: TList[V[E]]): TList[V[E]] = list match
         case TList.Empty => (key, value) :: TList.Empty
         case TList.Cons((k, v), tail) =>
@@ -40,10 +69,10 @@ object TDicts:
           if key > k then (k, v) :: extended(tail)
           else throw AssertionError("Duplicate key")
         case _ => throw AssertionError("Impossible case; added to silence spurious warning")
-      extended(self).asInstanceOf[TDict[Extended[E, D, I, A]]]
+      extended(self).asInstanceOf[Env[Extended[E, D, I, A]]]
 
     @targetName("extendedCanThrow")
-    def +![E >: U, A <: E](key: ID[Int], value: A)(using CanEqual[E, E]): TDict[TList.Cons[V[E], ?, ?]] =
+    def +![E >: U, A <: E](key: ID[Int], value: A)(using CanEqual[E, E]): Env[TList.Cons[V[E], ?, ?]] =
       def extended(list: TList[V[E]]): TList.Cons[V[E], ?, ?] = list match
         case TList.Empty => (key, value) :: TList.Empty
         case TList.Cons((k, v), tail) =>
@@ -55,7 +84,7 @@ object TDicts:
       extended(self)
 
     @targetName("merged")
-    def ++[E >: U, S <: TList[V[E]]](other: TDict[S])(using AreDisjoint[E, D, S] =:= true): TDict[Merged[E, D, S]] =
+    def ++[E >: U, S <: TList[V[E]]](other: Env[S])(using AreDisjoint[E, D, S] =:= true): Env[Merged[E, D, S]] =
       def merged(l1: TList[V[E]], l2: TList[V[E]]): TList[V[E]] = l1 match
         case TList.Empty => l2
         case TList.Cons((k1, v1), tail1) => l2 match
@@ -64,10 +93,10 @@ object TDicts:
             if k1 < k2 then (k1, v1) :: merged(tail1, l2) else
             if k1 > k2 then (k2, v2) :: merged(l1, tail2)
             else throw AssertionError("Duplicate key")
-      merged(self, other).asInstanceOf[TDict[Merged[E, D, S]]]
+      merged(self, other).asInstanceOf[Env[Merged[E, D, S]]]
 
     @targetName("mergedCanThrow")
-    def ++![E >: U](other: TDict[TList[V[E]]])(using CanEqual[E, E]): TDict[TList[V[E]]] =
+    def ++![E >: U](other: Env[TList[V[E]]])(using CanEqual[E, E]): Env[TList[V[E]]] =
       def merged(l1: TList[V[E]], l2: TList[V[E]]): TList[V[E]] = l1 match
         case TList.Empty => l2
         case TList.Cons((k1, v1), tail1) => l2 match
@@ -111,11 +140,10 @@ object TDicts:
           case false => false
 
   private type V[T] = (Int, T)
-end TDicts
+end Bindings
 
-def test: Unit =
-  import TDicts.*
-  val empty: TDict[TList.Empty] = TDict.empty
-  val d1 = empty + (ID.from(0), 0)
+private def envExample: Unit =
+  import Bindings.*
+  val d1 = Env.empty + (ID.from(0), 0)
   val d2 = d1 + (ID.from(1), 0)
-  val d3 = d2 ++ (empty + (ID.from(2), 0))
+  val d3 = d2 ++ (Env.empty + (ID.from(2), 0))
