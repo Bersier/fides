@@ -17,7 +17,7 @@ object TList:
   case object Empty extends TList[Nothing]:
     type Length = 0
     override inline def apply(i: Int): Nothing = throw new IndexOutOfBoundsException(s"Off by $i")
-    @targetName("cons") override def ::[U, H <: U](head: H): Cons[H, H, Empty] = Cons(head, this)
+    @targetName("cons") override inline def ::[U, H <: U](head: H): Cons[H, H, Empty] = Cons(head, this)
     override def iterator: Iterator[Nothing] = Iterator.empty
     override def length: 0 = 0
     override def forall(p: Nothing => Boolean): true = true

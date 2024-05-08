@@ -20,7 +20,7 @@ lazy val root = project
 //      "-Xdisable-assertions",
 //      "-Xmax-inlines", "128",
       "-Ycheck-all-patmat",
-      "-Ycheck-reentrant",
+//      "-Ycheck-reentrant",
       "-Ycook-comments",
       "-Ydebug-macros",
       "-Ydebug-pos",
