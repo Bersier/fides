@@ -17,8 +17,7 @@ object Bindings:
       val available = used.put(i, ()).isEmpty
       if available then Some(i) else None
     inline def from(i: Int): ID[i.type] =
-      used(i) = ()
-      i
+      assert(i >= 0); used(i) = (); i
     private val used = concurrent.TrieMap.empty[Int, Unit]
     private val next = AtomicInteger(1)
     given CanEqual[ID[Int], ID[Int]] = CanEqual.derived
@@ -66,28 +65,27 @@ object Bindings:
       valueIn(self)(using key).asInstanceOf[At[U, D, I] & Option[U]]
 
     @targetName("atOption")
-    def at(key: ID[Int]): Option[U] =
-      valueIn(self)(using key)
+    def at(key: ID[Int]): Option[U] = valueIn(self)(using key)
 
     @targetName("extended")
-    def +[E >: U, V <: E, I <: Int & Singleton]
-    (key: ID[I], value: V)(using ContainsKey[D, I] =:= false): Env[Extended[E, D, I, V]] =
+    def +[W >: U, V <: W, I <: Int & Singleton]
+    (key: ID[I], value: V)(using ContainsKey[D, I] =:= false): Env[Extended[W, D, I, V]] =
       extended(self)(using key, value, (_, _) => throw AssertionError("Duplicate key"))
-        .asInstanceOf[Env[Extended[E, D, I, V]]]
+        .asInstanceOf[Env[Extended[W, D, I, V]]]
 
     @targetName("extendedCanThrow")
-    def +![E >: U, V <: E](key: ID[Int], value: V)(using CanEqual[E, E]): Env[TList.Cons[R[E], ?, ?]] =
+    def +![W >: U, V <: W](key: ID[Int], value: V)(using CanEqual[W, W]): Env[TList.Cons[R[W], ?, ?]] =
       extended(self)(using key, value, _ == _)
 
     @targetName("merged")
-    def ++[E >: U, S <: TList[R[E]]](other: Env[S])(using AreDisjoint[E, D, S] =:= true): Env[Merged[E, D, S]] =
-      merged(self, other)(using (_, _) => throw AssertionError("Duplicate key")).asInstanceOf[Env[Merged[E, D, S]]]
+    def ++[V >: U, S <: TList[R[V]]](other: Env[S])(using AreDisjoint[V, D, S] =:= true): Env[Merged[V, D, S]] =
+      merged(self, other)(using (_, _) => throw AssertionError("Duplicate key")).asInstanceOf[Env[Merged[V, D, S]]]
 
     @targetName("mergedCanThrow")
-    def ++![E >: U](other: Env[TList[R[E]]])(using CanEqual[E, E]): Env[TList[R[E]]] =
+    def ++![V >: U](other: Env[TList[R[V]]])(using CanEqual[V, V]): Env[TList[R[V]]] =
       merged(self, other)(using _ == _)
 
-  private def valueIn[E](list: TList[R[E]])(implicit key: ID[Int]): Option[E] = list.consOption.flatMap:
+  private def valueIn[V](list: TList[R[V]])(implicit key: ID[Int]): Option[V] = list.consOption.flatMap:
     case TList.Cons((k, v), tail) => key == k thenYield v orElse (valueIn(tail), provided = key < k)
 
   private def extended[V](list: TList[R[V]])
@@ -112,43 +110,43 @@ object Bindings:
       case _ => throw AssertionError("Impossible case; added to silence spurious warning")
     case _ => throw AssertionError("Impossible case; added to silence spurious warning")
 
-  type At[E, L <: TList[R[E]], K <: Int] <: Option[?] = L match
+  type At[V, L <: TList[R[V]], K <: Int] <: Option[?] = L match
     case TList.Empty => None.type
-    case TList.Cons[R[E], (k, v), tail] => K < k match
+    case TList.Cons[R[V], (k, v), tail] => K < k match
       case true => None.type
       case false => k < K match
-        case true => At[E, tail, K]
+        case true => At[V, tail, K]
         case false => Some[v]
 
-  type Extended[E, L <: TList[R[E]], K <: Int, V <: E] <: TList.Cons[R[E], ?, ?] = L match
+  type Extended[W, L <: TList[R[W]], K <: Int, V <: W] <: TList.Cons[R[W], ?, ?] = L match
     case TList.Empty => TList.Cons[R[V], (K, V), TList.Empty]
     case TList.Cons[?, (k, v), tail] => K < k match
-      case true => TList.Cons[R[E], (K, V), L]
+      case true => TList.Cons[R[W], (K, V), L]
       case false => k < K match
-        case true => TList.Cons[R[E], (k, v), Extended[E, tail, K, V]]
+        case true => TList.Cons[R[W], (k, v), Extended[W, tail, K, V]]
 
-  type Merged[E, L1 <: TList[R[E]], L2 <: TList[R[E]]] <: TList[R[E]] = L1 match
+  type Merged[V, L1 <: TList[R[V]], L2 <: TList[R[V]]] <: TList[R[V]] = L1 match
     case TList.Empty => L2
     case TList.Cons[?, (k1, v1), tail1] => L2 match
       case TList.Empty => L1
       case TList.Cons[?, (k2, v2), tail2] => k1 < k2 match
-        case true => TList.Cons[R[E], (k1, v1), Merged[E, tail1, L2]]
+        case true => TList.Cons[R[V], (k1, v1), Merged[V, tail1, L2]]
         case false => k2 < k1 match
-          case true => TList.Cons[R[E], (k2, v2), Merged[E, L1, tail2]]
+          case true => TList.Cons[R[V], (k2, v2), Merged[V, L1, tail2]]
 
   type ContainsKey[L <: TList[R[?]], I <: Int] <: Boolean = L match
     case TList.Empty => false
     case TList.Cons[?, (I, ?), ?] => true
     case TList.Cons[?, (Int, ?), tail] => ContainsKey[tail, I]
 
-  type AreDisjoint[E, L1 <: TList[R[E]], L2 <: TList[R[E]]] <: Boolean = L1 match
+  type AreDisjoint[V, L1 <: TList[R[V]], L2 <: TList[R[V]]] <: Boolean = L1 match
     case TList.Empty => true
     case TList.Cons[?, (k1, ?), tail1] => L2 match
       case TList.Empty => true
       case TList.Cons[?, (k2, ?), tail2] => k1 < k2 match
-        case true => AreDisjoint[E, tail1, L2]
+        case true => AreDisjoint[V, tail1, L2]
         case false => k2 < k1 match
-          case true => AreDisjoint[E, L1, tail2]
+          case true => AreDisjoint[V, L1, tail2]
           case false => false
 
   private type R[T] = (Int, T)
