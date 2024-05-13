@@ -12,6 +12,7 @@ sealed trait TList[+E] extends LinearSeq[E]:
   override def map[U](f: E => U): TListL[U] =
     throw new AssertionError("Implemented only to refine map's return type (otherwise, Scala won't allow it).")
   def safeZip[U](that: TListL[U]): TListL[(E, U)]
+  def consOption: Option[TList.Cons[E, E, TList[E]]]
 
 object TList:
   case object Empty extends TList[Nothing]:
@@ -26,6 +27,7 @@ object TList:
     override def tail: Nothing = throw new NoSuchElementException("tail of empty list")
     override def map[U](f: Nothing => U): this.type = this
     def safeZip[U](that: TListL[U]): Empty = Empty
+    inline def consOption: None.type = None
   type Empty = Empty.type
 
   given CanEqual[TList[?], Empty] = CanEqual.derived
@@ -50,5 +52,6 @@ object TList:
     def safeZip[U](other: TListL[U]): TListL[(E, U)] = other match
       case Cons(h, t) => Cons((head, h), tail.safeZip(t.asInstanceOf[tail.TListL[U]]))
       case _ => throw AssertionError("Impossible")
+    inline def consOption: Some[Cons[E, H, Tail]] = Some(this)
   end Cons
 end TList

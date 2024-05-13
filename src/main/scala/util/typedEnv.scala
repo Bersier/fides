@@ -16,7 +16,9 @@ object Bindings:
       assert(i >= 0)
       val available = used.put(i, ()).isEmpty
       if available then Some(i) else None
-    inline def from(i: Int): ID[i.type] = i
+    inline def from(i: Int): ID[i.type] =
+      used(i) = ()
+      i
     private val used = concurrent.TrieMap.empty[Int, Unit]
     private val next = AtomicInteger(1)
     given CanEqual[ID[Int], ID[Int]] = CanEqual.derived
@@ -60,27 +62,12 @@ object Bindings:
   extension [D <: TList[R[U]], U](self: Env[D])
     def size: Int = self.length
 
-    // todo avoid code duplication
     def at[I <: Int & Singleton](key: ID[I]): At[U, D, I] & Option[U] =
-      def valueIn(list: TList[R[U]]): Option[U] = list match
-        case TList.Empty => None
-        case TList.Cons((k, v), tail) =>
-          if key < k then None else
-          if key > k then valueIn(tail)
-          else Some(v)
-        case _ => throw AssertionError("Impossible case; added to silence spurious warning")
-      valueIn(self).asInstanceOf[At[U, D, I] & Option[U]]
+      valueIn(self)(using key).asInstanceOf[At[U, D, I] & Option[U]]
 
     @targetName("atOption")
     def at(key: ID[Int]): Option[U] =
-      def valueIn(list: TList[R[U]]): Option[U] = list match
-        case TList.Empty => None
-        case TList.Cons((k, v), tail) =>
-          if key < k then None else
-          if key > k then valueIn(tail)
-          else Some(v)
-        case _ => throw AssertionError("Impossible case; added to silence spurious warning")
-      valueIn(self)
+      valueIn(self)(using key)
 
     @targetName("extended")
     def +[E >: U, V <: E, I <: Int & Singleton]
@@ -134,6 +121,62 @@ object Bindings:
           case _ => throw AssertionError("Impossible case; added to silence spurious warning")
         case _ => throw AssertionError("Impossible case; added to silence spurious warning")
       merged(self, other)
+
+  private def valueIn0[E](key: ID[Int])(list: TList[R[E]]): Option[E] = list match
+    case TList.Empty => None
+    case TList.Cons((k, v), tail) =>
+      if key < k then None else
+      if key > k then valueIn0(key)(tail)
+      else Some(v)
+    case _ => throw AssertionError("Impossible case; added to silence spurious warning")
+
+  private def valueIn2[E](key: ID[Int])(list: TList[R[E]]): Option[E] = list.consOption.flatMap:
+    case TList.Cons((k, v), tail) =>
+      if key < k then None else
+      if key > k then valueIn2(key)(tail)
+      else Some(v)
+
+  private def valueIn3[E](key: ID[Int])(list: TList[R[E]]): Option[E] =
+    for TList.Cons((k, v), tail) <- list.consOption; if key >= k
+        o <- if key == k then Some(v) else valueIn3(key)(tail) yield o
+
+  private def valueIn4[E](key: ID[Int])(list: TList[R[E]]): Option[E] =
+    for TList.Cons((k, v), tail) <- list.consOption; if key >= k
+        o <- Some(key).filter(key => key == k).map(o => v).orElse(valueIn4(key)(tail)) yield o
+
+  private def valueIn5[E](key: ID[Int])(list: TList[R[E]]): Option[E] =
+    for TList.Cons((k, v), tail) <- list.consOption; if key >= k
+        o <- (for _ <- Some(key); if key == k yield v).orElse(valueIn5(key)(tail)) yield o
+
+  private def valueIn6[E](key: ID[Int])(list: TList[R[E]]): Option[E] =
+    for TList.Cons((k, v), tail) <- list.consOption; if key >= k
+        o <- (for _ <- (key == k).asOption yield v).orElse(valueIn6(key)(tail)) yield o
+
+  private def valueIn7[E](key: ID[Int])(list: TList[R[E]]): Option[E] =
+    for TList.Cons((k, v), tail) <- list.consOption; if key >= k
+        o <- (key == k).thenYield(v).orElse(valueIn7(key)(tail)) yield o
+
+  private def valueIn8[E](key: ID[Int])(list: TList[R[E]]): Option[E] =
+    for TList.Cons((k, v), tail) <- list.consOption; if key >= k
+        o <- key == k thenYield v orElse valueIn8(key)(tail) yield o
+
+  private def valueIn9[E](key: ID[Int])(list: TList[R[E]]): Option[E] =
+    for TList.Cons((k, v), tail) <- list.consOption
+        o <- key == k thenYield v orElse (key < k thenFlatYield valueIn9(key)(tail)) yield o
+
+  private def valueInA[E](key: ID[Int])(list: TList[R[E]]): Option[E] = for
+    TList.Cons((k, v), tail) <- list.consOption
+    o <- (key == k thenYield v).orElseIf(key < k)(valueInA(key)(tail))
+  yield o
+
+  private def valueInB[E](key: ID[Int])(list: TList[R[E]]): Option[E] = for
+    TList.Cons((k, v), tail) <- list.consOption
+    o <- key == k thenYield v orElse (valueInB(key)(tail), provided = key < k)
+  yield o
+
+  // todo delete all other valueIn defs
+  private def valueIn[E](list: TList[R[E]])(implicit key: ID[Int]): Option[E] = list.consOption.flatMap:
+    case TList.Cons((k, v), tail) => key == k thenYield v orElse (valueIn(tail), provided = key < k)
 
   type At[E, L <: TList[R[E]], K <: Int] <: Option[?] = L match
     case TList.Empty => None.type
