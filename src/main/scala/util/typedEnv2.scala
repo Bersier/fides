@@ -12,9 +12,10 @@ sealed trait Env2[+V] extends Map[Env2.ID[Int], V]:
 
   @targetName("extended")
   def +[W >: V, U <: W, I <: Int & Singleton]
-  (key: ID[I], value: U)(using ContainsKey[Shape, I] =:= false): Env2[W]{ type Shape = Extended[W, Shape, I, U] }
+  (key: ID[I], value: U)
+  (using ContainsKey[Shape, I] =:= false): Env2[W]{ type Shape = Extended[W, Env2.this.Shape, I, U] }
 object Env2:
-  opaque type ID[+I <: Int] = I // todo convert to (value) class?
+  opaque type ID[+I <: Int] = I
   object ID:
     def newInstance: ID[Int] =
       val result = next.getAndIncrement()
@@ -33,7 +34,7 @@ object Env2:
 
   def empty: Env2[Nothing] = Env2Impl(TList.Empty)
 
-  private final class Env2Impl[+V, L <: Int, S <: TList[R[V]]{ type Length = L }](representation: S) extends Env2[V]:
+  private final class Env2Impl[+V, S <: TList[R[V]]](representation: S) extends Env2[V]:
     protected type Shape = S
 
     def removed(key: ID[Int]): Map[ID[Int], V] = ???
