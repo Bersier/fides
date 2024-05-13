@@ -72,111 +72,45 @@ object Bindings:
     @targetName("extended")
     def +[E >: U, V <: E, I <: Int & Singleton]
     (key: ID[I], value: V)(using ContainsKey[D, I] =:= false): Env[Extended[E, D, I, V]] =
-      def extended(list: TList[R[E]]): TList.Cons[R[E], ?, ?] = list match
-        case TList.Empty => (key, value) :: TList.Empty
-        case TList.Cons((k, v), tail) =>
-          if key < k then (key, value) :: list else
-          if key > k then (k, v) :: extended(tail)
-          else throw AssertionError("Duplicate key")
-        case _ => throw AssertionError("Impossible case; added to silence spurious warning")
-      extended(self).asInstanceOf[Env[Extended[E, D, I, V]]]
+      extended(self)(using key, value, (_, _) => throw AssertionError("Duplicate key"))
+        .asInstanceOf[Env[Extended[E, D, I, V]]]
 
     @targetName("extendedCanThrow")
     def +![E >: U, V <: E](key: ID[Int], value: V)(using CanEqual[E, E]): Env[TList.Cons[R[E], ?, ?]] =
-      def extended(list: TList[R[E]]): TList.Cons[R[E], ?, ?] = list match
-        case TList.Empty => (key, value) :: TList.Empty
-        case TList.Cons((k, v), tail) =>
-          if key < k then (key, value) :: list else
-          if key > k then (k, v) :: extended(tail)
-          else if value == v then (k, v) :: tail
-          else throw AssertionError("Ambiguous key")
-        case _ => throw AssertionError("Impossible case; added to silence spurious warning")
-      extended(self)
+      extended(self)(using key, value, _ == _)
 
     @targetName("merged")
     def ++[E >: U, S <: TList[R[E]]](other: Env[S])(using AreDisjoint[E, D, S] =:= true): Env[Merged[E, D, S]] =
-      def merged(l1: TList[R[E]], l2: TList[R[E]]): TList[R[E]] = l1 match
-        case TList.Empty => l2
-        case TList.Cons((k1, v1), tail1) => l2 match
-          case TList.Empty => l1
-          case TList.Cons((k2, v2), tail2) =>
-            if k1 < k2 then (k1, v1) :: merged(tail1, l2) else
-            if k1 > k2 then (k2, v2) :: merged(l1, tail2)
-            else throw AssertionError("Duplicate key")
-          case _ => throw AssertionError("Impossible case; added to silence spurious warning")
-        case _ => throw AssertionError("Impossible case; added to silence spurious warning")
-      merged(self, other).asInstanceOf[Env[Merged[E, D, S]]]
+      merged(self, other)(using (_, _) => throw AssertionError("Duplicate key")).asInstanceOf[Env[Merged[E, D, S]]]
 
     @targetName("mergedCanThrow")
     def ++![E >: U](other: Env[TList[R[E]]])(using CanEqual[E, E]): Env[TList[R[E]]] =
-      def merged(l1: TList[R[E]], l2: TList[R[E]]): TList[R[E]] = l1 match
-        case TList.Empty => l2
-        case TList.Cons((k1, v1), tail1) => l2 match
-          case TList.Empty => l1
-          case TList.Cons((k2, v2), tail2) =>
-            if k1 < k2 then (k1, v1) :: merged(tail1, l2) else
-            if k1 > k2 then (k2, v2) :: merged(l1, tail2)
-            else if v1 == v2 then (k1, v1) :: merged(tail1, tail2)
-            else throw AssertionError("Ambiguous key")
-          case _ => throw AssertionError("Impossible case; added to silence spurious warning")
-        case _ => throw AssertionError("Impossible case; added to silence spurious warning")
-      merged(self, other)
+      merged(self, other)(using _ == _)
 
-  private def valueIn0[E](key: ID[Int])(list: TList[R[E]]): Option[E] = list match
-    case TList.Empty => None
-    case TList.Cons((k, v), tail) =>
-      if key < k then None else
-      if key > k then valueIn0(key)(tail)
-      else Some(v)
-    case _ => throw AssertionError("Impossible case; added to silence spurious warning")
-
-  private def valueIn2[E](key: ID[Int])(list: TList[R[E]]): Option[E] = list.consOption.flatMap:
-    case TList.Cons((k, v), tail) =>
-      if key < k then None else
-      if key > k then valueIn2(key)(tail)
-      else Some(v)
-
-  private def valueIn3[E](key: ID[Int])(list: TList[R[E]]): Option[E] =
-    for TList.Cons((k, v), tail) <- list.consOption; if key >= k
-        o <- if key == k then Some(v) else valueIn3(key)(tail) yield o
-
-  private def valueIn4[E](key: ID[Int])(list: TList[R[E]]): Option[E] =
-    for TList.Cons((k, v), tail) <- list.consOption; if key >= k
-        o <- Some(key).filter(key => key == k).map(o => v).orElse(valueIn4(key)(tail)) yield o
-
-  private def valueIn5[E](key: ID[Int])(list: TList[R[E]]): Option[E] =
-    for TList.Cons((k, v), tail) <- list.consOption; if key >= k
-        o <- (for _ <- Some(key); if key == k yield v).orElse(valueIn5(key)(tail)) yield o
-
-  private def valueIn6[E](key: ID[Int])(list: TList[R[E]]): Option[E] =
-    for TList.Cons((k, v), tail) <- list.consOption; if key >= k
-        o <- (for _ <- (key == k).asOption yield v).orElse(valueIn6(key)(tail)) yield o
-
-  private def valueIn7[E](key: ID[Int])(list: TList[R[E]]): Option[E] =
-    for TList.Cons((k, v), tail) <- list.consOption; if key >= k
-        o <- (key == k).thenYield(v).orElse(valueIn7(key)(tail)) yield o
-
-  private def valueIn8[E](key: ID[Int])(list: TList[R[E]]): Option[E] =
-    for TList.Cons((k, v), tail) <- list.consOption; if key >= k
-        o <- key == k thenYield v orElse valueIn8(key)(tail) yield o
-
-  private def valueIn9[E](key: ID[Int])(list: TList[R[E]]): Option[E] =
-    for TList.Cons((k, v), tail) <- list.consOption
-        o <- key == k thenYield v orElse (key < k thenFlatYield valueIn9(key)(tail)) yield o
-
-  private def valueInA[E](key: ID[Int])(list: TList[R[E]]): Option[E] = for
-    TList.Cons((k, v), tail) <- list.consOption
-    o <- (key == k thenYield v).orElseIf(key < k)(valueInA(key)(tail))
-  yield o
-
-  private def valueInB[E](key: ID[Int])(list: TList[R[E]]): Option[E] = for
-    TList.Cons((k, v), tail) <- list.consOption
-    o <- key == k thenYield v orElse (valueInB(key)(tail), provided = key < k)
-  yield o
-
-  // todo delete all other valueIn defs
   private def valueIn[E](list: TList[R[E]])(implicit key: ID[Int]): Option[E] = list.consOption.flatMap:
     case TList.Cons((k, v), tail) => key == k thenYield v orElse (valueIn(tail), provided = key < k)
+
+  private def extended[V](list: TList[R[V]])
+  (using key: ID[Int], value: V, eq: (V, V) => Boolean): TList.Cons[R[V], ?, ?] = list match
+    case TList.Empty => (key, value) :: TList.Empty
+    case TList.Cons((k, v), tail) =>
+      if key < k then (key, value) :: list else
+      if key > k then (k, v) :: extended(tail)
+      else if eq(value, v) then (k, v) :: tail
+      else throw Error("Ambiguous key")
+    case _ => throw AssertionError("Impossible case; added to silence spurious warning")
+
+  private def merged[V](l1: TList[R[V]], l2: TList[R[V]])(using eq: (V, V) => Boolean): TList[R[V]] = l1 match
+    case TList.Empty => l2
+    case TList.Cons((k1, v1), tail1) => l2 match
+      case TList.Empty => l1
+      case TList.Cons((k2, v2), tail2) =>
+        if k1 < k2 then (k1, v1) :: merged(tail1, l2) else
+        if k1 > k2 then (k2, v2) :: merged(l1, tail2)
+        else if eq(v1, v2) then (k1, v1) :: merged(tail1, tail2)
+        else throw AssertionError("Ambiguous key")
+      case _ => throw AssertionError("Impossible case; added to silence spurious warning")
+    case _ => throw AssertionError("Impossible case; added to silence spurious warning")
 
   type At[E, L <: TList[R[E]], K <: Int] <: Option[?] = L match
     case TList.Empty => None.type
