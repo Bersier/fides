@@ -17,7 +17,7 @@ object Bindings:
       val available = used.put(i, ()).isEmpty
       if available then Some(i) else None
     inline def from(i: Int): ID[i.type] =
-      assert(i >= 0); used(i) = (); i
+      used(i) = (); i
     private val used = concurrent.TrieMap.empty[Int, Unit]
     private val next = AtomicInteger(1)
     given CanEqual[ID[Int], ID[Int]] = CanEqual.derived
@@ -149,7 +149,7 @@ object Bindings:
           case true => AreDisjoint[V, L1, tail2]
           case false => false
 
-  private type R[T] = (Int, T)
+  private type R[+T] = (Int, T)
 end Bindings
 
 private def envExample: Unit =
