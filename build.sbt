@@ -3,8 +3,8 @@ lazy val root = project
   .settings(
     name := "Fides",
     // See https://repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/
-    scalaVersion := "3.4.2",
-//    scalaVersion := "3.5.0-RC1-bin-20240512-99c4c00-NIGHTLY",
+//    scalaVersion := "3.4.2",
+    scalaVersion := "3.5.0-RC1-bin-20240512-99c4c00-NIGHTLY",
     libraryDependencies += "dev.zio" %% "zio" % "2.0.22",
     libraryDependencies += "dev.zio" %% "zio-streams" % "2.0.22",
     libraryDependencies += "org.scala-lang" %% "scala3-staging" % scalaVersion.value,

@@ -58,31 +58,31 @@ object Bindings:
     def empty: Env[TList.Empty] = TList.Empty
   end Env
 
-  extension [D <: TList[R[U]], U](self: Env[D])
+  extension [D <: TList[R[V]], V](self: Env[D])
     def size: Int = self.length
 
-    def at[I <: Int & Singleton](key: ID[I]): At[U, D, I] & Option[U] =
-      valueIn(self)(using key).asInstanceOf[At[U, D, I] & Option[U]]
+    def at[I <: Int & Singleton](key: ID[I]): At[V, D, I] & Option[V] =
+      valueIn(self)(using key).asInstanceOf[At[V, D, I] & Option[V]]
 
     @targetName("atOption")
-    def at(key: ID[Int]): Option[U] = valueIn(self)(using key)
+    def at(key: ID[Int]): Option[V] = valueIn(self)(using key)
 
     @targetName("extended")
-    def +[W >: U, V <: W, I <: Int & Singleton]
-    (key: ID[I], value: V)(using ContainsKey[D, I] =:= false): Env[Extended[W, D, I, V]] =
+    def +[W >: V, U <: W, I <: Int & Singleton]
+    (key: ID[I], value: U)(using ContainsKey[D, I] =:= false): Env[Extended[W, D, I, U]] =
       extended(self)(using key, value, (_, _) => throw AssertionError("Duplicate key"))
-        .asInstanceOf[Env[Extended[W, D, I, V]]]
+        .asInstanceOf[Env[Extended[W, D, I, U]]]
 
     @targetName("extendedCanThrow")
-    def +![W >: U, V <: W](key: ID[Int], value: V)(using CanEqual[W, W]): Env[TList.Cons[R[W], ?, ?]] =
+    def +![W >: V, U <: W](key: ID[Int], value: U)(using CanEqual[W, W]): Env[TList.Cons[R[W], ?, ?]] =
       extended(self)(using key, value, _ == _)
 
     @targetName("merged")
-    def ++[V >: U, S <: TList[R[V]]](other: Env[S])(using AreDisjoint[V, D, S] =:= true): Env[Merged[V, D, S]] =
-      merged(self, other)(using (_, _) => throw AssertionError("Duplicate key")).asInstanceOf[Env[Merged[V, D, S]]]
+    def ++[W >: V, S <: TList[R[W]]](other: Env[S])(using AreDisjoint[W, D, S] =:= true): Env[Merged[W, D, S]] =
+      merged(self, other)(using (_, _) => throw AssertionError("Duplicate key")).asInstanceOf[Env[Merged[W, D, S]]]
 
     @targetName("mergedCanThrow")
-    def ++![V >: U](other: Env[TList[R[V]]])(using CanEqual[V, V]): Env[TList[R[V]]] =
+    def ++![W >: V](other: Env[TList[R[W]]])(using CanEqual[W, W]): Env[TList[R[W]]] =
       merged(self, other)(using _ == _)
 
   private def valueIn[V](list: TList[R[V]])(implicit key: ID[Int]): Option[V] = list.consOption.flatMap:

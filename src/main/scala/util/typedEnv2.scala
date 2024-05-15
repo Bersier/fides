@@ -6,7 +6,9 @@ import scala.collection.concurrent
 import scala.compiletime.ops.int.<
 
 sealed trait Env2[+V] extends Map[Env2.ID[Int], V]:
-  import util.Env2.{AreDisjoint, ContainsKey, Extended, ID, Merged}
+  import util.Env2.{AreDisjoint, At, ContainsKey, Extended, ID, Merged}
+
+  def at[W >: V, I <: Int & Singleton](key: ID[I]): At[W, Shape, I] & Option[V]
 
   @targetName("extended")
   def +[W >: V, U <: W, I <: Int & Singleton](key: ID[I], value: U)
@@ -42,7 +44,7 @@ object Env2:
     given CanEqual[ID[Int], ID[Int]] = CanEqual.derived
   end ID
 
-  def empty: Env2[Nothing] = Env2Impl(TList.Empty)
+  def empty: Env2[Nothing]{ type Shape = TList.Empty } = Env2Impl(TList.Empty)
 
   private final class Env2Impl[+V, S <: TList[R[V]]](protected val representation: S) extends Env2[V]:
     protected type Shape = S
@@ -145,3 +147,11 @@ object Env2:
 
   private type R[+T] = (Int, T)
 end Env2
+
+private def env2Example: Unit =
+  import Env2.*
+  val d1 = Env2.empty + (ID.from(0), 0)
+  val d2 = d1 + (ID.from(1), 0)
+  val d3 = d2 ++ (Env2.empty + (ID.from(2), 0))
+  val someZero: Some[Int] = d1.at(ID.from(0))
+  val none: None.type = d1.at(ID.from(1))
