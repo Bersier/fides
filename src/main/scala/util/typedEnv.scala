@@ -74,14 +74,30 @@ object Env:
     given CanEqual[ID[Long], ID[Long]] = CanEqual.derived
   end ID
 
-  def empty: Env[Nothing]{ type Shape = TList.Empty } = Env2Impl(TList.Empty)
+  val empty: Env[Nothing]{ type Shape = TList.Empty } = EnvImpl(TList.Empty)
 
-  private final class Env2Impl[+V, S <: TList[R[V]]](protected val representation: S) extends Env[V]:
+  private final class EnvImpl[+V, S <: TList[R[V]]](protected val representation: S) extends Env[V]:
     protected type Shape = S
 
-    def removed(key: ID[Long]): Map[ID[Long], V] = ???
+    def removed(key: ID[Long]): Env[V] =
+      def removed(list: TList[R[V]]): TList[R[V]] = list match
+        case TList.Empty => list
+        case TList.Cons((k, v), tail) =>
+          if key < k then list else
+          if key > k then (k, v) :: removed(tail)
+          else tail
+        case _ => throw AssertionError("Impossible case; added to silence spurious warning")
+      EnvImpl(removed(representation))
 
-    def updated[V1 >: V](key: ID[Long], value: V1): Map[ID[Long], V1] = ???
+    def updated[W >: V](key: ID[Long], value: W): Env[W] =
+      def updated(list: TList[R[W]]): TList.Cons[R[W], ?, ?] = list match
+        case TList.Empty => (key, value) :: TList.Empty
+        case TList.Cons((k, v), tail) =>
+          if key < k then (key, value) :: list else
+          if key > k then (k, v) :: updated(tail)
+          else (key, value) :: tail
+        case _ => throw AssertionError("Impossible case; added to silence spurious warning")
+      EnvImpl(updated(representation))
 
     inline def get(key: ID[Long]): Option[V] = valueIn(representation)(using key)
 
@@ -93,23 +109,23 @@ object Env:
     @targetName("extended")
     def +[W >: V, U <: W, I <: Long & Singleton](key: ID[I], value: U)
     (using ContainsKey[S, I] =:= false): Env[W]{ type Shape = Extended[W, S, I, U] } =
-      Env2Impl(extended(representation)(using key, value, (_, _) => throw AssertionError("Duplicate key")))
+      EnvImpl(extended(representation)(using key, value, (_, _) => throw AssertionError("Duplicate key")))
         .asInstanceOf[Env[W]{ type Shape = Extended[W, S, I, U] }]
 
     @targetName("extendedCanThrow")
     def +![W >: V](key: ID[Long], value: W)(using CanEqual[W, W]): Env[W] =
-      Env2Impl(extended(representation)(using key, value, _ == _))
+      EnvImpl(extended(representation)(using key, value, _ == _))
 
     @targetName("merged")
     def ++[W >: V, S2 <: TList[R[W]]](that: Env[W]{ type Shape = S2 })
     (using AreDisjoint[W, S, S2] =:= true): Env[W]{ type Shape = Merged[W, S, S2] } =
-      Env2Impl(merged(representation, that.representation)(using (_, _) => throw AssertionError("Duplicate key")))
+      EnvImpl(merged(representation, that.representation)(using (_, _) => throw AssertionError("Duplicate key")))
         .asInstanceOf[Env[W]{ type Shape = Merged[W, S, S2] }]
 
     @targetName("mergedCanThrow")
     def ++![W >: V](that: Env[W])(using CanEqual[W, W]): Env[W] =
-      Env2Impl(merged(representation, that.representation)(using _ == _))
-  end Env2Impl
+      EnvImpl(merged(representation, that.representation)(using _ == _))
+  end EnvImpl
 
   private def valueIn[V](list: TList[R[V]])(implicit key: Long): Option[V] = list.consOption.flatMap:
     case TList.Cons((k, v), tail) => key == k thenYield v orElse (valueIn(tail), provided = key < k)
