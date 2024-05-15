@@ -32,11 +32,9 @@ import scala.compiletime.ops.long.<
   * <br><br>
   * [[Env]] represents typeful dictionaries whose keys are [[ID]]s (ideally singleton types) and whose values have a
   * known upper type bound.
-  *
-  * @tparam L internally, the bindings are represented as a sorted list of key-value pairs, without duplicates
   */
 sealed trait Env[+V] extends Map[Env.ID[Long], V]:
-  import util.Env.{AreDisjoint, At, ContainsKey, Extended, ID, Merged}
+  import util.Env.{AreDisjoint, At, ContainsKey, Extended, ID, Merged, Without}
 
   def at[W >: V, I <: Long & Singleton](key: ID[I]): At[W, Shape, I] & Option[V]
 
@@ -46,6 +44,10 @@ sealed trait Env[+V] extends Map[Env.ID[Long], V]:
 
   @targetName("extendedCanThrow")
   def +![W >: V](key: ID[Long], value: W)(using CanEqual[W, W]): Env[W]
+
+  @targetName("without")
+  def -[W >: V, I <: Long & Singleton](key: ID[I])
+  (using ContainsKey[Shape, I] =:= true): Env[V]{ type Shape = Without[W, Env.this.Shape, I] }
 
   @targetName("merged")
   def ++[W >: V, S2 <: TList[(Long, W)]](that: Env[W]{ type Shape = S2 })
@@ -79,15 +81,7 @@ object Env:
   private final class EnvImpl[+V, S <: TList[R[V]]](protected val representation: S) extends Env[V]:
     protected type Shape = S
 
-    def removed(key: ID[Long]): Env[V] =
-      def removed(list: TList[R[V]]): TList[R[V]] = list match
-        case TList.Empty => list
-        case TList.Cons((k, v), tail) =>
-          if key < k then list else
-          if key > k then (k, v) :: removed(tail)
-          else tail
-        case _ => throw AssertionError("Impossible case; added to silence spurious warning")
-      EnvImpl(removed(representation))
+    def removed(key: ID[Long]): Env[V] = EnvImpl(without(representation)(using key))
 
     def updated[W >: V](key: ID[Long], value: W): Env[W] =
       def updated(list: TList[R[W]]): TList.Cons[R[W], ?, ?] = list match
@@ -116,6 +110,11 @@ object Env:
     def +![W >: V](key: ID[Long], value: W)(using CanEqual[W, W]): Env[W] =
       EnvImpl(extended(representation)(using key, value, _ == _))
 
+    @targetName("without")
+    def -[W >: V, I <: Long & Singleton](key: ID[I])
+    (using ContainsKey[S, I] =:= true): Env[V]{ type Shape = Without[W, S, I] } =
+      EnvImpl(without(representation)(using key)).asInstanceOf[Env[V]{ type Shape = Without[W, S, I] }]
+
     @targetName("merged")
     def ++[W >: V, S2 <: TList[R[W]]](that: Env[W]{ type Shape = S2 })
     (using AreDisjoint[W, S, S2] =:= true): Env[W]{ type Shape = Merged[W, S, S2] } =
@@ -140,6 +139,14 @@ object Env:
       else throw Error("Ambiguous key")
     case _ => throw AssertionError("Impossible case; added to silence spurious warning")
 
+  private def without[V](list: TList[R[V]])(using key: ID[Long]): TList[R[V]] = list match
+    case TList.Empty => list
+    case TList.Cons((k, v), tail) =>
+      if key < k then list else
+      if key > k then (k, v) :: without(tail)
+      else tail
+    case _ => throw AssertionError("Impossible case; added to silence spurious warning")
+
   private def merged[V](l1: TList[R[V]], l2: TList[R[V]])(using eq: (V, V) => Boolean): TList[R[V]] = l1 match
     case TList.Empty => l2
     case TList.Cons((k1, v1), tail1) => l2 match
@@ -160,12 +167,19 @@ object Env:
         case true => At[V, tail, K]
         case false => Some[v]
 
-  type Extended[W, L <: TList[R[W]], K <: Long, V <: W] <: TList.Cons[R[W], ?, ?] = L match
-    case TList.Empty => TList.Cons[R[V], (K, V), TList.Empty]
+  type Extended[V, L <: TList[R[V]], K <: Long, U <: V] <: TList.Cons[R[V], ?, ?] = L match
+    case TList.Empty => TList.Cons[R[U], (K, U), TList.Empty]
     case TList.Cons[?, (k, v), tail] => K < k match
-      case true => TList.Cons[R[W], (K, V), L]
+      case true => TList.Cons[R[V], (K, U), L]
       case false => k < K match
-        case true => TList.Cons[R[W], (k, v), Extended[W, tail, K, V]]
+        case true => TList.Cons[R[V], (k, v), Extended[V, tail, K, U]]
+
+  type Without[V, L <: TList[R[V]], K <: Long] <: TList[R[V]] = L match
+    case TList.Cons[?, (k, v), tail] => K < k match
+      case true => L
+      case false => k < K match
+        case true => TList.Cons[R[V], (k, v), Without[V, tail, K]]
+        case false => tail & TList[R[V]]
 
   type Merged[V, L1 <: TList[R[V]], L2 <: TList[R[V]]] <: TList[R[V]] = L1 match
     case TList.Empty => L2
@@ -194,8 +208,8 @@ object Env:
   private type R[+T] = (Long, T)
 end Env
 
-private def env2Example: Unit =
-  import Env.*
+private def envExample: Unit =
+  import Env.ID
   val d1 = Env.empty + (ID.from(0), 0)
   val d2 = d1 + (ID.from(1), 0)
   val d3 = d2 ++ (Env.empty + (ID.from(2), 0))
