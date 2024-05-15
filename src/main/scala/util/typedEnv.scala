@@ -35,28 +35,28 @@ import scala.compiletime.ops.long.<
   *
   * @tparam L internally, the bindings are represented as a sorted list of key-value pairs, without duplicates
   */
-sealed trait Env2[+V] extends Map[Env2.ID[Long], V]:
-  import util.Env2.{AreDisjoint, At, ContainsKey, Extended, ID, Merged}
+sealed trait Env[+V] extends Map[Env.ID[Long], V]:
+  import util.Env.{AreDisjoint, At, ContainsKey, Extended, ID, Merged}
 
   def at[W >: V, I <: Long & Singleton](key: ID[I]): At[W, Shape, I] & Option[V]
 
   @targetName("extended")
   def +[W >: V, U <: W, I <: Long & Singleton](key: ID[I], value: U)
-  (using ContainsKey[Shape, I] =:= false): Env2[W]{ type Shape = Extended[W, Env2.this.Shape, I, U] }
+  (using ContainsKey[Shape, I] =:= false): Env[W]{ type Shape = Extended[W, Env.this.Shape, I, U] }
 
   @targetName("extendedCanThrow")
-  def +![W >: V](key: ID[Long], value: W)(using CanEqual[W, W]): Env2[W]
+  def +![W >: V](key: ID[Long], value: W)(using CanEqual[W, W]): Env[W]
 
   @targetName("merged")
-  def ++[W >: V, S2 <: TList[(Long, W)]](that: Env2[W]{ type Shape = S2 })
-  (using AreDisjoint[W, Shape, S2] =:= true): Env2[W]{ type Shape = Merged[W, Env2.this.Shape, S2] }
+  def ++[W >: V, S2 <: TList[(Long, W)]](that: Env[W]{ type Shape = S2 })
+  (using AreDisjoint[W, Shape, S2] =:= true): Env[W]{ type Shape = Merged[W, Env.this.Shape, S2] }
 
   @targetName("mergedCanThrow")
-  def ++![W >: V](that: Env2[W])(using CanEqual[W, W]): Env2[W]
+  def ++![W >: V](that: Env[W])(using CanEqual[W, W]): Env[W]
 
   protected type Shape <: TList[(Long, V)]
   protected def representation: Shape
-object Env2:
+object Env:
   opaque type ID[+I <: Long] = I
   object ID:
     def newInstance: ID[Long] =
@@ -74,9 +74,9 @@ object Env2:
     given CanEqual[ID[Long], ID[Long]] = CanEqual.derived
   end ID
 
-  def empty: Env2[Nothing]{ type Shape = TList.Empty } = Env2Impl(TList.Empty)
+  def empty: Env[Nothing]{ type Shape = TList.Empty } = Env2Impl(TList.Empty)
 
-  private final class Env2Impl[+V, S <: TList[R[V]]](protected val representation: S) extends Env2[V]:
+  private final class Env2Impl[+V, S <: TList[R[V]]](protected val representation: S) extends Env[V]:
     protected type Shape = S
 
     def removed(key: ID[Long]): Map[ID[Long], V] = ???
@@ -92,22 +92,22 @@ object Env2:
 
     @targetName("extended")
     def +[W >: V, U <: W, I <: Long & Singleton](key: ID[I], value: U)
-    (using ContainsKey[S, I] =:= false): Env2[W]{ type Shape = Extended[W, S, I, U] } =
+    (using ContainsKey[S, I] =:= false): Env[W]{ type Shape = Extended[W, S, I, U] } =
       Env2Impl(extended(representation)(using key, value, (_, _) => throw AssertionError("Duplicate key")))
-        .asInstanceOf[Env2[W]{ type Shape = Extended[W, S, I, U] }]
+        .asInstanceOf[Env[W]{ type Shape = Extended[W, S, I, U] }]
 
     @targetName("extendedCanThrow")
-    def +![W >: V](key: ID[Long], value: W)(using CanEqual[W, W]): Env2[W] =
+    def +![W >: V](key: ID[Long], value: W)(using CanEqual[W, W]): Env[W] =
       Env2Impl(extended(representation)(using key, value, _ == _))
 
     @targetName("merged")
-    def ++[W >: V, S2 <: TList[R[W]]](that: Env2[W]{ type Shape = S2 })
-    (using AreDisjoint[W, S, S2] =:= true): Env2[W]{ type Shape = Merged[W, S, S2] } =
+    def ++[W >: V, S2 <: TList[R[W]]](that: Env[W]{ type Shape = S2 })
+    (using AreDisjoint[W, S, S2] =:= true): Env[W]{ type Shape = Merged[W, S, S2] } =
       Env2Impl(merged(representation, that.representation)(using (_, _) => throw AssertionError("Duplicate key")))
-        .asInstanceOf[Env2[W]{ type Shape = Merged[W, S, S2] }]
+        .asInstanceOf[Env[W]{ type Shape = Merged[W, S, S2] }]
 
     @targetName("mergedCanThrow")
-    def ++![W >: V](that: Env2[W])(using CanEqual[W, W]): Env2[W] =
+    def ++![W >: V](that: Env[W])(using CanEqual[W, W]): Env[W] =
       Env2Impl(merged(representation, that.representation)(using _ == _))
   end Env2Impl
 
@@ -176,12 +176,12 @@ object Env2:
           case false => false
 
   private type R[+T] = (Long, T)
-end Env2
+end Env
 
 private def env2Example: Unit =
-  import Env2.*
-  val d1 = Env2.empty + (ID.from(0), 0)
+  import Env.*
+  val d1 = Env.empty + (ID.from(0), 0)
   val d2 = d1 + (ID.from(1), 0)
-  val d3 = d2 ++ (Env2.empty + (ID.from(2), 0))
+  val d3 = d2 ++ (Env.empty + (ID.from(2), 0))
   val someZero: Some[Int] = d1.at(ID.from(0))
   val none: None.type = d1.at(ID.from(1))
