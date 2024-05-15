@@ -213,5 +213,7 @@ private def envExample: Unit =
   val d1 = Env.empty + (ID.from(0), 0)
   val d2 = d1 + (ID.from(1), 0)
   val d3 = d2 ++ (Env.empty + (ID.from(2), 0))
+  val d4 = d3 - (ID.from(0)) + (ID.from(0), 1)
   val someZero: Some[Int] = d1.at(ID.from(0))
   val none: None.type = d1.at(ID.from(1))
+  println((d4, someZero, none))

@@ -71,14 +71,24 @@ object ShowableTerm:
     */
   inline def derived[T](using mirror: Mirror.Of[T]): ShowableTerm[T] =
     inline mirror match
-      case p: Mirror.ProductOf[T] => new ShowableTerm[T]:
-        override def outerPrecedence: Precedence = Precedences.parentheses
-        override def innerPrecedence: Precedence = Precedences.comma
-        override def polarity: Char = polarityFromName(constValue[mirror.MirroredLabel])
-        override def header: String = constValue[mirror.MirroredLabel].toLowerCase.nn + "("
-        override def tailer: String = ")"
-        override val keys: TList[String] = tupleTypesAsValues[mirror.MirroredElemLabels].map(_.toString)
+      case p: Mirror.ProductOf[T] => ShowableTermImpl(
+        outerPrecedence = Precedences.parentheses,
+        innerPrecedence = Precedences.comma,
+        polarity = polarityFromName(constValue[mirror.MirroredLabel]),
+        header = constValue[mirror.MirroredLabel].toLowerCase.nn + "(",
+        tailer = ")",
+        keys = tupleTypesAsValues[mirror.MirroredElemLabels].map(_.toString),
+      )
       case _ => error("ShowableTerm derivation is currently only supported for product types.")
+
+  private final case class ShowableTermImpl[T](
+    innerPrecedence: Precedence,
+    outerPrecedence: Precedence,
+    polarity: Char,
+    header: String,
+    tailer: String,
+    keys: TList[String],
+  ) extends ShowableTerm[T]
 end ShowableTerm
 
 given ShowableTerm[Match[?]] with
