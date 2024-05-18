@@ -194,7 +194,7 @@ object Env:
   /**
     * @param list a list of key-value pairs, sorted by key, without duplicate keys
     * @param eq equality function for values
-    * @return a new list, additionally containing the new given key-value pair
+    * @return a new duplicate-free sorted list, additionally containing the new given key-value pair
     */
   private def extended[V](list: TList[R[V]])
   (using key: IDTop, value: V, eq: (V, V) => Boolean): TList.Cons[R[V], ?, ?] = list match
@@ -242,7 +242,7 @@ object Env:
     * Type-level version of [[valueIn]]
     */
   type ValueIn[V, L <: TList[R[V]], K <: Long] <: V = L match
-    case TList.Cons[(Long, V), (k, v), tail] => K < k match
+    case TList.Cons[?, (k, v), tail] => K < k match
       case false => k < K match
         case true => ValueIn[V, tail, K]
         case false => v & V
@@ -282,10 +282,13 @@ object Env:
   /**
     * At the type level, checks whether the given list contains the given key.
     */
-  type ContainsKey[L <: TList[R[?]], I <: Long] <: Boolean = L match
+  type ContainsKey[L <: TList[R[?]], K <: Long] <: Boolean = L match
     case TList.Empty => false
-    case TList.Cons[?, (I, ?), ?] => true
-    case TList.Cons[?, (Long, ?), tail] => ContainsKey[tail, I]
+    case TList.Cons[?, (k, ?), tail] => K < k match
+      case true => false
+      case false => k < K match
+        case true => ContainsKey[tail, K]
+        case false => true
 
   /**
     * At the type level, checks whether the two given lists have disjoint keys.
@@ -322,3 +325,17 @@ private def envExample: Unit =
   val d4 = d3 -| (ID.from(0)) +| (ID.from(0), 1)
   val zero: Int = d1.at(ID.from(0))
   println((d4, zero))
+
+  def foo1(`1`: String, `2`: List[Int]): String =
+    `2`.map(i => (i + 1).toString).mkString(`1`)
+  println(foo1)
+
+  def foo2(
+    args: Env[Any]{
+      type Shape = TList.Cons[(Long, ?), (1L, String), TList.Cons[(Long, ?), (2L, List[Int]), TList.Empty]]
+    },
+  ): String =
+    val `1`: String = args.at(Env.ID.from(1))
+    val `2`: List[Int] = args.at(Env.ID.from(2))
+    `2`.map(i => (i + 1).toString).mkString(`1`)
+  println(foo2)
