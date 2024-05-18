@@ -10,3 +10,6 @@ extension [T](o: Option[T])
     o orElse (condition thenFlatYield alternative)
   inline infix def orElse(inline alternative: => Option[T], inline provided: Boolean = true): Option[T] =
     o.orElseIf(provided)(alternative)
+
+extension [T](s: Some[T])
+  inline def unpacked: T = s.get
