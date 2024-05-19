@@ -50,6 +50,9 @@ sealed trait Env[+V] extends Map[Env.IDTop, V]:
   @targetName("extended")
   def +|[W >: V, U <: W, I <: Long & Singleton](key: ID[I], value: U)
   (using ContainsKey[Shape, I] =:= false): Env[W]{ type Shape = Extended[W, Env.this.Shape, I, U] }
+//  def +|[W >: V, I <: Long & Singleton](key: ID[I], value: W)
+//  (using ContainsKey[Shape, I] =:= false): Env[W]{ type Shape = Extended[W, Env.this.Shape, I, value.type] }
+// todo why does ContainsKey not reduce anymore when value.type is used instead of U?
 
   /**
     * @return a new [[Env]] that additionally contains the given key-value pair
@@ -162,6 +165,10 @@ object Env:
     (using ContainsKey[S, I] =:= false): Env[W]{ type Shape = Extended[W, S, I, U] } =
       EnvImpl(extended(representation)(using key, value, (_, _) => throw AssertionError("Duplicate key")))
         .asInstanceOf[Env[W]{ type Shape = Extended[W, S, I, U] }]
+//    def +|[W >: V, I <: Long & Singleton](key: ID[I], value: W)
+//    (using ContainsKey[S, I] =:= false): Env[W]{ type Shape = Extended[W, S, I, value.type] } =
+//      EnvImpl(extended(representation)(using key, value, (_, _) => throw AssertionError("Duplicate key")))
+//        .asInstanceOf[Env[W]{ type Shape = Extended[W, S, I, value.type] }]
 
     @targetName("extendedCanThrow")
     def +![W >: V](key: IDTop, value: W)(using CanEqual[W, W]): Env[W] =
@@ -237,6 +244,18 @@ object Env:
         else throw AmbiguousKeyError(k1)
       case _ => throw AssertionError("Impossible case; added to silence spurious warning")
     case _ => throw AssertionError("Impossible case; added to silence spurious warning")
+
+  type EnvL[V, L <: TList[R[V]]] = Env[V]{ type Shape = Sorted[V, L] }
+
+  type EnvT[T <: Tuple] = Env[?]{ type Shape = FromTuple[T] }
+
+  type FromTuple[T <: Tuple] <: TList[?] = T match
+    case EmptyTuple => TList.Empty
+    case (k, v) *: tail => Extended[Any, FromTuple[tail], k, v]
+
+  type Sorted[V, L <: TList[R[V]]] <: TList[R[V]] = L match
+    case TList.Empty => L
+    case TList.Cons[?, (k, v), tail] => Extended[V, Sorted[V, tail], k, v]
 
   /**
     * Type-level version of [[valueIn]]
@@ -326,16 +345,22 @@ private def envExample: Unit =
   val zero: Int = d1.at(ID.from(0))
   println((d4, zero))
 
-  def foo1(`1`: String, `2`: List[Int]): String =
+  def foo1(`2`: List[Int], `1`: String): String =
     `2`.map(i => (i + 1).toString).mkString(`1`)
-  println(foo1)
+  println(foo1(`2` = List(1, 2), `1` = ", "))
 
-  def foo2(
-    args: Env[Any]{
-      type Shape = TList.Cons[(Long, ?), (1L, String), TList.Cons[(Long, ?), (2L, List[Int]), TList.Empty]]
-    },
-  ): String =
-    val `1`: String = args.at(Env.ID.from(1))
-    val `2`: List[Int] = args.at(Env.ID.from(2))
+  def foo2(args: Env.EnvT[((2L, List[Int]), (1L, String))]): String =
+    val `1`: String = args.at(ID.from(1))
+    val `2`: List[Int] = args.at(ID.from(2))
     `2`.map(i => (i + 1).toString).mkString(`1`)
+
+  val one: ID[1L & Singleton] = ID.from(1)
+  val comma: String = ", "
+  val env1 = Env.empty +| (ID.from(2), List(1, 2))
+  val env2: Env[Any]{
+    type Shape = TList.Cons[(Long, Any), (1L, String), TList.Cons[(Long, Any), (2L, List[Int]), TList.Empty]]
+  } = env1 +| (one, comma) // todo why does Scala think that comma is of type (String | List[Int])?
+  // todo it seems to instantiate the type of comma to W.
+  //  If we didn't keep track of upper bounds, this should not be possible.
+  println(foo2(env2))
   println(foo2)
