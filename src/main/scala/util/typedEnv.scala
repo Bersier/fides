@@ -3,6 +3,7 @@ package util
 import java.util.concurrent.atomic.AtomicInteger
 import scala.annotation.targetName
 import scala.collection.concurrent
+import scala.compiletime.ops.any.!=
 import scala.compiletime.ops.long.<
 
 /**
@@ -148,6 +149,14 @@ object Env:
     */
   val empty: Env[Nothing]{ type Shape = Empty } = EnvImpl(Empty)
 
+  def from[I <: Long & Singleton, V](kV: (ID[I], V)): Env[V]{ type Shape = Cons[I, V, Empty] } =
+    EnvImpl(Cons(kV._1, kV._2, Empty))
+
+  def from[I1 <: Long & Singleton, V1, I2 <: Long & Singleton, V2](kV1: (ID[I1], V1), kV2: (ID[I2], V2))
+  (using (I1 != I2) =:= true): Env[V1 | V2]{ type Shape = Extended[Cons[I1, V1, Empty], I2, V2] } =
+    EnvImpl(extended(Cons(kV1._1, kV1._2, Empty), kV2._1, kV2._2, duplicateKeyThrower))
+      .asInstanceOf[Env[V1 | V2]{ type Shape = Extended[Cons[I1, V1, Empty], I2, V2] }]
+
   private final class EnvImpl[+V, S <: KVList](protected val representation: S) extends Env[V]:
     protected type Shape = S
 
@@ -172,7 +181,7 @@ object Env:
     @targetName("extended")
     def +|[W >: V, U, I <: Long & Singleton](key: ID[I], value: U)
     (using ContainsKey[S, I] =:= false): Env[U | W]{ type Shape = Extended[S, I, U] } =
-      EnvImpl(extended(representation, key, value, (_, _) => throw AssertionError("Duplicate key")))
+      EnvImpl(extended(representation, key, value, duplicateKeyThrower))
         .asInstanceOf[Env[U | W]{ type Shape = Extended[S, I, U] }]
 
     @targetName("extendedCanThrow")
@@ -187,7 +196,7 @@ object Env:
     @targetName("merged")
     def +|+[W >: V, S2 <: KVList](that: Env[W]{ type Shape = S2 })
     (using AreDisjoint[S, S2] =:= true): Env[W]{ type Shape = Merged[S, S2] } =
-      EnvImpl(merged(representation, that.representation)(using (_, _) => throw AssertionError("Duplicate key")))
+      EnvImpl(merged(representation, that.representation)(using duplicateKeyThrower))
         .asInstanceOf[Env[W]{ type Shape = Merged[S, S2] }]
 
     @targetName("mergedCanThrow")
@@ -195,6 +204,8 @@ object Env:
       given CanEqual[Any, Any] = CanEqual.derived
       EnvImpl(merged(representation, that.representation)(using _ == _))
   end EnvImpl
+
+  private val duplicateKeyThrower: (Any, Any) => Nothing = (_, _) => throw AssertionError("Duplicate key")
 
   /**
     * @param list a list of key-value pairs, sorted by key, without duplicate keys
@@ -357,4 +368,4 @@ private def envExample: Unit =
   // todo why does Scala think that comma is of type (String | List[Int])?
   // todo it seems to instantiate the type of comma to W.
   //  If we didn't keep track of upper bounds, this should not be possible.
-  println(foo2(Env.empty +| (ID.from(2), List(1, 2)) +| (ID.from(1), ", ")))
+  println(foo2(Env.from(ID.from(2) -> List(1, 2), ID.from(1) -> ", ")))
