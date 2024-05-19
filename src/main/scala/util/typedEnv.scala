@@ -1,5 +1,6 @@
 package util
 
+import java.util.NoSuchElementException
 import java.util.concurrent.atomic.AtomicInteger
 import scala.annotation.targetName
 import scala.collection.concurrent
@@ -49,8 +50,8 @@ sealed trait Env[+V] extends Map[Env.IDTop, V]:
     * @return a new [[Env]] that additionally contains the given key-value pair
     */
   @targetName("extended")
-  def +|[W >: V, U, I <: Long & Singleton](key: ID[I], value: U)
-  (using ContainsKey[Shape, I] =:= false): Env[U | W]{ type Shape = Extended[Env.this.Shape, I, U] }
+  def +|[W >: V, U <: W, I <: Long & Singleton](key: ID[I], value: U)
+  (using ContainsKey[Shape, I] =:= false): Env[W]{ type Shape = Extended[Env.this.Shape, I, U] }
 
   /**
     * @return a new [[Env]] that additionally contains the given key-value pair
@@ -154,8 +155,50 @@ object Env:
 
   def from[I1 <: Long & Singleton, V1, I2 <: Long & Singleton, V2](kV1: (ID[I1], V1), kV2: (ID[I2], V2))
   (using (I1 != I2) =:= true): Env[V1 | V2]{ type Shape = Extended[Cons[I1, V1, Empty], I2, V2] } =
-    EnvImpl(extended(Cons(kV1._1, kV1._2, Empty), kV2._1, kV2._2, duplicateKeyThrower))
+    EnvImpl(extended(from(kV1).representation, kV2._1, kV2._2, duplicateKeyThrower))
       .asInstanceOf[Env[V1 | V2]{ type Shape = Extended[Cons[I1, V1, Empty], I2, V2] }]
+
+  def from[I1 <: Long & Singleton, V1, I2 <: Long & Singleton, V2, I3 <: Long & Singleton, V3]
+  (kV1: (ID[I1], V1), kV2: (ID[I2], V2), kV3: (ID[I3], V3))
+  (using (I1 != I2) =:= true, (I1 != I3) =:= true, (I2 != I3) =:= true): Env[V1 | V2 | V3]{
+    type Shape = Extended[Extended[Cons[I1, V1, Empty], I2, V2], I3, V3]
+  } = EnvImpl(extended(from(kV1, kV2).representation, kV3._1, kV3._2, duplicateKeyThrower))
+    .asInstanceOf[Env[V1 | V2 | V3]{ type Shape = Extended[Extended[Cons[I1, V1, Empty], I2, V2], I3, V3] }]
+
+  def from[
+    I1 <: Long & Singleton, V1,
+    I2 <: Long & Singleton, V2,
+    I3 <: Long & Singleton, V3,
+    I4 <: Long & Singleton, V4,
+  ](kV1: (ID[I1], V1), kV2: (ID[I2], V2), kV3: (ID[I3], V3), kV4: (ID[I4], V4))
+  (using
+    (I1 != I2) =:= true, (I1 != I3) =:= true, (I1 != I4) =:= true,
+    (I2 != I3) =:= true, (I2 != I4) =:= true, (I3 != I4) =:= true,
+  ): Env[V1 | V2 | V3 | V4]{
+    type Shape = Extended[Extended[Extended[Cons[I1, V1, Empty], I2, V2], I3, V3], I4, V4]
+  } = EnvImpl(extended(from(kV1, kV2, kV3).representation, kV4._1, kV4._2, duplicateKeyThrower))
+    .asInstanceOf[Env[V1 | V2 | V3 | V4]{
+      type Shape = Extended[Extended[Extended[Cons[I1, V1, Empty], I2, V2], I3, V3], I4, V4] }
+    ]
+
+  def from[
+    I1 <: Long & Singleton, V1,
+    I2 <: Long & Singleton, V2,
+    I3 <: Long & Singleton, V3,
+    I4 <: Long & Singleton, V4,
+    I5 <: Long & Singleton, V5,
+  ](kV1: (ID[I1], V1), kV2: (ID[I2], V2), kV3: (ID[I3], V3), kV4: (ID[I4], V4), kV5: (ID[I5], V5))
+  (using
+    (I1 != I2) =:= true, (I1 != I3) =:= true, (I1 != I4) =:= true, (I1 != I5) =:= true,
+    (I2 != I3) =:= true, (I2 != I4) =:= true, (I2 != I5) =:= true,
+    (I3 != I4) =:= true, (I3 != I5) =:= true,
+    (I4 != I5) =:= true,
+  ): Env[V1 | V2 | V3 | V4 | V5]{
+    type Shape = Extended[Extended[Extended[Extended[Cons[I1, V1, Empty], I2, V2], I3, V3], I4, V4], I5, V5]
+  } = EnvImpl(extended(from(kV1, kV2, kV3, kV4).representation, kV5._1, kV5._2, duplicateKeyThrower))
+    .asInstanceOf[Env[V1 | V2 | V3 | V4 | V5]{
+      type Shape = Extended[Extended[Extended[Extended[Cons[I1, V1, Empty], I2, V2], I3, V3], I4, V4], I5, V5] }
+    ]
 
   private final class EnvImpl[+V, S <: KVList](protected val representation: S) extends Env[V]:
     protected type Shape = S
@@ -173,16 +216,23 @@ object Env:
 
     inline def get(key: IDTop): Option[V] = valueIn(representation)(using key)
 
-    inline def iterator: Iterator[(IDTop, V)] = ??? // todo
+    def iterator: Iterator[(IDTop, V)] = new Iterator[(IDTop, V)]:
+      var remaining: KVList = representation
+      def hasNext: Boolean = remaining == Empty
+      def next(): (IDTop, V) = remaining match
+        case Empty => throw new NoSuchElementException
+        case Cons(key, value, tail) =>
+          remaining = tail
+          (key, value.asInstanceOf[V])
 
     def at[I <: Long & Singleton](key: ID[I])(using ContainsKey[S, I] =:= true): ValueIn[Shape, I] =
       valueIn(representation)(using key).get.asInstanceOf[ValueIn[S, I]]
 
     @targetName("extended")
-    def +|[W >: V, U, I <: Long & Singleton](key: ID[I], value: U)
-    (using ContainsKey[S, I] =:= false): Env[U | W]{ type Shape = Extended[S, I, U] } =
+    def +|[W >: V, U <: W, I <: Long & Singleton](key: ID[I], value: U)
+    (using ContainsKey[S, I] =:= false): Env[W]{ type Shape = Extended[S, I, U] } =
       EnvImpl(extended(representation, key, value, duplicateKeyThrower))
-        .asInstanceOf[Env[U | W]{ type Shape = Extended[S, I, U] }]
+        .asInstanceOf[Env[W]{ type Shape = Extended[S, I, U] }]
 
     @targetName("extendedCanThrow")
     def +![W >: V](key: IDTop, value: W)(using CanEqual[W, W]): Env[W] =
@@ -364,8 +414,4 @@ private def envExample: Unit =
     val `1`: String = args.at(ID.from(1))
     val `2`: List[Int] = args.at(ID.from(2))
     `2`.map(i => (i + 1).toString).mkString(`1`)
-
-  // todo why does Scala think that comma is of type (String | List[Int])?
-  // todo it seems to instantiate the type of comma to W.
-  //  If we didn't keep track of upper bounds, this should not be possible.
   println(foo2(Env.from(ID.from(2) -> List(1, 2), ID.from(1) -> ", ")))
