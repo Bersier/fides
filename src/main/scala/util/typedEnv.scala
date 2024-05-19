@@ -48,8 +48,8 @@ sealed trait Env[+V] extends Map[Env.IDTop, V]:
     * @return a new [[Env]] that additionally contains the given key-value pair
     */
   @targetName("extended")
-  def +|[W >: V, U <: W, I <: Long & Singleton](key: ID[I], value: U)
-  (using ContainsKey[Shape, I] =:= false): Env[W]{ type Shape = Extended[W, Env.this.Shape, I, U] }
+  def +|[W >: V, U, I <: Long & Singleton](key: ID[I], value: U)
+  (using ContainsKey[Shape, I] =:= false): Env[U | W]{ type Shape = Extended[U | W, Env.this.Shape, I, U] }
 //  def +|[W >: V, I <: Long & Singleton](key: ID[I], value: W)
 //  (using ContainsKey[Shape, I] =:= false): Env[W]{ type Shape = Extended[W, Env.this.Shape, I, value.type] }
 // todo why does ContainsKey not reduce anymore when value.type is used instead of U?
@@ -161,10 +161,10 @@ object Env:
       valueIn(representation)(using key).get.asInstanceOf[ValueIn[W, S, I]]
 
     @targetName("extended")
-    def +|[W >: V, U <: W, I <: Long & Singleton](key: ID[I], value: U)
-    (using ContainsKey[S, I] =:= false): Env[W]{ type Shape = Extended[W, S, I, U] } =
+    def +|[W >: V, U, I <: Long & Singleton](key: ID[I], value: U)
+    (using ContainsKey[S, I] =:= false): Env[U | W]{ type Shape = Extended[U | W, S, I, U] } =
       EnvImpl(extended(representation)(using key, value, (_, _) => throw AssertionError("Duplicate key")))
-        .asInstanceOf[Env[W]{ type Shape = Extended[W, S, I, U] }]
+        .asInstanceOf[Env[U | W]{ type Shape = Extended[U | W, S, I, U] }]
 //    def +|[W >: V, I <: Long & Singleton](key: ID[I], value: W)
 //    (using ContainsKey[S, I] =:= false): Env[W]{ type Shape = Extended[W, S, I, value.type] } =
 //      EnvImpl(extended(representation)(using key, value, (_, _) => throw AssertionError("Duplicate key")))
@@ -270,7 +270,7 @@ object Env:
   * Type-level version of [[extended]]
   */
   type Extended[V, L <: TList[R[V]], K <: Long, U <: V] <: TList.Cons[R[V], ?, ?] = L match
-    case TList.Empty => TList.Cons[R[U], (K, U), TList.Empty]
+    case TList.Empty => TList.Cons[R[V], (K, U), TList.Empty]
     case TList.Cons[?, (k, v), tail] => K < k match
       case true => TList.Cons[R[V], (K, U), L]
       case false => k < K match
@@ -349,17 +349,20 @@ private def envExample: Unit =
     `2`.map(i => (i + 1).toString).mkString(`1`)
   println(foo1(`2` = List(1, 2), `1` = ", "))
 
-  def foo2(args: Env.EnvT[((2L, List[Int]), (1L, String))]): String =
+  // todo switch to Tuples for shapes? Env.EnvT[((2L, List[Int]), (1L, String))]
+  def foo2(args: Env[String | List[Int]]{
+    type Shape = TList.Cons[(Long, String | List[Int]), (1L, String), TList.Cons[(Long, List[Int]), (2L, List[Int]), TList.Empty]]
+  }): String =
     val `1`: String = args.at(ID.from(1))
     val `2`: List[Int] = args.at(ID.from(2))
     `2`.map(i => (i + 1).toString).mkString(`1`)
 
   val one: ID[1L & Singleton] = ID.from(1)
   val comma: String = ", "
-  val env1 = Env.empty +| (ID.from(2), List(1, 2))
-  val env2: Env[Any]{
-    type Shape = TList.Cons[(Long, Any), (1L, String), TList.Cons[(Long, Any), (2L, List[Int]), TList.Empty]]
-  } = env1 +| (one, comma) // todo why does Scala think that comma is of type (String | List[Int])?
+  val env2: Env[String | List[Int]]{
+    type Shape = TList.Cons[(Long, String | List[Int]), (1L, String), TList.Cons[(Long, List[Int]), (2L, List[Int]), TList.Empty]]
+  } = Env.empty +| (ID.from(2), List(1, 2)) +| (one, comma)
+  // todo why does Scala think that comma is of type (String | List[Int])?
   // todo it seems to instantiate the type of comma to W.
   //  If we didn't keep track of upper bounds, this should not be possible.
   println(foo2(env2))
