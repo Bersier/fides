@@ -34,13 +34,13 @@ import scala.compiletime.ops.long.<
   * known upper type bound.
   */
 sealed trait Env[+V] extends Map[Env.IDTop, V]:
-  import util.Env.{AreDisjoint, ContainsKey, Extended, ID, IDTop, Merged, ValueIn, Without}
+  import util.Env.{AreDisjoint, ContainsKey, Extended, ID, IDTop, KVList, Merged, ValueIn, Without}
 
   /**
     * @param key present in this [[Env]] whose corresponding value is to be retrieved
     * @return the value corresponding to the given key
     */
-  def at[W >: V, I <: Long & Singleton](key: ID[I])(using ContainsKey[Shape, I] =:= true): ValueIn[W, Shape, I]
+  def at[I <: Long & Singleton](key: ID[I])(using ContainsKey[Shape, I] =:= true): ValueIn[Shape, I]
 
   /**
     * @param key known to be absent from this [[Env]]
@@ -49,10 +49,7 @@ sealed trait Env[+V] extends Map[Env.IDTop, V]:
     */
   @targetName("extended")
   def +|[W >: V, U, I <: Long & Singleton](key: ID[I], value: U)
-  (using ContainsKey[Shape, I] =:= false): Env[U | W]{ type Shape = Extended[U | W, Env.this.Shape, I, U] }
-//  def +|[W >: V, I <: Long & Singleton](key: ID[I], value: W)
-//  (using ContainsKey[Shape, I] =:= false): Env[W]{ type Shape = Extended[W, Env.this.Shape, I, value.type] }
-// todo why does ContainsKey not reduce anymore when value.type is used instead of U?
+  (using ContainsKey[Shape, I] =:= false): Env[U | W]{ type Shape = Extended[Env.this.Shape, I, U] }
 
   /**
     * @return a new [[Env]] that additionally contains the given key-value pair
@@ -66,16 +63,16 @@ sealed trait Env[+V] extends Map[Env.IDTop, V]:
     * @return a new [[Env]] without the given key
     */
   @targetName("without")
-  def -|[W >: V, I <: Long & Singleton](key: ID[I])
-  (using ContainsKey[Shape, I] =:= true): Env[V]{ type Shape = Without[W, Env.this.Shape, I] }
+  def -|[I <: Long & Singleton](key: ID[I])
+  (using ContainsKey[Shape, I] =:= true): Env[V]{ type Shape = Without[Env.this.Shape, I] }
 
   /**
     * @param that another [[Env]], whose keys are disjoint from this one
     * @return the union of the this and that [[Env]]
     */
   @targetName("merged")
-  def +|+[W >: V, S2 <: TList[(Long, W)]](that: Env[W]{ type Shape = S2 })
-  (using AreDisjoint[W, Shape, S2] =:= true): Env[W]{ type Shape = Merged[W, Env.this.Shape, S2] }
+  def +|+[W >: V, S2 <: KVList](that: Env[W]{ type Shape = S2 })
+  (using AreDisjoint[Shape, S2] =:= true): Env[W]{ type Shape = Merged[Env.this.Shape, S2] }
 
   /**
     * @param that another [[Env]], compatible with this one
@@ -90,7 +87,7 @@ sealed trait Env[+V] extends Map[Env.IDTop, V]:
     *
     * It is sorted by (Long) key, without duplicate keys.
     */
-  protected type Shape <: TList[(Long, V)]
+  protected type Shape <: KVList
 
   /**
     * Internal representation of this [[Env]]
@@ -99,6 +96,19 @@ sealed trait Env[+V] extends Map[Env.IDTop, V]:
   */
   protected def representation: Shape
 object Env:
+
+  sealed trait KVList
+  object KVList:
+    case object Empty extends KVList
+    type Empty = Empty.type
+    final case class Cons[K <: Long & Singleton, +V, +T <: KVList](k: K, v: V, t: T) extends KVList
+
+    given CanEqual[KVList, Empty] = CanEqual.derived
+    given CanEqual[Empty, KVList] = CanEqual.derived
+    given [H, T <: KVList](using CanEqual[H, H], CanEqual[T, T]): CanEqual[Cons[?, H, T], Cons[?, H, T]] =
+      CanEqual.derived
+  end KVList
+  import KVList.{Cons, Empty}
 
   /**
     * Represents identifiers.
@@ -136,57 +146,53 @@ object Env:
   /**
     * The empty [[Env]]
     */
-  val empty: Env[Nothing]{ type Shape = TList.Empty } = EnvImpl(TList.Empty)
+  val empty: Env[Nothing]{ type Shape = Empty } = EnvImpl(Empty)
 
-  private final class EnvImpl[+V, S <: TList[R[V]]](protected val representation: S) extends Env[V]:
+  private final class EnvImpl[+V, S <: KVList](protected val representation: S) extends Env[V]:
     protected type Shape = S
 
     def removed(key: IDTop): Env[V] = EnvImpl(without(representation)(using key))
 
     def updated[W >: V](key: IDTop, value: W): Env[W] =
-      def updated(list: TList[R[W]]): TList.Cons[R[W], ?, ?] = list match
-        case TList.Empty => (key, value) :: TList.Empty
-        case TList.Cons((k, v), tail) =>
-          if key < k then (key, value) :: list else
-          if key > k then (k, v) :: updated(tail)
-          else (key, value) :: tail
-        case _ => throw AssertionError("Impossible case; added to silence spurious warning")
+      def updated(list: KVList): Cons[?, ?, ?] = list match
+        case Empty => Cons(key, value, Empty)
+        case Cons(k, v, tail) =>
+          if key < k then Cons(key, value, list) else
+          if key > k then Cons(k, v, updated(tail))
+          else Cons(key, value, tail)
       EnvImpl(updated(representation))
 
     inline def get(key: IDTop): Option[V] = valueIn(representation)(using key)
 
-    inline def iterator: Iterator[(IDTop, V)] = representation.iterator
+    inline def iterator: Iterator[(IDTop, V)] = ??? // todo
 
-    def at[W >: V, I <: Long & Singleton](key: ID[I])(using ContainsKey[S, I] =:= true): ValueIn[W, Shape, I] =
-      valueIn(representation)(using key).get.asInstanceOf[ValueIn[W, S, I]]
+    def at[I <: Long & Singleton](key: ID[I])(using ContainsKey[S, I] =:= true): ValueIn[Shape, I] =
+      valueIn(representation)(using key).get.asInstanceOf[ValueIn[S, I]]
 
     @targetName("extended")
     def +|[W >: V, U, I <: Long & Singleton](key: ID[I], value: U)
-    (using ContainsKey[S, I] =:= false): Env[U | W]{ type Shape = Extended[U | W, S, I, U] } =
-      EnvImpl(extended(representation)(using key, value, (_, _) => throw AssertionError("Duplicate key")))
-        .asInstanceOf[Env[U | W]{ type Shape = Extended[U | W, S, I, U] }]
-//    def +|[W >: V, I <: Long & Singleton](key: ID[I], value: W)
-//    (using ContainsKey[S, I] =:= false): Env[W]{ type Shape = Extended[W, S, I, value.type] } =
-//      EnvImpl(extended(representation)(using key, value, (_, _) => throw AssertionError("Duplicate key")))
-//        .asInstanceOf[Env[W]{ type Shape = Extended[W, S, I, value.type] }]
+    (using ContainsKey[S, I] =:= false): Env[U | W]{ type Shape = Extended[S, I, U] } =
+      EnvImpl(extended(representation, key, value, (_, _) => throw AssertionError("Duplicate key")))
+        .asInstanceOf[Env[U | W]{ type Shape = Extended[S, I, U] }]
 
     @targetName("extendedCanThrow")
     def +![W >: V](key: IDTop, value: W)(using CanEqual[W, W]): Env[W] =
-      EnvImpl(extended(representation)(using key, value, _ == _))
+      EnvImpl(extended(representation, key, value, _ == _))
 
     @targetName("without")
-    def -|[W >: V, I <: Long & Singleton](key: ID[I])
-    (using ContainsKey[S, I] =:= true): Env[V]{ type Shape = Without[W, S, I] } =
-      EnvImpl(without(representation)(using key)).asInstanceOf[Env[V]{ type Shape = Without[W, S, I] }]
+    def -|[I <: Long & Singleton](key: ID[I])
+    (using ContainsKey[S, I] =:= true): Env[V]{ type Shape = Without[S, I] } =
+      EnvImpl(without(representation)(using key)).asInstanceOf[Env[V]{ type Shape = Without[S, I] }]
 
     @targetName("merged")
-    def +|+[W >: V, S2 <: TList[R[W]]](that: Env[W]{ type Shape = S2 })
-    (using AreDisjoint[W, S, S2] =:= true): Env[W]{ type Shape = Merged[W, S, S2] } =
+    def +|+[W >: V, S2 <: KVList](that: Env[W]{ type Shape = S2 })
+    (using AreDisjoint[S, S2] =:= true): Env[W]{ type Shape = Merged[S, S2] } =
       EnvImpl(merged(representation, that.representation)(using (_, _) => throw AssertionError("Duplicate key")))
-        .asInstanceOf[Env[W]{ type Shape = Merged[W, S, S2] }]
+        .asInstanceOf[Env[W]{ type Shape = Merged[S, S2] }]
 
     @targetName("mergedCanThrow")
     def +!+[W >: V](that: Env[W])(using CanEqual[W, W]): Env[W] =
+      given CanEqual[Any, Any] = CanEqual.derived
       EnvImpl(merged(representation, that.representation)(using _ == _))
   end EnvImpl
 
@@ -195,35 +201,33 @@ object Env:
     * @param key whose associated value is to be returned
     * @return the value associated to the given key in the given list, if present
     */
-  private def valueIn[V](list: TList[R[V]])(implicit key: Long): Option[V] = list.consOption.flatMap:
-    case TList.Cons((k, v), tail) => key == k thenYield v orElse (valueIn(tail), provided = key < k)
+  private def valueIn[V](list: KVList)(implicit key: Long): Option[V] = list match
+    case Empty => None
+    case Cons(k, v, tail) => key == k thenYield v.asInstanceOf[V] orElse (valueIn(tail), provided = key < k)
 
   /**
     * @param list a list of key-value pairs, sorted by key, without duplicate keys
     * @param eq equality function for values
     * @return a new duplicate-free sorted list, additionally containing the new given key-value pair
     */
-  private def extended[V](list: TList[R[V]])
-  (using key: IDTop, value: V, eq: (V, V) => Boolean): TList.Cons[R[V], ?, ?] = list match
-    case TList.Empty => (key, value) :: TList.Empty
-    case TList.Cons((k, v), tail) =>
-      if key < k then (key, value) :: list else
-      if key > k then (k, v) :: extended(tail)
-      else if eq(value, v) then (k, v) :: tail
+  private def extended[V](list: KVList, key: IDTop, value: V, eq: (V, V) => Boolean): Cons[?, ?, ?] = list match
+    case Empty => Cons(key, value, Empty)
+    case Cons(k, v, tail) =>
+      if key < k then Cons(key, value, list) else
+      if key > k then Cons(k, v, extended(tail, key, value, eq))
+      else if eq(value, v.asInstanceOf[V]) then Cons(k, v, tail)
       else throw AmbiguousKeyError(key)
-    case _ => throw AssertionError("Impossible case; added to silence spurious warning")
 
   /**
     * @param list a list of key-value pairs, sorted by key, without duplicate keys
     * @return a new list, without the given key
     */
-  private def without[V](list: TList[R[V]])(using key: IDTop): TList[R[V]] = list match
-    case TList.Empty => list
-    case TList.Cons((k, v), tail) =>
+  private def without[V](list: KVList)(using key: IDTop): KVList = list match
+    case Empty => list
+    case Cons(k, v, tail) =>
       if key < k then list else
-      if key > k then (k, v) :: without(tail)
+      if key > k then Cons(k, v, without(tail))
       else tail
-    case _ => throw AssertionError("Impossible case; added to silence spurious warning")
 
   /**
     * The usual merge algorithm
@@ -233,77 +237,75 @@ object Env:
     * @param eq equality function for values
     * @return a new duplicate-free sorted list representing the union of the two given lists
     */
-  private def merged[V](l1: TList[R[V]], l2: TList[R[V]])(using eq: (V, V) => Boolean): TList[R[V]] = l1 match
-    case TList.Empty => l2
-    case TList.Cons((k1, v1), tail1) => l2 match
-      case TList.Empty => l1
-      case TList.Cons((k2, v2), tail2) =>
-        if k1 < k2 then (k1, v1) :: merged(tail1, l2) else
-        if k1 > k2 then (k2, v2) :: merged(l1, tail2)
-        else if eq(v1, v2) then (k1, v1) :: merged(tail1, tail2)
+  private def merged[V](l1: KVList, l2: KVList)(using eq: (V, V) => Boolean): KVList = l1 match
+    case Empty => l2
+    case Cons(k1, v1, tail1) => l2 match
+      case Empty => l1
+      case Cons(k2, v2, tail2) =>
+        if k1 < k2 then Cons(k1, v1, merged(tail1, l2)) else
+        if k1 > k2 then Cons(k2, v2, merged(l1, tail2))
+        else if eq(v1.asInstanceOf[V], v2.asInstanceOf[V]) then Cons(k1, v1, merged(tail1, tail2))
         else throw AmbiguousKeyError(k1)
-      case _ => throw AssertionError("Impossible case; added to silence spurious warning")
-    case _ => throw AssertionError("Impossible case; added to silence spurious warning")
 
-  type EnvL[V, L <: TList[R[V]]] = Env[V]{ type Shape = Sorted[V, L] }
+  type EnvL[L <: KVList] = Env[?]{ type Shape = Sorted[L] }
 
   type EnvT[T <: Tuple] = Env[?]{ type Shape = FromTuple[T] }
 
-  type FromTuple[T <: Tuple] <: TList[?] = T match
-    case EmptyTuple => TList.Empty
-    case (k, v) *: tail => Extended[Any, FromTuple[tail], k, v]
+  type FromTuple[T <: Tuple] <: KVList = T match
+    case EmptyTuple => Empty
+    case (k, v) *: tail => Extended[FromTuple[tail], k, v]
 
-  type Sorted[V, L <: TList[R[V]]] <: TList[R[V]] = L match
-    case TList.Empty => L
-    case TList.Cons[?, (k, v), tail] => Extended[V, Sorted[V, tail], k, v]
+  type Sorted[L <: KVList] <: KVList = L match
+    case Empty => L
+    case Cons[k, v, tail] => Extended[Sorted[tail], k, v]
 
   /**
     * Type-level version of [[valueIn]]
     */
-  type ValueIn[V, L <: TList[R[V]], K <: Long] <: V = L match
-    case TList.Cons[?, (k, v), tail] => K < k match
+  type ValueIn[L <: KVList, K <: Long] = L match
+    case Cons[k, v, tail] => K < k match
       case false => k < K match
-        case true => ValueIn[V, tail, K]
-        case false => v & V
+        case true => ValueIn[tail, K]
+        case false => v
 
   /**
   * Type-level version of [[extended]]
   */
-  type Extended[V, L <: TList[R[V]], K <: Long, U <: V] <: TList.Cons[R[V], ?, ?] = L match
-    case TList.Empty => TList.Cons[R[V], (K, U), TList.Empty]
-    case TList.Cons[?, (k, v), tail] => K < k match
-      case true => TList.Cons[R[V], (K, U), L]
+  type Extended[L <: KVList, K <: Long, V] <: Cons[?, ?, ?] = L match
+    case Empty => Cons[K, V, Empty]
+    case Cons[k, v, tail] => K < k match
+      case true => Cons[K, V, L]
       case false => k < K match
-        case true => TList.Cons[R[V], (k, v), Extended[V, tail, K, U]]
+        case true => Cons[k, v, Extended[tail, K, V]]
 
   /**
     * Type-level version of [[without]]
     */
-  type Without[V, L <: TList[R[V]], K <: Long] <: TList[R[V]] = L match
-    case TList.Cons[?, (k, v), tail] => K < k match
+  type Without[L <: KVList, K <: Long] <: KVList = L match
+    case Cons[k, v, tail] => K < k match
       case true => L
       case false => k < K match
-        case true => TList.Cons[R[V], (k, v), Without[V, tail, K]]
-        case false => tail & TList[R[V]]
+        case true => Cons[k, v, Without[tail, K]]
+        case false => tail & KVList
 
   /**
     * Type-level version of [[merged]]
     */
-  type Merged[V, L1 <: TList[R[V]], L2 <: TList[R[V]]] <: TList[R[V]] = L1 match
-    case TList.Empty => L2
-    case TList.Cons[?, (k1, v1), tail1] => L2 match
-      case TList.Empty => L1
-      case TList.Cons[?, (k2, v2), tail2] => k1 < k2 match
-        case true => TList.Cons[R[V], (k1, v1), Merged[V, tail1, L2]]
+  type Merged[L1 <: KVList, L2 <: KVList] <: KVList = L1 match
+    case Empty => L2
+    case Cons[k1, v1, tail1] => L2 match
+      case Empty => L1
+      case Cons[k2, v2, tail2] => k1 < k2 match
+        case true => Cons[k1, v1, Merged[tail1, L2]]
         case false => k2 < k1 match
-          case true => TList.Cons[R[V], (k2, v2), Merged[V, L1, tail2]]
+          case true => Cons[k2, v2, Merged[L1, tail2]]
 
   /**
     * At the type level, checks whether the given list contains the given key.
     */
-  type ContainsKey[L <: TList[R[?]], K <: Long] <: Boolean = L match
-    case TList.Empty => false
-    case TList.Cons[?, (k, ?), tail] => K < k match
+  type ContainsKey[L <: KVList, K <: Long] <: Boolean = L match
+    case Empty => false
+    case Cons[k, ?, tail] => K < k match
       case true => false
       case false => k < K match
         case true => ContainsKey[tail, K]
@@ -312,14 +314,14 @@ object Env:
   /**
     * At the type level, checks whether the two given lists have disjoint keys.
     */
-  type AreDisjoint[V, L1 <: TList[R[V]], L2 <: TList[R[V]]] <: Boolean = L1 match
-    case TList.Empty => true
-    case TList.Cons[?, (k1, ?), tail1] => L2 match
-      case TList.Empty => true
-      case TList.Cons[?, (k2, ?), tail2] => k1 < k2 match
-        case true => AreDisjoint[V, tail1, L2]
+  type AreDisjoint[L1 <: KVList, L2 <: KVList] <: Boolean = L1 match
+    case Empty => true
+    case Cons[k1, ?, tail1] => L2 match
+      case Empty => true
+      case Cons[k2, ?, tail2] => k1 < k2 match
+        case true => AreDisjoint[tail1, L2]
         case false => k2 < k1 match
-          case true => AreDisjoint[V, L1, tail2]
+          case true => AreDisjoint[L1, tail2]
           case false => false
 
   /**
@@ -332,8 +334,6 @@ object Env:
     * Supertype of all [[ID]]s
     */
   private type IDTop = ID[Long]
-
-  private type R[+T] = (Long, T)
 end Env
 
 private def envExample: Unit =
@@ -349,21 +349,12 @@ private def envExample: Unit =
     `2`.map(i => (i + 1).toString).mkString(`1`)
   println(foo1(`2` = List(1, 2), `1` = ", "))
 
-  // todo switch to Tuples for shapes? Env.EnvT[((2L, List[Int]), (1L, String))]
-  def foo2(args: Env[String | List[Int]]{
-    type Shape = TList.Cons[(Long, String | List[Int]), (1L, String), TList.Cons[(Long, List[Int]), (2L, List[Int]), TList.Empty]]
-  }): String =
+  def foo2(args: Env.EnvT[((2L, List[Int]), (1L, String))]): String =
     val `1`: String = args.at(ID.from(1))
     val `2`: List[Int] = args.at(ID.from(2))
     `2`.map(i => (i + 1).toString).mkString(`1`)
 
-  val one: ID[1L & Singleton] = ID.from(1)
-  val comma: String = ", "
-  val env2: Env[String | List[Int]]{
-    type Shape = TList.Cons[(Long, String | List[Int]), (1L, String), TList.Cons[(Long, List[Int]), (2L, List[Int]), TList.Empty]]
-  } = Env.empty +| (ID.from(2), List(1, 2)) +| (one, comma)
   // todo why does Scala think that comma is of type (String | List[Int])?
   // todo it seems to instantiate the type of comma to W.
   //  If we didn't keep track of upper bounds, this should not be possible.
-  println(foo2(env2))
-  println(foo2)
+  println(foo2(Env.empty +| (ID.from(2), List(1, 2)) +| (ID.from(1), ", ")))
