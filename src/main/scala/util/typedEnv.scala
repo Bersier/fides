@@ -406,12 +406,12 @@ private def envExample: Unit =
   val zero: Int = d1.at(ID.from(0))
   println((d4, zero))
 
-  def foo1(`2`: List[Int], `1`: String): String =
-    `2`.map(i => (i + 1).toString).mkString(`1`)
+  def foo1[T](`2`: List[T], `1`: String): String =
+    `2`.map(_.toString).mkString(`1`)
   println(foo1(`2` = List(1, 2), `1` = ", "))
 
-  def foo2(args: Env.EnvT[((2L, List[Int]), (1L, String))]): String =
+  def foo2[T](args: Env.EnvT[((2L, List[T]), (1L, String))]): String =
     val `1`: String = args.at(ID.from(1))
-    val `2`: List[Int] = args.at(ID.from(2))
-    `2`.map(i => (i + 1).toString).mkString(`1`)
-  println(foo2(Env.from(ID.from(2) -> List(1, 2), ID.from(1) -> ", ")))
+    val `2`: List[T] = args.at(ID.from(2))
+    `2`.map(_.toString).mkString(`1`)
+  println(foo2[Int](Env.from(ID.from(2) -> List(1, 2), ID.from(1) -> ", ")))
