@@ -99,16 +99,36 @@ sealed trait Env[+V] extends Map[Env.IDTop, V]:
   protected def representation: Shape
 object Env:
 
+  /**
+    * List of key-value pairs, where keys are of type [[Long]]
+    */
   sealed trait KVList
   object KVList:
+
+    /**
+      * Empty [[KVList]]
+      */
     case object Empty extends KVList
+
+    /**
+      * Empty [[KVList]] type
+      */
     type Empty = Empty.type
+
+    /**
+      * Constructs a new [[KVList]] from the given head and tail.
+      *
+      * @param k the key of the of the head of the new list
+      * @param v the value of the head of the new list
+      * @param t the tail of the new list
+      */
     final case class Cons[K <: Long & Singleton, +V, +T <: KVList](k: K, v: V, t: T) extends KVList
 
     given CanEqual[KVList, Empty] = CanEqual.derived
     given CanEqual[Empty, KVList] = CanEqual.derived
-    given [H, T <: KVList](using CanEqual[H, H], CanEqual[T, T]): CanEqual[Cons[?, H, T], Cons[?, H, T]] =
-      CanEqual.derived
+    given [H1, H2, T1 <: KVList, T2 <: KVList](using
+      CanEqual[H1, H2], CanEqual[T1, T2],
+    ): CanEqual[Cons[?, H1, T1], Cons[?, H2, T2]] = CanEqual.derived
   end KVList
   import KVList.{Cons, Empty}
 
@@ -146,18 +166,27 @@ object Env:
   end ID
 
   /**
-    * The empty [[Env]]
+    * @return the empty [[Env]]
     */
   val empty: Env[Nothing]{ type Shape = Empty } = EnvImpl(Empty)
 
+  /**
+    * @return a new [[Env]] containing the given key-value pair
+    */
   def from[I <: Long & Singleton, V](kV: (ID[I], V)): Env[V]{ type Shape = Cons[I, V, Empty] } =
     EnvImpl(Cons(kV._1, kV._2, Empty))
 
+  /**
+    * @return a new [[Env]] containing the two given key-value pairs
+    */
   def from[I1 <: Long & Singleton, V1, I2 <: Long & Singleton, V2](kV1: (ID[I1], V1), kV2: (ID[I2], V2))
   (using (I1 != I2) =:= true): Env[V1 | V2]{ type Shape = Extended[Cons[I1, V1, Empty], I2, V2] } =
     EnvImpl(extended(from(kV1).representation, kV2._1, kV2._2, duplicateKeyThrower))
       .asInstanceOf[Env[V1 | V2]{ type Shape = Extended[Cons[I1, V1, Empty], I2, V2] }]
 
+  /**
+    * @return a new [[Env]] containing the three given key-value pairs
+    */
   def from[I1 <: Long & Singleton, V1, I2 <: Long & Singleton, V2, I3 <: Long & Singleton, V3]
   (kV1: (ID[I1], V1), kV2: (ID[I2], V2), kV3: (ID[I3], V3))
   (using (I1 != I2) =:= true, (I1 != I3) =:= true, (I2 != I3) =:= true): Env[V1 | V2 | V3]{
@@ -165,6 +194,9 @@ object Env:
   } = EnvImpl(extended(from(kV1, kV2).representation, kV3._1, kV3._2, duplicateKeyThrower))
     .asInstanceOf[Env[V1 | V2 | V3]{ type Shape = Extended[Extended[Cons[I1, V1, Empty], I2, V2], I3, V3] }]
 
+  /**
+    * @return a new [[Env]] containing the four given key-value pairs
+    */
   def from[
     I1 <: Long & Singleton, V1,
     I2 <: Long & Singleton, V2,
@@ -181,6 +213,9 @@ object Env:
       type Shape = Extended[Extended[Extended[Cons[I1, V1, Empty], I2, V2], I3, V3], I4, V4] }
     ]
 
+  /**
+    * @return a new [[Env]] containing the five given key-value pairs
+    */
   def from[
     I1 <: Long & Singleton, V1,
     I2 <: Long & Singleton, V2,
@@ -308,14 +343,26 @@ object Env:
         else if eq(v1.asInstanceOf[V], v2.asInstanceOf[V]) then Cons(k1, v1, merged(tail1, tail2))
         else throw AmbiguousKeyError(k1)
 
+  /**
+    * Converts a [[KVList]] type to an [[Env]] type.
+    */
   type EnvL[L <: KVList] = Env[?]{ type Shape = Sorted[L] }
 
+  /**
+    * Converts a [[Tuple]] type to an [[Env]] type.
+    */
   type EnvT[T <: Tuple] = Env[?]{ type Shape = FromTuple[T] }
 
+  /**
+    * Converts a [[Tuple]] type to a sorted [[KVList]] type.
+    */
   type FromTuple[T <: Tuple] <: KVList = T match
     case EmptyTuple => Empty
     case (k, v) *: tail => Extended[FromTuple[tail], k, v]
 
+  /**
+    * Type-level list sort
+    */
   type Sorted[L <: KVList] <: KVList = L match
     case Empty => L
     case Cons[k, v, tail] => Extended[Sorted[tail], k, v]
@@ -330,8 +377,8 @@ object Env:
         case false => v
 
   /**
-  * Type-level version of [[extended]]
-  */
+    * Type-level version of [[extended]]
+    */
   type Extended[L <: KVList, K <: Long, V] <: Cons[?, ?, ?] = L match
     case Empty => Cons[K, V, Empty]
     case Cons[k, v, tail] => K < k match
