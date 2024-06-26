@@ -1,7 +1,7 @@
 package util
 
 import java.util.NoSuchElementException
-import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicLong
 import scala.annotation.targetName
 import scala.collection.concurrent
 import scala.compiletime.ops.any.!=
@@ -161,7 +161,7 @@ object Env:
       used(i) = (); i
 
     private val used = concurrent.TrieMap.empty[Long, Unit]
-    private val next = AtomicInteger(1)
+    private val next = AtomicLong(1)
     given CanEqual[IDTop, IDTop] = CanEqual.derived
   end ID
 
