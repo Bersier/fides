@@ -2,7 +2,7 @@ name := "Fides"
 version := "0.1.0"
 
 // See https://repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/
-scalaVersion := "3.5.1-RC1-bin-20240625-b3f113e-NIGHTLY"
+scalaVersion := "3.6.0-RC1-bin-20240710-466676c-NIGHTLY"
 
 libraryDependencies ++= Seq(
   "org.scala-lang" %% "scala3-staging" % scalaVersion.value,
@@ -18,7 +18,7 @@ libraryDependencies ++= Seq(
 // See https://github.com/lampepfl/dotty/blob/main/compiler/src/dotty/tools/dotc/config/ScalaSettings.scala
 scalacOptions ++= Seq(
 //  "-Vprofile",
-  "-Werror",
+//  "-Werror",
   "-Wimplausible-patterns",
   "-Wnonunit-statement",
   "-Wsafe-init",

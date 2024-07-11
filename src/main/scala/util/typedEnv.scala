@@ -7,6 +7,8 @@ import scala.collection.concurrent
 import scala.compiletime.ops.any.!=
 import scala.compiletime.ops.long.<
 
+// todo delete, as https://github.com/Bersier/contextual should subsume it
+
 /**
   * Typeful representation of a binding environment/context
   * <br><br>

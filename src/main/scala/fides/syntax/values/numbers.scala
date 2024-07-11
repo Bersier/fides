@@ -21,6 +21,8 @@ end NaturalNumber
   * Outputs the sum of the two inputs.
   */
 final case class Add[N <: WholeNumber](augend: Code[Expr[N]], addend: Code[Expr[N]]) extends Expr[N]
+// todo symmetry of operation should be explicit: Should take a Set2
+// todo associativity could also be made explicit, by taking a set of any size
 
 /**
   * Outputs the difference of the two inputs.

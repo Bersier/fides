@@ -1,6 +1,11 @@
 package util
 
 val Async = new Done
+
+/**
+  * Indicates an absence of return (rather than a return value of type Unit).
+  * In other words, when Async is returned, it does not indicate the effective end of the call.
+  */
 type Async = Async.Type
 
 class Done:
