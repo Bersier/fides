@@ -19,7 +19,7 @@ trait Bag[+T, Size <: Int] extends Bag.Unsized[T]:
     randomSamplePointUnsafe(generator)
 
   final def randomSample[S <: Int & Singleton](size: S, generator: Random = Random)
-  (using 0 <= S =:= true): Bag[T, S] =
+  (using 0 <= S =:= true, 1 <= Size =:= true): Bag[T, S] =
     randomSampleUnsafe(size, generator).asInstanceOf[Bag[T, S]]
 
   final def randomSampleWithoutRepetitions[S <: Int & Singleton](size: S, generator: Random = Random)
@@ -209,7 +209,7 @@ object Bag:
       randomSamplePoint(elements, size)
 
     protected[Bag] override def randomSampleUnsafe(size: Int, generator: Random): Unsized[T] =
-      // todo dubious numeric stability
+      // todo dubious numeric stability; write a better version using Spire Real
       inline def repetitionCount(inline sampleSize: Int, inline size: Int): Int =
         val q = 1 - 1.0 / size
         val r = q * size
