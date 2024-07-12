@@ -1,5 +1,7 @@
 package util
 
+import scala.annotation.targetName
+
 /**
   * Observer base trait, with methods shared by all observers
   *
@@ -55,6 +57,19 @@ trait Observable[+T] extends (IndefiniteObserver[T] => Async):
   def foreach(observer: IndefiniteObserver[T]): Async
 
 end Observable
+
+// todo monoid
+extension [S](o1: Observable[S])
+  @targetName("plus") def +[T](o2: Observable[T]): Observable[S | T] =
+    (observer: IndefiniteObserver[S | T]) => Async:
+      val _ = o1.foreach(observer)
+      val _ = o2.foreach(observer)
+
+extension [S](o1: FiniteObservable[S])
+  @targetName("plus") def +[T](o2: FiniteObservable[T]): FiniteObservable[S | T] =
+    (observer: DefiniteObserver[S | T]) => Async:
+      val _ = o1.foreach(observer)
+      val _ = o2.foreach(observer)
 
 /**
   * Finite observable, whose size is eventually known
