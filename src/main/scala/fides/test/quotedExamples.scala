@@ -121,10 +121,10 @@ def multiquoteExample(using Context): Code[?] =
   Quote(
     Send(
       contents = Quote(
-        Add(
+        Add(Args(
           QuotedEscape(Wrap(Inp(myIntChannel))),
           Escape(Wrap(Negate(WholeNumber(5)))),
-        )
+        ))
       ),
       recipient = Inp(InpChan())
     )
