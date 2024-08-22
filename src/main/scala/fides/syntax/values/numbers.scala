@@ -18,7 +18,7 @@ final class NaturalNumber(value: BigInt) extends WholeNumber(value), Val[Natural
 end NaturalNumber
 
 /**
-  * Outputs the sum of the two inputs.
+  * Outputs the sum of the inputs.
   */
 final case class Add[N <: WholeNumber](terms: Code[Args[Expr[N]]]) extends Expr[N]
 
@@ -28,7 +28,7 @@ final case class Add[N <: WholeNumber](terms: Code[Args[Expr[N]]]) extends Expr[
 final case class Negate(integer: Code[Expr[WholeNumber]]) extends Expr[WholeNumber]
 
 /**
-  * Outputs the product of the two inputs.
+  * Outputs the product of the inputs.
   */
 final case class Multiply[N <: WholeNumber](factors: Code[Args[Expr[N]]]) extends Expr[N]
 
