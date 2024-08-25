@@ -44,7 +44,6 @@ scalacOptions ++= Seq(
 //  "-language:experimental.modularity",
 //  "-language:experimental.namedTypeArguments",
 //  "-language:experimental.pureFunctions",
-//  "-language:experimental.tupledFunction",
   "-language:strictEquality",
   "-new-syntax",
   "-release:21",

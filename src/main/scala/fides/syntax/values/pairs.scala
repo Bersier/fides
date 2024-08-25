@@ -21,10 +21,14 @@ final case class Pair[T1 <: ValType, T2 <: ValType](
 /**
   * Extracts the elements of a pair.
   */
-final case class UnPair[T1 <: ValType, T2 <: ValType](
-  first: Code[Xctr[T1]],
-  second: Code[Xctr[T2]],
-) extends Xctr[Paired[T1, T2]]
+type UnPair[T1 <: ValType, T2 <: ValType] = MatchPair[Nothing, Nothing, T1, T2, Nothing, Paired[T1, T2]]
+object UnPair:
+  inline def apply[T1 <: ValType, T2 <: ValType](
+    inline first: Code[Xctr[T1]],
+    inline second: Code[Xctr[T2]]
+  ): UnPair[T1, T2] =
+    MatchPair[Nothing, Nothing, T1, T2, Nothing, Paired[T1, T2]](first, second)
+end UnPair
 
 /**
   * Pair pattern.
@@ -39,7 +43,7 @@ final case class MatchPair[
   P2 <: N2,
   N1 <: ValType,
   N2 <: ValType,
-  L <: Paired[P1, P2],
+  L >: Nothing <: Paired[P1, P2],
   U >: Paired[N1, N2] <: ValType,
 ](
   first: Code[Ptrn[P1, N1]],

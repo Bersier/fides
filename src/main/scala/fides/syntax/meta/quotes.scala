@@ -59,5 +59,5 @@ final case class Quote[S <: CodeType](code: Code[S]) extends Expr[Quoted[S]]
 /**
   * Code extractor.
   */
-final case class MatchQuote[S <: CodeType](code: Code[S]) extends Code[Ptrn[Quoted[S], ValType]]
+final case class MatchQuote[S <: CodeType](code: Code[S]) extends Ptrn[Quoted[S], ValType]
 // todo lossy type

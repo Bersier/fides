@@ -49,8 +49,8 @@ trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
   *
   * Given a value v, if its singleton type is a supertype of [[P]], this pattern will match it.
   *
-  * @tparam N all values of that type are allowed to be matched against this pattern
   * @tparam P the type of the pattern, when interpreted as a value to be matched against
+  * @tparam N all values of that type are allowed to be matched against this pattern
   */
 trait Ptrn[+P <: N, -N <: ValType] extends CodeType, Code[Ptrn[P, N]]
 
