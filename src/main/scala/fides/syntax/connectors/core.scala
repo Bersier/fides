@@ -43,14 +43,14 @@ final case class Signal(trigger: Code[Expr[?]]) extends Expr[Pulse]
   *
   * Another way to think about this is that it forwards the value of the expression that "first" reduces to a value.
   */
-type Pick[T <: ValType] = PickP[Positive, T, ValType, T, ValType]
+type Pick[T <: ValType] = PickP[Positive, T, ValType]
 object Pick:
   inline def apply[T <: ValType](inline inputs: Code[Args.Some[Expr[T]]]): Pick[T] = PickP(inputs)
 
 /**
   * Internal choice. Non-deterministically forwards the input to one of the outputs.
   */
-type UnPick[T <: ValType] = PickP[Negative, Nothing, T, Nothing, T]
+type UnPick[T <: ValType] = PickP[Negative, Nothing, T]
 object UnPick:
   inline def apply[T <: ValType](inline recipients: Code[Args.Some[Xctr[T]]]): UnPick[T] = PickP(recipients)
 end UnPick
@@ -58,16 +58,8 @@ end UnPick
 /**
   * General [[Polar]] for picking. Note that it can only be an [[Expr]] or an [[Xctr]].
   */
-final case class PickP[
-  R >: Positive & Negative <: Polarity,
-  P <: N,
-  N <: ValType,
-  L >: Nothing <: P,
-  U >: N <: ValType,
-](
+final case class PickP[R >: Positive & Negative <: Polarity, P <: N, N <: ValType](
   connections: Code[Args.Some[Polar[R, P, N]]],
-)(using
-  P <:< (L | Nothing),
-  (U & ValType) <:< N,
-  (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing)),
-) extends Polar[R, L, U]
+)(using (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing))) extends Polar[R, P, N]
+
+// todo why not allow MatchPick?
