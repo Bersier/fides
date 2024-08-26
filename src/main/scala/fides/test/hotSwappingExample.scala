@@ -49,27 +49,27 @@ def randomBitService(response: Channel[Bool])(using Context): Code[Process] =
     )
   )
 
-def hotSwappingRandomBitServiceExample(hotswappingSignal: InpChan[Pulse], request: InpChan[OutChan[Bool]])
-  (using Context): Code[?] =
-  import scala.language.implicitConversions
-  val startSignal = Channel[Order]()
-  val killSignal = Channel[Order]()
-  val response = Channel[Bool]()
-  Concurrent(Args(
-    OnHold(
-      Inp(hotswappingSignal),
-      Concurrent(Args(
-        Forward(Kill, Out(killSignal)),
-        Forward(Start, Out(startSignal)),
-      ))
-    ),
-    dynamicCollection(response, request),
-    Awake(
-      killSignal,
-      randomBitService(response)
-    ),
-    Asleep(
-      startSignal,
-      randomBitService(response)
-    ),
-  ))
+//def hotSwappingRandomBitServiceExample(hotswappingSignal: InpChan[Pulse], request: InpChan[OutChan[Bool]])
+//  (using Context): Code[?] =
+//  import scala.language.implicitConversions
+//  val startSignal = Channel[Order]()
+//  val killSignal = Channel[Order]()
+//  val response = Channel[Bool]()
+//  Concurrent(Args(
+//    OnHold(
+//      Inp(hotswappingSignal),
+//      Concurrent(Args(
+//        Forward(Kill, Out(killSignal)),
+//        Forward(Start, Out(startSignal)),
+//      ))
+//    ),
+//    dynamicCollection(response, request),
+//    Awake(
+//      killSignal,
+//      randomBitService(response)
+//    ),
+//    Asleep(
+//      startSignal,
+//      randomBitService(response)
+//    ),
+//  ))

@@ -84,7 +84,7 @@ def simulateSignedMatcherExample2(using Context): Code[?] =
   val matchSignChannel = Channel[Signed[WholeNumber]]()
   Concurrent(Args(
     Forward(
-      Quote(Escape(Sign(WholeNumber(4), myKey))),
+      Quote(Escape(Wrap(Sign(WholeNumber(4), myKey)))),
       Match(
         MatchQuote(MatchEscape(UnWrap(Out(matchSignChannel))))
       ),
