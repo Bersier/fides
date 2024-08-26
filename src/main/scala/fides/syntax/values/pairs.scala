@@ -1,6 +1,7 @@
 package fides.syntax.values
 
-import fides.syntax.code.{Code, Expr, Negative, Neutrale, Plrty, Polar, Positive, Ptrn, Val, ValType, Xctr}
+import fides.syntax.code.{Code, Expr, Polarity, Polar, Ptrn, Val, ValType, Xctr}
+import Polarity.*
 
 /**
   * A value that is made up of two values.
@@ -10,13 +11,13 @@ sealed trait PairT[+T1 <: ValType, +T2 <: ValType] extends ValType
 /**
   * A value that is made up of two values.
   */
-type Paired[T1 <: ValType, T2 <: ValType] = PairP[Neutrale, T1, T2, ValType, ValType, PairT[T1, T2], ValType]
+type Paired[T1 <: ValType, T2 <: ValType] = PairP[Neutral, T1, T2, ValType, ValType, PairT[T1, T2], ValType]
 object Paired:
   inline def apply[T1 <: ValType, T2 <: ValType](
     inline first: Code[Val[T1]],
     inline second: Code[Val[T2]],
   ): Paired[T1, T2] =
-    PairP[Neutrale, T1, T2, ValType, ValType, PairT[T1, T2], ValType](first, second)
+    PairP[Neutral, T1, T2, ValType, ValType, PairT[T1, T2], ValType](first, second)
 end Paired
 
 /**
@@ -79,7 +80,7 @@ object MatchPair:
 end MatchPair
 
 final case class PairP[
-  R <: Plrty,
+  R <: Polarity,
   P1 <: N1,
   P2 <: N2,
   N1 <: ValType,
