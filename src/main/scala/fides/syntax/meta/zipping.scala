@@ -1,46 +1,46 @@
 package fides.syntax.meta
 
 import fides.syntax.code.{Code, CodeType, Expr, Ptrn, Xctr}
-import fides.syntax.values.Collected
+import fides.syntax.values.CollectedG
 
 /**
   * Used for unordered collections of pieces of code, at the syntax level.
   */
-sealed trait Args[+S <: CodeType] extends Code[Args[S]], CodeType:
-  def arguments: Iterable[Code[S]]
+type Args[+S <: CodeType] = ArgsG[Boolean, S]
 object Args:
-  def apply[S <: CodeType](arguments: Code[S]*): Args[S] = if arguments.isEmpty then None else Some(arguments*)
-  case object None extends Args[Nothing], Code[None.type], CodeType:
-    def arguments: Iterable[Code[Nothing]] = Iterable.empty[Code[Nothing]]
-  end None
-  final case class Some[+S <: CodeType](arguments: Code[S]*) extends Args[S], Code[Some[S]], CodeType:
-    assert(arguments.nonEmpty)
+  def apply[S <: CodeType](): ArgsG[false, Nothing] = None
+  def apply[S <: CodeType](first: Code[S], others: Code[S]*): ArgsG[true, S] = new Some(first, others*)
+  case object None extends ArgsG[false, Nothing]:
+    def arguments: Iterable[Code[Nothing]] = Iterable.empty
+  type None = None.type
+  final class Some[+S <: CodeType](first: Code[S], others: Code[S]*) extends ArgsG[true, S]:
+    val arguments: Iterable[Code[S]] = first +: others
   end Some
 end Args
+
+sealed trait ArgsG[+IsNonEmpty <: Boolean, +S <: CodeType] extends Code[ArgsG[IsNonEmpty, S]], CodeType:
+  def arguments: Iterable[Code[S]]
+  override def toString: String = s"Args($arguments)"
+end ArgsG
 
 /**
   * Converts a Collected of code quotations to a Quoted of a VarArgs of all the pieces of code.
   */
-final case class Zip[S <: CodeType](pieces: Code[Expr[Collected[Quoted[S]]]]) extends Expr[Quoted[Args[S]]]
-
-final case class ZipNonEmpty[S <: CodeType](
-  pieces: Code[Expr[Collected.Some[Quoted[S]]]],
-) extends Expr[Quoted[Args.Some[S]]]
-// todo how to make the "Some" part generic?
+final case class Zip[IsNonEmpty <: Boolean, S <: CodeType](
+  pieces: Code[Expr[CollectedG[IsNonEmpty, Quoted[S]]]],
+) extends Expr[Quoted[ArgsG[IsNonEmpty, S]]]
 
 /**
   * Extracts the processes out of a Concurrent process in the context of an irrefutable pattern.
   */
-final case class UnZip[S <: CodeType](pieces: Code[Xctr[Collected[Quoted[S]]]]) extends Xctr[Quoted[Args[S]]]
-
-final case class UnZipNonEmpty[S <: CodeType](
-  pieces: Code[Xctr[Collected.Some[Quoted[S]]]],
-) extends Xctr[Quoted[Args.Some[S]]]
+final case class UnZip[IsNonEmpty <: Boolean, S <: CodeType](
+  pieces: Code[Xctr[CollectedG[IsNonEmpty, Quoted[S]]]],
+) extends Xctr[Quoted[ArgsG[IsNonEmpty, S]]]
 
 /**
   * Extracts the processes out of a Concurrent process in the context of a refutable pattern.
   */
-final case class MatchZip[S <: CodeType](
-  pieces: Code[Ptrn[Collected[Quoted[S]], Collected[Quoted[S]]]],
-) extends Ptrn[Quoted[Args[S]], Quoted[Args[S]]]
+final case class MatchZip[IsNonEmpty <: Boolean, S <: CodeType](
+  pieces: Code[Ptrn[CollectedG[IsNonEmpty, Quoted[S]], CollectedG[IsNonEmpty, Quoted[S]]]],
+) extends Ptrn[Quoted[ArgsG[IsNonEmpty, S]], Quoted[ArgsG[IsNonEmpty, S]]]
 // todo should this really be allowed?

@@ -6,16 +6,22 @@ import fides.syntax.identifiers.{InpChan, OutChan}
 /**
   * A value that is made up of an unordered collection of values.
   */
-sealed trait Collected[T <: ValType] extends Val[Collected[T]], ValType:
-  def elements: Iterable[Val[T]]
+type Collected[+T <: ValType] = CollectedG[Boolean, T]
 object Collected:
-  case object None extends Collected[Nothing], Val[None]:
-    def elements: Iterable[Val[Nothing]] = Iterable.empty[Val[Nothing]]
+  def apply[T <: ValType](): CollectedG[false, Nothing] = None
+  def apply[T <: ValType](first: Val[T], others: Val[T]*): CollectedG[true, T] = new Some(first, others*)
+  case object None extends CollectedG[false, Nothing]:
+    def elements: Iterable[Val[Nothing]] = Iterable.empty
   type None = None.type
-  final case class Some[T <: ValType](elements: Val[T]*) extends Collected[T], Val[Some[T]]:
-    assert(elements.nonEmpty)
+  final class Some[+T <: ValType](first: Val[T], others: Val[T]*) extends CollectedG[true, T]:
+    val elements: Iterable[Val[T]] = first +: others
   end Some
 end Collected
+
+sealed trait CollectedG[+IsNonEmpty <: Boolean, +T <: ValType] extends Val[CollectedG[IsNonEmpty, T]], ValType:
+  def elements: Iterable[Val[T]]
+  override def toString: String = s"Collected($elements)"
+end CollectedG
 
 type Collected2[T <: ValType] = Collected2.None | Collected2.Some[T]
 object Collected2:

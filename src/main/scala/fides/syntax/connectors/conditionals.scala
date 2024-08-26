@@ -2,7 +2,7 @@ package fides.syntax.connectors
 
 import fides.syntax.code.{Atom, Code, CodeType, Expr, Process, Ptrn, Val, ValType, Xctr}
 import fides.syntax.meta.Args
-import fides.syntax.values.{Collected, TypeVal}
+import fides.syntax.values.{Collected, CollectedG, TypeVal}
 
 /**
   * Tries to match a value to the given pattern. Upon failure, outputs the value to the alternative instead.
@@ -37,7 +37,7 @@ final class Match3[T <: ValType](
 ) extends Xctr[T]
 
 private type AltType[T <: ValType, P <: Code[Ptrn[T, T]]] <: T = T match
-  case Collected[?] => P match
+  case CollectedG[false, ?] => P match
     case Collected.None => Collected.Some[?] & T
     case Collected.Some[?] => Collected.None & T
     case _ => T
