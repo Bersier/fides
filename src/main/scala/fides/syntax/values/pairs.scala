@@ -16,8 +16,7 @@ object Paired:
   inline def apply[T1 <: ValType, T2 <: ValType](
     inline first: Code[Val[T1]],
     inline second: Code[Val[T2]],
-  ): Paired[T1, T2] =
-    PairP[Neutral, T1, T2, ValType, ValType, PairT[T1, T2], ValType](first, second)
+  ): Paired[T1, T2] = PairP(first, second)
 end Paired
 
 /**
@@ -28,8 +27,7 @@ object Pair:
   inline def apply[T1 <: ValType, T2 <: ValType](
     inline first: Code[Expr[T1]],
     inline second: Code[Expr[T2]],
-  ): Pair[T1, T2] =
-    PairP[Positive, T1, T2, ValType, ValType, PairT[T1, T2], ValType](first, second)
+  ): Pair[T1, T2] = PairP(first, second)
 end Pair
 
 /**
@@ -40,9 +38,7 @@ object UnPair:
   inline def apply[T1 <: ValType, T2 <: ValType](
     inline first: Code[Xctr[T1]],
     inline second: Code[Xctr[T2]],
-  ): UnPair[T1, T2] =
-    // See https://github.com/scala/scala3/issues/19610 as to why the type arguments need to be specified explicitly.
-    MatchPair[Nothing, Nothing, T1, T2, Nothing, PairT[T1, T2]](first, second)
+  ): UnPair[T1, T2] = MatchPair(first, second)
 end UnPair
 
 /**
@@ -75,10 +71,12 @@ object MatchPair:
   )(using
     PairT[P1, P2] <:< (L | PairT[Nothing, Nothing]),
     (U & PairT[ValType, ValType]) <:< PairT[N1, N2],
-  ): MatchPair[P1, P2, N1, N2, L, U] =
-    PairP[Negative, P1, P2, N1, N2, L, U](first, second)
+  ): MatchPair[P1, P2, N1, N2, L, U] = PairP(first, second)
 end MatchPair
 
+/**
+  * General pair [[Polar]]
+  */
 final case class PairP[
   R <: Polarity,
   P1 <: N1,

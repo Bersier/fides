@@ -36,6 +36,8 @@ object Polarity:
 import Polarity.*
 
 /**
+  * [[Polar]] is a generalization of expressions and patterns.
+  *
   * [[Polar]]`[`[[Positive]]`, P, N]` doesn't make sense when `N` != [[ValType]].
   *
   * So `N` is meaningless when `R` == [[Positive]].

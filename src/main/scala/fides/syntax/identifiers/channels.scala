@@ -62,3 +62,5 @@ final case class Inp[+T <: ValType](iD: Code[InpChan[T]]) extends Expr[T]
   * Dual of Inp
   */
 final case class Out[-T <: ValType](iD: Code[Val[OutChan[T]]]) extends Xctr[T]
+
+// todo resuscitate Loc (not sure if that's the correct name)?
