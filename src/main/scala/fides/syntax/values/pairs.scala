@@ -75,7 +75,7 @@ object MatchPair:
 end MatchPair
 
 /**
-  * General pair [[Polar]]
+  * General [[Polar]] for pairing.
   */
 final case class PairP[
   R <: Polarity,

@@ -41,7 +41,7 @@ object MatchWrap:
 end MatchWrap
 
 /**
-  * General wrapping [[Polar]]
+  * General [[Polar]] for wrapping. Note that it can only be an [[Expr]] or a [[Ptrn]].
   */
 final case class WrapP[
   R >: Positive & Negative <: Polarity,
