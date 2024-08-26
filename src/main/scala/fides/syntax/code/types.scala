@@ -21,13 +21,19 @@ trait CodeType private[syntax]()
   * Parent type of all the Scala types that represent Fides value types.
   */
 trait ValType private[syntax]()
+// todo
 
 /**
   * Fides code type for processes.
   */
 trait Process extends CodeType, Code[Process]
 
-// todo Polar[L <: Polarity, +P <: N, -N <: ValType]
+sealed trait Plrty
+sealed trait Positive extends Plrty
+sealed trait Negative extends Plrty
+sealed trait Neutrale extends Positive, Negative
+
+trait Polar[+R <: Plrty, +P <: N, -N <: ValType] extends CodeType, Code[Polar[R, P, N]]
 //  Is it an issue that Polar[+, P, T] doesn't make sense when T != ValType?
 //  And with this style, it is not possible to type e.g. UnWrap differently from Wrap.
 
@@ -39,7 +45,7 @@ trait Process extends CodeType, Code[Process]
   *
   * Dual of Xctr
   */
-trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
+type Expr[+T <: ValType] = Polar[Positive, T, ValType]
 
 /**
   * Fides code type for refutable patterns (non-refutable patterns, Xctr, are a special case of refutable patterns).
@@ -52,7 +58,7 @@ trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
   * @tparam P the type of the pattern, when interpreted as a value to be matched against
   * @tparam N all values of that type are allowed to be matched against this pattern
   */
-trait Ptrn[+P <: N, -N <: ValType] extends CodeType, Code[Ptrn[P, N]]
+type Ptrn[+P <: N, -N <: ValType] = Polar[Negative, P, N]
 
 /**
   * Fides code type for extractors (aka non-refutable patterns). While extractors are really just a special type of
@@ -70,7 +76,7 @@ type Xctr[-T <: ValType] = Ptrn[Nothing, T]
   *
   * @tparam T keeps track of the value type
   */
-trait Val[+T <: ValType] extends Expr[T], Ptrn[T, ValType], Code[Val[T]]
+type Val[+T <: ValType] = Polar[Neutrale, T, ValType]
 
 trait Atom extends ValType
 

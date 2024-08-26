@@ -29,18 +29,6 @@ def unPairExample(using Context): Code[?] =
     UnPair(Out(myChannel), Ignore()),
   )
 
-/**
-  * See https://github.com/scala/scala3/issues/19610 as to why the type arguments need to be specified explicitly.
-  * See also
-  * docs.google.com/document/d/1dRY4EBGkJ8NSgq6xK_2lBz1yUl4c--4kSRD377TXEXg/edit#heading=h.7p6a1h1490aw
-  */
-def unPairExample2(using Context): Code[?] =
-  val myChannel = OutChan[WholeNumber](name = "myChannel")
-  Forward(
-    Paired(WholeNumber(1), Cell(False)), // Paired[WholeNumber, Cell[Bool]]
-    MatchPair[Nothing, Nothing, WholeNumber, ValType, Nothing, Paired[WholeNumber, ValType]](Out(myChannel), Ignore()),
-  )
-
 def staticAndDynamicSendExample(using Context): Code[?] =
   import scala.language.implicitConversions
   val channel1  = OutChan[Bool]()
