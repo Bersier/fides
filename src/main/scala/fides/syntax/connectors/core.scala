@@ -1,10 +1,10 @@
 package fides.syntax.connectors
 
 import fides.syntax.code.{Code, Expr, Polar, Polarity, Process, ValType, Xctr}
-import Polarity.{Negative, Positive}
 import fides.syntax.meta.Args
 import fides.syntax.values.Pulse
 import util.&:&
+import Polarity.{Negative, Positive}
 
 /**
   * A hard-coded connection between one input and one output

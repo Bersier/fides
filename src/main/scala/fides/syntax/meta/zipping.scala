@@ -1,7 +1,8 @@
 package fides.syntax.meta
 
-import fides.syntax.code.{Code, CodeType, Expr, Ptrn, Xctr}
+import fides.syntax.code.{Code, CodeType, Expr, Polar, Polarity, Ptrn, ValType, Xctr}
 import fides.syntax.values.CollectedG
+import Polarity.{Negative, Positive}
 
 /**
   * Used for unordered collections of pieces of code, at the syntax level.
@@ -26,21 +27,71 @@ end ArgsG
 /**
   * Converts a Collected of code quotations to a Quoted of a VarArgs of all the pieces of code.
   */
-final case class Zip[IsNonEmpty <: Boolean, S <: CodeType](
-  pieces: Code[Expr[CollectedG[IsNonEmpty, Quoted[S]]]],
-) extends Expr[Quoted[ArgsG[IsNonEmpty, S]]]
+type Zip[
+  IsNonEmpty <: Boolean,
+  S <: CodeType,
+] = ZipP[Positive, IsNonEmpty, Boolean, S, CodeType, Quoted[ArgsG[IsNonEmpty, S]], ValType]
+object Zip:
+  inline def apply[IsNonEmpty <: Boolean, S <: CodeType](
+    inline pieces: Code[Expr[CollectedG[IsNonEmpty, Quoted[S]]]],
+  ): Zip[IsNonEmpty, S] = ZipP(pieces)
+end Zip
 
 /**
   * Extracts the processes out of a Concurrent process in the context of an irrefutable pattern.
   */
-final case class UnZip[IsNonEmpty <: Boolean, S <: CodeType](
-  pieces: Code[Xctr[CollectedG[IsNonEmpty, Quoted[S]]]],
-) extends Xctr[Quoted[ArgsG[IsNonEmpty, S]]]
+type UnZip[
+  IsNonEmpty <: Boolean,
+  S <: CodeType,
+] = MatchZip[Nothing, IsNonEmpty, Nothing, S, Nothing, Quoted[ArgsG[IsNonEmpty, S]]]
+object UnZip:
+  inline def apply[IsNonEmpty <: Boolean, S <: CodeType](
+    inline pieces: Code[Xctr[CollectedG[IsNonEmpty, Quoted[S]]]],
+  ): UnZip[IsNonEmpty, S] = MatchZip(pieces)
+end UnZip
 
 /**
   * Extracts the processes out of a Concurrent process in the context of a refutable pattern.
   */
-final case class MatchZip[IsNonEmpty <: Boolean, S <: CodeType](
-  pieces: Code[Ptrn[CollectedG[IsNonEmpty, Quoted[S]], CollectedG[IsNonEmpty, Quoted[S]]]],
-) extends Ptrn[Quoted[ArgsG[IsNonEmpty, S]], Quoted[ArgsG[IsNonEmpty, S]]]
+type MatchZip[
+  IsNonEmptyP <: IsNonEmptyN,
+  IsNonEmptyN <: Boolean,
+  P <: N,
+  N <: CodeType,
+  L >: Nothing <: Quoted[ArgsG[IsNonEmptyP, P]],
+  U >: Quoted[ArgsG[IsNonEmptyN, N]] <: ValType,
+] = ZipP[Negative, IsNonEmptyP, IsNonEmptyN, P, N, L, U]
+object MatchZip:
+  inline def apply[
+    IsNonEmptyP <: IsNonEmptyN,
+    IsNonEmptyN <: Boolean,
+    P <: N,
+    N <: CodeType,
+    L >: Nothing <: Quoted[ArgsG[IsNonEmptyP, P]],
+    U >: Quoted[ArgsG[IsNonEmptyN, N]] <: ValType,
+  ](
+    inline pieces: Code[Ptrn[CollectedG[IsNonEmptyP, Quoted[P]], CollectedG[IsNonEmptyN, Quoted[N]]]],
+  )(using
+    Quoted[ArgsG[IsNonEmptyP, P]] <:< (L | Quoted[ArgsG[Nothing, Nothing]]),
+    (U & Quoted[ArgsG[Boolean, CodeType]]) <:< Quoted[ArgsG[IsNonEmptyN, N]],
+  ): MatchZip[IsNonEmptyP, IsNonEmptyN, P, N, L, U] = ZipP(pieces)
+end MatchZip
 // todo should this really be allowed?
+
+/**
+  * General [[Polar]] for zipping.
+  */
+final case class ZipP[
+  R >: Positive & Negative <: Polarity,
+  IsNonEmptyP <: IsNonEmptyN,
+  IsNonEmptyN <: Boolean,
+  P <: N,
+  N <: CodeType,
+  L >: Nothing <: Quoted[ArgsG[IsNonEmptyP, P]],
+  U >: Quoted[ArgsG[IsNonEmptyN, N]] <: ValType,
+](
+  pieces: Code[Polar[R, CollectedG[IsNonEmptyP, Quoted[P]], CollectedG[IsNonEmptyN, Quoted[N]]]],
+)(using
+  Quoted[ArgsG[IsNonEmptyP, P]] <:< (L | Quoted[ArgsG[Nothing, Nothing]]),
+  (U & Quoted[ArgsG[Boolean, CodeType]]) <:< Quoted[ArgsG[IsNonEmptyN, N]],
+) extends Polar[R, L, U]

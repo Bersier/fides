@@ -1,7 +1,7 @@
 package fides.syntax.values
 
 import fides.syntax.code.{Code, Expr, Polarity, Polar, Ptrn, Val, ValType, Xctr}
-import Polarity.*
+import Polarity.{Negative, Neutral, Positive}
 
 /**
   * A value that is made up of two values.
