@@ -2,6 +2,7 @@ package fides.test
 
 import fides.syntax.code.*
 import fides.syntax.connectors.*
+import fides.syntax.control.*
 import fides.syntax.identifiers.*
 import fides.syntax.meta.*
 import fides.syntax.processes.*
@@ -79,47 +80,54 @@ def collectExample(using Context): Code[?] =
     size = Inp(sizeChannel),
   )
 
-def randomBitGeneratorExample(using Context): Code[?] =
-  val randomBitChannel = OutChan[Bool]()
-  Repeated(
-    Forward(
-      RandomBit(),
-      Out(randomBitChannel)
-    )
+def patternMeaningExample(pattern: Code[Ptrn[Atom, ValType]])(using Context): Code[?] =
+  import scala.language.implicitConversions
+  Forward[Bool](
+    Inp(Channel[Bool]()),
+    Match[Atom](pattern),
   )
 
-def serviceExample(using Context): Code[?] =
-  val addressChannel = InpChan[OutChan[Bool]]()
-  Repeated(
-    Send(
-      contents = RandomBit(),
-      recipient = Inp(addressChannel)
-    )
-  )
-
-/**
-  This example simulates if-then-else
-  */
-def switchExample(using Context): Code[?] =
-  val channel1 = OutChan[Pulse]()
-  val channel2 = OutChan[Pulse]()
-  Switch(
-    input = Pulse,
-    testee = True,
-    cases = Args(
-      Case(
-        testValue = True,
-        extractor = Out(channel1)
-      ),
-      Case(
-        testValue = False,
-        extractor = Out(channel2)
+def ifThenElse(testee: Code[Expr[Bool]], trueBranch: Code[Process], falseBranch: Code[Process])
+  (using Context): Code[Process] =
+  import scala.language.implicitConversions
+  val trueSignal = Channel[Pulse]()
+  val falseSignal = Channel[Pulse]()
+  Concurrent(Args(
+    Switch(
+      input = Pulse,
+      testee = testee,
+      cases = Args(
+        Case(
+          testValue = True,
+          extractor = Out(trueSignal)
+        ),
+        Case(
+          testValue = False,
+          extractor = Out(falseSignal)
+        )
       )
-    )
-  )
+    ),
+    OnHold(startSignal = Inp(trueSignal), body = trueBranch),
+    OnHold(startSignal = Inp(falseSignal), body = falseBranch),
+  ))
 
-def hotSwappingExample(using Context): Code[?] =
-  ???
+def ifTrue(testee: Code[Expr[Bool]], code: Code[Process])
+  (using Context): Code[Process] =
+  import scala.language.implicitConversions
+  val signal = Channel[Pulse]()
+  Concurrent(Args(
+    Switch(
+      input = Pulse,
+      testee = testee,
+      cases = Args(
+        Case(
+          testValue = True,
+          extractor = Out(signal)
+        )
+      )
+    ),
+    OnHold(Inp(signal), code)
+  ))
 
 //def loopExample(using Context): Code[?] =
 //  val collectionChannel = Channel[Collected.Some[WholeNumber]]()
