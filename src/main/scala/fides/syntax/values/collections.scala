@@ -1,7 +1,9 @@
 package fides.syntax.values
 
-import fides.syntax.code.{Code, Expr, Val, ValType, Xctr}
+import fides.syntax.code.{Code, Expr, Polar, Polarity, Val, ValType, Xctr}
 import fides.syntax.identifiers.{InpChan, OutChan}
+import Polarity.{Negative, Positive}
+import util.&:&
 
 /**
   * A value that is made up of an unordered collection of values.
@@ -40,18 +42,39 @@ end Collected2
 /**
   * Outputs a Collected with one element added to it.
   */
-final case class AddElement[T <: ValType](
-  element: Code[Expr[T]],
-  others: Code[Expr[Collected[T]]],
-) extends Expr[Collected.Some[T]]
+type AddElement[T <: ValType] = AddElementP[Positive, T, ValType, Collected.Some[T], ValType]
+object AddElement:
+  inline def apply[T <: ValType](
+    inline element: Code[Expr[T]],
+    inline others: Code[Expr[Collected[T]]],
+  ): AddElement[T] = AddElementP(element, others)
+end AddElement
 
 /**
   * (Non-deterministically) extracts one element from a Collected.
   */
-final case class UnAddElement[T <: ValType](
-  element: Code[Xctr[T]],
-  others: Code[Xctr[Collected[T]]],
-) extends Xctr[Collected.Some[T]]
+type UnAddElement[T <: ValType] = AddElementP[Negative, Nothing, T, Nothing, Collected.Some[T]]
+object UnAddElement:
+  inline def apply[T <: ValType](
+    inline element: Code[Xctr[T]],
+    inline others: Code[Xctr[Collected[T]]],
+  ): UnAddElement[T] = AddElementP(element, others)
+end UnAddElement
+
+final case class AddElementP[
+  R >: Positive & Negative <: Polarity,
+  P <: N,
+  N <: ValType,
+  L >: Nothing <: Collected.Some[P],
+  U >: Collected.Some[N] <: ValType,
+](
+  element: Code[Polar[R, P, N]],
+  others: Code[Polar[R, Collected[P], Collected[N]]],
+)(using
+  Collected.Some[P] <:< (L | Collected.Some[Nothing]),
+  (U & Collected.Some[ValType]) <:< Collected.Some[N],
+  (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing)),
+) extends Polar[R, L, U]
 
 /**
   * Waits for [[size]] elements from [[elementSource]], then outputs them as a Collected.
@@ -68,3 +91,4 @@ final case class UnCollect[T <: ValType](
   elementSource: Code[Val[OutChan[T]]],
   size: Code[Xctr[WholeNumber]],
 ) extends Xctr[Collected[T]]
+// todo write CollectP, once InpChan/OutChan asymmetry has been fixed

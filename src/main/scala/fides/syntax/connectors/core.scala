@@ -61,5 +61,3 @@ end UnPick
 final case class PickP[R >: Positive & Negative <: Polarity, P <: N, N <: ValType](
   connections: Code[Args.Some[Polar[R, P, N]]],
 )(using (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing))) extends Polar[R, P, N]
-
-// todo why not allow MatchPick?
