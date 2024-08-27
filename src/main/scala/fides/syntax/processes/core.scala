@@ -10,7 +10,7 @@ import fides.syntax.meta.Args
   * The value is guaranteed to arrive eventually, assuming the address exists.
   * Sending is also guaranteed to be fully private.
   *
-  * @param message the value to be sent
+  * @param contents the value to be sent
   * @param recipient address of the recipient
   */
 final case class Send[T <: ValType](contents: Code[Expr[T]], recipient: Code[Expr[OutChan[T]]]) extends Process
@@ -23,7 +23,7 @@ final case class Send[T <: ValType](contents: Code[Expr[T]], recipient: Code[Exp
   * On the other hand, if it is known that there will never be any Inp for the channel, the message should eventually
   * get garbage-collected.
   *
-  * @param message the contents of the message
+  * @param contents the contents of the message
   * @param recipient the address of the recipient
   */
 final case class Message[T <: ValType](contents: Code[Val[T]], recipient: Code[Val[OutChan[T]]]) extends Process

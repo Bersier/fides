@@ -1,8 +1,10 @@
 package fides.syntax.connectors
 
-import fides.syntax.code.{Code, Expr, Process, ValType, Xctr}
+import fides.syntax.code.{Code, Expr, Polar, Polarity, Process, ValType, Xctr}
 import fides.syntax.meta.Args
 import fides.syntax.values.Pulse
+import util.&:&
+import Polarity.{Negative, Positive}
 
 /**
   * A hard-coded connection between one input and one output
@@ -41,9 +43,21 @@ final case class Signal(trigger: Code[Expr[?]]) extends Expr[Pulse]
   *
   * Another way to think about this is that it forwards the value of the expression that "first" reduces to a value.
   */
-final case class Pick[T <: ValType](inputs: Code[Args.Some[Expr[T]]]) extends Expr[T]
+type Pick[T <: ValType] = PickP[Positive, T, ValType]
+object Pick:
+  inline def apply[T <: ValType](inline inputs: Code[Args.Some[Expr[T]]]): Pick[T] = PickP(inputs)
 
 /**
   * Internal choice. Non-deterministically forwards the input to one of the outputs.
   */
-final case class UnPick[T <: ValType](recipients: Code[Args.Some[Xctr[T]]]) extends Xctr[T]
+type UnPick[T <: ValType] = PickP[Negative, Nothing, T]
+object UnPick:
+  inline def apply[T <: ValType](inline recipients: Code[Args.Some[Xctr[T]]]): UnPick[T] = PickP(recipients)
+end UnPick
+
+/**
+  * General [[Polar]] for picking. Note that it can only be an [[Expr]] or an [[Xctr]].
+  */
+final case class PickP[R >: Positive & Negative <: Polarity, P <: N, N <: ValType](
+  connections: Code[Args.Some[Polar[R, P, N]]],
+)(using (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing))) extends Polar[R, P, N]
