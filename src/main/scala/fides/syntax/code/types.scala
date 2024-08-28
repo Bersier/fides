@@ -21,15 +21,28 @@ trait CodeType private[syntax]()
   * Parent type of all the Scala types that represent Fides value types.
   */
 trait ValType private[syntax]()
+// todo
 
 /**
   * Fides code type for processes.
   */
 trait Process extends CodeType, Code[Process]
 
-// todo Polar[L <: Polarity, +P <: N, -N <: ValType]
-//  Is it an issue that Polar[+, P, T] doesn't make sense when T != ValType?
-//  And with this style, it is not possible to type e.g. UnWrap differently from Wrap.
+sealed trait Polarity derives CanEqual
+object Polarity:
+  sealed trait Positive extends Polarity
+  sealed trait Negative extends Polarity
+  sealed trait Neutral extends Positive, Negative
+import Polarity.*
+
+/**
+  * [[Polar]] is a generalization of expressions and patterns.
+  *
+  * [[Polar]]`[`[[Positive]]`, P, N]` doesn't make sense when `N` != [[ValType]].
+  *
+  * So `N` is meaningless when `R` == [[Positive]].
+  */
+trait Polar[+R <: Polarity, +P <: N, -N <: ValType] extends CodeType, Code[Polar[R, P, N]]
 
 /**
   * Fides code type for expressions. While expressions are really just a special type of process with a single output,
@@ -39,7 +52,7 @@ trait Process extends CodeType, Code[Process]
   *
   * Dual of Xctr
   */
-trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
+type Expr[+T <: ValType] = Polar[Positive, T, ValType]
 
 /**
   * Fides code type for refutable patterns (non-refutable patterns, Xctr, are a special case of refutable patterns).
@@ -52,7 +65,7 @@ trait Expr[+T <: ValType] extends CodeType, Code[Expr[T]]
   * @tparam P the type of the pattern, when interpreted as a value to be matched against
   * @tparam N all values of that type are allowed to be matched against this pattern
   */
-trait Ptrn[+P <: N, -N <: ValType] extends CodeType, Code[Ptrn[P, N]]
+type Ptrn[+P <: N, -N <: ValType] = Polar[Negative, P, N]
 
 /**
   * Fides code type for extractors (aka non-refutable patterns). While extractors are really just a special type of
@@ -68,9 +81,11 @@ type Xctr[-T <: ValType] = Ptrn[Nothing, T]
 /**
   * Fides code type for Fides values.
   *
+  * [[Val]]`[T] <: `[[Expr]]`[T] & `[[Ptrn]]`[T, `[[ValType]]`]`
+  *
   * @tparam T keeps track of the value type
   */
-trait Val[+T <: ValType] extends Expr[T], Ptrn[T, ValType], Code[Val[T]]
+type Val[+T <: ValType] = Polar[Neutral, T, ValType]
 
 trait Atom extends ValType
 
@@ -78,27 +93,24 @@ trait Atom extends ValType
   * Unused so far. Could be used to keep track of the quote context with an additional Code parameter.
   */
 sealed trait QuoteContext private[syntax]()
-sealed trait Neutral extends QuoteContext
-sealed trait InQuote[C <: QuoteContext, P <: Polarity] extends QuoteContext
-sealed trait Macro[I <: Int] extends QuoteContext
-
-enum Polarity derives CanEqual:
-  case Expr, Xctr, Ptrn
+object QuoteContext:
+  sealed trait Neutral extends QuoteContext
+  sealed trait InQuote[C <: QuoteContext, P <: Polarity] extends QuoteContext
+  sealed trait Macro[I <: Int] extends QuoteContext
+end QuoteContext
 
 /**
   * Could be used to type Escape once QuoteContext is used.
   */
 type EscapeQuoteContext[C <: QuoteContext] <: QuoteContext = C match
-  case Neutral => Macro[0]
-  case InQuote[c, p] => c
-  case Macro[i] => Macro[i + 1]
+  case QuoteContext.Neutral => QuoteContext.Macro[0]
+  case QuoteContext.InQuote[c, p] => c
+  case QuoteContext.Macro[i] => QuoteContext.Macro[i + 1]
 
 /**
   * Could be used to type Escape once QuoteContext is used.
   */
 type EscapeParamType[S <: CodeType, C <: QuoteContext] = C match
-  case InQuote[c, p] => p match
-    case Polarity.Expr.type => Expr[Quoted[S]]
-    case Polarity.Xctr.type => Xctr[Quoted[S]]
-    case Polarity.Ptrn.type => Ptrn[Quoted[S], Quoted[S]]
+  case QuoteContext.InQuote[c, p] => Polar[p, Quoted[S], Quoted[S]]
   case _ => Expr[Quoted[S]]
+// todo not sure if this is still correct or meaningful
