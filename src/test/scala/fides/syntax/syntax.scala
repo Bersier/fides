@@ -1,4 +1,4 @@
-package fides.test
+package fides.syntax
 
 import fides.syntax.code.*
 import fides.syntax.connectors.*
@@ -10,7 +10,6 @@ import fides.syntax.values.*
 import scala.language.implicitConversions
 import scala.util.Properties
 
-// todo syntax examples should go into test.syntax package
 @main def syntax(): Unit =
   println("Java version: " + System.getProperty("java.version"))
   println("Scala version: " + dotty.tools.dotc.config.Properties.simpleVersionString)
@@ -32,7 +31,3 @@ import scala.util.Properties
   println(UnSign(UnWrap(negLoc), Escape(Quote(Ignore()))))
   println(UnSign(UnWrap(negLoc), Out(Escape(Wrap(OutChan[Identifier]())))))
   println(UnSign(UnWrap(negLoc), Out(Escape(Wrap(Inp[OutChan[Identifier]](Channel()))))))
-
-
-
-

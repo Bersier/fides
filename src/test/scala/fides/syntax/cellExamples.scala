@@ -1,4 +1,4 @@
-package fides.test
+package fides.syntax
 
 import fides.syntax.code.Code
 import fides.syntax.connectors.{Forward, Ignore}
