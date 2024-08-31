@@ -1,7 +1,7 @@
 package fides.syntax.meta
 
+import fides.syntax.code.Polarity.{Negative, Positive}
 import fides.syntax.code.{Code, Expr, Polar, Polarity, Ptrn, Val, ValType, Xctr}
-import Polarity.{Negative, Positive}
 
 /**
   * Wraps a value into a Quoted.

@@ -1,8 +1,8 @@
 package fides.syntax.meta
 
+import fides.syntax.code.Polarity.{Negative, Positive}
 import fides.syntax.code.{Code, CodeType, Expr, Polar, Polarity, Ptrn, ValType, Xctr}
 import fides.syntax.values.CollectedG
-import Polarity.{Negative, Positive}
 
 /**
   * Used for unordered collections of pieces of code, at the syntax level.

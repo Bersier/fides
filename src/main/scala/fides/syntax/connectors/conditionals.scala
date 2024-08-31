@@ -2,7 +2,8 @@ package fides.syntax.connectors
 
 import fides.syntax.code.{Atom, Code, CodeType, Expr, Process, Ptrn, Val, ValType, Xctr}
 import fides.syntax.meta.Args
-import fides.syntax.values.{Collected, CollectedG, TypeVal}
+import fides.syntax.values.{Collected, CollectedG}
+import izumi.reflect.Tag
 
 /**
   * Tries to match a value to the given pattern. Upon failure, outputs the value to the alternative instead.
@@ -22,7 +23,12 @@ final case class CopyMatch[P <: N, N <: ValType](
 /**
   * Matches any value of type [[T]].
   */
-final case class MatchType[T <: ValType](t: Code[Val[TypeVal[T]]]) extends Ptrn[T, ValType]
+final case class MatchType[T <: ValType](t: Code[Type[T]]) extends Ptrn[T, ValType]
+
+/**
+  * Represents a Fides type
+  */
+final case class Type[T <: ValType](t: Tag[T]) extends CodeType, Code[Type[T]]
 
 final case class Match2[T <: ValType, A <: T](
   pattern: Code[Ptrn[T, T]],

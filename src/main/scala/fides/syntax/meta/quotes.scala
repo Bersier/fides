@@ -50,7 +50,7 @@ final case class MatchEscapeMatcher[S <: CodeType](
 //  (and similarly for other matchers)
 
 /**
-  * Analoguous to s-Strings in Scala, but for code
+  * Analogous to s-Strings in Scala, but for code
   *
   * Once all the Escape inside [[code]] have been evaluated and spliced in, reduces to a [[Quoted]].
   */

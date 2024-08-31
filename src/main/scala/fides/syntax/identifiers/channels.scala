@@ -17,7 +17,7 @@ final class Channel[T <: ValType : Tag] private(name: String) extends Location(n
   override def toString: String = s"@$name"
   /**
     * This type information is only for syntax/static purposes.
-    * At runtime, a channel indentifer value does not need to keep track of its type.
+    * At runtime, a channel indentifier value does not need to keep track of its type.
     */
   def valueType: Tag[T] = summon[Tag[T]]
 object Channel:

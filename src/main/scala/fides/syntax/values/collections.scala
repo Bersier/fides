@@ -1,8 +1,8 @@
 package fides.syntax.values
 
+import fides.syntax.code.Polarity.{Negative, Positive}
 import fides.syntax.code.{Code, Expr, Polar, Polarity, Val, ValType, Xctr}
 import fides.syntax.identifiers.{InpChan, OutChan}
-import Polarity.{Negative, Positive}
 import util.&:&
 
 /**

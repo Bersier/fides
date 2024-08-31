@@ -1,7 +1,7 @@
 package fides.syntax.values
 
-import fides.syntax.code.{Code, Expr, Polarity, Polar, Ptrn, Val, ValType, Xctr}
-import Polarity.{Negative, Neutral, Positive}
+import fides.syntax.code.Polarity.{Negative, Neutral, Positive}
+import fides.syntax.code.{Code, Expr, Polar, Polarity, Ptrn, Val, ValType, Xctr}
 
 /**
   * A value that is made up of two values.
@@ -47,7 +47,7 @@ end UnPair
   * @tparam L defined by the unification equation: L | PairT[Nothing, Nothing] =:= PairT[P1, P2].
   *           This equation is encoded in its bound as well as the first implicit parameter.
   * @tparam U defined by the unification equation: U & PairT[ValType, ValType] =:= PairT[N1, N2].
-  *           This equation is encoded in its bound as well as the second implicit paramter.
+  *           This equation is encoded in its bound as well as the second implicit parameter.
   */
 type MatchPair[
   P1 <: N1,

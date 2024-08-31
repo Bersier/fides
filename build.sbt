@@ -2,7 +2,7 @@ name := "Fides"
 version := "0.1.0"
 
 // See https://repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/
-scalaVersion := "3.6.0-RC1-bin-20240823-5101daf-NIGHTLY"
+scalaVersion := "3.6.0-RC1-bin-20240828-5e83606-NIGHTLY"
 
 libraryDependencies ++= Seq(
   "org.scala-lang" %% "scala3-staging" % scalaVersion.value,

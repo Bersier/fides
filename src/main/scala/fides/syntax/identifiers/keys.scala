@@ -4,7 +4,7 @@ import fides.syntax.code.{Code, Expr, Val, ValType}
 import izumi.reflect.Tag
 
 /**
-  * A key has a corresponding identifier. The identifer can be obtained from the key, but not vice versa
+  * A key has a corresponding identifier. The identifier can be obtained from the key, but not vice versa
   * (there might not even exist a corresponding key for some identifiers).
   */
 sealed class IdentifierKey(name: String)(using Context) extends Val[IdentifierKey], ValType:
