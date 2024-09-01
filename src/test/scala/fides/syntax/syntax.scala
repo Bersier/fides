@@ -27,7 +27,6 @@ import scala.util.Properties
   println(UnSign(negLoc, Ignore()))
   println(Sign(Wrap(posLoc), IdentifierKey()))
   println(UnSign(UnWrap(negLoc), Ignore()))
-  println(SignedMatcher(Identifier(), OutChan()))
   println(UnSign(UnWrap(negLoc), Escape(Quote(Ignore()))))
   println(UnSign(UnWrap(negLoc), Out(Escape(Wrap(OutChan[Identifier]())))))
   println(UnSign(UnWrap(negLoc), Out(Escape(Wrap(Inp[OutChan[Identifier]](Channel()))))))

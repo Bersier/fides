@@ -4,7 +4,7 @@ import fides.syntax.code.{Code, CodeType, Expr, Ptrn, Val, ValType}
 import fides.syntax.values.NaturalNumber
 
 /**
-  * Code as value, used for metaprogramming
+  * Code as value, for metaprogramming
   */
 final case class Quoted[+S <: CodeType](code: Code[S]) extends Val[Quoted[S]], ValType
 
@@ -72,7 +72,7 @@ final case class MatchEscapeMatcher[S <: CodeType](
 /**
   * Analogous to s-Strings in Scala, but for code
   *
-  * Once all the Escape inside [[code]] have been evaluated and spliced in, reduces to a [[Quoted]].
+  * Once all the [[Escape]]s inside [[code]] have been evaluated and spliced in, reduces to a [[Quoted]].
   */
 final case class Quote[S <: CodeType](code: Code[S]) extends Expr[Quoted[S]]
 

@@ -39,7 +39,8 @@ def unQuoteExample(using Context): Code[?] =
   )
 
 /**
-  * [[SignedMatcher]] can be reproduced by using [[MatchEscape]], [[MatchWrap]]  and [[MatchSign]]
+  * [[SignedMatcher]], which is not part of Fides anymore,
+  * can be reproduced by using [[MatchEscape]], [[MatchWrap]] and [[MatchSign]].
   */
 def signedMatcherExample(using Context): Code[?] =
   val myKey     = ChannelKey[WholeNumber]()
@@ -54,14 +55,14 @@ def signedMatcherExample(using Context): Code[?] =
       ))
     ),
     Args(
-      Match(
-        MatchQuote(
-          SignedMatcher(
-            document = MatchEscape(UnWrap(Out(myChannel))),
-            signature = myChannel,
-          )
-        )
-      ),
+//      Match(
+//        MatchQuote(
+//          SignedMatcher(
+//            document = MatchEscape(UnWrap(Out(myChannel))),
+//            signature = myChannel,
+//          )
+//        )
+//      ),
       Match(
         MatchQuote(
           MatchEscape(
@@ -77,8 +78,9 @@ def signedMatcherExample(using Context): Code[?] =
     )
   )
 
+// todo modify code to use something different from SignedMatcher, which got removed.
 /**
-  * There is a problem with [[MatchEscape]] that the type matched is not tracked then a wrong type can be used in the code
+  * There is a problem with [[MatchEscape]]: the type matched is not tracked, so a wrong type can be used in the code.
   */
 def matchEscapeProblem(using Context): Code[?] =
   val myKey     = ChannelKey[WholeNumber]()
@@ -93,14 +95,14 @@ def matchEscapeProblem(using Context): Code[?] =
       ))
     ),
     Args(
-      Match(
-        MatchQuote(
-          SignedMatcher(
-            document = MatchEscape(UnWrap(Out(OutChan[Pulse]()))), // should fail but it doesn't because of lossy typing
-            signature = myChannel,
-          )
-        )
-      ),
+//      Match(
+//        MatchQuote(
+//          SignedMatcher(
+//            document = MatchEscape(UnWrap(Out(OutChan[Pulse]()))), // should fail, but doesn't because of lossy typing
+//            signature = myChannel,
+//          )
+//        )
+//      ),
     )
   )
 
