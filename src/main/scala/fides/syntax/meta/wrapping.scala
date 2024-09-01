@@ -5,6 +5,8 @@ import fides.syntax.code.{Code, Expr, Polar, Polarity, Ptrn, Val, ValType, Xctr}
 
 /**
   * Wraps a value into a Quoted.
+  *
+  * [[Wrap]]`[T] <: `[[Expr]]`[`[[Quoted]]`[`[[Val]]`[T]]]`
   */
 type Wrap[T <: ValType] = WrapP[Positive, T, ValType, Quoted[Val[T]], ValType]
 object Wrap:
@@ -13,6 +15,8 @@ end Wrap
 
 /**
   * Unwraps a quoted value.
+  *
+  * [[UnWrap]]`[T] <: `[[Xctr]]`[`[[Quoted]]`[`[[Val]]`[T]]]`
   */
 type UnWrap[T <: ValType] = MatchWrap[Nothing, T, Nothing, Quoted[Val[T]]]
 object UnWrap:

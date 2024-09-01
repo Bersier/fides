@@ -41,6 +41,8 @@ end Collected2
 
 /**
   * Outputs a Collected with one element added to it.
+  *
+  * [[AddElement]]`[T] <: `[[Expr]]`[`[[Collected.Some]]`[T]]`
   */
 type AddElement[T <: ValType] = AddElementP[Positive, T, ValType, Collected.Some[T], ValType]
 object AddElement:
@@ -52,6 +54,8 @@ end AddElement
 
 /**
   * (Non-deterministically) extracts one element from a Collected.
+  *
+  * [[UnAddElement]]`[T] <: `[[Xctr]]`[`[[Collected.Some]]`[T]]`
   */
 type UnAddElement[T <: ValType] = AddElementP[Negative, Nothing, T, Nothing, Collected.Some[T]]
 object UnAddElement:

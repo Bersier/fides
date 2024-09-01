@@ -21,6 +21,8 @@ end Paired
 
 /**
   * Pairs two values together.
+  *
+  * [[Pair]]`[T1, T2] <: `[[Expr]]`[`[[PairT]]`[T1, T2]]`
   */
 type Pair[T1 <: ValType, T2 <: ValType] = PairP[Positive, T1, T2, ValType, ValType, PairT[T1, T2], ValType]
 object Pair:
@@ -32,6 +34,8 @@ end Pair
 
 /**
   * Extracts the elements of a pair.
+  *
+  * [[UnPair]]`[T1, T2] <: `[[Xctr]]`[`[[PairT]]`[T1, T2]]`
   */
 type UnPair[T1 <: ValType, T2 <: ValType] = MatchPair[Nothing, Nothing, T1, T2, Nothing, PairT[T1, T2]]
 object UnPair:

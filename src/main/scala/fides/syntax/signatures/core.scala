@@ -15,10 +15,8 @@ final case class Signed[+T <: ValType] private(document: Val[T], signature: Iden
 object Signed:
   /**
     * Signed values can only be created from keys, but only reveal the corresponding identifier.
-    *
-    * todo This is not meant to be used as part of the syntax...
     */
-  def newInstance[T <: ValType](document: Val[T], signatory: IdentifierKey): Signed[T] =
+  private[fides] def newInstance[T <: ValType](document: Val[T], signatory: IdentifierKey): Signed[T] =
     new Signed(document, signatory.identifier)
 end Signed
 
