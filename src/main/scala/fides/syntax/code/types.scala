@@ -1,5 +1,6 @@
 package fides.syntax.code
 
+import fides.syntax.code.Polarity.{Negative, Neutral, Positive}
 import fides.syntax.meta.Quoted
 
 import scala.compiletime.ops.int.+
@@ -33,7 +34,7 @@ object Polarity:
   sealed trait Positive extends Polarity
   sealed trait Negative extends Polarity
   sealed trait Neutral extends Positive, Negative
-import fides.syntax.code.Polarity.*
+end Polarity
 
 /**
   * [[Polar]] is a generalization of expressions and patterns.
