@@ -1,7 +1,8 @@
 package fides.syntax.processes
 
 import fides.syntax.code.{Code, Expr, Process, Val, ValType}
-import fides.syntax.identifiers.{Identifier, OutChan}
+import fides.syntax.declarations.Declaration
+import fides.syntax.identifiers.OutChan
 import fides.syntax.meta.Args
 
 /**
@@ -35,10 +36,10 @@ final case class Message[T <: ValType](contents: Code[Val[T]], recipient: Code[V
   * The local identifiers are really placeholders,
   * to be replaced by new identifiers upon execution/dissolution of the scope.
   *
-  * @param localIdentifiers names whose meaning is only valid within this scope
+  * @param declarations valid within this scope
   * @param body the body of the scope, in which the replacements will take place
   */
-final case class Scope(declarations: Code[Args[Val[Identifier]]], body: Code[Process]) extends Process
+final case class Scope(declarations: Code[Args[Declaration[?]]], body: Code[Process]) extends Process
 
 /**
   * Behaviorally equivalent to an infinite number of copies of the given body

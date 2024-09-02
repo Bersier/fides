@@ -20,7 +20,11 @@ final class Chan[+R <: Polarity, +P <: ValType, -N <: ValType] private[identifie
 ) extends Identifier(name), Val[Chan[R, P, N]]:
   override def toString: String = s"@$name"
 end Chan
+// todo consider renaming to ChannelP
 
+/**
+  * [[Channel]]`[T] <: `[[InpChan]]`[T] & `[[OutChan]]`[T]`
+  */
 type Channel[T <: ValType] = Chan[Neutral, T, T]
 object Channel:
   def apply[T <: ValType]()(using Context, Tag[T]): Channel[T] = Named.from(new Chan(_))
