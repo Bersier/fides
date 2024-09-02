@@ -3,6 +3,7 @@ package fides.syntax
 import fides.syntax.code.Code
 import fides.syntax.connectors.*
 import fides.syntax.identifiers.*
+import fides.syntax.identifiers.naming.Context
 import fides.syntax.meta.*
 import fides.syntax.processes.*
 import fides.syntax.signatures.*

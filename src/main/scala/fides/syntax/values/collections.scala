@@ -84,7 +84,7 @@ final case class AddElementP[
   * Waits for [[size]] elements from [[elementSource]], then outputs them as a Collected.
   */
 final case class Collect[T <: ValType](
-  elementSource: Code[InpChan[T]],
+  elementSource: Code[Val[InpChan[T]]],
   size: Code[Expr[WholeNumber]],
 ) extends Expr[Collected[T]]
 

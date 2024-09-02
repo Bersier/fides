@@ -33,7 +33,7 @@ object Polarity:
   sealed trait Positive extends Polarity
   sealed trait Negative extends Polarity
   sealed trait Neutral extends Positive, Negative
-import Polarity.*
+import fides.syntax.code.Polarity.*
 
 /**
   * [[Polar]] is a generalization of expressions and patterns.

@@ -16,7 +16,7 @@ object IdentifierKey:
 end IdentifierKey
 
 final class ChannelKey[T <: ValType : Tag](name: String)(using Context) extends IdentifierKey(""):
-  override lazy val identifier: OutChan[T] = OutChan(Channel(name))
+  override lazy val identifier: OutChan[T] = Channel(name)
 object ChannelKey:
   def apply[T <: ValType : Tag]()(using Context): ChannelKey[T] = new ChannelKey(Named.newName())
 end ChannelKey

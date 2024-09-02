@@ -11,7 +11,9 @@ import fides.syntax.identifiers.naming.{Context, Named}
   *
   * Identifiers are globally unique. Their names are just a convenient representation (that may or may not be unique).
   */
-open class Identifier protected(name: String) extends Atom, Val[Identifier], Named(name) derives CanEqual:
+open class Identifier protected(
+  protected[identifiers] val name: String,
+) extends Atom, Val[Identifier], Named derives CanEqual:
   override def toString: String = s"#$name"
 object Identifier:
   def apply()(using Context): Identifier = Named.from(new Identifier(_))

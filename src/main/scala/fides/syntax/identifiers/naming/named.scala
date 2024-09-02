@@ -1,12 +1,11 @@
 package fides.syntax.identifiers.naming
 
-import fides.syntax.code.{Code, CodeType}
-
 import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.immutable.ArraySeq
 import scala.language.experimental.pureFunctions
 
-trait Named protected(val name: String)
+trait Named:
+  protected[identifiers] def name: String
 object Named:
   private[identifiers] def from[N <: Named](constructor: String -> N)(using Context): N =
     from(constructor, newName())
