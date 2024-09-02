@@ -1,19 +1,20 @@
-package fides.syntax.identifiers
+package fides.syntax.identifiers.naming
 
 import fides.syntax.code.{Code, CodeType}
 
 import java.util.concurrent.atomic.AtomicInteger
+import scala.collection.immutable.ArraySeq
 import scala.language.experimental.pureFunctions
 
-trait Location protected(val name: String) extends CodeType, Code[Location]
-object Location:
-  private[identifiers] def from[I <: Location](constructor: String -> I)(using Context): I =
+trait Named protected(val name: String)
+object Named:
+  private[identifiers] def from[N <: Named](constructor: String -> N)(using Context): N =
     from(constructor, newName())
 
-  private[identifiers] def newName[I <: Location]() =
-    util.symbols(currentSymbolIndex.getAndIncrement()).toString
+  private[identifiers] def newName[N <: Named]() =
+    symbols(currentSymbolIndex.getAndIncrement()).toString
 
-  private[identifiers] def from[I <: Location](constructor: String -> I, name: String)(using Context): I =
+  private[identifiers] def from[N <: Named](constructor: String -> N, name: String)(using Context): N =
     val location = constructor(qualifiedName(name))
     val previous   = summon[Context].names.putIfAbsent(name, location)
     require(
@@ -27,4 +28,12 @@ object Location:
     s"$globalPrefix$name"
 
   private val currentSymbolIndex = AtomicInteger(0)
-end Location
+end Named
+
+val symbols: IndexedSeq[Char] = ArraySeq.from(
+  Set.from('a' to 'z') ++
+  Set.from('α' to 'ω') ++
+  Set.from('א' to 'ת') ++
+  Set.from('१' to '९') --
+  Set('l', 'o', 'ν', 'ο', 'ח', 'י', 'ן', 'ז', 'ו')
+).sorted

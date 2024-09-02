@@ -1,6 +1,7 @@
 package fides.syntax.identifiers
 
 import fides.syntax.code.{Atom, Expr, Val}
+import fides.syntax.identifiers.naming.{Context, Named}
 
 // todo use context functions?
 
@@ -10,11 +11,11 @@ import fides.syntax.code.{Atom, Expr, Val}
   *
   * Identifiers are globally unique. Their names are just a convenient representation (that may or may not be unique).
   */
-open class Identifier protected(name: String) extends Atom, Val[Identifier], Location(name) derives CanEqual:
+open class Identifier protected(name: String) extends Atom, Val[Identifier], Named(name) derives CanEqual:
   override def toString: String = s"#$name"
 object Identifier:
-  def apply()(using Context): Identifier = Location.from(new Identifier(_))
-  def apply(name: String)(using Context): Identifier = Location.from(new Identifier(_), name)
+  def apply()(using Context): Identifier = Named.from(new Identifier(_))
+  def apply(name: String)(using Context): Identifier = Named.from(new Identifier(_), name)
 end Identifier
 
 /**

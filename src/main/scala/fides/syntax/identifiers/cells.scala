@@ -1,6 +1,7 @@
 package fides.syntax.identifiers
 
 import fides.syntax.code.{Code, Expr, Process, Val, ValType, Xctr}
+import fides.syntax.identifiers.naming.{Context, Named}
 import fides.syntax.values.Pulse
 import izumi.reflect.Tag
 
@@ -20,9 +21,9 @@ final class Cell[T <: ValType : Tag] private(
   def valueType: Tag[T] = summon[Tag[T]]
 object Cell:
   def apply[T <: ValType](value: Code[Val[T]])(using Context, Tag[T]): Cell[T] =
-    Location.from(new Cell(value, _))
+    Named.from(new Cell(value, _))
   def apply[T <: ValType](value: Code[Val[T]], name: String)(using Context, Tag[T]): Cell[T] =
-    Location.from(new Cell(value, _), name)
+    Named.from(new Cell(value, _), name)
 end Cell
 
 /**

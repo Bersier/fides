@@ -1,6 +1,7 @@
 package fides.syntax.identifiers
 
 import fides.syntax.code.{Code, Expr, Val, ValType}
+import fides.syntax.identifiers.naming.{Context, Named}
 import izumi.reflect.Tag
 
 /**
@@ -11,13 +12,13 @@ sealed class IdentifierKey(name: String)(using Context) extends Val[IdentifierKe
   lazy val identifier: Identifier = Identifier(name)
   override def toString: String = s"Key(${identifier.name})"
 object IdentifierKey:
-  def apply()(using Context): IdentifierKey = new IdentifierKey(Location.newName())
+  def apply()(using Context): IdentifierKey = new IdentifierKey(Named.newName())
 end IdentifierKey
 
 final class ChannelKey[T <: ValType : Tag](name: String)(using Context) extends IdentifierKey(""):
   override lazy val identifier: OutChan[T] = OutChan(Channel(name))
 object ChannelKey:
-  def apply[T <: ValType : Tag]()(using Context): ChannelKey[T] = new ChannelKey(Location.newName())
+  def apply[T <: ValType : Tag]()(using Context): ChannelKey[T] = new ChannelKey(Named.newName())
 end ChannelKey
 
 /**

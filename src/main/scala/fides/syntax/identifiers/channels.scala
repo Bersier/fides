@@ -1,58 +1,51 @@
 package fides.syntax.identifiers
 
-import fides.syntax.code.{Code, CodeType, Expr, Val, ValType, Xctr}
+import fides.syntax.code.Polarity.{Negative, Positive}
+import fides.syntax.code.{Code, CodeType, Expr, Polar, Polarity, Val, ValType, Xctr}
+import fides.syntax.identifiers.naming.{Context, Named}
 import izumi.reflect.Tag
+import util.&:&
+
+// todo add channel declarations: chan <identifier> = ...; analogous to variable declarations
+//  but what about channel identifiers vs variable names?
+/*
+val <ptrn> = <expr>
+var <name> = <expr>
+chan <name>;
+
+ */
 
 /**
   * A type of location used for channels
-  *
-  * Syntactically, each channel has an associated metaprogramming level.
-  * A channel may only be used as an InpChan at its own metaprogramming level.
   *
   * @param name not part of the abstract syntax. Only there so we can keep track of which channel is which with
   *             human-readable names.
   * @tparam T the type of the values that transit through the channel
   */
-final class Channel[T <: ValType : Tag] private(name: String) extends Location(name), Code[Channel[T]]:
+final class Channel[T <: ValType : Tag] private(
+  name: String,
+) extends Identifier(name), InpChan[T], OutChan[T], Val[Channel[T]]:
   override def toString: String = s"@$name"
   /**
     * This type information is only for syntax/static purposes.
-    * At runtime, a channel indentifier value does not need to keep track of its type.
+    * At runtime, a channel identifier value does not need to keep track of its type.
     */
   def valueType: Tag[T] = summon[Tag[T]]
 object Channel:
-  def apply[T <: ValType]()(using Context, Tag[T]): Channel[T] = Location.from(new Channel(_))
-  def apply[T <: ValType](name: String)(using Context, Tag[T]): Channel[T] = Location.from(new Channel(_), name)
-  given [T <: ValType]: Conversion[Channel[T], InpChan[T]] with
-    def apply(c: Channel[T]): InpChan[T] = InpChan(c)
-  given [T <: ValType]: Conversion[Channel[T], OutChan[T]] with
-    def apply(c: Channel[T]): OutChan[T] = OutChan(c)
+  def apply[T <: ValType]()(using Context, Tag[T]): Channel[T] = Named.from(new Channel(_))
+  def apply[T <: ValType](name: String)(using Context, Tag[T]): Channel[T] = Named.from(new Channel(_), name)
 end Channel
 
-/**
-  * [[InpChan]]s are not Fides values, as reception is always static in Fides (i.e. no dynamic receive).
-  */
-final case class InpChan[+T <: ValType](c: Channel[? <: T]) extends CodeType, Code[InpChan[T]]:
-  override def toString: String = c.toString
-object InpChan:
-  def apply[T <: ValType]()(using Context, Tag[T]): InpChan[T] = new InpChan(Channel())
-  def apply[T <: ValType](name: String)(using Context, Tag[T]): InpChan[T] = new InpChan(Channel(name))
-end InpChan
-// todo change type of c to Code[Channel[? <: T]] (same question for OutChan)?
-
-final case class OutChan[-T <: ValType](c: Channel[? >: T]) extends Identifier(c.name), Val[OutChan[T]]:
-  override def toString: String = c.toString
-object OutChan:
-  def apply[T <: ValType]()(using Context, Tag[T]): OutChan[T] = new OutChan(Channel())
-  def apply[T <: ValType](name: String)(using Context, Tag[T]): OutChan[T] = new OutChan(Channel(name))
-end OutChan
+// todo keep track of anchors, so as to prevent dynamic receive
+sealed trait InpChan[+T <: ValType] extends Identifier, Val[InpChan[T]]
+sealed trait OutChan[-T <: ValType] extends Identifier, Val[OutChan[T]]
 
 /**
   * Absorbs from the location referred to by [[iD]]. Reduces to the received val after reception.
   *
   * Dual of Out
   */
-final case class Inp[+T <: ValType](iD: Code[InpChan[T]]) extends Expr[T]
+final case class Inp[T <: ValType](iD: Code[InpChan[T]]) extends Expr[T]
 
 /**
   * Emits to the location referred to by [[iD]], once it has a value.
@@ -61,6 +54,12 @@ final case class Inp[+T <: ValType](iD: Code[InpChan[T]]) extends Expr[T]
   *
   * Dual of Inp
   */
-final case class Out[-T <: ValType](iD: Code[Val[OutChan[T]]]) extends Xctr[T]
+final case class Out[T <: ValType](iD: Code[Val[OutChan[T]]]) extends Xctr[T]
 
-// todo resuscitate Loc (not sure if that's the correct name)?
+/**
+  * General [[Polar]] for input and output. Note that it can only be an [[Expr]] or a [[Xctr]].
+  */
+// todo
+final case class LocP[R >: Positive & Negative <: Polarity, P <: N, N <: ValType](
+  iD: Code[Polar[R, P, N]], // todo
+)(using (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing))) extends Polar[R, P, N]
