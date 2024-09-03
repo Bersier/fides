@@ -12,7 +12,8 @@ import util.&:&
   *
   * Dual of [[Out]]
   */
-final case class Inp[T <: ValType](iD: Code[Val[InpChan[T]]] | Code[Name[T]]) extends Expr[T]
+final case class Inp[+T <: ValType](iD: Code[Val[InpChan[T]]] | Code[Name[? <: T]]) extends Expr[T]
+// todo add variance, like here, to all primitives, for the sake of metaprogramming?
 
 /**
   * Emits to the location referred to by [[iD]], once it has a value.
@@ -21,15 +22,22 @@ final case class Inp[T <: ValType](iD: Code[Val[InpChan[T]]] | Code[Name[T]]) ex
   *
   * Dual of [[Inp]]
   */
-final case class Out[T <: ValType](iD: Code[Val[OutChan[T]]] | Code[Name[T]]) extends Xctr[T]
+final case class Out[-T <: ValType](iD: Code[Val[OutChan[T]]] | Code[Name[? >: T]]) extends Xctr[T]
+// todo these should become type aliases, if LocP is to make any sense.
 
 /**
   * General [[Polar]] for input and output. Note that it can only be an [[Expr]] or a [[Xctr]].
   */
 // todo
-final case class LocP[R >: Positive & Negative <: Polarity, P <: N, N <: ValType](
-  iD: Code[Val[Chan[R, P, N]]] | Code[Name[?]], // todo NameP[R, P, N]?
+final case class LocP[+R >: Positive & Negative <: Polarity, +P <: N, -N <: ValType](
+  iD: Code[Val[Chan[R, P, N]]] | Code[Name[? >: Nothing <: ValType]], // todo NameP[R, P, N]?
 )(using (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing))) extends Polar[R, P, N]
+// todo given the constraint  (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing)),
+//  can this even be used in a polymorphic abstraction where the polarity is not known in advance?
+//  Relatedly, we should be careful about not unintentionally leaking certain features of the Scala type system into
+//  Fides. If the polymorphic abstraction can only be used with an implicit proof that the type parameter satisfies
+//  certain properties, then it is pointless for Fides. Similarly, we don't want to introduce the '?' type wildcard
+//  into Fides, do we?
 
 /**
   * A hard-coded connection between one input and one output
