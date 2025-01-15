@@ -18,7 +18,7 @@ class Return[T]:
 //  def apply2[Other <: Return[T]#Type](value: Other): Type = value.asInstanceOf[Type]
 //  def apply3(using other: Return[T])(value: other.Type): Type = other.unapply(value)
   private inline def unapply(inline value: Type): T = value
-  given Conversion[Type, T] with
+  given Conversion[Type, T]:
     def apply(value: Type): T = unapply(value)
 //object Return: // todo delete ('given' doesn't make sense)
 //  given [T](using r: Return[T]): Conversion[r.Type, T] with

@@ -91,7 +91,7 @@ object ShowableTerm:
   ) extends ShowableTerm[T]
 end ShowableTerm
 
-given ShowableTerm[Match[?]] with
+given ShowableTerm[Match[?]]:
   def outerPrecedence: Precedence = Precedences.space
   def innerPrecedence: Precedence = Precedences.space
   def polarity: Char = '-'

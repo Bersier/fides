@@ -32,7 +32,7 @@ object TList:
 
   given CanEqual[TList[?], Empty] = CanEqual.derived
   given CanEqual[Empty, TList[?]] = CanEqual.derived
-  given [T](using CanEqual[T, T]): CanEqual[TList[T], TList[T]] = CanEqual.derived
+  given [T] => CanEqual[T, T] => CanEqual[TList[T], TList[T]] = CanEqual.derived
 
   final case class Cons[+E, +H <: E, +Tail <: TList[E]](override val head: H, override val tail: Tail) extends TList[E]:
     type Length = tail.Length + 1
