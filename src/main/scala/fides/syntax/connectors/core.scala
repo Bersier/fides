@@ -39,6 +39,12 @@ final case class LocP[+R >: Positive & Negative <: Polarity, +P <: N, -N <: ValT
 //  certain properties, then it is pointless for Fides. Similarly, we don't want to introduce the '?' type wildcard
 //  into Fides, do we?
 
+// TODO But why did we want to make this generic in the first place? What's the issue with having separate constructs
+//  for separate polarities? I forgot... I think it leads to redundancy somewhere, but where? Don't we want the syntax
+//  to make the polarity explicit, rather than in just the composition rules? It's probably something to do with
+//  metaprogramming...
+
+
 /**
   * A hard-coded connection between one input and one output
   *

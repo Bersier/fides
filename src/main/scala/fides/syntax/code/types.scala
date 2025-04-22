@@ -63,6 +63,8 @@ type Expr[+T <: ValType] = Polar[Positive, T, ValType]
   *
   * Given a value v, if its singleton type is a supertype of [[P]], this pattern will match it.
   *
+  * [[P]] ensures that it's not possible to match against cases that are known statically to never match.
+  *
   * @tparam P the type of the pattern, when interpreted as a value to be matched against
   * @tparam N all values of that type are allowed to be matched against this pattern
   */

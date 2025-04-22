@@ -13,12 +13,12 @@ object Declaration:
     name: Name[T],
     body: Expr[T],
   ) extends Declaration[T], Code[Declaration[T]]
-  
+
   final case class MutableVariable[T <: ValType : Tag](
     name: Name[T],
     body: Expr[T],
   ) extends Declaration[T], Code[Declaration[T]]
-  
+
   final case class FreshChannel[T <: ValType : Tag](
     name: Name[Channel[T]],
   ) extends Declaration[Channel[T]], Code[Declaration[Channel[T]]]
