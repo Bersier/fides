@@ -1,12 +1,12 @@
 package fides.syntax.meta
 
-import fides.syntax.code.{Code, CodeType, Expr, Ptrn, Val, ValType}
+import fides.syntax.code.{Code, CodeType, Expr, Lit, ValTop, Xctr}
 import fides.syntax.values.NaturalNumber
 
 /**
   * Code as value, for metaprogramming
   */
-final case class Quoted[+S <: CodeType](code: Code[S]) extends Val[Quoted[S]], ValType
+final case class Quoted[S <: CodeType](code: Code[S]) extends Lit[Quoted[S]], ValTop
 
 /**
   * Allows escaping the body of a [[Quote]]. Ignores nested [[Quote]]s
@@ -37,7 +37,7 @@ final case class Escape[S <: CodeType](code: Code[Expr[Quoted[S]]]) extends Code
   */
 final case class QuotedEscape[S <: CodeType](
   code: Code[Expr[Quoted[S]]],
-  level: Code[Val[NaturalNumber]] = NaturalNumber(0),
+  level: Code[Lit[NaturalNumber]] = NaturalNumber(0),
 ) extends Code[S]
 
 /**
@@ -49,7 +49,7 @@ final case class QuotedEscape[S <: CodeType](
   * To quote a [[MatchEscape]] from a nested [[MatchQuote]], rather than escaping the top-level [[MatchEscape]],
   * use [[MatchEscapeMatcher]].
   */
-final case class MatchEscape[S <: CodeType](code: Code[Ptrn[Quoted[S], Quoted[S]]]) extends Code[S]
+final case class MatchEscape[S <: CodeType](code: Code[Xctr[Quoted[S]]]) extends Code[S]
 // todo lossy type
 
 /**
@@ -65,8 +65,8 @@ final case class MatchEscape[S <: CodeType](code: Code[Ptrn[Quoted[S], Quoted[S]
   * For `level > 0`, [[MatchEscapeMatcher]]`(c, level)` matches [[MatchEscapeMatcher]]`(c, level - 1)`.
   */
 final case class MatchEscapeMatcher[S <: CodeType](
-  code: Code[Ptrn[Quoted[S], Quoted[S]]],
-  level: Code[Val[NaturalNumber]] = NaturalNumber(0),
+  code: Code[Xctr[Quoted[S]]],
+  level: Code[Lit[NaturalNumber]] = NaturalNumber(0),
 ) extends Code[S]
 
 /**
@@ -79,5 +79,5 @@ final case class Quote[S <: CodeType](code: Code[S]) extends Expr[Quoted[S]]
 /**
   * Code extractor.
   */
-final case class MatchQuote[S <: CodeType](code: Code[S]) extends Ptrn[Quoted[S], ValType]
+final case class MatchQuote[S <: CodeType](code: Code[S]) extends Xctr[Quoted[S]]
 // todo lossy type

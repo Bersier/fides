@@ -91,13 +91,13 @@ object ShowableTerm:
   ) extends ShowableTerm[T]
 end ShowableTerm
 
-given ShowableTerm[Match[?]]:
-  def outerPrecedence: Precedence = Precedences.space
-  def innerPrecedence: Precedence = Precedences.space
-  def polarity: Char = '-'
-  def header: String = "match"
-  def tailer: String = ""
-  val keys = "against" :: "default to" :: TList.Empty
+//given ShowableTerm[Match[?]]:
+//  def outerPrecedence: Precedence = Precedences.space
+//  def innerPrecedence: Precedence = Precedences.space
+//  def polarity: Char = '-'
+//  def header: String = "match"
+//  def tailer: String = ""
+//  val keys = "against" :: "default to" :: TList.Empty
 
 /**
   * Precedence is used to keep track of when additional parentheses are necessary.

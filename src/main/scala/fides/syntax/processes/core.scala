@@ -1,6 +1,6 @@
 package fides.syntax.processes
 
-import fides.syntax.code.{Code, Expr, Process, Val, ValType}
+import fides.syntax.code.{Code, Expr, Process, Lit, ValTop}
 import fides.syntax.declarations.Declaration
 import fides.syntax.identifiers.OutChan
 import fides.syntax.meta.Args
@@ -14,7 +14,7 @@ import fides.syntax.meta.Args
   * @param contents the value to be sent
   * @param recipient address of the recipient
   */
-final case class Send[T <: ValType](contents: Code[Expr[T]], recipient: Code[Expr[OutChan[T]]]) extends Process
+final case class Send[T <: ValTop](contents: Code[Expr[T]], recipient: Code[Expr[OutChan[T]]]) extends Process
 
 /**
   * A message in transit
@@ -27,17 +27,14 @@ final case class Send[T <: ValType](contents: Code[Expr[T]], recipient: Code[Exp
   * @param contents the contents of the message
   * @param recipient the address of the recipient
   */
-final case class Message[T <: ValType](contents: Code[Val[T]], recipient: Code[Val[OutChan[T]]]) extends Process
+final case class Message[T <: ValTop](contents: Code[Lit[T]], recipient: Code[Lit[OutChan[T]]]) extends Process
 // todo delete?
 
 /**
   * A name scope
   *
-  * The local identifiers are really placeholders,
-  * to be replaced by new identifiers upon execution/dissolution of the scope.
-  *
   * @param declarations valid within this scope
-  * @param body the body of the scope, in which the replacements will take place
+  * @param body the body of the scope, in which the names are valid
   */
 final case class Scope(declarations: Code[Args[Declaration[?]]], body: Code[Process]) extends Process
 

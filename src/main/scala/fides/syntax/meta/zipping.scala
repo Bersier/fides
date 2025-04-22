@@ -1,7 +1,7 @@
 package fides.syntax.meta
 
 import fides.syntax.code.Polarity.{Negative, Positive}
-import fides.syntax.code.{Code, CodeType, Expr, Polar, Polarity, ValType, Xctr}
+import fides.syntax.code.{Code, CodeType, Expr, Polar, Polarity, ValTop, Xctr}
 import fides.syntax.values.CollectedG
 import util.&:&
 
@@ -33,7 +33,7 @@ end ArgsG
 type Zip[
   IsNonEmpty <: Boolean,
   S <: CodeType,
-] = ZipP[Positive, IsNonEmpty, Boolean, S, CodeType, Quoted[ArgsG[IsNonEmpty, S]], ValType]
+] = ZipP[Positive, IsNonEmpty, Boolean, S, CodeType, Quoted[ArgsG[IsNonEmpty, S]], ValTop]
 object Zip:
   inline def apply[IsNonEmpty <: Boolean, S <: CodeType](
     inline pieces: Code[Expr[CollectedG[IsNonEmpty, Quoted[S]]]],
@@ -65,7 +65,7 @@ final case class ZipP[
   P <: N,
   N <: CodeType,
   L >: Nothing <: Quoted[ArgsG[IsNonEmptyP, P]],
-  U >: Quoted[ArgsG[IsNonEmptyN, N]] <: ValType,
+  U >: Quoted[ArgsG[IsNonEmptyN, N]] <: ValTop,
 ](
   pieces: Code[Polar[R, CollectedG[IsNonEmptyP, Quoted[P]], CollectedG[IsNonEmptyN, Quoted[N]]]],
 )(using

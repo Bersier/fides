@@ -9,7 +9,7 @@ import util.TList
 // todo polymorphic abstractions?
 //  Variance? Type bounds ?!
 
-final case class ExprComponent[T <: ValType](
+final case class ExprComponent[T <: ValTop](
   name: Code[ExprCompName],
   parameters: Code[Args[Identifier]],
   expr: Code[Expr[T]],

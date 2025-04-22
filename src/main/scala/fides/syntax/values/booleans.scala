@@ -1,12 +1,12 @@
 package fides.syntax.values
 
-import fides.syntax.code.{Atom, Code, Expr, Val}
+import fides.syntax.code.{Atom, Code, Expr, Lit}
 import fides.syntax.meta.Args
 
 /**
   * Boolean values
   */
-sealed trait Bool extends Atom, Val[Bool]
+sealed trait Bool extends Atom, Lit[Bool]
 case object True extends Bool
 case object False extends Bool
 

@@ -1,6 +1,6 @@
 package fides.syntax.identifiers
 
-import fides.syntax.code.{Code, Expr, Process, Val, ValType, Xctr}
+import fides.syntax.code.{Code, Expr, Process, Lit, ValTop, Xctr}
 import fides.syntax.identifiers.naming.{Context, Named}
 import fides.syntax.values.Pulse
 import izumi.reflect.Tag
@@ -13,28 +13,28 @@ import izumi.reflect.Tag
   *
   * @tparam T the type of the values that get stored in the cell
   */
-final class Cell[T <: ValType : Tag] private(
-  var value: Code[Val[T]],
+final class Cell[T <: ValTop : Tag] private(
+  var value: Code[Lit[T]],
   name: String,
-) extends Identifier(name), Val[Cell[T]], Process:
+) extends Identifier(name), Lit[Cell[T]], Process:
   override def toString: String = s"$$$name($value)"
   def valueType: Tag[T] = summon[Tag[T]]
 object Cell:
-  def apply[T <: ValType](value: Code[Val[T]])(using Context, Tag[T]): Cell[T] =
+  def apply[T <: ValTop](value: Code[Lit[T]])(using Context, Tag[T]): Cell[T] =
     Named.from(new Cell(value, _))
-  def apply[T <: ValType](value: Code[Val[T]], name: String)(using Context, Tag[T]): Cell[T] =
+  def apply[T <: ValTop](value: Code[Lit[T]], name: String)(using Context, Tag[T]): Cell[T] =
     Named.from(new Cell(value, _), name)
 end Cell
 
 /**
   * Reads the value contained in the cell once the trigger value is available.
   */
-final case class Read[T <: ValType](trigger: Code[Expr[Pulse]], iD: Code[Val[Cell[T]]]) extends Expr[T]
+final case class Read[T <: ValTop](trigger: Code[Expr[Pulse]], iD: Code[Lit[Cell[T]]]) extends Expr[T]
 
 /**
   * Unconditionally overwrites the value contained in the cell, and signals completion.
   */
-final case class Write[T <: ValType](signal: Code[Xctr[Pulse]], iD: Code[Val[Cell[T]]]) extends Xctr[T]
+final case class Write[T <: ValTop](signal: Code[Xctr[Pulse]], iD: Code[Lit[Cell[T]]]) extends Xctr[T]
 
 /**
   * Atomically
@@ -49,8 +49,8 @@ final case class Write[T <: ValType](signal: Code[Xctr[Pulse]], iD: Code[Val[Cel
   * only if they are the same, updates the value of the cell to the inputted new value, and
   * outputs the previous value of the cell.
   */
-final case class CompareAndSwap[T <: ValType](
+final case class CompareAndSwap[T <: ValTop](
   testValue: Code[Expr[T]],
   newValue: Code[Expr[T]],
-  iD: Code[Val[Cell[T]]],
+  iD: Code[Lit[Cell[T]]],
 ) extends Expr[T]

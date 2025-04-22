@@ -14,7 +14,7 @@ def outChanExample(using Context): Code[?] =
   val channel = Channel[OutChan[Bool]]()
   Concurrent(Args(
     Forward(
-      inp = OutChan[ValType](),
+      inp = OutChan[ValTop](),
       out = Out(channel),
     ),
     Forward(

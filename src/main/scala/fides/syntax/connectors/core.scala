@@ -1,7 +1,7 @@
 package fides.syntax.connectors
 
-import fides.syntax.code.Polarity.{Negative, Positive}
-import fides.syntax.code.{Code, Expr, Polar, Polarity, Process, Val, ValType, Xctr}
+import fides.syntax.code.{Code, Expr, Lit, Polar, Process, ValTop, Xctr}
+import fides.syntax.declarations.Declaration
 import fides.syntax.identifiers.{Chan, InpChan, Name, OutChan}
 import fides.syntax.meta.Args
 import fides.syntax.values.Pulse
@@ -12,8 +12,9 @@ import util.&:&
   *
   * Dual of [[Out]]
   */
-final case class Inp[+T <: ValType](iD: Code[Val[InpChan[T]]] | Code[Name[? <: T]]) extends Expr[T]
+final case class Inp[+T <: ValTop](iD: Code[Expr[InpChan[T]] & Lit]) extends Expr[T]
 // todo add variance, like here, to all primitives, for the sake of metaprogramming?
+// todo  | Code[Name[? <: T]]
 
 /**
   * Emits to the location referred to by [[iD]], once it has a value.
@@ -22,16 +23,18 @@ final case class Inp[+T <: ValType](iD: Code[Val[InpChan[T]]] | Code[Name[? <: T
   *
   * Dual of [[Inp]]
   */
-final case class Out[-T <: ValType](iD: Code[Val[OutChan[T]]] | Code[Name[? >: T]]) extends Xctr[T]
+final case class Out[-T <: ValTop](iD: Code[Expr[OutChan[T]] & Lit]) extends Xctr[T]
 // todo these should become type aliases, if LocP is to make any sense.
+// todo  | Code[Name[? >: T]]
 
 /**
   * General [[Polar]] for input and output. Note that it can only be an [[Expr]] or a [[Xctr]].
   */
-// todo
-final case class LocP[+R >: Positive & Negative <: Polarity, +P <: N, -N <: ValType](
-  iD: Code[Val[Chan[R, P, N]]] | Code[Name[? >: Nothing <: ValType]], // todo NameP[R, P, N]?
-)(using (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing))) extends Polar[R, P, N]
+final case class Loc[+P >: Nothing, -N <: ValTop](
+  iD: Code[Lit[Chan[P, N]]] | Code[Name[? >: Nothing <: ValTop]],
+) extends Polar[P, N]
+// todo Code[Name[? >: Nothing <: ValTop]]
+
 // todo given the constraint  (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing)),
 //  can this even be used in a polymorphic abstraction where the polarity is not known in advance?
 //  Relatedly, we should be careful about not unintentionally leaking certain features of the Scala type system into
@@ -50,7 +53,18 @@ final case class LocP[+R >: Positive & Negative <: Polarity, +P <: N, -N <: ValT
   *
   * Equivalent to [[Spread]]([[inp]], [[Args]]([[out]])).
   */
-final case class Forward[T <: ValType](inp: Code[Expr[T]], out: Code[Xctr[T]]) extends Process
+final case class Forward[T <: ValTop](inp: Code[Expr[T]], out: Code[Xctr[T]]) extends Process
+
+/**
+  * Dual of Forward. The connection between [[inp]] and [[out]] is instead achieved via variables.
+  *
+  * Equivalent to [[Spread]]([[inp]], [[Args]]([[out]])).
+  */
+final case class Backward[T <: ValTop, U <: ValTop](
+  declarations: Code[Args[Declaration[?]]],
+  inp: Code[Xctr[T]],
+  out: Code[Expr[U]],
+) extends Polar[Polarity.Neutral, T, U]
 
 /**
   * Kind-of the dual of values.
@@ -59,17 +73,17 @@ final case class Forward[T <: ValType](inp: Code[Expr[T]], out: Code[Xctr[T]]) e
   *
   * Can be implemented in terms of the other primitives.
   */
-final case class Ignore() extends Xctr[ValType]
+final case class Ignore() extends Xctr[ValTop]
 
 /**
   * Spreads a value to multiple recipients.
   */
-final case class Spread[T <: ValType](value: Code[Expr[T]], recipients: Code[Args[Xctr[T]]]) extends Process
+final case class Spread[T <: ValTop](recipients: Code[Args[Xctr[T]]]) extends Xctr[T]
 
 /**
   * Forwards the inputted value once signalled to do so.
   */
-final case class Hold[T <: ValType](signal: Code[Expr[Pulse]], value: Code[Expr[T]]) extends Expr[T]
+final case class Hold[T <: ValTop](signal: Code[Expr[Pulse]], value: Code[Expr[T]]) extends Expr[T]
 
 /**
   * Upon reception of a value, outputs a pulse. It only communicates the arrival of the value,
@@ -84,23 +98,23 @@ final case class Signal(trigger: Code[Expr[?]]) extends Expr[Pulse]
   *
   * [[Pick]]`[T] <: `[[Expr]]`[T]`
   */
-type Pick[T <: ValType] = PickP[Positive, T, ValType]
+type Pick[T <: ValTop] = PickP[Positive, T, ValTop]
 object Pick:
-  inline def apply[T <: ValType](inline inputs: Code[Args.Some[Expr[T]]]): Pick[T] = PickP(inputs)
+  inline def apply[T <: ValTop](inline inputs: Code[Args.Some[Expr[T]]]): Pick[T] = PickP(inputs)
 
 /**
   * Internal choice. Non-deterministically forwards the input to one of the outputs.
   *
   * [[UnPick]]`[T] <: `[[Xctr]]`[T]`
   */
-type UnPick[T <: ValType] = PickP[Negative, Nothing, T]
+type UnPick[T <: ValTop] = PickP[Negative, Nothing, T]
 object UnPick:
-  inline def apply[T <: ValType](inline recipients: Code[Args.Some[Xctr[T]]]): UnPick[T] = PickP(recipients)
+  inline def apply[T <: ValTop](inline recipients: Code[Args.Some[Xctr[T]]]): UnPick[T] = PickP(recipients)
 end UnPick
 
 /**
   * General [[Polar]] for picking. Note that it can only be an [[Expr]] or an [[Xctr]].
   */
-final case class PickP[R >: Positive & Negative <: Polarity, P <: N, N <: ValType](
+final case class PickP[R >: Positive & Negative <: Polarity, P <: N, N <: ValTop](
   connections: Code[Args.Some[Polar[R, P, N]]],
 )(using (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing))) extends Polar[R, P, N]
