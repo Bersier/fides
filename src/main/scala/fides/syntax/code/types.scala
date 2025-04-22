@@ -37,6 +37,7 @@ trait Process extends CodeType, Code[Process]
   * [[Polar]] is a generalization of expressions and patterns.
   */
 trait Polar[+P >: ValBot, -N <: ValTop] extends CodeType, Code[Polar[P, N]]
+// TODO seal Polar and always extend Code directly (?)
 
 /**
   * Fides code type for Fides value literals

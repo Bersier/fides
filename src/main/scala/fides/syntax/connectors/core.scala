@@ -1,6 +1,6 @@
 package fides.syntax.connectors
 
-import fides.syntax.code.{Code, Expr, Lit, Polar, Process, ValTop, Xctr}
+import fides.syntax.code.{Code, Expr, Lit, Polar, Process, OffBot, OffTop, ValBot, ValTop, Xctr}
 import fides.syntax.declarations.Declaration
 import fides.syntax.identifiers.{Chan, InpChan, Name, OutChan}
 import fides.syntax.meta.Args
@@ -12,7 +12,10 @@ import util.&:&
   *
   * Dual of [[Out]]
   */
-final case class Inp[+T <: ValTop](iD: Code[Expr[InpChan[T]] & Lit]) extends Expr[T]
+type Inp[+T <: ValTop] = Loc[T, OffBot]
+object Inp:
+  def apply[T <: ValTop](iD: Code[Expr[InpChan[T]] & Lit]): Inp[T] = Loc(iD)
+end Inp
 // todo add variance, like here, to all primitives, for the sake of metaprogramming?
 // todo  | Code[Name[? <: T]]
 
@@ -23,17 +26,17 @@ final case class Inp[+T <: ValTop](iD: Code[Expr[InpChan[T]] & Lit]) extends Exp
   *
   * Dual of [[Inp]]
   */
-final case class Out[-T <: ValTop](iD: Code[Expr[OutChan[T]] & Lit]) extends Xctr[T]
-// todo these should become type aliases, if LocP is to make any sense.
+type Out[-T <: ValTop] = Loc[OffTop, T]
+object Out:
+  def apply[T <: ValTop](iD: Code[Expr[OutChan[T]] & Lit]): Out[T] = Loc(iD)
+end Out
 // todo  | Code[Name[? >: T]]
 
 /**
   * General [[Polar]] for input and output. Note that it can only be an [[Expr]] or a [[Xctr]].
   */
-final case class Loc[+P >: Nothing, -N <: ValTop](
-  iD: Code[Lit[Chan[P, N]]] | Code[Name[? >: Nothing <: ValTop]],
-) extends Polar[P, N]
-// todo Code[Name[? >: Nothing <: ValTop]]
+final case class Loc[P >: ValBot, N <: ValTop](iD: Code[Expr[Chan[P, N]] & Lit]) extends Polar[P, N]
+// todo  | Code[Name[? >: Nothing <: ValTop]]
 
 // todo given the constraint  (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing)),
 //  can this even be used in a polymorphic abstraction where the polarity is not known in advance?
@@ -64,7 +67,7 @@ final case class Backward[T <: ValTop, U <: ValTop](
   declarations: Code[Args[Declaration[?]]],
   inp: Code[Xctr[T]],
   out: Code[Expr[U]],
-) extends Polar[Polarity.Neutral, T, U]
+) extends Polar[T, U]
 
 /**
   * Kind-of the dual of values.
@@ -98,23 +101,21 @@ final case class Signal(trigger: Code[Expr[?]]) extends Expr[Pulse]
   *
   * [[Pick]]`[T] <: `[[Expr]]`[T]`
   */
-type Pick[T <: ValTop] = PickP[Positive, T, ValTop]
+type Pick[T <: ValTop] = PickP[T, OffBot]
 object Pick:
-  inline def apply[T <: ValTop](inline inputs: Code[Args.Some[Expr[T]]]): Pick[T] = PickP(inputs)
+  def apply[T <: ValTop](inputs: Code[Args.Some[Expr[T]]]): Pick[T] = PickP(inputs)
 
 /**
   * Internal choice. Non-deterministically forwards the input to one of the outputs.
   *
   * [[UnPick]]`[T] <: `[[Xctr]]`[T]`
   */
-type UnPick[T <: ValTop] = PickP[Negative, Nothing, T]
+type UnPick[T <: ValTop] = PickP[OffTop, T]
 object UnPick:
-  inline def apply[T <: ValTop](inline recipients: Code[Args.Some[Xctr[T]]]): UnPick[T] = PickP(recipients)
+  def apply[T <: ValTop](recipients: Code[Args.Some[Xctr[T]]]): UnPick[T] = PickP(recipients)
 end UnPick
 
 /**
   * General [[Polar]] for picking. Note that it can only be an [[Expr]] or an [[Xctr]].
   */
-final case class PickP[R >: Positive & Negative <: Polarity, P <: N, N <: ValTop](
-  connections: Code[Args.Some[Polar[R, P, N]]],
-)(using (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing))) extends Polar[R, P, N]
+final case class PickP[P, N](connections: Code[Args.Some[Polar[P, N]]]) extends Polar[P, N]

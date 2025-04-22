@@ -1,13 +1,17 @@
 package fides.syntax.control
 
-import fides.syntax.code.{Atom, Code, Expr, Process, Lit, ValTop, Xctr}
-import fides.syntax.identifiers.{Cell, OutChan}
-import fides.syntax.values.{Bool, Pulse}
+import fides.syntax.code.{Atom, Code, Expr, Process, Lit, Ntrl, ValTop, Xctr}
+import fides.syntax.identifiers.{OutChan}
+import fides.syntax.values.{BoolT, Pulse}
 
-sealed trait Order extends Atom, Lit[Order]
-case object Kill extends Order
-case object Pause extends Order
-case object Start extends Order
+sealed trait OrderT extends Atom
+sealed trait KillT extends OrderT
+sealed trait PauseT extends OrderT
+sealed trait StartT extends OrderT
+
+case object Kill extends Lit, Ntrl[KillT]
+case object Pause extends Lit, Ntrl[PauseT]
+case object Start extends Lit, Ntrl[StartT]
 
 /**
   * A pausable process
@@ -15,7 +19,7 @@ case object Start extends Order
   * @param awake indicates the current state of the process (whether it's awake or asleep)
   * @param body the process that can be paused
   */
-final case class Pausable(awake: Code[Cell[Bool]], body: Code[Process]) extends Process
+//final case class Pausable(awake: Code[Cell[BoolT]], body: Code[Process]) extends Process
 
 /**
   * Upon reception of a pulse, the body's execution is started.
@@ -43,7 +47,7 @@ final case class Mortal(
   */
 final case class Sandboxed(monitor: Code[Process], sandboxed: Code[Process]) extends Process
 
-final case class Handled(errorHandler: Code[Lit[OutChan[Error[ValTop]]]], body: Code[Process]) extends Process
+final case class Handled(errorHandler: Code[Expr[OutChan[Error[ValTop]]] & Lit], body: Code[Process]) extends Process
 
-final case class Error[+T <: ValTop](value: Code[Lit[T]]) extends Lit[Error[T]], ValTop
+final case class Error[+T <: ValTop](value: Code[Expr[T] & Lit]) extends Lit, Ntrl[Error[T]], ValTop
 // todo develop

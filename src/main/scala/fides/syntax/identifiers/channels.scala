@@ -8,10 +8,6 @@ import izumi.reflect.Tag
   */
 sealed trait ChanT[+InpT >: ValBot, -OutT <: ValTop] extends IDT
 
-// todo Left here:
-// todo How to represent a Channel identifier that, depending on the execution polarity,
-//  can either be used as an InpChan, or as an OutChan, but not both in the same polarity?
-
 /**
   * Channel identifier
   *

@@ -23,12 +23,12 @@ def outChanExample(using Context): Code[?] =
     )
   ))
 
-def unPairExample(using Context): Code[?] =
-  val myChannel = OutChan[WholeNumber](name = "myChannel")
-  Forward(
-    Paired(WholeNumber(1), Cell(False)),
-    UnPair(Out(myChannel), Ignore()),
-  )
+//def unPairExample(using Context): Code[?] =
+//  val myChannel = OutChan[WholeNumber](name = "myChannel")
+//  Forward(
+//    Paired(WholeNumber(1), Cell(False)),
+//    UnPair(Out(myChannel), Ignore()),
+//  )
 
 def staticAndDynamicSendExample(using Context): Code[?] =
   import scala.language.implicitConversions
