@@ -1,9 +1,10 @@
 package fides.syntax.values
 
-import fides.syntax.code.{Atom, Code, Expr, Lit, Ntrl}
+import fides.syntax.core.Code
+import fides.syntax.types.{AtomT, Expr, Lit, Ntrl}
 import fides.syntax.meta.Args
 
-sealed trait BoolT extends Atom
+sealed trait BoolT extends AtomT
 sealed trait TrueT extends BoolT
 sealed trait FalseT extends BoolT
 
@@ -28,7 +29,7 @@ final case class NegateBool(value: Code[Expr[BoolT]]) extends Expr[BoolT]
 /**
   * Outputs true iff the atoms are the same.
   */
-final case class Equal(args: Code[Args[Expr[Atom]]]) extends Expr[BoolT]
+final case class Equal(args: Code[Args[Expr[AtomT]]]) extends Expr[BoolT]
 
 /**
   * Outputs True with probability 1/2, False with probability 1/2.

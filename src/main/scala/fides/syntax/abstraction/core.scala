@@ -1,5 +1,7 @@
-package fides.syntax.code
+package fides.syntax.abstraction
 
+import fides.syntax.core.Code
+import fides.syntax.types.{CodeType, Expr, Process, ValTop}
 import fides.syntax.identifiers.Identifier
 import fides.syntax.meta.Args
 import util.TList

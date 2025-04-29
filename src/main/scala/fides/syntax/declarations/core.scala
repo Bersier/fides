@@ -1,6 +1,7 @@
 package fides.syntax.declarations
 
-import fides.syntax.code.{Code, CodeType, Expr, ValTop}
+import fides.syntax.core.Code
+import fides.syntax.types.{CodeType, Expr, ValTop}
 import fides.syntax.identifiers.{Channel, Name}
 import izumi.reflect.Tag
 

@@ -1,12 +1,8 @@
 package fides.syntax.identifiers
 
-import fides.syntax.code.{Lit, OffBot, OffTop, Polar, Ntrl, ValBot, ValTop}
-import izumi.reflect.Tag
-
-/**
-  * Data type for Channels
-  */
-sealed trait ChanT[+InpT >: ValBot, -OutT <: ValTop] extends IDT
+import fides.syntax.core.Code
+import fides.syntax.types.{IdentifierT, Lit, Ntrl, OffBot, OffTop, Polar, ValBot, ValTop, ChanT}
+import izumi.reflect.Tag // TODO
 
 /**
   * Channel identifier
@@ -16,7 +12,7 @@ sealed trait ChanT[+InpT >: ValBot, -OutT <: ValTop] extends IDT
   * @tparam InpT this identifier, when used to receive, might receive any value of this type
   * @tparam OutT this identifier, when used to send, can be used to send any value of this type
   */
-final class Chan[InpT >: ValBot, OutT <: ValTop] private[identifiers] extends Lit, Ntrl[ChanT[InpT, OutT]]
+final class Chan[InpT >: OutT, OutT <: ValTop] extends Code[Lit & Ntrl[ChanT[InpT, OutT]]]
 
 type InpChan[+T <: ValTop] = Chan[T, OffBot]
 object InpChan:

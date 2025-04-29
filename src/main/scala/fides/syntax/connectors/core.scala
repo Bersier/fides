@@ -1,6 +1,7 @@
 package fides.syntax.connectors
 
-import fides.syntax.code.{Code, Expr, Lit, Polar, Process, OffBot, OffTop, ValBot, ValTop, Xctr}
+import fides.syntax.core.Code
+import fides.syntax.types.{Expr, Lit, Polar, Process, OffBot, OffTop, ValBot, ValTop, Xctr}
 import fides.syntax.declarations.Declaration
 import fides.syntax.identifiers.{Chan, InpChan, Name, OutChan}
 import fides.syntax.meta.Args
@@ -35,7 +36,7 @@ end Out
 /**
   * General [[Polar]] for input and output. Note that it can only be an [[Expr]] or a [[Xctr]].
   */
-final case class Loc[P >: ValBot, N <: ValTop](iD: Code[Expr[Chan[P, N]] & Lit]) extends Polar[P, N]
+final case class Loc[P >: ValBot, N <: ValTop](iD: Code[Expr[Chan[P, N]] & Lit]) extends Code[Polar[P, N]]
 // todo  | Code[Name[? >: Nothing <: ValTop]]
 
 // todo given the constraint  (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing)),
@@ -56,7 +57,7 @@ final case class Loc[P >: ValBot, N <: ValTop](iD: Code[Expr[Chan[P, N]] & Lit])
   *
   * Equivalent to [[Spread]]([[inp]], [[Args]]([[out]])).
   */
-final case class Forward[T <: ValTop](inp: Code[Expr[T]], out: Code[Xctr[T]]) extends Process
+final case class Forward[T <: ValTop](inp: Code[Expr[T]], out: Code[Xctr[T]]) extends Code[Process]
 
 /**
   * Dual of Forward. The connection between [[inp]] and [[out]] is instead achieved via variables.
@@ -67,7 +68,7 @@ final case class Backward[T <: ValTop, U <: ValTop](
   declarations: Code[Args[Declaration[?]]],
   inp: Code[Xctr[T]],
   out: Code[Expr[U]],
-) extends Polar[T, U]
+) extends Code[Polar[T, U]]
 
 /**
   * Kind-of the dual of values.
@@ -76,23 +77,23 @@ final case class Backward[T <: ValTop, U <: ValTop](
   *
   * Can be implemented in terms of the other primitives.
   */
-final case class Ignore() extends Xctr[ValTop]
+final case class Ignore() extends Code[Xctr[ValTop]]
 
 /**
   * Spreads a value to multiple recipients.
   */
-final case class Spread[T <: ValTop](recipients: Code[Args[Xctr[T]]]) extends Xctr[T]
+final case class Spread[T <: ValTop](recipients: Code[Args[Xctr[T]]]) extends Code[Xctr[T]]
 
 /**
   * Forwards the inputted value once signalled to do so.
   */
-final case class Hold[T <: ValTop](signal: Code[Expr[Pulse]], value: Code[Expr[T]]) extends Expr[T]
+final case class Hold[T <: ValTop](signal: Code[Expr[Pulse]], value: Code[Expr[T]]) extends Code[Expr[T]]
 
 /**
   * Upon reception of a value, outputs a pulse. It only communicates the arrival of the value,
   * but forgets/ignores about the actual value.
   */
-final case class Signal(trigger: Code[Expr[?]]) extends Expr[Pulse]
+final case class Signal(trigger: Code[Expr[?]]) extends Code[Expr[Pulse]]
 
 /**
   * Forwards one of the inputs. Is guaranteed to forward a value if any of the inputs yields a value.
@@ -118,4 +119,4 @@ end UnPick
 /**
   * General [[Polar]] for picking. Note that it can only be an [[Expr]] or an [[Xctr]].
   */
-final case class PickP[P, N](connections: Code[Args.Some[Polar[P, N]]]) extends Polar[P, N]
+final case class PickP[P, N](connections: Code[Args.Some[Polar[P, N]]]) extends Code[Polar[P, N]]

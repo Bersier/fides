@@ -1,12 +1,13 @@
 package fides.syntax.meta
 
-import fides.syntax.code.{Code, CodeType, Expr, Lit, ValTop, Xctr}
+import fides.syntax.core.Code
+import fides.syntax.types.{CodeType, Expr, Lit, Ntrl, ValTop, Xctr, QuotedT, NaturalNumberT}
 import fides.syntax.values.NaturalNumber
 
 /**
   * Code as value, for metaprogramming
   */
-final case class Quoted[S <: CodeType](code: Code[S]) extends Lit[Quoted[S]], ValTop
+final case class Quoted[S <: CodeType](code: Code[S]) extends Code[Lit & Ntrl[QuotedT[S]]]
 
 /**
   * Allows escaping the body of a [[Quote]]. Ignores nested [[Quote]]s
@@ -36,8 +37,8 @@ final case class Escape[S <: CodeType](code: Code[Expr[Quoted[S]]]) extends Code
   * So [[QuotedEscape]]s within quotes are matched by [[QuotedEscape]]s within [[MatchQuote]], as expected.
   */
 final case class QuotedEscape[S <: CodeType](
-  code: Code[Expr[Quoted[S]]],
-  level: Code[Lit[NaturalNumber]] = NaturalNumber(0),
+  code: Code[Expr[QuotedT[S]]],
+  level: Code[Lit & Ntrl[NaturalNumberT]] = NaturalNumber(0),
 ) extends Code[S]
 
 /**
@@ -66,7 +67,7 @@ final case class MatchEscape[S <: CodeType](code: Code[Xctr[Quoted[S]]]) extends
   */
 final case class MatchEscapeMatcher[S <: CodeType](
   code: Code[Xctr[Quoted[S]]],
-  level: Code[Lit[NaturalNumber]] = NaturalNumber(0),
+  level: Code[Lit & Ntrl[NaturalNumberT]] = NaturalNumber(0),
 ) extends Code[S]
 
 /**

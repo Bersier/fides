@@ -1,6 +1,6 @@
 package fides.syntax
 
-import fides.syntax.code.Code
+import fides.syntax.types.Code
 import fides.syntax.connectors.*
 import fides.syntax.identifiers.*
 import fides.syntax.identifiers.naming.Context

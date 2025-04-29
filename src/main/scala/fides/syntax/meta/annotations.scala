@@ -1,7 +1,8 @@
 package fides.syntax.meta
 
-import fides.syntax.code.{Code, CodeType, Expr, Lit, ValTop}
-import fides.syntax.values.{NaturalNumber, NaturalNumberT}
+import fides.syntax.core.Code
+import fides.syntax.types.{CodeType, Expr, Lit, ValTop, NaturalNumberT}
+import fides.syntax.values.NaturalNumber
 
 /**
   * An annotated piece of code. The annotation does not change the semantics of the code.

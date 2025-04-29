@@ -1,10 +1,11 @@
 package fides.syntax.control
 
-import fides.syntax.code.{Atom, Code, Expr, Process, Lit, Ntrl, ValTop, Xctr}
-import fides.syntax.identifiers.{OutChan}
+import fides.syntax.core.Code
+import fides.syntax.types.{AtomT, Expr, Process, Lit, Ntrl, ValTop, Xctr}
+import fides.syntax.identifiers.OutChan
 import fides.syntax.values.{BoolT, Pulse}
 
-sealed trait OrderT extends Atom
+sealed trait OrderT extends AtomT
 sealed trait KillT extends OrderT
 sealed trait PauseT extends OrderT
 sealed trait StartT extends OrderT

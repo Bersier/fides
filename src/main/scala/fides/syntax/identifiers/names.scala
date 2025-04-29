@@ -1,6 +1,7 @@
 package fides.syntax.identifiers
 
-import fides.syntax.code.{Code, CodeType, ValTop}
+import fides.syntax.core.Code
+import fides.syntax.types.{CodeType, ValTop}
 
 final class Name[T <: ValTop] private extends CodeType, Code[Name[T]]
 //object Name:

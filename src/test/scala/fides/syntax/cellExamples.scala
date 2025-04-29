@@ -1,6 +1,6 @@
 package fides.syntax
 
-import fides.syntax.code.Code
+import fides.syntax.types.Code
 import fides.syntax.connectors.{Forward, Ignore}
 import fides.syntax.identifiers.naming.Context
 import fides.syntax.identifiers.{Cell, CompareAndSwap, Read, Write}

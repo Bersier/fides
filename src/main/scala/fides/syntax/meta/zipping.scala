@@ -1,7 +1,7 @@
 package fides.syntax.meta
 
-import fides.syntax.code.Polarity.{Negative, Positive}
-import fides.syntax.code.{Code, CodeType, Expr, Polar, Polarity, ValTop, Xctr}
+import fides.syntax.core.Code
+import fides.syntax.types.{CodeType, Expr, Polar, ValTop, Xctr}
 import fides.syntax.values.CollectedG
 import util.&:&
 
@@ -26,9 +26,9 @@ sealed trait ArgsG[+IsNonEmpty <: Boolean, +S <: CodeType] extends Code[ArgsG[Is
 end ArgsG
 
 /**
-  * Converts a collection of code quotations to a [[Quoted]] of [[Args]] of all the pieces of code.
+  * As an Expr, converts a collection of code quotations to a [[Quoted]] of [[Args]] of all the pieces of code.
   *
-  * [[Zip]]`[IsNonEmpty, S] <: `[[Expr]]`[`[[Quoted]]`[`[[ArgsG]]`[IsNonEmpty, S]]]`
+  * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Args]].
   */
 type Zip[
   IsNonEmpty <: Boolean,
@@ -55,21 +55,13 @@ object UnZip:
   ): UnZip[IsNonEmpty, S] = ZipP(pieces)
 end UnZip
 
-/**
-  * General [[Polar]] for zipping. Note that it can only be an [[Expr]] or an [[Xctr]].
-  */
 final case class ZipP[
-  R >: Positive & Negative <: Polarity,
-  IsNonEmptyP <: IsNonEmptyN,
+  IsNonEmptyP >: Boolean,
   IsNonEmptyN <: Boolean,
   P <: N,
   N <: CodeType,
   L >: Nothing <: Quoted[ArgsG[IsNonEmptyP, P]],
   U >: Quoted[ArgsG[IsNonEmptyN, N]] <: ValTop,
 ](
-  pieces: Code[Polar[R, CollectedG[IsNonEmptyP, Quoted[P]], CollectedG[IsNonEmptyN, Quoted[N]]]],
-)(using
-  (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing)),
-  Quoted[ArgsG[IsNonEmptyP, P]] <:< (L | Quoted[ArgsG[Nothing, Nothing]]),
-  (U & Quoted[ArgsG[Boolean, CodeType]]) <:< Quoted[ArgsG[IsNonEmptyN, N]],
-) extends Polar[R, L, U]
+  pieces: Code[Polar[CollectedG[IsNonEmptyP, Quoted[P]], CollectedG[IsNonEmptyN, Quoted[N]]]],
+) extends Polar[L, U]

@@ -1,6 +1,7 @@
 package fides.syntax.meta
 
-import fides.syntax.code.{Code, CodeType, Expr}
+import fides.syntax.core.Code
+import fides.syntax.types.{CodeType, Expr}
 import fides.syntax.identifiers.Identifier
 
 /**

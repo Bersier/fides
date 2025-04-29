@@ -1,6 +1,7 @@
 package fides.syntax.identifiers
 
-import fides.syntax.code.{Code, Expr, Process, Lit, ValTop, Xctr}
+import fides.syntax.core.Code
+import fides.syntax.types.{Expr, Process, Lit, ValTop, Xctr}
 import fides.syntax.values.Pulse
 import izumi.reflect.Tag
 

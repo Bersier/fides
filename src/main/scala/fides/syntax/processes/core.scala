@@ -1,6 +1,7 @@
 package fides.syntax.processes
 
-import fides.syntax.code.{Code, Expr, Process, Lit, ValTop}
+import fides.syntax.core.Code
+import fides.syntax.types.{Expr, Process, Lit, ValTop}
 import fides.syntax.declarations.Declaration
 import fides.syntax.identifiers.OutChan
 import fides.syntax.meta.Args

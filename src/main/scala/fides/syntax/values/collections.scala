@@ -1,7 +1,7 @@
 package fides.syntax.values
 
-import fides.syntax.code.Polarity.{Negative, Positive}
-import fides.syntax.code.{Code, Expr, Polar, Polarity, Lit, ValTop, Xctr}
+import fides.syntax.core.Code
+import fides.syntax.types.{Expr, Polar, Lit, ValTop, Xctr}
 import fides.syntax.identifiers.{InpChan, OutChan}
 import util.&:&
 

@@ -1,24 +1,24 @@
 package fides.syntax.signatures
 
-import fides.syntax.code.Polarity.Negative
-import fides.syntax.code.{Code, Expr, Polar, Ptrn, Lit, ValTop, Xctr}
-import fides.syntax.identifiers.{Identifier, IdentifierKey}
+import fides.syntax.core.Code
+import fides.syntax.types.{Expr, Polar, Lit, ValTop, Xctr}
+import fides.syntax.identifiers.Identifier
 
-/**
-  * Signed values are guaranteed to have been created using a key corresponding to [[signature]].
-  *
-  * @param document  the signed value
-  * @param signature the identifier corresponding to the key that was used to sign the document
-  * @tparam T the type of the signed value
-  */
-final case class Signed[+T <: ValTop] private(document: Lit[T], signature: Identifier) extends Lit[Signed[T]], ValTop
-object Signed:
-  /**
-    * Signed values can only be created from keys, but only reveal the corresponding identifier.
-    */
-  private[fides] def newInstance[T <: ValTop](document: Lit[T], signatory: IdentifierKey): Signed[T] =
-    new Signed(document, signatory.identifier)
-end Signed
+///**
+//  * Signed values are guaranteed to have been created using a key corresponding to [[signature]].
+//  *
+//  * @param document  the signed value
+//  * @param signature the identifier corresponding to the key that was used to sign the document
+//  * @tparam T the type of the signed value
+//  */
+//final case class Signed[+T <: ValTop] private(document: Lit[T], signature: Identifier) extends Lit[Signed[T]], ValTop
+//object Signed:
+//  /**
+//    * Signed values can only be created from keys, but only reveal the corresponding identifier.
+//    */
+//  private[fides] def newInstance[T <: ValTop](document: Lit[T], signatory: IdentifierKey): Signed[T] =
+//    new Signed(document, signatory.identifier)
+//end Signed
 
 /**
   * Primitive to sign values
