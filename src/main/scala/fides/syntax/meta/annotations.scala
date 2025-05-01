@@ -19,4 +19,4 @@ final case class AnnotatedMatcher[S <: CodeType, T <: ValTop](
 /**
   * Removes all the annotations from a Quoted.
   */
-final case class RemoveAnnotations[S <: CodeType](code: Code[Expr[Quoted[S]]]) extends Expr[Quoted[S]]
+final case class RemoveAnnotations[S <: CodeType](code: Code[Expr[Quoted[S]]]) extends Code[Expr[Quoted[S]]]

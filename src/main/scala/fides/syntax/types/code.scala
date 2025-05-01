@@ -8,7 +8,20 @@ import scala.language.experimental.pureFunctions
 /**
   * Parent type of all the Scala types that represent the different types of possible Fides code.
   */
-trait CodeType private[syntax]()
+sealed trait CodeType private[types]()
+
+sealed trait ArgsS[+IsNonEmpty <: Boolean, +S <: CodeType] extends CodeType
+type Args[+S] = ArgsS[Boolean, S]
+
+sealed trait CaseS[T <: ValTop, A <: AtomT] extends CodeType
+
+sealed trait TypeS[T <: ValTop] extends CodeType
+
+sealed trait DeclarationS[T <: ValTop] extends CodeType
+
+sealed trait NameS[+T <: ValTop] extends CodeType
+
+sealed trait MNameS[T <: ValTop] extends NameS[T]
 
 /**
   * Fides code type for processes.
@@ -18,13 +31,12 @@ type Process = Polar[OffTop, OffBot]
 /**
   * [[Polar]] is a generalization of expressions and patterns.
   */
-trait Polar[+P >: ValBot, -N <: ValTop] extends CodeType
-// TODO seal Polar and always extend Code directly (?)
+sealed trait Polar[+P >: ValBot, -N <: ValTop] extends CodeType
 
 /**
   * Fides code type for Fides value literals
   */
-trait Lit extends CodeType
+sealed trait Lit extends CodeType
 // TODO Rename to Const, and set Lit[T] = Const & Ntrl[T]?
 
 /**

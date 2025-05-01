@@ -15,4 +15,4 @@ final case class Substitute[S <: CodeType](
   original   : Code[Expr[Identifier]],
   replacement: Code[Expr[Identifier]],
   code       : Code[Expr[Quoted[S]]],
-) extends Expr[Quoted[S]]
+) extends Code[Expr[Quoted[S]]]

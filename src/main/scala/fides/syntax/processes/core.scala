@@ -1,7 +1,7 @@
 package fides.syntax.processes
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Expr, Process, Lit, ValTop}
+import fides.syntax.types.{Args, Expr, Lit, Ntrl, Process, ValTop}
 import fides.syntax.declarations.Declaration
 import fides.syntax.identifiers.OutChan
 import fides.syntax.meta.Args
@@ -15,7 +15,7 @@ import fides.syntax.meta.Args
   * @param contents the value to be sent
   * @param recipient address of the recipient
   */
-final case class Send[T <: ValTop](contents: Code[Expr[T]], recipient: Code[Expr[OutChan[T]]]) extends Process
+final case class Send[T <: ValTop](contents: Code[Expr[T]], recipient: Code[Expr[OutChan[T]]]) extends Code[Process]
 
 /**
   * A message in transit
@@ -28,7 +28,10 @@ final case class Send[T <: ValTop](contents: Code[Expr[T]], recipient: Code[Expr
   * @param contents the contents of the message
   * @param recipient the address of the recipient
   */
-final case class Message[T <: ValTop](contents: Code[Lit[T]], recipient: Code[Lit[OutChan[T]]]) extends Process
+final case class Message[T <: ValTop](
+  contents: Code[Lit & Ntrl[T]],
+  recipient: Code[Lit & Ntrl[OutChan[T]]],
+) extends Code[Process]
 // todo delete?
 
 /**
@@ -37,16 +40,16 @@ final case class Message[T <: ValTop](contents: Code[Lit[T]], recipient: Code[Li
   * @param declarations valid within this scope
   * @param body the body of the scope, in which the names are valid
   */
-final case class Scope(declarations: Code[Args[Declaration[?]]], body: Code[Process]) extends Process
+final case class Scope(declarations: Code[Args[Declaration[?]]], body: Code[Process]) extends Code[Process]
 
 /**
   * Behaviorally equivalent to an infinite number of copies of the given body
   *
   * @param body the process to be repeated
   */
-final case class Repeated(body: Code[Process]) extends Process
+final case class Repeated(body: Code[Process]) extends Code[Process]
 
 /**
   * Composes the given processes concurrently.
   */
-final case class Concurrent(processes: Code[Args[Process]]) extends Process
+final case class Concurrent(processes: Code[Args[Process]]) extends Code[Process]

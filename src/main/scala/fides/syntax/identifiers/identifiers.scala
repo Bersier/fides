@@ -1,6 +1,7 @@
 package fides.syntax.identifiers
 
-import fides.syntax.types.{AtomT, Expr, Lit, Polar}
+import fides.syntax.core.Code
+import fides.syntax.types.{AtomT, Expr, IdentifierT, Lit, Ntrl, Polar}
 
 // todo use context functions?
 

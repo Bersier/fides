@@ -21,4 +21,4 @@ sealed class IdentifierKey extends Code[Lit & Ntrl[IdentifierKeyT]]
   *
   * Equivalent to signing a dummy message, and then extracting the signature from it via pattern matching.
   */
-final case class ExtractIdentifier(key: Code[Expr[IdentifierKey]]) extends Expr[Identifier]
+final case class ExtractIdentifier(key: Code[Expr[IdentifierKey]]) extends Code[Expr[Identifier]]

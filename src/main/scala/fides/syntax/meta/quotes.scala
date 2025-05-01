@@ -75,10 +75,10 @@ final case class MatchEscapeMatcher[S <: CodeType](
   *
   * Once all the [[Escape]]s inside [[code]] have been evaluated and spliced in, reduces to a [[Quoted]].
   */
-final case class Quote[S <: CodeType](code: Code[S]) extends Expr[Quoted[S]]
+final case class Quote[S <: CodeType](code: Code[S]) extends Code[Expr[Quoted[S]]]
 
 /**
   * Code extractor.
   */
-final case class MatchQuote[S <: CodeType](code: Code[S]) extends Xctr[Quoted[S]]
+final case class MatchQuote[S <: CodeType](code: Code[S]) extends Code[Xctr[Quoted[S]]]
 // todo lossy type

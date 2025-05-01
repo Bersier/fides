@@ -1,7 +1,7 @@
 package fides.syntax.connectors
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Expr, Lit, Polar, Process, OffBot, OffTop, ValBot, ValTop, Xctr}
+import fides.syntax.types.{Args, Expr, Lit, OffBot, OffTop, Polar, Process, PulseT, ValBot, ValTop, Xctr}
 import fides.syntax.declarations.Declaration
 import fides.syntax.identifiers.{Chan, InpChan, Name, OutChan}
 import fides.syntax.meta.Args
@@ -87,13 +87,13 @@ final case class Spread[T <: ValTop](recipients: Code[Args[Xctr[T]]]) extends Co
 /**
   * Forwards the inputted value once signalled to do so.
   */
-final case class Hold[T <: ValTop](signal: Code[Expr[Pulse]], value: Code[Expr[T]]) extends Code[Expr[T]]
+final case class Hold[T <: ValTop](signal: Code[Expr[PulseT]], value: Code[Expr[T]]) extends Code[Expr[T]]
 
 /**
   * Upon reception of a value, outputs a pulse. It only communicates the arrival of the value,
   * but forgets/ignores about the actual value.
   */
-final case class Signal(trigger: Code[Expr[?]]) extends Code[Expr[Pulse]]
+final case class Signal(trigger: Code[Expr[?]]) extends Code[Expr[PulseT]]
 
 /**
   * Forwards one of the inputs. Is guaranteed to forward a value if any of the inputs yields a value.

@@ -32,7 +32,7 @@ scalacOptions ++= Seq(
 //  "-Ycheck-reentrant",
   "-Ydebug-pos",
   "-Yexplicit-nulls",
-  "-Yrequire-targetName",
+//  "-Yrequire-targetName",
   "-Ysafe-init-global",
   "-deprecation",
   "-experimental",

@@ -1,6 +1,7 @@
 package fides.syntax.values
 
-import fides.syntax.types.{AtomT, Lit, ValTop, Ntrl}
+import fides.syntax.core.Code
+import fides.syntax.types.{AtomT, Lit, Ntrl, PulseT, StrT, ValTop}
 
 /**
   * A value that doesn't carry any information beyond causality
@@ -8,10 +9,9 @@ import fides.syntax.types.{AtomT, Lit, ValTop, Ntrl}
   *
   * The corresponding type is akin to the Unit type.
   */
-case object Pulse extends AtomT, Lit, Ntrl[Pulse]
-type Pulse = Pulse.type
+case object Pulse extends Code[Lit & Ntrl[PulseT]]
 
 /**
   * Added mainly for convenience, so annotations and error messages can be readily readable.
   */
-final case class Str(value: String) extends Lit, Ntrl[Str], ValTop
+final case class Str(value: String) extends Code[Lit & Ntrl[StrT]]

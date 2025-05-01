@@ -1,7 +1,7 @@
 package fides.syntax.signatures
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Expr, Polar, Lit, ValTop, Xctr}
+import fides.syntax.types.{Expr, IdentifierKeyT, Lit, Polar, SignedT, ValTop, Xctr}
 import fides.syntax.identifiers.Identifier
 
 ///**
@@ -25,34 +25,13 @@ import fides.syntax.identifiers.Identifier
   */
 final case class Sign[T <: ValTop](
   document: Code[Expr[T]],
-  signatory: Code[Expr[IdentifierKey]],
-) extends Expr[Signed[T]]
-
-/**
-  * Primitive to unsign values
-  *
-  * [[UnSign]]`[T] <: `[[Xctr]]`[`[[Signed]]`[T]]`
-  */
-type UnSign[T <: ValTop] = MatchSign[Nothing, T, Nothing, Signed[T]]
-object UnSign:
-  inline def apply[T <: ValTop](
-    inline document: Code[Xctr[T]],
-    inline signature: Code[Xctr[Identifier]],
-  ): UnSign[T] = MatchSign(document, signature)
-end UnSign
+  signatory: Code[Expr[IdentifierKeyT]],
+) extends Code[Expr[SignedT[T]]]
 
 /**
   * Primitive to match signed values
   */
-final case class MatchSign[
-  P <: N,
-  N <: ValTop,
-  L >: Nothing <: Signed[P],
-  U >: Signed[N] <: ValTop,
-](
-  document: Code[Ptrn[P, N]],
-  signature: Code[Ptrn[Identifier, Identifier]],
-)(using
-  Signed[P] <:< (L | Signed[Nothing]),
-  (U & Signed[ValTop]) <:< Signed[N],
-) extends Polar[Negative, L, U]
+final case class UnSign[T <: ValTop](
+  document: Code[Xctr[T]],
+  signature: Code[Xctr[Identifier]],
+) extends Code[Xctr[SignedT[T]]]
