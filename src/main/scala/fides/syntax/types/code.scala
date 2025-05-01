@@ -1,8 +1,5 @@
 package fides.syntax.types
 
-import fides.syntax.meta.Quoted
-
-import scala.compiletime.ops.int.+
 import scala.language.experimental.pureFunctions
 
 /**
@@ -11,7 +8,7 @@ import scala.language.experimental.pureFunctions
 sealed trait CodeType private[types]()
 
 sealed trait ArgsS[+IsNonEmpty <: Boolean, +S <: CodeType] extends CodeType
-type Args[+S] = ArgsS[Boolean, S]
+type Args[+S <: CodeType] = ArgsS[Boolean, S]
 
 sealed trait CaseS[T <: ValTop, A <: AtomT] extends CodeType
 

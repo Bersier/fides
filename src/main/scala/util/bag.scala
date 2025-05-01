@@ -1,8 +1,8 @@
 package util
 
 import scala.annotation.targetName
-import scala.compiletime.{constValue, error}
 import scala.compiletime.ops.int.{+, <=}
+import scala.compiletime.{constValue, error}
 import scala.util.Random
 
 // todo move to Misc repository

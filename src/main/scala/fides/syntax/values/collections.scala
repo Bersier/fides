@@ -1,9 +1,7 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{ChanT, Collected, CollectedT, Expr, Lit, NaturalNumberT, Ntrl, OffBot, OffTop, Polar, ValTop, Xctr}
-import fides.syntax.identifiers.{InpChan, OutChan}
-import util.&:&
+import fides.syntax.types.{ChanT, Collected, CollectedT, Expr, Lit, NaturalNumberT, Ntrl, OffBot, Polar, ValBot, ValTop}
 
 /**
   * A literal for a value that is made up of an unordered collection of values.
@@ -13,8 +11,8 @@ object Collected:
   def apply[T <: ValTop](first: Code[Lit & Ntrl[T]], others: Code[Lit & Ntrl[T]]*): Some[T] =
     new NonEmpty(first, others*)
 
-  type None = Code[CollectedT[false, OffBot]]
-  type Some[T <: ValTop] = Code[CollectedT[true, T]]
+  type None = Code[Lit & Ntrl[CollectedT[false, OffBot]]]
+  type Some[T <: ValTop] = Code[Lit & Ntrl[CollectedT[true, T]]]
 
   private case object Empty extends None:
     def elements: Iterable[Code[Lit & Ntrl[OffBot]]] = Iterable.empty
@@ -39,7 +37,7 @@ final case class AddElementP[P <: N, N <: ValTop](
   *
   * As an Xctr, outputs the elements of a Collected to [[elementSource]], and its size to [[size]].
   */
-final case class Collect[P >: OffBot, N <: OffTop](
+final case class Collect[P >: ValBot, N <: ValTop](
   elementSource: Code[Lit & Expr[ChanT[P, N]]], // TODO replace by Loc?
   size: Code[Polar[NaturalNumberT, NaturalNumberT]],
 ) extends Code[Polar[Collected[P], Collected[N]]]

@@ -1,8 +1,7 @@
 package fides.syntax.identifiers
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Expr, IdentifierKeyT, Lit, Ntrl, ValTop}
-import izumi.reflect.Tag
+import fides.syntax.types.{Expr, IdentifierKeyT, IdentifierT, Lit, Ntrl}
 
 /**
   * A key has a corresponding identifier. The identifier can be obtained from the key, but not vice versa
@@ -21,4 +20,4 @@ sealed class IdentifierKey extends Code[Lit & Ntrl[IdentifierKeyT]]
   *
   * Equivalent to signing a dummy message, and then extracting the signature from it via pattern matching.
   */
-final case class ExtractIdentifier(key: Code[Expr[IdentifierKey]]) extends Code[Expr[Identifier]]
+final case class ExtractIdentifier(key: Code[Expr[IdentifierKeyT]]) extends Code[Expr[IdentifierT]]

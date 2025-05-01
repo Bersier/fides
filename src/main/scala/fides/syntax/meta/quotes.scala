@@ -1,7 +1,7 @@
 package fides.syntax.meta
 
 import fides.syntax.core.Code
-import fides.syntax.types.{CodeType, Expr, Lit, Ntrl, ValTop, Xctr, QuotedT, NaturalNumberT}
+import fides.syntax.types.{CodeType, Expr, Lit, NaturalNumberT, Ntrl, QuotedT, Xctr}
 import fides.syntax.values.NaturalNumber
 
 /**
@@ -21,7 +21,7 @@ final case class Quoted[S <: CodeType](code: Code[S]) extends Code[Lit & Ntrl[Qu
   *
   * (At the top-level (outside of a quote), could represent macro code.)
   */
-final case class Escape[S <: CodeType](code: Code[Expr[Quoted[S]]]) extends Code[S]
+final case class Escape[S <: CodeType](code: Code[Expr[QuotedT[S]]]) extends Code[S]
 
 /**
   * Represents an [[Escape]] within a (nested) [[Quote]], so it is simply treated like code of an [[Escape]],
@@ -50,7 +50,7 @@ final case class QuotedEscape[S <: CodeType](
   * To quote a [[MatchEscape]] from a nested [[MatchQuote]], rather than escaping the top-level [[MatchEscape]],
   * use [[MatchEscapeMatcher]].
   */
-final case class MatchEscape[S <: CodeType](code: Code[Xctr[Quoted[S]]]) extends Code[S]
+final case class MatchEscape[S <: CodeType](code: Code[Xctr[QuotedT[S]]]) extends Code[S]
 // todo lossy type
 
 /**
@@ -66,7 +66,7 @@ final case class MatchEscape[S <: CodeType](code: Code[Xctr[Quoted[S]]]) extends
   * For `level > 0`, [[MatchEscapeMatcher]]`(c, level)` matches [[MatchEscapeMatcher]]`(c, level - 1)`.
   */
 final case class MatchEscapeMatcher[S <: CodeType](
-  code: Code[Xctr[Quoted[S]]],
+  code: Code[Xctr[QuotedT[S]]],
   level: Code[Lit & Ntrl[NaturalNumberT]] = NaturalNumber(0),
 ) extends Code[S]
 
@@ -75,10 +75,10 @@ final case class MatchEscapeMatcher[S <: CodeType](
   *
   * Once all the [[Escape]]s inside [[code]] have been evaluated and spliced in, reduces to a [[Quoted]].
   */
-final case class Quote[S <: CodeType](code: Code[S]) extends Code[Expr[Quoted[S]]]
+final case class Quote[S <: CodeType](code: Code[S]) extends Code[Expr[QuotedT[S]]]
 
 /**
   * Code extractor.
   */
-final case class MatchQuote[S <: CodeType](code: Code[S]) extends Code[Xctr[Quoted[S]]]
+final case class MatchQuote[S <: CodeType](code: Code[S]) extends Code[Xctr[QuotedT[S]]]
 // todo lossy type

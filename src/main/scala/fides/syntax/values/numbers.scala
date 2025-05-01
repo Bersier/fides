@@ -1,8 +1,7 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Args, AtomT, Expr, Lit, NaturalNumberT, Ntrl, WholeNumberT}
-import fides.syntax.meta.Args
+import fides.syntax.types.{Args, Expr, Lit, NaturalNumberT, Ntrl, WholeNumberT}
 
 /**
   * Integer values

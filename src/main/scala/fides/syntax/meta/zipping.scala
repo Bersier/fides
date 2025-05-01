@@ -1,8 +1,7 @@
 package fides.syntax.meta
 
 import fides.syntax.core.Code
-import fides.syntax.types.{ArgsS, CodeType, CollectedT, Expr, OffBot, OffTop, Polar, ValTop, Xctr}
-import util.&:&
+import fides.syntax.types.{ArgsS, CodeType, CollectedT, OffBot, Polar, QuotedT}
 
 /**
   * Used for unordered collections of pieces of code, at the syntax level.
@@ -28,8 +27,8 @@ end Args
 final case class Zip[
   IsNonEmptyP <: Boolean,
   IsNonEmptyN <: Boolean,
-  P >: OffBot,
-  N <: OffTop,
+  P <: CodeType,
+  N <: CodeType,
 ](
-  pieces: Code[Polar[CollectedT[IsNonEmptyP, Quoted[P]], CollectedT[IsNonEmptyN, Quoted[N]]]],
-) extends Code[Polar[Quoted[ArgsS[IsNonEmptyP, P]], Quoted[ArgsS[IsNonEmptyN, N]]]]
+  pieces: Code[Polar[CollectedT[IsNonEmptyP, QuotedT[P]], CollectedT[IsNonEmptyN, QuotedT[N]]]],
+) extends Code[Polar[QuotedT[ArgsS[IsNonEmptyP, P]], QuotedT[ArgsS[IsNonEmptyN, N]]]]

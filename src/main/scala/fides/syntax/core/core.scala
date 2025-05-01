@@ -1,9 +1,7 @@
 package fides.syntax.core
 
-import fides.syntax.meta.Quoted
 import fides.syntax.types.CodeType
 
-import scala.compiletime.ops.int.+
 import scala.language.experimental.pureFunctions
 
 /**

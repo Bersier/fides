@@ -1,8 +1,7 @@
 package fides.syntax.control
 
 import fides.syntax.core.Code
-import fides.syntax.types.{AtomT, ErrorT, Expr, KillT, Lit, Ntrl, PauseT, Process, PulseT, StartT, ValTop, Xctr}
-import fides.syntax.identifiers.OutChan
+import fides.syntax.types.{ChanT, ErrorT, Expr, KillT, Lit, Ntrl, OffTop, PauseT, Process, PulseT, StartT, ValTop, Xctr}
 
 case object Kill extends Code[Lit & Ntrl[KillT]]
 case object Pause extends Code[Lit & Ntrl[PauseT]]
@@ -43,9 +42,9 @@ final case class Mortal(
 final case class Sandboxed(monitor: Code[Process], sandboxed: Code[Process]) extends Code[Process]
 
 final case class Handled(
-  errorHandler: Code[Expr[OutChan[Error[ValTop]]] & Lit],
+  errorHandler: Code[Expr[ChanT[OffTop, ErrorT[ValTop]]] & Lit],
   body: Code[Process],
 ) extends Code[Process]
 
-final case class Error[+T <: ValTop](value: Code[Expr[T] & Lit]) extends Code[Lit & Ntrl[ErrorT[T]]]
+final case class Error[T <: ValTop](value: Code[Lit & Expr[T]]) extends Code[Lit & Ntrl[ErrorT[T]]]
 // todo develop

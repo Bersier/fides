@@ -1,8 +1,7 @@
 package fides.syntax.identifiers
 
 import fides.syntax.core.Code
-import fides.syntax.types.{IdentifierT, Lit, Ntrl, OffBot, OffTop, Polar, ValBot, ValTop, ChanT}
-import izumi.reflect.Tag // TODO
+import fides.syntax.types.{ChanT, Lit, Ntrl, OffBot, OffTop, ValTop} // TODO
 
 /**
   * Channel identifier
@@ -14,17 +13,14 @@ import izumi.reflect.Tag // TODO
   */
 final class Chan[InpT >: OutT, OutT <: ValTop] extends Code[Lit & Ntrl[ChanT[InpT, OutT]]]
 
-type InpChan[+T <: ValTop] = Chan[T, OffBot]
 object InpChan:
-  def apply[T <: ValTop](): InpChan[T] = Chan()
+  def apply[T <: ValTop](): Chan[T, OffBot] = Chan()
 end InpChan
 
-type OutChan[-T <: ValTop] = Chan[OffTop, T]
 object OutChan:
-  def apply[T <: ValTop](): OutChan[T] = Chan()
+  def apply[T <: ValTop](): Chan[OffTop, T] = Chan()
 end OutChan
 
-type Channel[T <: ValTop] = Chan[T, T]
 object Channel:
-  def apply[T <: ValTop](): Channel[T] = Chan()
+  def apply[T <: ValTop](): Chan[T, T] = Chan()
 end Channel

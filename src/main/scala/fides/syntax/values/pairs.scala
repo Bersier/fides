@@ -1,16 +1,16 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Expr, Lit, PairT, Polar, ValTop, Xctr, OffTop, OffBot}
+import fides.syntax.types.{PairT, Polar, ValBot, ValTop}
 
 /**
   * General [[Polar]] for pairing.
   */
 final case class Pair[
-  P1 >: OffBot,
-  P2 >: OffBot,
-  N1 <: OffTop,
-  N2 <: OffTop,
+  P1 >: ValBot,
+  P2 >: ValBot,
+  N1 <: ValTop,
+  N2 <: ValTop,
 ](
   first: Code[Polar[P1, N1]],
   second: Code[Polar[P2, N2]],

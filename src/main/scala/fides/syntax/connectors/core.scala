@@ -1,21 +1,16 @@
 package fides.syntax.connectors
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Args, Expr, Lit, OffBot, OffTop, Polar, Process, PulseT, ValBot, ValTop, Xctr}
-import fides.syntax.declarations.Declaration
-import fides.syntax.identifiers.{Chan, InpChan, Name, OutChan}
 import fides.syntax.meta.Args
-import fides.syntax.values.Pulse
-import util.&:&
+import fides.syntax.types.{Args, ArgsS, ChanT, DeclarationS, Expr, Lit, OffBot, OffTop, Polar, Process, PulseT, ValBot, ValTop, Xctr}
 
 /**
   * Absorbs from the location referred to by [[iD]]. Reduces to the received val after reception.
   *
   * Dual of [[Out]]
   */
-type Inp[+T <: ValTop] = Loc[T, OffBot]
 object Inp:
-  def apply[T <: ValTop](iD: Code[Expr[InpChan[T]] & Lit]): Inp[T] = Loc(iD)
+  def apply[T <: ValTop](iD: Code[Lit & Expr[ChanT[T, OffBot]]]): Code[Polar[T, OffBot]] = Loc(iD)
 end Inp
 // todo add variance, like here, to all primitives, for the sake of metaprogramming?
 // todo  | Code[Name[? <: T]]
@@ -27,16 +22,15 @@ end Inp
   *
   * Dual of [[Inp]]
   */
-type Out[-T <: ValTop] = Loc[OffTop, T]
 object Out:
-  def apply[T <: ValTop](iD: Code[Expr[OutChan[T]] & Lit]): Out[T] = Loc(iD)
+  def apply[T <: ValTop](iD: Code[Expr[ChanT[OffTop, T]] & Lit]): Code[Polar[OffTop, T]] = Loc(iD)
 end Out
 // todo  | Code[Name[? >: T]]
 
 /**
   * General [[Polar]] for input and output. Note that it can only be an [[Expr]] or a [[Xctr]].
   */
-final case class Loc[P >: ValBot, N <: ValTop](iD: Code[Expr[Chan[P, N]] & Lit]) extends Code[Polar[P, N]]
+final case class Loc[P >: ValBot, N <: ValTop](iD: Code[Lit & Expr[ChanT[P, N]]]) extends Code[Polar[P, N]]
 // todo  | Code[Name[? >: Nothing <: ValTop]]
 
 // todo given the constraint  (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing)),
@@ -65,7 +59,7 @@ final case class Forward[T <: ValTop](inp: Code[Expr[T]], out: Code[Xctr[T]]) ex
   * Equivalent to [[Spread]]([[inp]], [[Args]]([[out]])).
   */
 final case class Backward[T <: ValTop, U <: ValTop](
-  declarations: Code[Args[Declaration[?]]],
+  declarations: Code[Args[DeclarationS[?]]],
   inp: Code[Xctr[T]],
   out: Code[Expr[U]],
 ) extends Code[Polar[T, U]]
@@ -104,7 +98,7 @@ final case class Signal(trigger: Code[Expr[?]]) extends Code[Expr[PulseT]]
   */
 type Pick[T <: ValTop] = PickP[T, OffBot]
 object Pick:
-  def apply[T <: ValTop](inputs: Code[Args.Some[Expr[T]]]): Pick[T] = PickP(inputs)
+  def apply[T <: ValTop](inputs: Code[ArgsS[true, Expr[T]]]): Pick[T] = PickP(inputs)
 
 /**
   * Internal choice. Non-deterministically forwards the input to one of the outputs.
@@ -113,10 +107,10 @@ object Pick:
   */
 type UnPick[T <: ValTop] = PickP[OffTop, T]
 object UnPick:
-  def apply[T <: ValTop](recipients: Code[Args.Some[Xctr[T]]]): UnPick[T] = PickP(recipients)
+  def apply[T <: ValTop](recipients: Code[ArgsS[true, Xctr[T]]]): UnPick[T] = PickP(recipients)
 end UnPick
 
 /**
   * General [[Polar]] for picking. Note that it can only be an [[Expr]] or an [[Xctr]].
   */
-final case class PickP[P, N](connections: Code[Args.Some[Polar[P, N]]]) extends Code[Polar[P, N]]
+final case class PickP[P >: ValBot, N <: ValTop](connections: Code[ArgsS[true, Polar[P, N]]]) extends Code[Polar[P, N]]

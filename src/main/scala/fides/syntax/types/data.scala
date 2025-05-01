@@ -21,7 +21,7 @@ sealed trait AtomT extends ValTop
 /**
   * Data type for pairs
   */
-sealed trait PairT[+T1 <: ValTop, +T2 <: ValTop] extends ValTop
+sealed trait PairT[+T1 >: ValBot, +T2 >: ValBot] extends ValTop
 
 sealed trait WholeNumberT extends AtomT
 sealed trait NaturalNumberT extends WholeNumberT
@@ -43,8 +43,8 @@ sealed trait SignedT[+T <: ValTop] extends ValTop
   */
 sealed trait ChanT[+InpT >: ValBot, -OutT <: ValTop] extends IdentifierT
 
-sealed trait CollectedT[+IsNonEmpty <: Boolean, +T <: ValTop] extends ValTop
-type Collected[+T <: ValTop] = CollectedT[Boolean, T]
+sealed trait CollectedT[+IsNonEmpty <: Boolean, +T >: ValBot] extends ValTop
+type Collected[+T >: ValBot] = CollectedT[Boolean, T]
 
 sealed trait OrderT extends AtomT
 sealed trait KillT extends OrderT
