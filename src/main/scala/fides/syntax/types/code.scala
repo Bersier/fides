@@ -24,12 +24,15 @@ sealed trait MNameS[T <: ValTop] extends NameS[T]
 /**
   * Fides code type for processes.
   */
-type Process = Polar[OffTop, OffBot]
+sealed trait Process extends CodeType
+// TODO rename to NonPo?
 
 /**
   * [[Polar]] is a generalization of expressions and patterns.
   */
 sealed trait Polar[+P >: ValBot, -N <: ValTop] extends CodeType
+
+type PoTop = Polar[OffTop, OffBot]
 
 /**
   * Fides code type for Fides value literals
@@ -60,7 +63,7 @@ type Xctr[-T <: ValTop] = Polar[OffTop, T]
 
 type Ntrl[T <: ValTop] = Polar[T, T]
 
-sealed trait BiPo[I <: Process, O <: Process] extends CodeType // TODO variance
+sealed trait BiPo[I <: PoTop, O <: PoTop] extends CodeType
 
 //trait InpLit[+T <: ValTop] extends Expr[T], Lit
 //trait OutLit[-T <: ValTop] extends Xctr[T], Lit
