@@ -6,7 +6,7 @@ package fides.syntax.types
 sealed trait ValTop private[types]()
 
 type ValBot = Nothing
-// TODO replace by true intersection
+// todo replace by true intersection
 
 type OffTop = Any
 type OffBot = Nothing

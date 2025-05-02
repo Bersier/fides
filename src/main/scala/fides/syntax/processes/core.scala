@@ -32,7 +32,9 @@ final case class Message[T <: ValTop](
   contents: Code[Lit & Ntrl[T]],
   recipient: Code[Lit & Ntrl[ChanT[OffTop, T]]],
 ) extends Code[Process]
-// todo delete?
+// todo delete? A pending 'send' (or Out) already represents a message in transit. Though this one makes it clear that
+//  contents have already been evaluated...
+//  But we're working on syntax here, not practical-implementation representation.
 
 /**
   * A name scope

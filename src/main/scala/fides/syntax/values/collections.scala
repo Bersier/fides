@@ -8,16 +8,16 @@ import fides.syntax.types.{ChanT, Collected, CollectedT, Expr, Lit, NaturalNumbe
   */
 object Collected:
   def apply[T <: ValTop](): None = Empty
-  def apply[T <: ValTop](first: Code[Lit & Ntrl[T]], others: Code[Lit & Ntrl[T]]*): Some[T] =
+  def apply[T <: ValTop](first: Code[Lit & Expr[T]], others: Code[Lit & Expr[T]]*): Some[T] =
     new NonEmpty(first, others*)
 
   type None = Code[Lit & Ntrl[CollectedT[false, OffBot]]]
   type Some[T <: ValTop] = Code[Lit & Ntrl[CollectedT[true, T]]]
 
   private case object Empty extends None:
-    def elements: Iterable[Code[Lit & Ntrl[OffBot]]] = Iterable.empty
-  private final class NonEmpty[T <: ValTop](first: Code[Lit & Ntrl[T]], others: Code[Lit & Ntrl[T]]*) extends Some[T]:
-    val elements: Iterable[Code[Lit & Ntrl[T]]] = first +: others
+    def elements: Iterable[Code[Lit & Expr[OffBot]]] = Iterable.empty
+  private final class NonEmpty[T <: ValTop](first: Code[Lit & Expr[T]], others: Code[Lit & Expr[T]]*) extends Some[T]:
+    val elements: Iterable[Code[Lit & Expr[T]]] = first +: others
 end Collected
 
 /**

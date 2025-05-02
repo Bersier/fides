@@ -13,6 +13,7 @@ final case class Match[T <: ValTop, U <: ValTop](
   pattern: Code[Xctr[T]],
   alternative: Code[Xctr[U]] = Ignore(),
 ) extends Code[Xctr[T | U]]
+// TODO with this new typing, pattern and/or alternative could be known at compile-time to never match
 
 /**
   * Matches any value of type [[T]].

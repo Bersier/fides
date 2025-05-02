@@ -3,7 +3,8 @@ package fides.syntax.types
 import scala.language.experimental.pureFunctions
 
 /**
-  * Parent type of all the Scala types that represent the different types of possible Fides code.
+  * Parent type of all the Scala types that represent
+  * the different types (aka syntactic categories) of possible Fides code.
   */
 sealed trait CodeType private[types]()
 
@@ -58,6 +59,8 @@ type Expr[+T <: ValTop] = Polar[T, OffBot]
 type Xctr[-T <: ValTop] = Polar[OffTop, T]
 
 type Ntrl[T <: ValTop] = Polar[T, T]
+
+sealed trait BiPo[I <: Process, O <: Process] extends CodeType // TODO variance
 
 //trait InpLit[+T <: ValTop] extends Expr[T], Lit
 //trait OutLit[-T <: ValTop] extends Xctr[T], Lit

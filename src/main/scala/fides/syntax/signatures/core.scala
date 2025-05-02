@@ -18,6 +18,7 @@ import fides.syntax.types.{Expr, IdentifierKeyT, IdentifierT, SignedT, ValTop, X
 //  private[fides] def newInstance[T <: ValTop](document: Lit[T], signatory: IdentifierKey): Signed[T] =
 //    new Signed(document, signatory.identifier)
 //end Signed
+// TODO Can't quotes contain SignedT values?
 
 /**
   * Primitive to sign values

@@ -38,7 +38,7 @@ final case class Escape[S <: CodeType](code: Code[Expr[QuotedT[S]]]) extends Cod
   */
 final case class QuotedEscape[S <: CodeType](
   code: Code[Expr[QuotedT[S]]],
-  level: Code[Lit & Ntrl[NaturalNumberT]] = NaturalNumber(0),
+  level: Code[Lit & Expr[NaturalNumberT]] = NaturalNumber(0),
 ) extends Code[S]
 
 /**
@@ -67,7 +67,7 @@ final case class MatchEscape[S <: CodeType](code: Code[Xctr[QuotedT[S]]]) extend
   */
 final case class MatchEscapeMatcher[S <: CodeType](
   code: Code[Xctr[QuotedT[S]]],
-  level: Code[Lit & Ntrl[NaturalNumberT]] = NaturalNumber(0),
+  level: Code[Lit & Expr[NaturalNumberT]] = NaturalNumber(0),
 ) extends Code[S]
 
 /**

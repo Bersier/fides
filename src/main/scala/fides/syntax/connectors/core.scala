@@ -1,8 +1,7 @@
 package fides.syntax.connectors
 
 import fides.syntax.core.Code
-import fides.syntax.meta.Args
-import fides.syntax.types.{Args, ArgsS, ChanT, DeclarationS, Expr, Lit, OffBot, OffTop, Polar, Process, PulseT, ValBot, ValTop, Xctr}
+import fides.syntax.types.{Args, ArgsS, BiPo, ChanT, DeclarationS, Expr, Lit, OffBot, OffTop, Polar, Process, PulseT, ValBot, ValTop, Xctr}
 
 /**
   * Absorbs from the location referred to by [[iD]]. Reduces to the received val after reception.
@@ -58,11 +57,22 @@ final case class Forward[T <: ValTop](inp: Code[Expr[T]], out: Code[Xctr[T]]) ex
   *
   * Equivalent to [[Spread]]([[inp]], [[Args]]([[out]])).
   */
-final case class Backward[T <: ValTop, U <: ValTop](
+final case class Backward[I <: Process, O <: Process](
   declarations: Code[Args[DeclarationS[?]]],
-  inp: Code[Xctr[T]],
-  out: Code[Expr[U]],
-) extends Code[Polar[T, U]]
+  inpXctr: Code[I],
+  outExpr: Code[O],
+) extends Code[BiPo[I, O]]
+// TODO ?
+
+final case class ApplyForward[I <: Process, O <: Process](
+  component: Code[BiPo[I, O]],
+  input: Code[I],
+) extends Code[O]
+
+final case class ApplyBackward[I <: Process, O <: Process](
+  component: Code[BiPo[I, O]],
+  input: Code[O],
+) extends Code[I]
 
 /**
   * Kind-of the dual of values.
