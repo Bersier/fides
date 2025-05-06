@@ -1,10 +1,6 @@
 package fides.syntax.identifiers
 
 import fides.syntax.core.Code
-import fides.syntax.types.{NameS, ValTop}
+import fides.syntax.types.{IdentifierT, Lit, NameS, Ntrl, ValTop}
 
-final class Name[T <: ValTop] private extends Code[NameS[T]]
-//object Name:
-//  def apply[T <: ValTop]()(using Context): Name[T] = Named.from(new Name(_))
-//  def apply[T <: ValTop](name: String)(using Context): Name[T] = Named.from(new Name(_), name)
-//end Name
+final case class Name[T <: ValTop](identifier: Code[Lit & Ntrl[IdentifierT]]) extends Code[NameS[T]]
