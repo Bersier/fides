@@ -1,13 +1,11 @@
 package fides.syntax.control
 
-import fides.syntax.code.{Atom, Code, Expr, Process, Val, ValType, Xctr}
-import fides.syntax.identifiers.{Cell, OutChan}
-import fides.syntax.values.{Bool, Pulse}
+import fides.syntax.core.Code
+import fides.syntax.types.{ChanT, ErrorT, Expr, KillT, Lit, Ntrl, OffTop, PauseT, Process, PulseT, StartT, ValTop, Xctr}
 
-sealed trait Order extends Atom, Val[Order]
-case object Kill extends Order
-case object Pause extends Order
-case object Start extends Order
+case object Kill extends Code[Lit & Ntrl[KillT]]
+case object Pause extends Code[Lit & Ntrl[PauseT]]
+case object Start extends Code[Lit & Ntrl[StartT]]
 
 /**
   * A pausable process
@@ -15,12 +13,12 @@ case object Start extends Order
   * @param awake indicates the current state of the process (whether it's awake or asleep)
   * @param body the process that can be paused
   */
-final case class Pausable(awake: Code[Cell[Bool]], body: Code[Process]) extends Process
+//final case class Pausable(awake: Code[Cell[BoolT]], body: Code[Process]) extends Process
 
 /**
   * Upon reception of a pulse, the body's execution is started.
   */
-final case class OnHold(startSignal: Code[Expr[Pulse]], body: Code[Process]) extends Process
+final case class OnHold(startSignal: Code[Expr[PulseT]], body: Code[Process]) extends Code[Process]
 
 /**
   * A killable process
@@ -32,18 +30,21 @@ final case class OnHold(startSignal: Code[Expr[Pulse]], body: Code[Process]) ext
   * @param body the process that can be stopped
   */
 final case class Mortal(
-  killSignal: Code[Expr[Pulse]],
-  deathSignal: Code[Xctr[Pulse]],
+  killSignal: Code[Expr[PulseT]],
+  deathSignal: Code[Xctr[PulseT]],
   body: Code[Process],
-) extends Process
+) extends Code[Process]
 
 /**
   * No message can reach and/or exit the sandboxed process directly. The monitor serves as the intermediate.
   * It can send and receive messages to and from the sandboxed process.
   */
-final case class Sandboxed(monitor: Code[Process], sandboxed: Code[Process]) extends Process
+final case class Sandboxed(monitor: Code[Process], sandboxed: Code[Process]) extends Code[Process]
 
-final case class Handled(errorHandler: Code[Val[OutChan[Error[ValType]]]], body: Code[Process]) extends Process
+final case class Handled(
+  errorHandler: Code[Expr[ChanT[OffTop, ErrorT[ValTop]]] & Lit],
+  body: Code[Process],
+) extends Code[Process]
 
-final case class Error[+T <: ValType](value: Code[Val[T]]) extends Val[Error[T]], ValType
+final case class Error[T <: ValTop](value: Code[Lit & Expr[T]]) extends Code[Lit & Ntrl[ErrorT[T]]]
 // todo develop

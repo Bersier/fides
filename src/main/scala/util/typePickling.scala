@@ -1,8 +1,8 @@
 package util
 
 import scala.compiletime.ops.any.ToString
-import scala.compiletime.ops.int.{-, `*`, +, Negate}
-import scala.compiletime.ops.string.{+ as ++, Matches, Substring, Length}
+import scala.compiletime.ops.int.{+, -, Negate, `*`}
+import scala.compiletime.ops.string.{Length, Matches, Substring, + as ++}
 
 type Encoded[T] <: String = T match
   case EmptyTuple => "EmptyTuple"

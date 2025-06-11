@@ -1,75 +1,34 @@
 package fides.syntax.meta
 
-import fides.syntax.code.Polarity.{Negative, Positive}
-import fides.syntax.code.{Code, CodeType, Expr, Polar, Polarity, ValType, Xctr}
-import fides.syntax.values.CollectedG
-import util.&:&
+import fides.syntax.core.Code
+import fides.syntax.types.{ArgsS, CodeType, CollectedT, OffBot, Polar, QuotedT}
 
 /**
   * Used for unordered collections of pieces of code, at the syntax level.
   */
-type Args[+S <: CodeType] = ArgsG[Boolean, S]
 object Args:
-  def apply[S <: CodeType](): ArgsG[false, Nothing] = None
-  def apply[S <: CodeType](first: Code[S], others: Code[S]*): ArgsG[true, S] = new Some(first, others*)
-  case object None extends ArgsG[false, Nothing]:
-    def arguments: Iterable[Code[Nothing]] = Iterable.empty
-  type None = None.type
-  final class Some[+S <: CodeType](first: Code[S], others: Code[S]*) extends ArgsG[true, S]:
+  def apply[S <: CodeType](): None = Empty
+  def apply[S <: CodeType](first: Code[S], others: Code[S]*): Some[S] = new NonEmpty(first, others*)
+
+  type None = Code[ArgsS[false, OffBot]]
+  type Some[+S <: CodeType] = Code[ArgsS[true, S]]
+
+  private case object Empty extends None:
+    def arguments: Iterable[Code[OffBot]] = Iterable.empty
+  private final class NonEmpty[+S <: CodeType](first: Code[S], others: Code[S]*) extends Some[S]:
     val arguments: Iterable[Code[S]] = first +: others
-  end Some
 end Args
 
-sealed trait ArgsG[+IsNonEmpty <: Boolean, +S <: CodeType] extends Code[ArgsG[IsNonEmpty, S]], CodeType:
-  def arguments: Iterable[Code[S]]
-  override def toString: String = s"Args($arguments)"
-end ArgsG
-
 /**
-  * Converts a collection of code quotations to a [[Quoted]] of [[Args]] of all the pieces of code.
+  * As an Expr, converts a collection of code quotations to a [[Quoted]] of [[Args]] of all the pieces of code.
   *
-  * [[Zip]]`[IsNonEmpty, S] <: `[[Expr]]`[`[[Quoted]]`[`[[ArgsG]]`[IsNonEmpty, S]]]`
+  * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Args]].
   */
-type Zip[
-  IsNonEmpty <: Boolean,
-  S <: CodeType,
-] = ZipP[Positive, IsNonEmpty, Boolean, S, CodeType, Quoted[ArgsG[IsNonEmpty, S]], ValType]
-object Zip:
-  inline def apply[IsNonEmpty <: Boolean, S <: CodeType](
-    inline pieces: Code[Expr[CollectedG[IsNonEmpty, Quoted[S]]]],
-  ): Zip[IsNonEmpty, S] = ZipP(pieces)
-end Zip
-
-/**
-  * Extracts the arguments out of a [[Quoted]] of [[Args]] in the context of an irrefutable pattern.
-  *
-  * [[UnZip]]`[IsNonEmpty, S] <: `[[Xctr]]`[`[[Quoted]]`[`[[ArgsG]]`[IsNonEmpty, S]]]`
-  */
-type UnZip[
-  IsNonEmpty <: Boolean,
-  S <: CodeType,
-] = ZipP[Negative, Nothing, IsNonEmpty, Nothing, S, Nothing, Quoted[ArgsG[IsNonEmpty, S]]]
-object UnZip:
-  inline def apply[IsNonEmpty <: Boolean, S <: CodeType](
-    inline pieces: Code[Xctr[CollectedG[IsNonEmpty, Quoted[S]]]],
-  ): UnZip[IsNonEmpty, S] = ZipP(pieces)
-end UnZip
-
-/**
-  * General [[Polar]] for zipping. Note that it can only be an [[Expr]] or an [[Xctr]].
-  */
-final case class ZipP[
-  R >: Positive & Negative <: Polarity,
-  IsNonEmptyP <: IsNonEmptyN,
+final case class Zip[
+  IsNonEmptyP <: Boolean,
   IsNonEmptyN <: Boolean,
-  P <: N,
+  P <: CodeType,
   N <: CodeType,
-  L >: Nothing <: Quoted[ArgsG[IsNonEmptyP, P]],
-  U >: Quoted[ArgsG[IsNonEmptyN, N]] <: ValType,
 ](
-  pieces: Code[Polar[R, CollectedG[IsNonEmptyP, Quoted[P]], CollectedG[IsNonEmptyN, Quoted[N]]]],
-)(using
-  (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing)),
-  Quoted[ArgsG[IsNonEmptyP, P]] <:< (L | Quoted[ArgsG[Nothing, Nothing]]),
-  (U & Quoted[ArgsG[Boolean, CodeType]]) <:< Quoted[ArgsG[IsNonEmptyN, N]],
-) extends Polar[R, L, U]
+  pieces: Code[Polar[CollectedT[IsNonEmptyP, QuotedT[P]], CollectedT[IsNonEmptyN, QuotedT[N]]]],
+) extends Code[Polar[QuotedT[ArgsS[IsNonEmptyP, P]], QuotedT[ArgsS[IsNonEmptyN, N]]]]

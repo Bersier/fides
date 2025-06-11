@@ -1,6 +1,7 @@
 package fides.syntax.identifiers
 
-import fides.syntax.code.{Atom, Expr, Val}
+import fides.syntax.core.Code
+import fides.syntax.types.{Expr, IdentifierT, Lit, Ntrl}
 
 // todo use context functions?
 
@@ -10,14 +11,9 @@ import fides.syntax.code.{Atom, Expr, Val}
   *
   * Identifiers are globally unique. Their names are just a convenient representation (that may or may not be unique).
   */
-open class Identifier protected(name: String) extends Atom, Val[Identifier], Location(name) derives CanEqual:
-  override def toString: String = s"#$name"
-object Identifier:
-  def apply()(using Context): Identifier = Location.from(new Identifier(_))
-  def apply(name: String)(using Context): Identifier = Location.from(new Identifier(_), name)
-end Identifier
+class Identifier protected extends Code[Lit & Ntrl[IdentifierT]]
 
 /**
   * Outputs a new identifier. Can be simulated with a scope with one placeholder. Added for convenience.
   */
-final case class NewIdentifier() extends Expr[Identifier]
+final case class NewIdentifier() extends Code[Expr[IdentifierT]]

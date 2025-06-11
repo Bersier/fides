@@ -1,12 +1,13 @@
 package fides.syntax.meta
 
-import fides.syntax.code.{Code, CodeType, Expr, Ptrn, Val, ValType}
+import fides.syntax.core.Code
+import fides.syntax.types.{CodeType, Expr, Lit, NaturalNumberT, Ntrl, QuotedT, Xctr}
 import fides.syntax.values.NaturalNumber
 
 /**
   * Code as value, for metaprogramming
   */
-final case class Quoted[+S <: CodeType](code: Code[S]) extends Val[Quoted[S]], ValType
+final case class Quoted[S <: CodeType](code: Code[S]) extends Code[Lit & Ntrl[QuotedT[S]]]
 
 /**
   * Allows escaping the body of a [[Quote]]. Ignores nested [[Quote]]s
@@ -20,7 +21,7 @@ final case class Quoted[+S <: CodeType](code: Code[S]) extends Val[Quoted[S]], V
   *
   * (At the top-level (outside of a quote), could represent macro code.)
   */
-final case class Escape[S <: CodeType](code: Code[Expr[Quoted[S]]]) extends Code[S]
+final case class Escape[S <: CodeType](code: Code[Expr[QuotedT[S]]]) extends Code[S]
 
 /**
   * Represents an [[Escape]] within a (nested) [[Quote]], so it is simply treated like code of an [[Escape]],
@@ -36,8 +37,8 @@ final case class Escape[S <: CodeType](code: Code[Expr[Quoted[S]]]) extends Code
   * So [[QuotedEscape]]s within quotes are matched by [[QuotedEscape]]s within [[MatchQuote]], as expected.
   */
 final case class QuotedEscape[S <: CodeType](
-  code: Code[Expr[Quoted[S]]],
-  level: Code[Val[NaturalNumber]] = NaturalNumber(0),
+  code: Code[Expr[QuotedT[S]]],
+  level: Code[Lit & Expr[NaturalNumberT]] = NaturalNumber(0),
 ) extends Code[S]
 
 /**
@@ -49,7 +50,7 @@ final case class QuotedEscape[S <: CodeType](
   * To quote a [[MatchEscape]] from a nested [[MatchQuote]], rather than escaping the top-level [[MatchEscape]],
   * use [[MatchEscapeMatcher]].
   */
-final case class MatchEscape[S <: CodeType](code: Code[Ptrn[Quoted[S], Quoted[S]]]) extends Code[S]
+final case class MatchEscape[S <: CodeType](code: Code[Xctr[QuotedT[S]]]) extends Code[S]
 // todo lossy type
 
 /**
@@ -65,8 +66,8 @@ final case class MatchEscape[S <: CodeType](code: Code[Ptrn[Quoted[S], Quoted[S]
   * For `level > 0`, [[MatchEscapeMatcher]]`(c, level)` matches [[MatchEscapeMatcher]]`(c, level - 1)`.
   */
 final case class MatchEscapeMatcher[S <: CodeType](
-  code: Code[Ptrn[Quoted[S], Quoted[S]]],
-  level: Code[Val[NaturalNumber]] = NaturalNumber(0),
+  code: Code[Xctr[QuotedT[S]]],
+  level: Code[Lit & Expr[NaturalNumberT]] = NaturalNumber(0),
 ) extends Code[S]
 
 /**
@@ -74,10 +75,10 @@ final case class MatchEscapeMatcher[S <: CodeType](
   *
   * Once all the [[Escape]]s inside [[code]] have been evaluated and spliced in, reduces to a [[Quoted]].
   */
-final case class Quote[S <: CodeType](code: Code[S]) extends Expr[Quoted[S]]
+final case class Quote[S <: CodeType](code: Code[S]) extends Code[Expr[QuotedT[S]]]
 
 /**
   * Code extractor.
   */
-final case class MatchQuote[S <: CodeType](code: Code[S]) extends Ptrn[Quoted[S], ValType]
+final case class MatchQuote[S <: CodeType](code: Code[S]) extends Code[Xctr[QuotedT[S]]]
 // todo lossy type

@@ -1,8 +1,7 @@
 package fides.syntax.processes
 
-import fides.syntax.code.{Code, Expr, Process, Val, ValType}
-import fides.syntax.identifiers.{Identifier, OutChan}
-import fides.syntax.meta.Args
+import fides.syntax.core.Code
+import fides.syntax.types.{Args, ChanT, DeclarationS, Expr, Lit, Ntrl, OffTop, Process, ValTop}
 
 /**
   * Sends a value to an address.
@@ -13,7 +12,10 @@ import fides.syntax.meta.Args
   * @param contents the value to be sent
   * @param recipient address of the recipient
   */
-final case class Send[T <: ValType](contents: Code[Expr[T]], recipient: Code[Expr[OutChan[T]]]) extends Process
+final case class Send[T <: ValTop](
+  contents: Code[Expr[T]],
+  recipient: Code[Expr[ChanT[OffTop, T]]],
+) extends Code[Process]
 
 /**
   * A message in transit
@@ -26,28 +28,30 @@ final case class Send[T <: ValType](contents: Code[Expr[T]], recipient: Code[Exp
   * @param contents the contents of the message
   * @param recipient the address of the recipient
   */
-final case class Message[T <: ValType](contents: Code[Val[T]], recipient: Code[Val[OutChan[T]]]) extends Process
-// todo delete?
+final case class Message[T <: ValTop](
+  contents: Code[Lit & Ntrl[T]],
+  recipient: Code[Lit & Ntrl[ChanT[OffTop, T]]],
+) extends Code[Process]
+// todo delete? A pending 'send' (or Out) already represents a message in transit. Though this one makes it clear that
+//  contents have already been evaluated...
+//  But we're working on syntax here, not practical-implementation representation.
 
 /**
   * A name scope
   *
-  * The local identifiers are really placeholders,
-  * to be replaced by new identifiers upon execution/dissolution of the scope.
-  *
-  * @param localIdentifiers names whose meaning is only valid within this scope
-  * @param body the body of the scope, in which the replacements will take place
+  * @param declarations valid within this scope
+  * @param body the body of the scope, in which the names are valid
   */
-final case class Scope(localIdentifiers: Code[Args[Val[Identifier]]], body: Code[Process]) extends Process
+final case class Scope(declarations: Code[Args[DeclarationS[?]]], body: Code[Process]) extends Code[Process]
 
 /**
   * Behaviorally equivalent to an infinite number of copies of the given body
   *
   * @param body the process to be repeated
   */
-final case class Repeated(body: Code[Process]) extends Process
+final case class Repeated(body: Code[Process]) extends Code[Process]
 
 /**
   * Composes the given processes concurrently.
   */
-final case class Concurrent(processes: Code[Args[Process]]) extends Process
+final case class Concurrent(processes: Code[Args[Process]]) extends Code[Process]

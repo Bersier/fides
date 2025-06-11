@@ -1,21 +1,22 @@
 package fides.syntax.meta
 
-import fides.syntax.code.{Code, CodeType, Expr, Val, ValType}
+import fides.syntax.core.Code
+import fides.syntax.types.{CodeType, Expr, Lit, NaturalNumberT, QuotedT, ValTop}
 import fides.syntax.values.NaturalNumber
 
 /**
   * An annotated piece of code. The annotation does not change the semantics of the code.
   * It acts as a structured comment.
   */
-final case class Annotated[S <: CodeType, T <: ValType](code: Code[S], annotation: Code[Val[T]]) extends Code[S]
+final case class Annotated[S <: CodeType, T <: ValTop](code: Code[S], annotation: Code[Expr[T] & Lit]) extends Code[S]
 
-final case class AnnotatedMatcher[S <: CodeType, T <: ValType](
+final case class AnnotatedMatcher[S <: CodeType, T <: ValTop](
   code: Code[S],
-  annotation: Code[Val[T]],
-  level: Code[Val[NaturalNumber]] = NaturalNumber(0),
+  annotation: Code[Expr[T] & Lit],
+  level: Code[Expr[NaturalNumberT] & Lit] = NaturalNumber(0),
 ) extends Code[S]
 
 /**
   * Removes all the annotations from a Quoted.
   */
-final case class RemoveAnnotations[S <: CodeType](code: Code[Expr[Quoted[S]]]) extends Expr[Quoted[S]]
+final case class RemoveAnnotations[S <: CodeType](code: Code[Expr[QuotedT[S]]]) extends Code[Expr[QuotedT[S]]]
