@@ -1,7 +1,7 @@
 package fides.syntax.connectors
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Args, ArgsS, BiPo, ChanT, DeclarationS, Expr, Lit, OffBot, OffTop, PoTop, Polar, Process, PulseT, ValBot, ValTop, Xctr}
+import fides.syntax.types.{Args, ArgsS, BiPo, ChanT, Cnst, DeclarationS, Expr, OffBot, OffTop, PoTop, Polar, Process, PulseT, ValBot, ValTop, Xctr}
 
 /**
   * Absorbs from the location referred to by [[iD]]. Reduces to the received val after reception.
@@ -9,7 +9,7 @@ import fides.syntax.types.{Args, ArgsS, BiPo, ChanT, DeclarationS, Expr, Lit, Of
   * Dual of [[Out]]
   */
 object Inp:
-  def apply[T <: ValTop](iD: Code[Lit & Expr[ChanT[T, OffBot]]]): Code[Expr[T]] = Loc(iD)
+  def apply[T <: ValTop](iD: Code[Cnst[ChanT[T, OffBot]]]): Code[Expr[T]] = Loc(iD)
 end Inp
 // todo add variance, like here, to all primitives, for the sake of metaprogramming?
 // todo  | Code[Name[? <: T]]
@@ -22,14 +22,14 @@ end Inp
   * Dual of [[Inp]]
   */
 object Out:
-  def apply[T <: ValTop](iD: Code[Expr[ChanT[OffTop, T]] & Lit]): Code[Xctr[T]] = Loc(iD)
+  def apply[T <: ValTop](iD: Code[Cnst[ChanT[OffTop, T]]]): Code[Xctr[T]] = Loc(iD)
 end Out
 // todo  | Code[Name[? >: T]]
 
 /**
   * General [[Polar]] for input and output. Note that it can only be an [[Expr]] or a [[Xctr]].
   */
-final case class Loc[P >: ValBot, N <: ValTop](iD: Code[Lit & Expr[ChanT[P, N]]]) extends Code[Polar[P, N]]
+final case class Loc[P >: ValBot, N <: ValTop](iD: Code[Cnst[ChanT[P, N]]]) extends Code[Polar[P, N]]
 
 /**
   * A hard-coded connection between one input and one output

@@ -1,10 +1,10 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Args, AtomT, BoolT, Expr, FalseT, Lit, Ntrl, TrueT}
+import fides.syntax.types.{Args, AtomT, BoolT, Expr, FalseT, Ntrl, TrueT}
 
-case object True extends Code[Lit & Ntrl[TrueT]]
-case object False extends Code[Lit & Ntrl[FalseT]]
+case object True extends Code[Ntrl[TrueT]]
+case object False extends Code[Ntrl[FalseT]]
 
 /**
   * Outputs the conjunction of the inputs.

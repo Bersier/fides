@@ -1,19 +1,19 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Args, Expr, Lit, NaturalNumberT, Ntrl, WholeNumberT}
+import fides.syntax.types.{Args, Expr, NaturalNumberT, Ntrl, WholeNumberT}
 
 /**
   * Integer values
   */
-sealed class WholeNumber(val value: BigInt) extends Code[Lit & Ntrl[WholeNumberT]]:
+sealed class WholeNumber(val value: BigInt) extends Code[Ntrl[WholeNumberT]]:
   override def toString: String = value.toString()
 end WholeNumber
 
 /**
   * Natural number values
   */
-final class NaturalNumber(value: BigInt) extends Code[Lit & Ntrl[NaturalNumberT]]:
+final class NaturalNumber(value: BigInt) extends Code[Ntrl[NaturalNumberT]]:
   assert(value >= 0)
 end NaturalNumber
 

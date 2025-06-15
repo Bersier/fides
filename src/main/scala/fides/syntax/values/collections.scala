@@ -1,23 +1,23 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{ChanT, Collected, CollectedT, Expr, Lit, NaturalNumberT, Ntrl, OffBot, Polar, ValBot, ValTop}
+import fides.syntax.types.{ChanT, Cnst, Collected, CollectedT, Expr, NaturalNumberT, Ntrl, OffBot, Polar, ValBot, ValTop}
 
 /**
   * A literal for a value that is made up of an unordered collection of values.
   */
 object Collected:
   def apply[T <: ValTop](): None = Empty
-  def apply[T <: ValTop](first: Code[Lit & Expr[T]], others: Code[Lit & Expr[T]]*): Some[T] =
+  def apply[T <: ValTop](first: Code[Cnst[T]], others: Code[Cnst[T]]*): Some[T] =
     new NonEmpty(first, others*)
 
-  type None = Code[Lit & Ntrl[CollectedT[false, OffBot]]]
-  type Some[T <: ValTop] = Code[Lit & Ntrl[CollectedT[true, T]]]
+  type None = Code[Ntrl[CollectedT[false, OffBot]]]
+  type Some[T <: ValTop] = Code[Ntrl[CollectedT[true, T]]]
 
   private case object Empty extends None:
-    def elements: Iterable[Code[Lit & Expr[OffBot]]] = Iterable.empty
-  private final class NonEmpty[T <: ValTop](first: Code[Lit & Expr[T]], others: Code[Lit & Expr[T]]*) extends Some[T]:
-    val elements: Iterable[Code[Lit & Expr[T]]] = first +: others
+    def elements: Iterable[Code[Cnst[OffBot]]] = Iterable.empty
+  private final class NonEmpty[T <: ValTop](first: Code[Cnst[T]], others: Code[Cnst[T]]*) extends Some[T]:
+    val elements: Iterable[Code[Cnst[T]]] = first +: others
 end Collected
 
 /**
@@ -38,6 +38,6 @@ final case class AddElementP[P <: N, N <: ValTop](
   * As an Xctr, outputs the elements of a Collected to [[elementSource]], and its size to [[size]].
   */
 final case class Collect[P >: ValBot, N <: ValTop](
-  elementSource: Code[Lit & Expr[ChanT[P, N]]], // TODO replace by Loc?
+  elementSource: Code[Cnst[ChanT[P, N]]], // TODO replace by Loc?
   size: Code[Polar[NaturalNumberT, NaturalNumberT]],
 ) extends Code[Polar[Collected[P], Collected[N]]]

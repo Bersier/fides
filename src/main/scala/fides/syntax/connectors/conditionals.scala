@@ -1,7 +1,7 @@
 package fides.syntax.connectors
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Args, AtomT, CaseS, Expr, Lit, Ntrl, Process, TypeS, ValTop, Xctr}
+import fides.syntax.types.{Args, AtomT, CaseS, Cnst, Expr, TypeS, ValTop, Xctr}
 import izumi.reflect.Tag
 
 /**
@@ -32,6 +32,6 @@ final case class Switch[T <: ValTop, A <: AtomT](
 ) extends Code[Expr[T]]
 
 final case class Case[T <: ValTop, A <: AtomT](
-  testValue: Code[Expr[A] & Lit],
+  testValue: Code[Cnst[A]],
   extractor: Code[Expr[T]],
 ) extends Code[CaseS[T, A]]

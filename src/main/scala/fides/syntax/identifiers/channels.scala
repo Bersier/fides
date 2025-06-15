@@ -1,7 +1,7 @@
 package fides.syntax.identifiers
 
 import fides.syntax.core.Code
-import fides.syntax.types.{ChanT, Lit, Ntrl, OffBot, OffTop, ValTop} // TODO
+import fides.syntax.types.{ChanT, Ntrl, OffBot, OffTop, ValTop}
 
 /**
   * Channel identifier
@@ -11,7 +11,7 @@ import fides.syntax.types.{ChanT, Lit, Ntrl, OffBot, OffTop, ValTop} // TODO
   * @tparam InpT this identifier, when used to receive, might receive any value of this type
   * @tparam OutT this identifier, when used to send, can be used to send any value of this type
   */
-final class Chan[InpT >: OutT, OutT <: ValTop] extends Code[Lit & Ntrl[ChanT[InpT, OutT]]]
+final class Chan[InpT >: OutT, OutT <: ValTop] extends Code[Ntrl[ChanT[InpT, OutT]]]
 
 object InpChan:
   def apply[T <: ValTop](): Chan[T, OffBot] = Chan()

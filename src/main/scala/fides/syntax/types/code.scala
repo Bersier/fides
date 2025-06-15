@@ -35,12 +35,9 @@ sealed trait Polar[+P >: ValBot, -N <: ValTop] extends CodeType
 type PoTop = Polar[OffTop, OffBot]
 
 /**
-  * Fides code type for Fides value literals
+  * Used to mark the code types that represent constants.
   */
-sealed trait Lit extends CodeType
-// TODO Rename to Const, and set Lit[T] = Const & Ntrl[T]?
-// todo Lit when used as input is always paired with Expr, and when used as output, it is paired with Ntrl
-//  Perhaps it should be a Polar instead of Expr? Although, really, it should be a meta-polarity, right?
+private[types] sealed trait Lit extends CodeType
 
 /**
   * Fides code type for expressions. While expressions are really just a special type of process with a single output,
@@ -53,6 +50,13 @@ sealed trait Lit extends CodeType
 type Expr[+T <: ValTop] = Polar[T, OffBot]
 
 /**
+  * Fides code type for constants
+  *
+  * It differs from [[Ntrl]] in that it allows for covariance, which is what we want when a constant is needed.
+  */
+type Cnst[+T <: ValTop] = Expr[T] & Lit
+
+/**
   * Fides code type for extractors (aka patterns). While extractors are really just a special type of
   * process with a single input, they behave differently from a syntactic point of view, as [where their only input
   * comes from] is not represented explicitly by a name, but implicitly by where they are written, dually to
@@ -63,11 +67,11 @@ type Expr[+T <: ValTop] = Polar[T, OffBot]
   */
 type Xctr[-T <: ValTop] = Polar[OffTop, T]
 
-type Ntrl[T <: ValTop] = Polar[T, T]
+/**
+  * Fides code type for Literals
+  *
+  * Can be used as either an [[Expr]] or as an [[Xctr]]. Is naturally a [[Cnst]].
+  */
+type Ntrl[T <: ValTop] = Polar[T, T] & Lit
 
 sealed trait BiPo[I <: PoTop, O <: PoTop] extends CodeType
-
-//trait InpLit[+T <: ValTop] extends Expr[T], Lit
-//trait OutLit[-T <: ValTop] extends Xctr[T], Lit
-//
-//trait Lit[T <: ValTop] extends InpLit[T], OutLit[T]

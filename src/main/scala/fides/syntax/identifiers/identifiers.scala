@@ -1,7 +1,7 @@
 package fides.syntax.identifiers
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Expr, IdentifierT, Lit, Ntrl}
+import fides.syntax.types.{Expr, IdentifierT, Ntrl}
 
 // todo use context functions?
 
@@ -11,7 +11,7 @@ import fides.syntax.types.{Expr, IdentifierT, Lit, Ntrl}
   *
   * Identifiers are globally unique. Their names are just a convenient representation (that may or may not be unique).
   */
-class Identifier protected extends Code[Lit & Ntrl[IdentifierT]]
+class Identifier protected extends Code[Ntrl[IdentifierT]]
 
 /**
   * Outputs a new identifier. Can be simulated with a scope with one placeholder. Added for convenience.
