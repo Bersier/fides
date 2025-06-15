@@ -6,7 +6,7 @@ package fides.syntax.types
 sealed trait TopT private[types]()
 
 type BotT = Nothing
-// todo replace by true intersection
+// todo replace by true intersection, and use as bound everywhere appropriate
 
 type OffTopT = Any
 type OffBotT = Nothing
@@ -41,7 +41,7 @@ sealed trait SignedT[+T <: TopT] extends TopT
 /**
   * Data type for Channels
   */
-sealed trait ChanT[+InpT >: BotT, -OutT <: TopT] extends IdentifierT
+sealed trait ChanT[+InpT >: BotT, -OutT <: InpT & TopT] extends IdentifierT
 
 sealed trait CollectedT[+IsNonEmpty <: Boolean, +T >: BotT] extends TopT
 type Collected[+T >: BotT] = CollectedT[Boolean, T]

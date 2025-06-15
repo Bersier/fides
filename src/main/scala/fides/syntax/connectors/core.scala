@@ -29,7 +29,7 @@ end Out
 /**
   * General [[Polr]] for input and output. Note that it can only be an [[Expr]] or a [[Xctr]].
   */
-final case class Loc[P >: BotT, N <: TopT](iD: Code[Cnst[ChanT[P, N]]]) extends Code[Polr[P, N]]
+final case class Loc[P >: BotT, N <: P & TopT](iD: Code[Cnst[ChanT[P, N]]]) extends Code[Polr[P, N]]
 
 /**
   * A hard-coded connection between one input and one output

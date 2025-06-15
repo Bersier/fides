@@ -15,3 +15,5 @@ final case class Pair[
   first: Code[Polr[P1, N1]],
   second: Code[Polr[P2, N2]],
 ) extends Code[Polr[PairT[P1, P2], PairT[N1, N2]]]
+// TODO when first and second are literals, Pair(first, second) should be too. So Lit and Cnst need to be revisited...
+//  Although... do we really need to keep track of all literals at the type level?
