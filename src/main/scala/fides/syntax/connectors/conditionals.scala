@@ -22,6 +22,9 @@ final case class MatchType[T <: ValTop](t: Code[TypeS[T]]) extends Code[Xctr[T]]
   */
 final case class Type[T <: ValTop](t: Tag[T]) extends Code[TypeS[T]]
 
+/**
+  * Two cases may not overlap.
+  */
 final case class Switch[T <: ValTop, A <: AtomT](
   testee : Code[Expr[A]],
   cases  : Code[Args[CaseS[T, A]]],
@@ -29,8 +32,6 @@ final case class Switch[T <: ValTop, A <: AtomT](
 ) extends Code[Expr[T]]
 
 final case class Case[T <: ValTop, A <: AtomT](
-  testValue: Code[Ntrl[A] & Lit],
+  testValue: Code[Expr[A] & Lit],
   extractor: Code[Expr[T]],
 ) extends Code[CaseS[T, A]]
-
-// todo is there a way to have an extractor that ignores the extracted value and instead propagates an unrelated one?

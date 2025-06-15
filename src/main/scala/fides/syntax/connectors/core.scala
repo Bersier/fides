@@ -9,7 +9,7 @@ import fides.syntax.types.{Args, ArgsS, BiPo, ChanT, DeclarationS, Expr, Lit, Of
   * Dual of [[Out]]
   */
 object Inp:
-  def apply[T <: ValTop](iD: Code[Lit & Expr[ChanT[T, OffBot]]]): Code[Polar[T, OffBot]] = Loc(iD)
+  def apply[T <: ValTop](iD: Code[Lit & Expr[ChanT[T, OffBot]]]): Code[Expr[T]] = Loc(iD)
 end Inp
 // todo add variance, like here, to all primitives, for the sake of metaprogramming?
 // todo  | Code[Name[? <: T]]
@@ -22,7 +22,7 @@ end Inp
   * Dual of [[Inp]]
   */
 object Out:
-  def apply[T <: ValTop](iD: Code[Expr[ChanT[OffTop, T]] & Lit]): Code[Polar[OffTop, T]] = Loc(iD)
+  def apply[T <: ValTop](iD: Code[Expr[ChanT[OffTop, T]] & Lit]): Code[Xctr[T]] = Loc(iD)
 end Out
 // todo  | Code[Name[? >: T]]
 

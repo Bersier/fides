@@ -39,6 +39,8 @@ type PoTop = Polar[OffTop, OffBot]
   */
 sealed trait Lit extends CodeType
 // TODO Rename to Const, and set Lit[T] = Const & Ntrl[T]?
+// todo Lit when used as input is always paired with Expr, and when used as output, it is paired with Ntrl
+//  Perhaps it should be a Polar instead of Expr? Although, really, it should be a meta-polarity, right?
 
 /**
   * Fides code type for expressions. While expressions are really just a special type of process with a single output,
