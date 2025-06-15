@@ -1,7 +1,7 @@
 package fides.syntax.meta
 
 import fides.syntax.core.Code
-import fides.syntax.types.{ArgsS, CodeType, CollectedT, OffBot, Polar, QuotedT}
+import fides.syntax.types.{ArgsS, CodeType, CollectedT, OffBotT, Polr, QuotedT}
 
 /**
   * Used for unordered collections of pieces of code, at the syntax level.
@@ -10,11 +10,11 @@ object Args:
   def apply[S <: CodeType](): None = Empty
   def apply[S <: CodeType](first: Code[S], others: Code[S]*): Some[S] = new NonEmpty(first, others*)
 
-  type None = Code[ArgsS[false, OffBot]]
+  type None = Code[ArgsS[false, OffBotT]]
   type Some[+S <: CodeType] = Code[ArgsS[true, S]]
 
   private case object Empty extends None:
-    def arguments: Iterable[Code[OffBot]] = Iterable.empty
+    def arguments: Iterable[Code[OffBotT]] = Iterable.empty
   private final class NonEmpty[+S <: CodeType](first: Code[S], others: Code[S]*) extends Some[S]:
     val arguments: Iterable[Code[S]] = first +: others
 end Args
@@ -30,5 +30,5 @@ final case class Zip[
   P <: CodeType,
   N <: CodeType,
 ](
-  pieces: Code[Polar[CollectedT[IsNonEmptyP, QuotedT[P]], CollectedT[IsNonEmptyN, QuotedT[N]]]],
-) extends Code[Polar[QuotedT[ArgsS[IsNonEmptyP, P]], QuotedT[ArgsS[IsNonEmptyN, N]]]]
+  pieces: Code[Polr[CollectedT[IsNonEmptyP, QuotedT[P]], CollectedT[IsNonEmptyN, QuotedT[N]]]],
+) extends Code[Polr[QuotedT[ArgsS[IsNonEmptyP, P]], QuotedT[ArgsS[IsNonEmptyN, N]]]]

@@ -11,15 +11,15 @@ sealed trait CodeType private[types]()
 sealed trait ArgsS[+IsNonEmpty <: Boolean, +S <: CodeType] extends CodeType
 type Args[+S <: CodeType] = ArgsS[Boolean, S]
 
-sealed trait CaseS[T <: ValTop, A <: AtomT] extends CodeType
+sealed trait CaseS[T <: TopT, A <: AtomT] extends CodeType
 
-sealed trait TypeS[T <: ValTop] extends CodeType
+sealed trait TypeS[T <: TopT] extends CodeType
 
-sealed trait DeclarationS[T <: ValTop] extends CodeType
+sealed trait DeclarationS[T <: TopT] extends CodeType
 
-sealed trait NameS[+T <: ValTop] extends CodeType
+sealed trait NameS[+T <: TopT] extends CodeType
 
-sealed trait MNameS[T <: ValTop] extends NameS[T]
+sealed trait MNameS[T <: TopT] extends NameS[T]
 
 /**
   * Fides code type for processes.
@@ -28,11 +28,11 @@ sealed trait Process extends CodeType
 // TODO rename to NonPo?
 
 /**
-  * [[Polar]] is a generalization of expressions and patterns.
+  * [[Polr]] is a generalization of expressions and patterns.
   */
-sealed trait Polar[+P >: ValBot, -N <: ValTop] extends CodeType
+sealed trait Polr[+P >: BotT, -N <: TopT] extends CodeType
 
-type PoTop = Polar[OffTop, OffBot]
+type PoTop = Polr[OffTopT, OffBotT]
 
 /**
   * Used to mark the code types that represent constants.
@@ -47,14 +47,14 @@ private[types] sealed trait Lit extends CodeType
   *
   * Dual of Xctr
   */
-type Expr[+T <: ValTop] = Polar[T, OffBot]
+type Expr[+T <: TopT] = Polr[T, OffBotT]
 
 /**
   * Fides code type for constants
   *
   * It differs from [[Ntrl]] in that it allows for covariance, which is what we want when a constant is needed.
   */
-type Cnst[+T <: ValTop] = Expr[T] & Lit
+type Cnst[+T <: TopT] = Expr[T] & Lit
 
 /**
   * Fides code type for extractors (aka patterns). While extractors are really just a special type of
@@ -65,13 +65,13 @@ type Cnst[+T <: ValTop] = Expr[T] & Lit
   *
   * Dual of Expr
   */
-type Xctr[-T <: ValTop] = Polar[OffTop, T]
+type Xctr[-T <: TopT] = Polr[OffTopT, T]
 
 /**
   * Fides code type for Literals
   *
   * Can be used as either an [[Expr]] or as an [[Xctr]]. Is naturally a [[Cnst]].
   */
-type Ntrl[T <: ValTop] = Polar[T, T] & Lit
+type Ntrl[T <: TopT] = Polr[T, T] & Lit
 
 sealed trait BiPo[I <: PoTop, O <: PoTop] extends CodeType

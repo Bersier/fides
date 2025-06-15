@@ -1,7 +1,7 @@
 package fides.syntax.processes
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Args, ChanT, DeclarationS, Expr, OffTop, Process, ValTop}
+import fides.syntax.types.{Args, ChanT, DeclarationS, Expr, OffTopT, Process, TopT}
 
 /**
   * Sends a value to an address.
@@ -17,9 +17,9 @@ import fides.syntax.types.{Args, ChanT, DeclarationS, Expr, OffTop, Process, Val
   * @param contents the value to be sent
   * @param recipient address of the recipient
   */
-final case class Send[T <: ValTop](
+final case class Send[T <: TopT](
   contents: Code[Expr[T]],
-  recipient: Code[Expr[ChanT[OffTop, T]]],
+  recipient: Code[Expr[ChanT[OffTopT, T]]],
 ) extends Code[Process]
 
 /**

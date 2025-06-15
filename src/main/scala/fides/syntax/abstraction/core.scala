@@ -3,7 +3,7 @@ package fides.syntax.abstraction
 import fides.syntax.core.Code
 import fides.syntax.identifiers.Identifier
 import fides.syntax.meta.Args
-import fides.syntax.types.{Args, CodeType, Expr, Process, ValTop}
+import fides.syntax.types.{Args, CodeType, Expr, Process, TopT}
 import util.TList
 
 // todo use lazy HOAS approach?

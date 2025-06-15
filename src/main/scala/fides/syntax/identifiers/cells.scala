@@ -1,10 +1,5 @@
 package fides.syntax.identifiers
 
-import fides.syntax.core.Code
-import fides.syntax.types.{Expr, Process, ValTop, Xctr}
-import fides.syntax.values.Pulse
-import izumi.reflect.Tag
-
 ///**
 //  * A type of location used for memory cells
 //  *

@@ -1,7 +1,7 @@
 package fides.syntax.connectors
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Args, ArgsS, BiPo, ChanT, Cnst, DeclarationS, Expr, OffBot, OffTop, PoTop, Polar, Process, PulseT, ValBot, ValTop, Xctr}
+import fides.syntax.types.{Args, ArgsS, BiPo, BotT, ChanT, Cnst, DeclarationS, Expr, OffBotT, OffTopT, PoTop, Polr, Process, PulseT, TopT, Xctr}
 
 /**
   * Absorbs from the location referred to by [[iD]]. Reduces to the received val after reception.
@@ -9,7 +9,7 @@ import fides.syntax.types.{Args, ArgsS, BiPo, ChanT, Cnst, DeclarationS, Expr, O
   * Dual of [[Out]]
   */
 object Inp:
-  def apply[T <: ValTop](iD: Code[Cnst[ChanT[T, OffBot]]]): Code[Expr[T]] = Loc(iD)
+  def apply[T <: TopT](iD: Code[Cnst[ChanT[T, OffBotT]]]): Code[Expr[T]] = Loc(iD)
 end Inp
 // todo add variance, like here, to all primitives, for the sake of metaprogramming?
 // todo  | Code[Name[? <: T]]
@@ -22,21 +22,21 @@ end Inp
   * Dual of [[Inp]]
   */
 object Out:
-  def apply[T <: ValTop](iD: Code[Cnst[ChanT[OffTop, T]]]): Code[Xctr[T]] = Loc(iD)
+  def apply[T <: TopT](iD: Code[Cnst[ChanT[OffTopT, T]]]): Code[Xctr[T]] = Loc(iD)
 end Out
 // todo  | Code[Name[? >: T]]
 
 /**
-  * General [[Polar]] for input and output. Note that it can only be an [[Expr]] or a [[Xctr]].
+  * General [[Polr]] for input and output. Note that it can only be an [[Expr]] or a [[Xctr]].
   */
-final case class Loc[P >: ValBot, N <: ValTop](iD: Code[Cnst[ChanT[P, N]]]) extends Code[Polar[P, N]]
+final case class Loc[P >: BotT, N <: TopT](iD: Code[Cnst[ChanT[P, N]]]) extends Code[Polr[P, N]]
 
 /**
   * A hard-coded connection between one input and one output
   *
   * Equivalent to [[Spread]]([[inp]], [[Args]]([[out]])).
   */
-final case class Forward[T <: ValTop](inp: Code[Expr[T]], out: Code[Xctr[T]]) extends Code[Process]
+final case class Forward[T <: TopT](inp: Code[Expr[T]], out: Code[Xctr[T]]) extends Code[Process]
 
 /**
   * Dual of Forward. The connection between [[inp]] and [[out]] is instead achieved via variables.
@@ -66,17 +66,17 @@ final case class Deply[I <: PoTop, O <: PoTop](
   *
   * Can be implemented in terms of the other primitives.
   */
-final case class Ignore() extends Code[Xctr[ValTop]]
+final case class Ignore() extends Code[Xctr[TopT]]
 
 /**
   * Spreads a value to multiple recipients.
   */
-final case class Spread[T <: ValTop](recipients: Code[Args[Xctr[T]]]) extends Code[Xctr[T]]
+final case class Spread[T <: TopT](recipients: Code[Args[Xctr[T]]]) extends Code[Xctr[T]]
 
 /**
   * Forwards the inputted value once signalled to do so.
   */
-final case class Hold[T <: ValTop](signal: Code[Expr[PulseT]], value: Code[Expr[T]]) extends Code[Expr[T]]
+final case class Hold[T <: TopT](signal: Code[Expr[PulseT]], value: Code[Expr[T]]) extends Code[Expr[T]]
 
 /**
   * Upon reception of a value, outputs a pulse. It only communicates the arrival of the value,
@@ -91,21 +91,21 @@ final case class Signal(trigger: Code[Expr[?]]) extends Code[Expr[PulseT]]
   *
   * [[Pick]]`[T] <: `[[Expr]]`[T]`
   */
-type Pick[T <: ValTop] = PickP[T, OffBot]
+type Pick[T <: TopT] = PickP[T, OffBotT]
 object Pick:
-  def apply[T <: ValTop](inputs: Code[ArgsS[true, Expr[T]]]): Pick[T] = PickP(inputs)
+  def apply[T <: TopT](inputs: Code[ArgsS[true, Expr[T]]]): Pick[T] = PickP(inputs)
 
 /**
   * Internal choice. Non-deterministically forwards the input to one of the outputs.
   *
   * [[UnPick]]`[T] <: `[[Xctr]]`[T]`
   */
-type UnPick[T <: ValTop] = PickP[OffTop, T]
+type UnPick[T <: TopT] = PickP[OffTopT, T]
 object UnPick:
-  def apply[T <: ValTop](recipients: Code[ArgsS[true, Xctr[T]]]): UnPick[T] = PickP(recipients)
+  def apply[T <: TopT](recipients: Code[ArgsS[true, Xctr[T]]]): UnPick[T] = PickP(recipients)
 end UnPick
 
 /**
-  * General [[Polar]] for picking. Note that it can only be an [[Expr]] or an [[Xctr]].
+  * General [[Polr]] for picking. Note that it can only be an [[Expr]] or an [[Xctr]].
   */
-final case class PickP[P >: ValBot, N <: ValTop](connections: Code[ArgsS[true, Polar[P, N]]]) extends Code[Polar[P, N]]
+final case class PickP[P >: BotT, N <: TopT](connections: Code[ArgsS[true, Polr[P, N]]]) extends Code[Polr[P, N]]

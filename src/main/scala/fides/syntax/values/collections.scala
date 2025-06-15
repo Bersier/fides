@@ -1,22 +1,22 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{ChanT, Cnst, Collected, CollectedT, Expr, NaturalNumberT, Ntrl, OffBot, Polar, ValBot, ValTop}
+import fides.syntax.types.{BotT, ChanT, Cnst, Collected, CollectedT, Expr, NaturalNumberT, Ntrl, OffBotT, Polr, TopT}
 
 /**
   * A literal for a value that is made up of an unordered collection of values.
   */
 object Collected:
-  def apply[T <: ValTop](): None = Empty
-  def apply[T <: ValTop](first: Code[Cnst[T]], others: Code[Cnst[T]]*): Some[T] =
+  def apply[T <: TopT](): None = Empty
+  def apply[T <: TopT](first: Code[Cnst[T]], others: Code[Cnst[T]]*): Some[T] =
     new NonEmpty(first, others*)
 
-  type None = Code[Ntrl[CollectedT[false, OffBot]]]
-  type Some[T <: ValTop] = Code[Ntrl[CollectedT[true, T]]]
+  type None = Code[Ntrl[CollectedT[false, OffBotT]]]
+  type Some[T <: TopT] = Code[Ntrl[CollectedT[true, T]]]
 
   private case object Empty extends None:
-    def elements: Iterable[Code[Cnst[OffBot]]] = Iterable.empty
-  private final class NonEmpty[T <: ValTop](first: Code[Cnst[T]], others: Code[Cnst[T]]*) extends Some[T]:
+    def elements: Iterable[Code[Cnst[OffBotT]]] = Iterable.empty
+  private final class NonEmpty[T <: TopT](first: Code[Cnst[T]], others: Code[Cnst[T]]*) extends Some[T]:
     val elements: Iterable[Code[Cnst[T]]] = first +: others
 end Collected
 
@@ -27,17 +27,17 @@ end Collected
   *
   * [[AddElement]]`[T] <: `[[Expr]]`[`[[Collected.Some]]`[T]]`
   */
-final case class AddElementP[P <: N, N <: ValTop](
-  element: Code[Polar[P, N]],
-  others: Code[Polar[Collected[P], Collected[N]]],
-) extends Code[Polar[CollectedT[true, P], CollectedT[true, N]]]
+final case class AddElementP[P <: N, N <: TopT](
+  element: Code[Polr[P, N]],
+  others: Code[Polr[Collected[P], Collected[N]]],
+) extends Code[Polr[CollectedT[true, P], CollectedT[true, N]]]
 
 /**
   * As an Expr, waits for [[size]] elements from [[elementSource]], then outputs them as a Collected.
   *
   * As an Xctr, outputs the elements of a Collected to [[elementSource]], and its size to [[size]].
   */
-final case class Collect[P >: ValBot, N <: ValTop](
+final case class Collect[P >: BotT, N <: TopT](
   elementSource: Code[Cnst[ChanT[P, N]]], // TODO replace by Loc?
-  size: Code[Polar[NaturalNumberT, NaturalNumberT]],
-) extends Code[Polar[Collected[P], Collected[N]]]
+  size: Code[Polr[NaturalNumberT, NaturalNumberT]],
+) extends Code[Polr[Collected[P], Collected[N]]]
