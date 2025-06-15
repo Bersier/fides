@@ -25,9 +25,9 @@ sealed trait PairT[+T1 >: BotT, +T2 >: BotT] extends TopT
 
 sealed trait WholeNumberT extends AtomT
 sealed trait NaturalNumberT extends WholeNumberT
-// TODO encode numbers at type level
+// todo encode numbers at type level (use https://github.com/Bersier/TypeLevelNumbers ?)
 
-sealed trait QuotedT[+S <: CodeType] extends TopT
+sealed trait QuotedT[+S <: TopS] extends TopT
 
 /**
   * Data type for identifiers

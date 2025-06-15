@@ -1,7 +1,7 @@
 package fides.syntax.control
 
 import fides.syntax.core.Code
-import fides.syntax.types.{ChanT, Cnst, ErrorT, Expr, KillT, Ntrl, OffTopT, PauseT, Process, PulseT, StartT, TopT, Xctr}
+import fides.syntax.types.{Aplr, ChanT, Cnst, ErrorT, Expr, KillT, Ntrl, OffTopT, PauseT, PulseT, StartT, TopT, Xctr}
 
 case object Kill extends Code[Ntrl[KillT]]
 case object Pause extends Code[Ntrl[PauseT]]
@@ -18,7 +18,7 @@ case object Start extends Code[Ntrl[StartT]]
 /**
   * Upon reception of a pulse, the body's execution is started.
   */
-final case class OnHold(startSignal: Code[Expr[PulseT]], body: Code[Process]) extends Code[Process]
+final case class OnHold(startSignal: Code[Expr[PulseT]], body: Code[Aplr]) extends Code[Aplr]
 
 /**
   * A killable process
@@ -32,19 +32,19 @@ final case class OnHold(startSignal: Code[Expr[PulseT]], body: Code[Process]) ex
 final case class Mortal(
   killSignal: Code[Expr[PulseT]],
   deathSignal: Code[Xctr[PulseT]],
-  body: Code[Process],
-) extends Code[Process]
+  body: Code[Aplr],
+) extends Code[Aplr]
 
 /**
   * No message can reach and/or exit the sandboxed process directly. The monitor serves as the intermediate.
   * It can send and receive messages to and from the sandboxed process.
   */
-final case class Sandboxed(monitor: Code[Process], sandboxed: Code[Process]) extends Code[Process]
+final case class Sandboxed(monitor: Code[Aplr], sandboxed: Code[Aplr]) extends Code[Aplr]
 
 final case class Handled(
   errorHandler: Code[Cnst[ChanT[OffTopT, ErrorT[TopT]]]],
-  body: Code[Process],
-) extends Code[Process]
+  body: Code[Aplr],
+) extends Code[Aplr]
 
 final case class Error[T <: TopT](value: Code[Cnst[T]]) extends Code[Ntrl[ErrorT[T]]]
 // todo develop

@@ -1,7 +1,7 @@
 package fides.syntax.connectors
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Args, ArgsS, BiPo, BotT, ChanT, Cnst, DeclarationS, Expr, OffBotT, OffTopT, PoTop, Polr, Process, PulseT, TopT, Xctr}
+import fides.syntax.types.*
 
 /**
   * Absorbs from the location referred to by [[iD]]. Reduces to the received val after reception.
@@ -36,26 +36,26 @@ final case class Loc[P >: BotT, N <: TopT](iD: Code[Cnst[ChanT[P, N]]]) extends 
   *
   * Equivalent to [[Spread]]([[inp]], [[Args]]([[out]])).
   */
-final case class Forward[T <: TopT](inp: Code[Expr[T]], out: Code[Xctr[T]]) extends Code[Process]
+final case class Forward[T <: TopT](inp: Code[Expr[T]], out: Code[Xctr[T]]) extends Code[Aplr]
 
 /**
   * Dual of Forward. The connection between [[inp]] and [[out]] is instead achieved via variables.
   *
   * Equivalent to [[Spread]]([[inp]], [[Args]]([[out]])).
   */
-final case class Backward[I <: PoTop, O <: PoTop](
-  declarations: Code[Args[DeclarationS[?]]],
+final case class Backward[I <: TopPoS, O <: TopPoS](
+  declarations: Code[Args[DeclS[?]]],
   inp: Code[I],
   out: Code[O],
-) extends Code[BiPo[I, O]]
+) extends Code[Bipo[I, O]]
 
-final case class Apply[I <: PoTop, O <: PoTop](
-  component: Code[BiPo[I, O]],
+final case class Apply[I <: TopPoS, O <: TopPoS](
+  component: Code[Bipo[I, O]],
   input: Code[I],
 ) extends Code[O]
 
-final case class Deply[I <: PoTop, O <: PoTop](
-  component: Code[BiPo[I, O]],
+final case class Deply[I <: TopPoS, O <: TopPoS](
+  component: Code[Bipo[I, O]],
   input: Code[O],
 ) extends Code[I]
 

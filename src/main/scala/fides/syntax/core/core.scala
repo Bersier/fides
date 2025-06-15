@@ -1,13 +1,13 @@
 package fides.syntax.core
 
-import fides.syntax.types.CodeType
+import fides.syntax.types.TopS
 
 import scala.language.experimental.pureFunctions
 
 /**
   * General type to represent Fides code
   */
-trait Code[+S <: CodeType] private[syntax]()
+trait Code[+S <: TopS] private[syntax]()
 // todo add QuoteContext type parameter
 // todo CodePtrn, CodeExpr, CodeVal
 

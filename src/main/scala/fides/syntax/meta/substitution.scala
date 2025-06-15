@@ -2,7 +2,7 @@ package fides.syntax.meta
 
 import fides.syntax.core.Code
 import fides.syntax.identifiers.Identifier
-import fides.syntax.types.{CodeType, Expr}
+import fides.syntax.types.{Expr, TopS}
 
 /**
   * Applies a substitution to a Quoted.

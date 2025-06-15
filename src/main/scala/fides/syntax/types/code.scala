@@ -4,40 +4,34 @@ import scala.language.experimental.pureFunctions
 
 /**
   * Parent type of all the Scala types that represent
-  * the different types (aka syntactic categories) of possible Fides code.
+  * the different types (aka syntactic categories) of possible Fides code
   */
-sealed trait CodeType private[types]()
+sealed trait TopS private[types]()
 
-sealed trait ArgsS[+IsNonEmpty <: Boolean, +S <: CodeType] extends CodeType
-type Args[+S <: CodeType] = ArgsS[Boolean, S]
+sealed trait ArgsS[+IsNonEmpty <: Boolean, +S <: TopS] extends TopS
+type Args[+S <: TopS] = ArgsS[Boolean, S]
 
-sealed trait CaseS[T <: TopT, A <: AtomT] extends CodeType
+sealed trait CaseS[T <: TopT, A <: AtomT] extends TopS
 
-sealed trait TypeS[T <: TopT] extends CodeType
+sealed trait TypeS[T <: TopT] extends TopS
 
-sealed trait DeclarationS[T <: TopT] extends CodeType
+sealed trait DeclS[T <: TopT] extends TopS
 
-sealed trait NameS[+T <: TopT] extends CodeType
+sealed trait NameS[+T <: TopT] extends TopS
 
 sealed trait MNameS[T <: TopT] extends NameS[T]
 
 /**
-  * Fides code type for processes.
+  * Fides code type for non-polar process code
   */
-sealed trait Process extends CodeType
-// TODO rename to NonPo?
+sealed trait Aplr extends TopS
 
 /**
   * [[Polr]] is a generalization of expressions and patterns.
   */
-sealed trait Polr[+P >: BotT, -N <: TopT] extends CodeType
+sealed trait Polr[+P >: BotT, -N <: TopT] extends TopS
 
-type PoTop = Polr[OffTopT, OffBotT]
-
-/**
-  * Used to mark the code types that represent constants.
-  */
-private[types] sealed trait Lit extends CodeType
+type TopPoS = Polr[OffTopT, OffBotT]
 
 /**
   * Fides code type for expressions. While expressions are really just a special type of process with a single output,
@@ -74,4 +68,9 @@ type Xctr[-T <: TopT] = Polr[OffTopT, T]
   */
 type Ntrl[T <: TopT] = Polr[T, T] & Lit
 
-sealed trait BiPo[I <: PoTop, O <: PoTop] extends CodeType
+sealed trait Bipo[I <: TopPoS, O <: TopPoS] extends TopS
+
+/**
+  * Used to mark the code types that represent constants.
+  */
+private[types] sealed trait Lit extends TopS
