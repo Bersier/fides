@@ -30,20 +30,6 @@ end Out
   * General [[Polar]] for input and output. Note that it can only be an [[Expr]] or a [[Xctr]].
   */
 final case class Loc[P >: ValBot, N <: ValTop](iD: Code[Lit & Expr[ChanT[P, N]]]) extends Code[Polar[P, N]]
-// todo  | Code[Name[? >: Nothing <: ValTop]]
-
-// todo given the constraint  (R =:= Positive) | ((R =:= Negative) &:& (P =:= Nothing)),
-//  can this even be used in a polymorphic abstraction where the polarity is not known in advance?
-//  Relatedly, we should be careful about not unintentionally leaking certain features of the Scala type system into
-//  Fides. If the polymorphic abstraction can only be used with an implicit proof that the type parameter satisfies
-//  certain properties, then it is pointless for Fides. Similarly, we don't want to introduce the '?' type wildcard
-//  into Fides, do we?
-
-// TODO But why did we want to make this generic in the first place? What's the issue with having separate constructs
-//  for separate polarities? I forgot... I think it leads to redundancy somewhere, but where? Don't we want the syntax
-//  to make the polarity explicit, rather than in just the composition rules? It's probably something to do with
-//  metaprogramming...
-
 
 /**
   * A hard-coded connection between one input and one output

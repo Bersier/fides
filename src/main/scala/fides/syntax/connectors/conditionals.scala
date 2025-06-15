@@ -6,14 +6,11 @@ import izumi.reflect.Tag
 
 /**
   * Tries to match a value to the given pattern. Upon failure, outputs the value to the alternative instead.
-  *
-  * Unfortunately, it doesn't seem possible to refine the type of [[alternative]] in Scala.
   */
 final case class Match[T <: ValTop, U <: ValTop](
   pattern: Code[Xctr[T]],
   alternative: Code[Xctr[U]] = Ignore(),
 ) extends Code[Xctr[T | U]]
-// TODO with this new typing, pattern and/or alternative could be known at compile-time to never match
 
 /**
   * Matches any value of type [[T]].
@@ -26,13 +23,14 @@ final case class MatchType[T <: ValTop](t: Code[TypeS[T]]) extends Code[Xctr[T]]
 final case class Type[T <: ValTop](t: Tag[T]) extends Code[TypeS[T]]
 
 final case class Switch[T <: ValTop, A <: AtomT](
-  input  : Code[Expr[T]],
   testee : Code[Expr[A]],
   cases  : Code[Args[CaseS[T, A]]],
-  default: Code[Xctr[T]] = Ignore(),
-) extends Code[Process]
+  default: Code[Expr[T]],
+) extends Code[Expr[T]]
 
 final case class Case[T <: ValTop, A <: AtomT](
   testValue: Code[Ntrl[A] & Lit],
-  extractor: Code[Xctr[T]],
+  extractor: Code[Expr[T]],
 ) extends Code[CaseS[T, A]]
+
+// todo is there a way to have an extractor that ignores the extracted value and instead propagates an unrelated one?

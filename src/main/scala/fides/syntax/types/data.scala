@@ -4,6 +4,7 @@ package fides.syntax.types
   * Parent type of all the Scala types that represent Fides data/value types
   */
 sealed trait ValTop private[types]()
+// todo rename to TopT?
 
 type ValBot = Nothing
 // todo replace by true intersection

@@ -17,6 +17,12 @@ transparent sealed trait Value private[syntax]() extends Word
 
 transparent sealed trait Header private[syntax]() extends Word
 
+/*
+Use extractor objects?
+https://docs.scala-lang.org/tour/extractor-objects.html
+https://docs.scala-lang.org/scala3/reference/changed-features/pattern-matching.html
+*/
+
 object Pulse extends Value
 object Pair extends Header
 
