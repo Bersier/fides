@@ -1,13 +1,14 @@
 package fides.syntax.meta
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Cnst, Expr, NaturalNumberT, Ntrl, QuotedT, TopS, Xctr}
+import fides.syntax.types.{Cnst, Expr, Exvr, NaturalNumberT, Ntrl, QuotedT, TopS, Xctr, Xcvr}
 import fides.syntax.values.NaturalNumber
 
 /**
   * Code as value, for metaprogramming
   */
 final case class Quoted[S <: TopS](code: Code[S]) extends Code[Ntrl[QuotedT[S]]]
+// todo should Quote and Quoted really be separate?
 
 /**
   * Allows escaping the body of a [[Quote]]. Ignores nested [[Quote]]s
@@ -75,10 +76,10 @@ final case class MatchEscapeMatcher[S <: TopS](
   *
   * Once all the [[Escape]]s inside [[code]] have been evaluated and spliced in, reduces to a [[Quoted]].
   */
-final case class Quote[S <: TopS](code: Code[S]) extends Code[Expr[QuotedT[S]]]
+final case class Quote[S <: TopS](code: Code[S]) extends Code[Exvr[QuotedT[S]]]
 
 /**
   * Code extractor.
   */
-final case class MatchQuote[S <: TopS](code: Code[S]) extends Code[Xctr[QuotedT[S]]]
+final case class MatchQuote[S <: TopS](code: Code[S]) extends Code[Xcvr[QuotedT[S]]]
 // todo lossy type

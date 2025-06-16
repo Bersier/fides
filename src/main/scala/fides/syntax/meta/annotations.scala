@@ -1,7 +1,7 @@
 package fides.syntax.meta
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Cnst, Expr, NaturalNumberT, QuotedT, TopS, TopT}
+import fides.syntax.types.{Cnst, Expr, Exvr, NaturalNumberT, QuotedT, TopS, TopT}
 import fides.syntax.values.NaturalNumber
 
 /**
@@ -19,4 +19,4 @@ final case class AnnotatedMatcher[S <: TopS, T <: TopT](
 /**
   * Removes all the annotations from a Quoted.
   */
-final case class RemoveAnnotations[S <: TopS](code: Code[Expr[QuotedT[S]]]) extends Code[Expr[QuotedT[S]]]
+final case class RemoveAnnotations[S <: TopS](code: Code[Expr[QuotedT[S]]]) extends Code[Exvr[QuotedT[S]]]

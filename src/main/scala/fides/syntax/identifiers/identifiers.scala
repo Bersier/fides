@@ -1,7 +1,7 @@
 package fides.syntax.identifiers
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Expr, IdentifierT, Ntrl}
+import fides.syntax.types.{Exvr, IdentifierT, Ntrl}
 
 // todo use context functions?
 
@@ -16,4 +16,4 @@ class Identifier protected extends Code[Ntrl[IdentifierT]]
 /**
   * Outputs a new identifier. Can be simulated with a scope with one placeholder. Added for convenience.
   */
-final case class NewIdentifier() extends Code[Expr[IdentifierT]]
+final case class NewIdentifier() extends Code[Exvr[IdentifierT]]

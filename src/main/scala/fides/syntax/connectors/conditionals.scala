@@ -1,7 +1,7 @@
 package fides.syntax.connectors
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Args, AtomT, CaseS, Cnst, Expr, TopT, TypeS, Xctr}
+import fides.syntax.types.{Args, AtomT, CaseS, Cnst, Expr, Exvr, TopT, TypeS, Xctr, Xcvr}
 import izumi.reflect.Tag
 
 /**
@@ -10,12 +10,12 @@ import izumi.reflect.Tag
 final case class Match[T <: TopT, U <: TopT](
   pattern: Code[Xctr[T]],
   alternative: Code[Xctr[U]] = Ignore(),
-) extends Code[Xctr[T | U]]
+) extends Code[Xcvr[T | U]]
 
 /**
   * Matches any value of type [[T]].
   */
-final case class MatchType[T <: TopT](t: Code[TypeS[T]]) extends Code[Xctr[T]]
+final case class MatchType[T <: TopT](t: Code[TypeS[T]]) extends Code[Xcvr[T]]
 
 /**
   * Represents a Fides type
@@ -29,7 +29,7 @@ final case class Switch[T <: TopT, A <: AtomT](
   testee : Code[Expr[A]],
   cases  : Code[Args[CaseS[T, A]]],
   default: Code[Expr[T]],
-) extends Code[Expr[T]]
+) extends Code[Exvr[T]]
 
 final case class Case[T <: TopT, A <: AtomT](
   testValue: Code[Cnst[A]],

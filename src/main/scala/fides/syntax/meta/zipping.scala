@@ -1,7 +1,7 @@
 package fides.syntax.meta
 
 import fides.syntax.core.Code
-import fides.syntax.types.{ArgsS, CollectedT, OffBotT, Polr, QuotedT, TopS}
+import fides.syntax.types.{ArgsS, CollectedT, OffBotT, Polr, Povr, QuotedT, TopS}
 
 /**
   * Used for unordered collections of pieces of code, at the syntax level.
@@ -31,4 +31,4 @@ final case class Zip[
   N <: TopS,
 ](
   pieces: Code[Polr[CollectedT[IsNonEmptyP, QuotedT[P]], CollectedT[IsNonEmptyN, QuotedT[N]]]],
-) extends Code[Polr[QuotedT[ArgsS[IsNonEmptyP, P]], QuotedT[ArgsS[IsNonEmptyN, N]]]]
+) extends Code[Povr[QuotedT[ArgsS[IsNonEmptyP, P]], QuotedT[ArgsS[IsNonEmptyN, N]]]]

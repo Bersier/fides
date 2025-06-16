@@ -1,7 +1,9 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{BotT, PairT, Polr, TopT}
+import fides.syntax.types.{BotT, PairT, PolrS, TopT}
+
+import scala.compiletime.ops.boolean.&&
 
 /**
   * General [[Polr]] for pairing.
@@ -11,9 +13,9 @@ final case class Pair[
   P2 >: BotT,
   N1 <: TopT,
   N2 <: TopT,
+  L1 <: Boolean,
+  L2 <: Boolean,
 ](
-  first: Code[Polr[P1, N1]],
-  second: Code[Polr[P2, N2]],
-) extends Code[Polr[PairT[P1, P2], PairT[N1, N2]]]
-// TODO when first and second are literals, Pair(first, second) should be too. So Lit and Cnst need to be revisited...
-//  Although... do we really need to keep track of all literals at the type level?
+  first: Code[PolrS[P1, N1, L1]],
+  second: Code[PolrS[P2, N2, L2]],
+) extends Code[PolrS[PairT[P1, P2], PairT[N1, N2], L1 && L2]]

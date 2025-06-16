@@ -2,13 +2,13 @@ package fides.syntax.declarations
 // todo rename package to "variables"
 
 import fides.syntax.core.Code
-import fides.syntax.types.{ChanT, DeclS, Expr, NameS, TopT, TypeS, Xctr}
+import fides.syntax.types.{ChanT, DeclS, Expr, Exvr, NameS, TopT, TypeS, Xctr, Xcvr}
 
 // todo generalize Loc for both channels and variables?
-final case class Use[T <: TopT](variableName: Code[NameS[T]]) extends Code[Expr[T]]
+final case class Use[T <: TopT](variableName: Code[NameS[T]]) extends Code[Exvr[T]]
 
 // todo merge Use and Assign into something like Loc
-final case class Assign[T <: TopT](variableName: Code[NameS[T]]) extends Code[Xctr[T]]
+final case class Assign[T <: TopT](variableName: Code[NameS[T]]) extends Code[Xcvr[T]]
 
 object Declaration:
   final case class ImmutableVariable[T <: TopT](

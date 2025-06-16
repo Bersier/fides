@@ -1,7 +1,7 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{BotT, ChanT, Cnst, Collected, CollectedT, Expr, NaturalNumberT, Ntrl, OffBotT, Polr, TopT}
+import fides.syntax.types.{BotT, ChanT, Cnst, Collected, CollectedT, NaturalNumberT, Ntrl, OffBotT, Polr, Povr, TopT}
 
 /**
   * A literal for a value that is made up of an unordered collection of values.
@@ -30,7 +30,7 @@ end Collected
 final case class AddElementP[P <: N, N <: TopT](
   element: Code[Polr[P, N]],
   others: Code[Polr[Collected[P], Collected[N]]],
-) extends Code[Polr[CollectedT[true, P], CollectedT[true, N]]]
+) extends Code[Povr[CollectedT[true, P], CollectedT[true, N]]]
 
 /**
   * As an Expr, waits for [[size]] elements from [[elementSource]], then outputs them as a Collected.
@@ -40,4 +40,4 @@ final case class AddElementP[P <: N, N <: TopT](
 final case class Collect[P >: BotT, N <: P & TopT](
   elementSource: Code[Cnst[ChanT[P, N]]], // TODO replace by Loc?
   size: Code[Polr[NaturalNumberT, NaturalNumberT]],
-) extends Code[Polr[Collected[P], Collected[N]]]
+) extends Code[Povr[Collected[P], Collected[N]]]

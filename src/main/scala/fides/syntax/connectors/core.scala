@@ -9,7 +9,7 @@ import fides.syntax.types.*
   * Dual of [[Out]]
   */
 object Inp:
-  def apply[T <: TopT](iD: Code[Cnst[ChanT[T, OffBotT]]]): Code[Expr[T]] = Loc(iD)
+  def apply[T <: TopT](iD: Code[Cnst[ChanT[T, OffBotT]]]): Code[Exvr[T]] = Loc(iD)
 end Inp
 // todo add variance, like here, to all primitives, for the sake of metaprogramming?
 // todo  | Code[Name[? <: T]]
@@ -22,14 +22,14 @@ end Inp
   * Dual of [[Inp]]
   */
 object Out:
-  def apply[T <: TopT](iD: Code[Cnst[ChanT[OffTopT, T]]]): Code[Xctr[T]] = Loc(iD)
+  def apply[T <: TopT](iD: Code[Cnst[ChanT[OffTopT, T]]]): Code[Xcvr[T]] = Loc(iD)
 end Out
 // todo  | Code[Name[? >: T]]
 
 /**
   * General [[Polr]] for input and output. Note that it can only be an [[Expr]] or a [[Xctr]].
   */
-final case class Loc[P >: BotT, N <: P & TopT](iD: Code[Cnst[ChanT[P, N]]]) extends Code[Polr[P, N]]
+final case class Loc[P >: BotT, N <: P & TopT](iD: Code[Cnst[ChanT[P, N]]]) extends Code[Povr[P, N]]
 
 /**
   * A hard-coded connection between one input and one output
@@ -66,23 +66,23 @@ final case class Deply[I <: TopPoS, O <: TopPoS](
   *
   * Can be implemented in terms of the other primitives.
   */
-final case class Ignore() extends Code[Xctr[TopT]]
+final case class Ignore() extends Code[Xcvr[TopT]]
 
 /**
   * Spreads a value to multiple recipients.
   */
-final case class Spread[T <: TopT](recipients: Code[Args[Xctr[T]]]) extends Code[Xctr[T]]
+final case class Spread[T <: TopT](recipients: Code[Args[Xctr[T]]]) extends Code[Xcvr[T]]
 
 /**
   * Forwards the inputted value once signalled to do so.
   */
-final case class Hold[T <: TopT](signal: Code[Expr[PulseT]], value: Code[Expr[T]]) extends Code[Expr[T]]
+final case class Hold[T <: TopT](signal: Code[Expr[PulseT]], value: Code[Expr[T]]) extends Code[Exvr[T]]
 
 /**
   * Upon reception of a value, outputs a pulse. It only communicates the arrival of the value,
   * but forgets/ignores about the actual value.
   */
-final case class Signal(trigger: Code[Expr[?]]) extends Code[Expr[PulseT]]
+final case class Signal(trigger: Code[Expr[?]]) extends Code[Exvr[PulseT]]
 
 /**
   * Forwards one of the inputs. Is guaranteed to forward a value if any of the inputs yields a value.
@@ -108,4 +108,4 @@ end UnPick
 /**
   * General [[Polr]] for picking. Note that it can only be an [[Expr]] or an [[Xctr]].
   */
-final case class PickP[P >: BotT, N <: TopT](connections: Code[ArgsS[true, Polr[P, N]]]) extends Code[Polr[P, N]]
+final case class PickP[P >: BotT, N <: TopT](connections: Code[ArgsS[true, Polr[P, N]]]) extends Code[Povr[P, N]]

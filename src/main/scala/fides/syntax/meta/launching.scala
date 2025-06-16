@@ -2,7 +2,7 @@ package fides.syntax.meta
 
 import fides.syntax.core.Code
 import fides.syntax.identifiers.Identifier
-import fides.syntax.types.{Aplr, Expr, QuotedT, SignedT}
+import fides.syntax.types.{Aplr, Expr, Exvr, QuotedT, SignedT}
 
 /**
   * Launches [[code]] as a new process, and outputs a signed value of the code, confirming the launch.
@@ -10,6 +10,6 @@ import fides.syntax.types.{Aplr, Expr, QuotedT, SignedT}
   * In the code, all the [[Channel]]s used in [[InpChan]]s undergo automatic renaming.
   * The new names are visible in the outputted code certificate.
   */
-final case class Launch(code: Code[Expr[QuotedT[Aplr]]]) extends Code[Expr[SignedT[QuotedT[Aplr]]]]
+final case class Launch(code: Code[Expr[QuotedT[Aplr]]]) extends Code[Exvr[SignedT[QuotedT[Aplr]]]]
 
 case object Launcher extends Identifier

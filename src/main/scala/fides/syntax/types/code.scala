@@ -29,9 +29,10 @@ sealed trait Aplr extends TopS
 /**
   * [[Polr]] is a generalization of expressions and patterns.
   */
-sealed trait Polr[+P >: BotT, -N <: TopT] extends TopS
+sealed trait PolrS[+P >: BotT, -N <: TopT, +IsLiteral <: Boolean] extends TopS
+type Polr[+P >: BotT, -N <: TopT] = PolrS[P, N, Boolean]
 
-type TopPoS = Polr[OffTopT, OffBotT]
+type TopPoS = PolrS[OffTopT, OffBotT, Boolean]
 
 /**
   * Fides code type for expressions. While expressions are really just a special type of process with a single output,
@@ -41,14 +42,7 @@ type TopPoS = Polr[OffTopT, OffBotT]
   *
   * Dual of Xctr
   */
-type Expr[+T <: TopT] = Polr[T, OffBotT]
-
-/**
-  * Fides code type for constants
-  *
-  * It differs from [[Ntrl]] in that it allows for covariance, which is what we want when a constant is needed.
-  */
-type Cnst[+T <: TopT] = Expr[T] & Lit
+type Expr[+T <: TopT] = PolrS[T, OffBotT, Boolean]
 
 /**
   * Fides code type for extractors (aka patterns). While extractors are really just a special type of
@@ -59,18 +53,38 @@ type Cnst[+T <: TopT] = Expr[T] & Lit
   *
   * Dual of Expr
   */
-type Xctr[-T <: TopT] = Polr[OffTopT, T]
+type Xctr[-T <: TopT] = PolrS[OffTopT, T, Boolean]
 
 /**
   * Fides code type for Literals
   *
   * Can be used as either an [[Expr]] or as an [[Xctr]]. Is naturally a [[Cnst]].
   */
-type Ntrl[T <: TopT] = Polr[T, T] & Lit
+type Ntrl[T <: TopT] = PolrS[T, T, true]
 
+/**
+  * Fides code type for bi-polar process code
+  */
 sealed trait Bipo[I <: TopPoS, O <: TopPoS] extends TopS
 
 /**
-  * Used to mark the code types that represent constants.
+  * [[Polr]] that is not a literal
   */
-private[types] sealed trait Lit extends TopS
+type Povr[+P >: BotT, -N <: TopT] = PolrS[P, N, false]
+
+/**
+  * [[Expr]] that is not a literal
+  */
+type Exvr[+T <: TopT] = PolrS[T, OffBotT, false]
+
+/**
+  * Fides code type for constants
+  *
+  * It differs from [[Ntrl]] in that it allows for covariance, which is what we want when a constant is needed.
+  */
+type Cnst[+T <: TopT] = PolrS[T, OffBotT, true]
+
+/**
+  * [[Xctr]] that is not a literal
+  */
+type Xcvr[-T <: TopT] = PolrS[OffTopT, T, Boolean]
