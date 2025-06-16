@@ -38,6 +38,6 @@ final case class AddElementP[P <: N, N <: TopT](
   * As an Xctr, outputs the elements of a Collected to [[elementSource]], and its size to [[size]].
   */
 final case class Collect[P >: BotT, N <: P & TopT](
-  elementSource: Code[Cnst[ChanT[P, N]]], // TODO replace by Loc?
+  elementSource: Code[Cnst[ChanT[P, N]]], // todo replace by Loc?
   size: Code[Polr[NaturalNumberT, NaturalNumberT]],
 ) extends Code[Povr[Collected[P], Collected[N]]]

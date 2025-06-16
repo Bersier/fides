@@ -1,24 +1,21 @@
 package fides.syntax.signatures
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Expr, Exvr, IdentifierKeyT, IdentifierT, SignedT, TopT, Xctr, Xcvr}
+import fides.syntax.types.{Cnst, Expr, Exvr, IdentifierKeyT, IdentifierT, SignedT, TopT, Xctr, Xcvr}
 
-///**
-//  * Signed values are guaranteed to have been created using a key corresponding to [[signature]].
-//  *
-//  * @param document  the signed value
-//  * @param signature the identifier corresponding to the key that was used to sign the document
-//  * @tparam T the type of the signed value
-//  */
-//final case class Signed[+T <: ValTop] private(document: Lit[T], signature: Identifier) extends Lit[Signed[T]], ValTop
-//object Signed:
-//  /**
-//    * Signed values can only be created from keys, but only reveal the corresponding identifier.
-//    */
-//  private[fides] def newInstance[T <: ValTop](document: Lit[T], signatory: IdentifierKey): Signed[T] =
-//    new Signed(document, signatory.identifier)
-//end Signed
-// TODO Can't quotes contain SignedT values?
+/**
+  * Signed values are guaranteed to have been created using a key corresponding to [[signature]].
+  *
+  * Signed values can only be created from keys, but only reveal the corresponding identifier.
+  *
+  * @param document  the signed value
+  * @param signature the identifier corresponding to the key that was used to sign the document
+  * @tparam T the type of the signed value
+  */
+final case class Signed[T <: TopT] private[fides] (
+  document: Code[Cnst[T]],
+  signature: Code[Cnst[IdentifierT]],
+) extends Code[Cnst[SignedT[T]]]
 
 /**
   * Primitive to sign values
