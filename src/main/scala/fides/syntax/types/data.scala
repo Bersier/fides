@@ -44,7 +44,7 @@ sealed trait SignedT[+T <: TopT] extends TopT
 sealed trait ChanT[+InpT >: BotT, -OutT <: InpT & TopT] extends IdentifierT
 
 sealed trait CollectedT[+IsNonEmpty <: Boolean, +T >: BotT] extends TopT
-type Collected[+T >: BotT] = CollectedT[Boolean, T]
+type BagT[+T >: BotT] = CollectedT[Boolean, T]
 
 sealed trait OrderT extends AtomT
 sealed trait KillT extends OrderT

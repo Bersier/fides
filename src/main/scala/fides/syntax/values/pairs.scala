@@ -1,7 +1,7 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{BotT, PairT, PolrS, TopT}
+import fides.syntax.types.{BotT, PairT, Polar, TopT}
 
 import scala.compiletime.ops.boolean.&&
 
@@ -16,6 +16,6 @@ final case class Pair[
   L1 <: Boolean,
   L2 <: Boolean,
 ](
-  first: Code[PolrS[P1, N1, L1]],
-  second: Code[PolrS[P2, N2, L2]],
-) extends Code[PolrS[PairT[P1, P2], PairT[N1, N2], L1 && L2]]
+  first: Code[Polar[P1, N1, L1]],
+  second: Code[Polar[P2, N2, L2]],
+) extends Code[Polar[PairT[P1, P2], PairT[N1, N2], L1 && L2]]

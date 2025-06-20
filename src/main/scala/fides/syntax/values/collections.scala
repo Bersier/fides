@@ -1,12 +1,12 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{BotT, ChanT, Cnst, Collected, CollectedT, NaturalNumberT, Ntrl, OffBotT, Polr, Povr, TopT}
+import fides.syntax.types.{BotT, ChanT, Cnst, BagT, CollectedT, NaturalNumberT, Ntrl, OffBotT, Polr, Povr, TopT}
 
 /**
   * A literal for a value that is made up of an unordered collection of values.
   */
-object Collected:
+object Collected: // todo make this a proper syntactic element
   def apply[T <: TopT](): None = Empty
   def apply[T <: TopT](first: Code[Cnst[T]], others: Code[Cnst[T]]*): Some[T] =
     new NonEmpty(first, others*)
@@ -29,7 +29,7 @@ end Collected
   */
 final case class AddElementP[P <: N, N <: TopT](
   element: Code[Polr[P, N]],
-  others: Code[Polr[Collected[P], Collected[N]]],
+  others: Code[Polr[BagT[P], BagT[N]]],
 ) extends Code[Povr[CollectedT[true, P], CollectedT[true, N]]]
 
 /**
@@ -40,4 +40,4 @@ final case class AddElementP[P <: N, N <: TopT](
 final case class Collect[P >: BotT, N <: P & TopT](
   elementSource: Code[Cnst[ChanT[P, N]]], // todo replace by Loc?
   size: Code[Polr[NaturalNumberT, NaturalNumberT]],
-) extends Code[Povr[Collected[P], Collected[N]]]
+) extends Code[Povr[BagT[P], BagT[N]]]
