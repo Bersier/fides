@@ -6,19 +6,24 @@ import fides.syntax.types.{BotT, ChanT, Cnst, BagT, CollectedT, NaturalNumberT, 
 /**
   * A literal for a value that is made up of an unordered collection of values.
   */
-object Collected: // todo make this a proper syntactic element
+trait Collected[T <: TopT] extends Code[Ntrl[BagT[T]]]  // todo
+object Collected:
   def apply[T <: TopT](): None = Empty
   def apply[T <: TopT](first: Code[Cnst[T]], others: Code[Cnst[T]]*): Some[T] =
     new NonEmpty(first, others*)
+//  def unapplySeq(collected: Collected): IndexedSeq[Code[]]
 
   type None = Code[Ntrl[CollectedT[false, OffBotT]]]
   type Some[T <: TopT] = Code[Ntrl[CollectedT[true, T]]]
 
-  private case object Empty extends None:
+  private case object Empty extends Collected[OffBotT], None:
     def elements: Iterable[Code[Cnst[OffBotT]]] = Iterable.empty
-  private final class NonEmpty[T <: TopT](first: Code[Cnst[T]], others: Code[Cnst[T]]*) extends Some[T]:
+  private final class NonEmpty[T <: TopT](first: Code[Cnst[T]], others: Code[Cnst[T]]*) extends Collected[T], Some[T]:
     val elements: Iterable[Code[Cnst[T]]] = first +: others
+    // todo we should not be able to see the order of the elements...
 end Collected
+// todo do we really need to distinguish between empty and non-empty? It looks like we need to for PickP...
+// todo Constructor should use Args
 
 /**
   * As an Expr, outputs a Collected with one element added to it.
@@ -41,3 +46,4 @@ final case class Collect[P >: BotT, N <: P & TopT](
   elementSource: Code[Cnst[ChanT[P, N]]], // todo replace by Loc?
   size: Code[Polr[NaturalNumberT, NaturalNumberT]],
 ) extends Code[Povr[BagT[P], BagT[N]]]
+// todo does it only start collecting after having received [[size]]?

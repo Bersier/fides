@@ -62,7 +62,7 @@ final case class Deply[I <: TopPoS, O <: TopPoS](
 /**
   * Kind-of the dual of values.
   *
-  * Aka Sink, Forget
+  * Aka Sink, Forget, Discard, Drop
   *
   * Can be implemented in terms of the other primitives.
   */
