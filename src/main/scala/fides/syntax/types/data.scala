@@ -5,14 +5,30 @@ package fides.syntax.types
   */
 sealed trait TopT private[types]()
 
+/**
+  * Lower bound for all data types
+  */
 type BotT = Nothing
 // todo replace by true intersection, and use as bound everywhere appropriate
 
+/**
+  * A type greater than [[TopT]]
+  *
+  * Indicates an unreachable data type in contravariant position.
+  */
 type OffTopT = Any
+
+/**
+  * A type smaller than [[BotT]]
+  *
+  * Indicates an unreachable data type (in covariant position).
+  */
 type OffBotT = Nothing
 
 /**
-  * Data type for atomic values. Atomic values
+  * Data type for atomic values
+  *
+  * Atomic values
   *  - can be tested for equality.
   *  - cannot be decomposed.
   */
