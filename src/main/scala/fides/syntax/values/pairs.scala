@@ -19,3 +19,4 @@ final case class Pair[
   first: Code[Polar[P1, N1, L1]],
   second: Code[Polar[P2, N2, L2]],
 ) extends Code[Polar[PairT[P1, P2], PairT[N1, N2], L1 && L2]]
+// todo replace by typed dictionary?

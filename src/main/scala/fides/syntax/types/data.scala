@@ -58,6 +58,8 @@ sealed trait SignedT[+T <: TopT] extends TopT
   * Data type for Channels
   */
 sealed trait ChanT[+InpT >: BotT, -OutT <: InpT & TopT] extends IdentifierT
+type InpChanT[+InpT >: BotT] = ChanT[InpT, OffBotT]
+type OutChanT[-OutT <: TopT] = ChanT[OffTopT, OutT]
 
 sealed trait CollectedT[+IsNonEmpty <: Boolean, +T >: BotT] extends TopT
 type BagT[+T >: BotT] = CollectedT[Boolean, T]

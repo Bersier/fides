@@ -2,6 +2,7 @@ package fides.syntax.connectors
 
 import fides.syntax.core.Code
 import fides.syntax.types.*
+import fides.syntax.meta.Args
 
 /**
   * Absorbs from the location referred to by [[iD]]. Reduces to the received val after reception.
@@ -33,15 +34,11 @@ final case class Loc[P >: BotT, N <: P & TopT](iD: Code[Cnst[ChanT[P, N]]]) exte
 
 /**
   * A hard-coded connection between one input and one output
-  *
-  * Equivalent to [[Spread]]([[inp]], [[Args]]([[out]])).
   */
 final case class Forward[T <: TopT](inp: Code[Expr[T]], out: Code[Xctr[T]]) extends Code[Aplr]
 
 /**
   * Dual of Forward. The connection between [[inp]] and [[out]] is instead achieved via variables.
-  *
-  * Equivalent to [[Spread]]([[inp]], [[Args]]([[out]])).
   */
 final case class Backward[I <: TopPoS, O <: TopPoS](
   declarations: Code[Args[DeclS[?]]],
@@ -64,9 +61,9 @@ final case class Deply[I <: TopPoS, O <: TopPoS](
   *
   * Aka Sink, Forget, Discard, Drop
   *
-  * Can be implemented in terms of the other primitives.
+  * [[Ignore]]`() <: `[[Code]]`[`[[Xcvr]]`[`[[TopT]]`]]`
   */
-final case class Ignore() extends Code[Xcvr[TopT]]
+def Ignore() = Spread(Args()) // todo delete?
 
 /**
   * Spreads a value to multiple recipients.

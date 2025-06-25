@@ -32,7 +32,7 @@ sealed trait Aplr extends TopS
 sealed trait Polar[+P >: BotT, -N <: TopT, +IsLiteral <: Boolean] extends TopS
 type Polr[+P >: BotT, -N <: TopT] = Polar[P, N, Boolean]
 
-type TopPoS = Polar[OffTopT, OffBotT, Boolean]
+type TopPoS = Polr[OffTopT, OffBotT]
 
 /**
   * Fides code type for expressions. While expressions are really just a special type of process with a single output,
@@ -42,7 +42,7 @@ type TopPoS = Polar[OffTopT, OffBotT, Boolean]
   *
   * Dual of Xctr
   */
-type Expr[+T <: TopT] = Polar[T, OffBotT, Boolean]
+type Expr[+T <: TopT] = Polr[T, OffBotT]
 
 /**
   * Fides code type for extractors (aka patterns). While extractors are really just a special type of
@@ -53,7 +53,7 @@ type Expr[+T <: TopT] = Polar[T, OffBotT, Boolean]
   *
   * Dual of Expr
   */
-type Xctr[-T <: TopT] = Polar[OffTopT, T, Boolean]
+type Xctr[-T <: TopT] = Polr[OffTopT, T]
 
 /**
   * Fides code type for Literals
@@ -87,4 +87,4 @@ type Cnst[+T <: TopT] = Polar[T, OffBotT, true]
 /**
   * [[Xctr]] that is not a literal
   */
-type Xcvr[-T <: TopT] = Polar[OffTopT, T, Boolean]
+type Xcvr[-T <: TopT] = Polar[OffTopT, T, false]
