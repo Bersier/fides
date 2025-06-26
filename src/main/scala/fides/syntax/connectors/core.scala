@@ -57,16 +57,9 @@ final case class Deply[I <: TopPoS, O <: TopPoS](
 ) extends Code[I]
 
 /**
-  * Kind-of the dual of values.
-  *
-  * Aka Sink, Forget, Discard, Drop
-  *
-  * [[Ignore]]`() <: `[[Code]]`[`[[Xcvr]]`[`[[TopT]]`]]`
-  */
-def Ignore() = Spread(Args()) // todo delete?
-
-/**
   * Spreads a value to multiple recipients.
+  *
+  * [[Spread]]`(`[[Args]]`())` is equivalent to Ignore/Sink/Forget/Discard/Drop.
   */
 final case class Spread[T <: TopT](recipients: Code[Args[Xctr[T]]]) extends Code[Xcvr[T]]
 
