@@ -13,7 +13,7 @@ case object Start extends Code[Ntrl[StartT]]
   * @param awake indicates the current state of the process (whether it's awake or asleep)
   * @param body the process that can be paused
   */
-//final case class Pausable(awake: Code[Cell[BoolT]], body: Code[Process]) extends Process
+//final case class Pausable(awake: Code[Cell[BoolT]], body: Code[Aplr]) extends Code[Aplr]
 
 /**
   * Upon reception of a pulse, the body's execution is started.

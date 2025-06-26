@@ -9,7 +9,7 @@ import izumi.reflect.Tag
   */
 final case class Match[T <: TopT, U <: TopT](
   pattern: Code[Xctr[T]],
-  alternative: Code[Xctr[U]] = Ignore(),
+  alternative: Code[Xctr[U]],
 ) extends Code[Xcvr[T | U]]
 
 /**
