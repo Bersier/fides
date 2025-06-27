@@ -41,6 +41,9 @@ type TopPoS = Polr[OffTopT, OffBotT]
   * This syntactic behavior can be viewed as some kind of mandatory syntactic sugar.
   *
   * Dual of Xctr
+  *
+  * Expressions should probably not be allowed to have any output effects
+  * (i.e. no outgoing connections with external code).
   */
 type Expr[+T <: TopT] = Polr[T, OffBotT]
 
@@ -52,6 +55,9 @@ type Expr[+T <: TopT] = Polr[T, OffBotT]
   * output being flipped.
   *
   * Dual of Expr
+  *
+  * Extractors should probably not be allowed to have any input effects
+  * (i.e. no incoming connections with external code).
   */
 type Xctr[-T <: TopT] = Polr[OffTopT, T]
 
@@ -64,6 +70,9 @@ type Ntrl[T <: TopT] = Polar[T, T, true]
 
 /**
   * Fides code type for bi-polar process code
+  *
+  * Bi-polar process code should probably not be allowed to have any side effects
+  * (i.e. no connections with external code).
   */
 sealed trait Bipo[I <: TopPoS, O <: TopPoS] extends TopS
 
