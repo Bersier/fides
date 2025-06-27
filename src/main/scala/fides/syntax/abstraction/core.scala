@@ -3,7 +3,7 @@ package fides.syntax.abstraction
 import fides.syntax.core.Code
 import fides.syntax.identifiers.Identifier
 import fides.syntax.meta.Args
-import fides.syntax.types.{Aplr, Args, Expr, TopS, TopT}
+import fides.syntax.types.{Aplr, Args, Expr, NameS, TopS, TopT}
 import util.TList
 
 // todo use lazy HOAS approach?
@@ -11,7 +11,7 @@ import util.TList
 // todo polymorphic abstractions?
 //  Variance? Type bounds ?!
 
-final case class Lambda()
+final case class Function[T <: TopT](parameter: Code[NameS[T]], body: Any)
 
 //final case class Mapping[L <: TList[(Identifier, CodeType)]](arguments: L) extends CodeType
 

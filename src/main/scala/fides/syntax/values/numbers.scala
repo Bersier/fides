@@ -21,7 +21,7 @@ end NaturalNumber
   * Outputs the sum of the inputs.
   */
 final case class Add[N <: WholeNumberT](terms: Code[Args[Expr[N]]]) extends Code[Exvr[N]]
-// todo should it take a collection of numbers instead?
+// todo take a collection of numbers instead
 
 /**
   * Outputs the negation of the input.
