@@ -1,7 +1,7 @@
 package fides.syntax.control
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Aplr, ChanT, Cnst, ErrorT, Expr, KillT, Ntrl, OffTopT, PauseT, PulseT, StartT, TopT, Xctr}
+import fides.syntax.types.*
 
 case object Kill extends Code[Ntrl[KillT]]
 case object Pause extends Code[Ntrl[PauseT]]
@@ -10,16 +10,19 @@ case object Start extends Code[Ntrl[StartT]]
 /**
   * A pausable process
   *
-  * @param awake indicates the current state of the process (whether it's awake or asleep)
+  * @param awake indicates the current state of the process (whether it's awake or asleep),
+  *              is like a mutable variable declaration // todo no scope; more like a loc, but with different semantics?
   * @param body the process that can be paused
   */
-//final case class Pausable(awake: Code[Cell[BoolT]], body: Code[Aplr]) extends Code[Aplr]
+final case class Pausable(awake: Code[NameS[BoolT]], body: Code[Aplr]) extends Code[Aplr]
 
 /**
-  * Upon reception of a pulse, the body's execution is started.
+   * Delays [[body]] until [[signal]] is received.
+   *
+   * Executes the body only if the received signal is [[True]].
+   * If [[False]], the body is discarded without getting executed.
   */
-final case class OnHold(startSignal: Code[Expr[PulseT]], body: Code[Aplr]) extends Code[Aplr]
-// todo OnHold for expressions...
+final case class Contingent(signal: Code[Expr[BoolT]], body: Code[Aplr]) extends Code[Aplr]
 
 /**
   * A killable process
