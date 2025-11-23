@@ -2,18 +2,10 @@ package util
 
 import scala.annotation.targetName
 import scala.compiletime.ops.int.{+, <=}
-import scala.compiletime.{constValue, error}
+import scala.compiletime.constValue
 import scala.util.Random
 
 // todo move to Misc repository
-
-@main def testBag(): Unit =
-  val bag: Bag[Int, 5] = Bag(1, 2, 3, 4, 5)
-  println(bag)
-  println()
-  for _ <- 0 until 10 do
-    println(bag.randomSample(20))
-
 trait Bag[+T, Size <: Int] extends Bag.Unsized[T]:
   final def randomSamplePoint(generator: Random = Random)(using 1 <= Size =:= true): T =
     randomSamplePointUnsafe(generator)
@@ -28,8 +20,9 @@ trait Bag[+T, Size <: Int] extends Bag.Unsized[T]:
 
   protected def randomSamplePointUnsafe(generator: Random): T
 
-  // todo confusing override logic
-  protected def randomSampleUnsafe(size: Int, generator: Random): Bag.Unsized[T] = size match
+  protected def randomSampleUnsafe(size: Int, generator: Random): Bag.Unsized[T]
+
+  final protected def randomSampleUnsafeHelper(size: Int, generator: Random): Bag.Unsized[T] = size match
     case 0 => Bag.Zero
     case 1 => Bag.One(randomSamplePointUnsafe(generator))
     case _ => Bag.Any(iterator.toList.reverse, this.size).randomSampleUnsafe(size, generator)
@@ -67,6 +60,10 @@ object Bag:
     protected def randomSamplePointUnsafe(generator: Random): Nothing =
       throw new AssertionError("Unreachable")
 
+    protected def randomSampleUnsafe(size: Int, generator: Random): Bag.Unsized[Nothing] = size match
+      case 0 => Bag.Zero
+      case i => throw AssertionError(i)
+    
     protected def randomSampleWithoutRepetitionsUnsafe(size: Int, generator: Random): Unsized[Nothing] =
       size match
         case 0 => this
@@ -86,6 +83,14 @@ object Bag:
 
     def randomSamplePointUnsafe(generator: Random): T = e
 
+    protected def randomSampleUnsafe(size: Int, generator: Random): Bag.Unsized[T] = size match
+      case 0 => Bag.Zero
+      case 1 => Bag.One(e)
+      case 2 => Bag.Two(e, e)
+      case 3 => Bag.Three(e, e, e)
+      case 4 => Bag.Four(e, e, e, e)
+      case _ => Bag.Any(List.fill(size)(e), this.size)
+      
     def randomSampleWithoutRepetitionsUnsafe(size: Int, generator: Random): Unsized[T] =
       if size == 0 then Zero else this
 
@@ -106,6 +111,9 @@ object Bag:
     def randomSamplePointUnsafe(generator: Random): T =
       if generator.nextBoolean() then e1 else e2
 
+    protected def randomSampleUnsafe(size: Int, generator: Random): Bag.Unsized[T] =
+      randomSampleUnsafeHelper(size, generator)
+    
     protected def randomSampleWithoutRepetitionsUnsafe(size: Int, generator: Random): Unsized[T] =
       size match
         case 0 => Zero
@@ -129,11 +137,14 @@ object Bag:
     override def size: 3 = 3
 
     def randomSamplePointUnsafe(generator: Random): T =
-      (generator.nextBoolean(), generator.nextBoolean()) match
-        case (false, false) => e1
-        case (false, true ) => e2
-        case (true , false) => e3
-        case (true , true ) => randomSamplePointUnsafe(generator)
+      generator.nextInt(3) match
+        case 0 => e1
+        case 1 => e2
+        case 2 => e3
+        case i => throw AssertionError(i)
+
+    protected def randomSampleUnsafe(size: Int, generator: Random): Bag.Unsized[T] =
+      randomSampleUnsafeHelper(size, generator)
 
     protected[Bag] def randomSampleWithoutRepetitionsUnsafe(size: Int, generator: Random): Unsized[T] =
       size match
@@ -144,11 +155,11 @@ object Bag:
         case _ => throw AssertionError(size)
 
     private def randomSampleWithoutRepetitionsOfSize2(generator: Random): Two[T] =
-      (generator.nextBoolean(), generator.nextBoolean()) match
-        case (false, false) => Two(e2, e3)
-        case (false, true ) => Two(e1, e3)
-        case (true , false) => Two(e1, e2)
-        case (true , true ) => randomSampleWithoutRepetitionsOfSize2(generator)
+      generator.nextInt(3) match
+        case 0 => Two(e2, e3)
+        case 1 => Two(e1, e3)
+        case 2 => Two(e1, e2)
+        case i => throw AssertionError(i)
 
   end Three
 
@@ -167,11 +178,15 @@ object Bag:
     override def size: 4 = 4
 
     def randomSamplePointUnsafe(generator: Random): T =
-      (generator.nextBoolean(), generator.nextBoolean()) match
-        case (false, false) => e1
-        case (false, true ) => e2
-        case (true , false) => e3
-        case (true , true ) => e4
+      generator.nextInt(3) match
+        case 0 => e1
+        case 1 => e2
+        case 2 => e3
+        case 3 => e4
+        case i => throw AssertionError(i)
+
+    protected def randomSampleUnsafe(size: Int, generator: Random): Bag.Unsized[T] =
+      randomSampleUnsafeHelper(size, generator)
 
     protected def randomSampleWithoutRepetitionsUnsafe(size: Int, generator: Random): Unsized[T] =
       size match
@@ -183,11 +198,12 @@ object Bag:
         case _ => throw AssertionError(size)
 
     private def randomSampleWithoutRepetitionsOfSize3(generator: Random): Three[T] =
-      (generator.nextBoolean(), generator.nextBoolean()) match
-        case (false, false) => Three(e2, e3, e4)
-        case (false, true ) => Three(e1, e3, e4)
-        case (true , false) => Three(e1, e2, e4)
-        case (true , true ) => Three(e1, e2, e3)
+      generator.nextInt(3) match
+        case 0 => Three(e2, e3, e4)
+        case 1 => Three(e1, e3, e4)
+        case 2 => Three(e1, e2, e4)
+        case 3 => Three(e1, e2, e3)
+        case i => throw AssertionError(i)
 
   end Four
 
@@ -210,30 +226,30 @@ object Bag:
 
     protected[Bag] override def randomSampleUnsafe(size: Int, generator: Random): Unsized[T] =
       // todo dubious numeric stability; write a better version using Spire Real
-      inline def repetitionCount(inline sampleSize: Int, inline size: Int): Int =
-        val q = 1 - 1.0 / size
-        val r = q * size
+      inline def repetitionCount(inline sampleSize: Int, inline elementCount: Int): Int =
+        val q = 1 - 1.0 / elementCount
+        val r = q * elementCount
         def repetitionCount(randomDouble: Double, probability: Double, count: Int): Int =
           assert(count <= sampleSize)
           if randomDouble < probability then count else
             val newProbability = (sampleSize - count) / (count + 1.0) * probability / r
             repetitionCount(randomDouble - probability, newProbability, count + 1)
-        if size == 1 then sampleSize else
+        if elementCount == 1 then sampleSize else
           repetitionCount(generator.nextDouble(), math.pow(q, sampleSize), 0)
-      def randomSample(sampleSize: Int, size: Int, elements: List[T], acc: List[T]): List[T] =
+      def randomSample(sampleSize: Int, elementCount: Int, elements: List[T], acc: List[T]): List[T] =
         if sampleSize == 0 then acc else
-          val count = repetitionCount(sampleSize, size)
-          randomSample(sampleSize - count, size - 1, elements.tail, withRepeated(elements.head, count, acc))
+          val count = repetitionCount(sampleSize, elementCount)
+          randomSample(sampleSize - count, elementCount - 1, elements.tail, withRepeated(elements.head, count, acc))
       optimizedUnsafe(randomSample(size, this.size, elements, Nil), size)
 
     protected def randomSampleWithoutRepetitionsUnsafe(size: Int, generator: Random): Unsized[T] =
-      inline def pickProbability(inline sampleSize: Int, inline size: Int): Double =
-        sampleSize.toDouble / size.toDouble
-      def randomSample(sampleSize: Int, size: Int, elements: List[T], acc: List[T]): List[T] =
+      inline def pickProbability(inline sampleSize: Int, inline elementCount: Int): Double =
+        sampleSize.toDouble / elementCount.toDouble
+      def randomSample(sampleSize: Int, elementCount: Int, elements: List[T], acc: List[T]): List[T] =
         if sampleSize == 0 then acc else
-          if bernoulliSample(pickProbability(sampleSize, size), generator)
-          then randomSample(sampleSize - 1, size -1, elements.tail, elements.head :: acc)
-          else randomSample(sampleSize, size - 1, elements.tail, acc)
+          if bernoulliSample(pickProbability(sampleSize, elementCount), generator)
+          then randomSample(sampleSize - 1, elementCount -1, elements.tail, elements.head :: acc)
+          else randomSample(sampleSize, elementCount - 1, elements.tail, acc)
       optimizedUnsafe(randomSample(size, this.size, elements, Nil), size)
 
   end Any
