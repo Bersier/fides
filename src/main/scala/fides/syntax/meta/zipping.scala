@@ -2,7 +2,7 @@ package fides.syntax.meta
 
 import fides.syntax.core.Code
 import fides.syntax.types.{ArgsS, CollectedT, OffBotT, Polr, Povr, QuotedT, TopS}
-import util.{Bag, FiniteObservable}
+import observable.{Async, DefiniteObserver, FiniteObservable}
 
 /**
   * Used for unordered collections of pieces of code, at the syntax level.
@@ -19,9 +19,15 @@ object Args:
   type Some[+S <: TopS] = Code[ArgsS[true, S]]
 
   private case object Empty extends Args[OffBotT], None:
-    def arguments: FiniteObservable[Code[OffBotT]] = Bag()
+    def arguments: FiniteObservable[Code[OffBotT]] =
+      (observer: DefiniteObserver[Code[OffBotT]]) => observer.withSize(0)
   private final class NonEmpty[+S <: TopS](first: Code[S], others: Code[S]*) extends Args[S], Some[S]:
-    val arguments: FiniteObservable[Code[S]] = Bag(first +: others *)
+    val arguments: FiniteObservable[Code[S]] = new FiniteObservable[Code[S]]:
+      private val arguments = first +: others
+
+      def foreach(observer: DefiniteObserver[Code[S]]): Async =
+        for argument <- arguments do observer.update(argument)
+        observer.withSize(arguments.size)
 end Args
 
 /**
