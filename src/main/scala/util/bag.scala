@@ -41,11 +41,12 @@ object Bag:
   def apply[T](e1: T, e2: T): Bag[T, 2] = Two(e1, e2)
   def apply[T](e1: T, e2: T, e3: T): Bag[T, 3] = Three(e1, e2, e3)
   def apply[T](e1: T, e2: T, e3: T, e4: T): Bag[T, 4] = Four(e1, e2, e3, e4)
+  def apply[T](elements: T*): Bag[T, Int] = applyUnsafe(elements)
   inline def apply[T, S <: Int & Singleton](e1: T, e2: T, e3: T, e4: T, e5: T, elements: T*): Bag[T, S] =
     assert(constValue[S] == elements.length + 5)
     applyUnsafe(IndexedSeq(e1, e2, e3, e4, e5) ++ elements).asInstanceOf[Bag[T, S]]
 
-  private def applyUnsafe[T](elements: IndexedSeq[T]): Bag[T, Int] =
+  private def applyUnsafe[T](elements: Seq[T]): Bag[T, Int] =
     Any(elements.toList.reverse, elements.length)
 
   private object Zero extends Bag[Nothing, 0]:
@@ -63,7 +64,7 @@ object Bag:
     protected def randomSampleUnsafe(size: Int, generator: Random): Bag.Unsized[Nothing] = size match
       case 0 => Bag.Zero
       case i => throw AssertionError(i)
-    
+
     protected def randomSampleWithoutRepetitionsUnsafe(size: Int, generator: Random): Unsized[Nothing] =
       size match
         case 0 => this
@@ -90,7 +91,7 @@ object Bag:
       case 3 => Bag.Three(e, e, e)
       case 4 => Bag.Four(e, e, e, e)
       case _ => Bag.Any(List.fill(size)(e), this.size)
-      
+
     def randomSampleWithoutRepetitionsUnsafe(size: Int, generator: Random): Unsized[T] =
       if size == 0 then Zero else this
 
@@ -113,7 +114,7 @@ object Bag:
 
     protected def randomSampleUnsafe(size: Int, generator: Random): Bag.Unsized[T] =
       randomSampleUnsafeHelper(size, generator)
-    
+
     protected def randomSampleWithoutRepetitionsUnsafe(size: Int, generator: Random): Unsized[T] =
       size match
         case 0 => Zero
@@ -227,15 +228,16 @@ object Bag:
     protected[Bag] override def randomSampleUnsafe(size: Int, generator: Random): Unsized[T] =
       // todo dubious numeric stability; write a better version using Spire Real
       inline def repetitionCount(inline sampleSize: Int, inline elementCount: Int): Int =
-        val q = 1 - 1.0 / elementCount
-        val r = q * elementCount
-        def repetitionCount(randomDouble: Double, probability: Double, count: Int): Int =
+        val logQ = math.log1p(-1.0 / elementCount)
+        val logR = logQ + math.log(elementCount)
+        def repetitionCount(randomDouble: Double, logProbability: Double, count: Int): Int =
           assert(count <= sampleSize)
+          val probability = math.exp(logProbability)
           if randomDouble < probability then count else
-            val newProbability = (sampleSize - count) / (count + 1.0) * probability / r
-            repetitionCount(randomDouble - probability, newProbability, count + 1)
+            val newLogProbability = logProbability + math.log((sampleSize - count) / (count + 1.0)) - logR
+            repetitionCount(randomDouble - probability, newLogProbability, count + 1)
         if elementCount == 1 then sampleSize else
-          repetitionCount(generator.nextDouble(), math.pow(q, sampleSize), 0)
+          repetitionCount(generator.nextDouble(), sampleSize * logQ, 0)
       def randomSample(sampleSize: Int, elementCount: Int, elements: List[T], acc: List[T]): List[T] =
         if sampleSize == 0 then acc else
           val count = repetitionCount(sampleSize, elementCount)
