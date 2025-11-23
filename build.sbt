@@ -1,8 +1,9 @@
 name := "Fides"
 version := "0.1.0"
 
-// See https://repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/
-scalaVersion := "3.7.2-RC1-bin-20250610-a183140-NIGHTLY"
+// See https://www.scala-lang.org/news/new-scala-nightlies-repo.html
+scalaVersion := "3.8.1-RC1-bin-20251123-91351e3-NIGHTLY"
+resolvers += Resolver.scalaNightlyRepository
 
 libraryDependencies ++= Seq(
   "org.scala-lang" %% "scala3-staging" % scalaVersion.value,
