@@ -11,7 +11,7 @@ import scala.util.Random
   val bag: Bag[Int, 5] = Bag(1, 2, 3, 4, 5)
   println(bag)
   println()
-  for i <- 0 until 10 do
+  for _ <- 0 until 10 do
     println(bag.randomSample(20))
 
 trait Bag[+T, Size <: Int] extends Bag.Unsized[T]:

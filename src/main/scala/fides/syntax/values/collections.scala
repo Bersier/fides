@@ -6,8 +6,7 @@ import fides.syntax.types.{BotT, ChanT, Cnst, BagT, CollectedT, NaturalNumberT, 
 /**
   * A literal for a value that is made up of an unordered collection of values.
   */
-trait Collected[T <: TopT] extends Code[Ntrl[BagT[T]]]  // todo
-object Collected:
+object Collected: // todo
   def apply[T <: TopT](): None = Empty
   def apply[T <: TopT](first: Code[Cnst[T]], others: Code[Cnst[T]]*): Some[T] =
     new NonEmpty(first, others*)
@@ -16,9 +15,9 @@ object Collected:
   type None = Code[Ntrl[CollectedT[false, OffBotT]]]
   type Some[T <: TopT] = Code[Ntrl[CollectedT[true, T]]]
 
-  private case object Empty extends Collected[OffBotT], None:
+  private case object Empty extends None:
     def elements: Iterable[Code[Cnst[OffBotT]]] = Iterable.empty
-  private final class NonEmpty[T <: TopT](first: Code[Cnst[T]], others: Code[Cnst[T]]*) extends Collected[T], Some[T]:
+  private final class NonEmpty[T <: TopT](first: Code[Cnst[T]], others: Code[Cnst[T]]*) extends Some[T]:
     val elements: Iterable[Code[Cnst[T]]] = first +: others
     // todo we should not be able to see the order of the elements...
 end Collected

@@ -74,7 +74,7 @@ extension [S](o1: FiniteObservable[S])
 /**
   * Finite observable, whose size is eventually known
   */
-trait FiniteObservable[+T] extends Observable[T] with (DefiniteObserver[T] => Async):
+trait FiniteObservable[+T] extends Observable[T], ((IndefiniteObserver[T] | DefiniteObserver[T]) => Async):
   /**
     * Applies the given observer to this observable.
     */
