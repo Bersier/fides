@@ -10,7 +10,6 @@ object Collected: // todo
   def apply[T <: TopT](): None = Empty
   def apply[T <: TopT](first: Code[Cnst[T]], others: Code[Cnst[T]]*): Some[T] =
     new NonEmpty(first, others*)
-//  def unapplySeq(collected: Collected): IndexedSeq[Code[]]
 
   type None = Code[Ntrl[CollectedT[false, OffBotT]]]
   type Some[T <: TopT] = Code[Ntrl[CollectedT[true, T]]]
@@ -19,9 +18,7 @@ object Collected: // todo
     def elements: Iterable[Code[Cnst[OffBotT]]] = Iterable.empty
   private final class NonEmpty[T <: TopT](first: Code[Cnst[T]], others: Code[Cnst[T]]*) extends Some[T]:
     val elements: Iterable[Code[Cnst[T]]] = first +: others
-    // todo we should not be able to see the order of the elements...
 end Collected
-// todo do we really need to distinguish between empty and non-empty? It looks like we need to for PickP...
 // todo Constructor should use Args
 
 /**
