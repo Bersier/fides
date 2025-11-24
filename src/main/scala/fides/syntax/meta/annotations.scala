@@ -1,8 +1,9 @@
 package fides.syntax.meta
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Cnst, Expr, Exvr, NaturalNumberT, QuotedT, TopS, TopT}
+import fides.syntax.types.{Cnst, Expr, Exvr, NatT, QuotedT, TopS, TopT}
 import fides.syntax.values.NaturalNumber
+import typelevelnumbers.binary.Bits
 
 /**
   * An annotated piece of code. The annotation does not change the semantics of the code.
@@ -13,7 +14,7 @@ final case class Annotated[S <: TopS, T <: TopT](code: Code[S], annotation: Code
 final case class AnnotatedMatcher[S <: TopS, T <: TopT](
   code: Code[S],
   annotation: Code[Cnst[T]],
-  level: Code[Cnst[NaturalNumberT]] = NaturalNumber(0),
+  level: Code[Cnst[NatT]] = NaturalNumber(Bits.None),
 ) extends Code[S]
 
 /**

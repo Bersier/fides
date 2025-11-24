@@ -1,6 +1,9 @@
 
 lazy val root = (project in file("."))
-  .dependsOn(RootProject(uri("https://github.com/Bersier/observable.git")))
+  .dependsOn(
+    RootProject(uri("https://github.com/Bersier/observable.git")),
+    RootProject(uri("https://github.com/Bersier/TypeLevelNumbers.git")),
+  ) // to reload the dependencies, delete all copies of it in ~/.sbt/1.0/staging
   .settings(
     name := "Fides",
     version := "0.1.0",

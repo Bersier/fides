@@ -1,47 +1,28 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{ArgsUS, Expr, Exvr, NaturalNumberT, Ntrl, PairT, WholeNumberT}
-
-/**
-  * Integer values
-  */
-sealed class WholeNumber(val value: BigInt) extends Code[Ntrl[WholeNumberT]]:
-  override def toString: String = value.toString()
-end WholeNumber
+import fides.syntax.types.{CollectedUT, Expr, Exvr, NatBT, NatT, Ntrl}
+import typelevelnumbers.binary.Bits
 
 /**
   * Natural number values
   */
-final class NaturalNumber(value: BigInt) extends Code[Ntrl[NaturalNumberT]]:
-  assert(value >= 0)
+final case class NaturalNumber[B <: Bits](bits: B) extends Code[Ntrl[NatBT[B]]]:
+  assert(bits.withoutTrailingZeros == bits)
+  override def toString: String = bits.toBigInt.toString
 end NaturalNumber
 
 /**
   * Outputs the sum of the inputs.
   */
-final case class Add[N <: WholeNumberT](terms: Code[ArgsUS[Expr[N]]]) extends Code[Exvr[N]]
-// todo take a collection of numbers instead
-
-/**
-  * Outputs the negation of the input.
-  */
-final case class Negate(integer: Code[Expr[WholeNumberT]]) extends Code[Exvr[WholeNumberT]]
+final case class Add(terms: Code[Expr[CollectedUT[NatT]]]) extends Code[Exvr[NatT]]
 
 /**
   * Outputs the product of the inputs.
   */
-final case class Multiply[N <: WholeNumberT](factors: Code[ArgsUS[Expr[N]]]) extends Code[Exvr[N]]
-
-/**
-  * Outputs the quotient and the remainder of the division of the two inputs.
-  */
-final case class Divide[N <: WholeNumberT](
-  dividend: Code[Expr[N]],
-  divisor: Code[Expr[N]],
-) extends Code[Exvr[PairT[N, NaturalNumberT]]]
+final case class Multiply(factors: Code[Expr[CollectedUT[NatT]]]) extends Code[Exvr[NatT]]
 
 /**
   * Outputs -1 if the lhs is larger, 0 if they are equal, 1 if the rhs is larger.
   */
-final case class Compare(lhs: Code[Expr[WholeNumberT]], rhs: Code[Expr[WholeNumberT]]) extends Code[Exvr[WholeNumberT]]
+final case class Compare(lhs: Code[Expr[NatT]], rhs: Code[Expr[NatT]]) extends Code[Exvr[NatT]]

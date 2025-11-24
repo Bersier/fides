@@ -1,5 +1,7 @@
 package fides.syntax.types
 
+import typelevelnumbers.binary.Bits
+
 /**
   * Parent type of all the Scala types that represent Fides data/value types
   */
@@ -39,9 +41,8 @@ sealed trait AtomT extends TopT
   */
 sealed trait PairT[+T1 >: BotT, +T2 >: BotT] extends TopT
 
-sealed trait WholeNumberT extends AtomT
-sealed trait NaturalNumberT extends WholeNumberT
-// todo encode numbers at type level (use https://github.com/Bersier/TypeLevelNumbers ?)
+sealed trait NatBT[+B <: Bits] extends AtomT
+type NatT = NatBT[Bits]
 
 sealed trait QuotedT[+S <: TopS] extends TopT
 
@@ -62,6 +63,7 @@ type InpChanT[+InpT >: BotT] = ChanT[InpT, OffBotT]
 type OutChanT[-OutT <: TopT] = ChanT[OffTopT, OutT]
 
 sealed trait CollectedT[+IsNonEmpty <: Boolean, +T >: BotT] extends TopT
+type CollectedUT[+T >: BotT] = CollectedT[Boolean, T]
 
 sealed trait OrderT extends AtomT
 sealed trait KillT extends OrderT

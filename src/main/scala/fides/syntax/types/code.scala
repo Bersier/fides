@@ -15,6 +15,9 @@ sealed trait TopS private[types]()
   */
 type OffBotS = Nothing
 
+/**
+  * Fides code type for multisets of syntactic elements
+  */
 sealed trait ArgsS[+IsNonEmpty <: Boolean, +S <: TopS] extends TopS
 type ArgsUS[+S <: TopS] = ArgsS[Boolean, S]
 
