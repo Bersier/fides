@@ -1,7 +1,7 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{ArgsUS, Expr, Exvr, NaturalNumberT, Ntrl, WholeNumberT}
+import fides.syntax.types.{ArgsUS, Expr, Exvr, NaturalNumberT, Ntrl, PairT, WholeNumberT}
 
 /**
   * Integer values
@@ -34,14 +34,12 @@ final case class Negate(integer: Code[Expr[WholeNumberT]]) extends Code[Exvr[Who
 final case class Multiply[N <: WholeNumberT](factors: Code[ArgsUS[Expr[N]]]) extends Code[Exvr[N]]
 
 /**
-  * Outputs the quotient of the two inputs.
+  * Outputs the quotient and the remainder of the division of the two inputs.
   */
-final case class Divide[N <: WholeNumberT](dividend: Code[Expr[N]], divisor: Code[Expr[N]]) extends Code[Exvr[N]]
-
-/**
-  * Outputs the remainder of the division of the two inputs.
-  */
-final case class Reduce[N <: WholeNumberT](dividend: Code[Expr[N]], divisor: Code[Expr[N]]) extends Code[Exvr[N]]
+final case class Divide[N <: WholeNumberT](
+  dividend: Code[Expr[N]],
+  divisor: Code[Expr[N]],
+) extends Code[Exvr[PairT[N, NaturalNumberT]]]
 
 /**
   * Outputs -1 if the lhs is larger, 0 if they are equal, 1 if the rhs is larger.
