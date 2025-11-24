@@ -10,6 +10,8 @@ import typelevelnumbers.binary.Bits
 final case class NaturalNumber[B <: Bits](bits: B) extends Code[Ntrl[NatBT[B]]]:
   assert(bits.withoutTrailingZeros == bits)
   override def toString: String = bits.toBigInt.toString
+object NaturalNumber:
+  inline def from[N <: Int](n: N): NaturalNumber[Bits.FromInt[N]] = NaturalNumber(Bits.fromInt(n))
 end NaturalNumber
 
 /**
