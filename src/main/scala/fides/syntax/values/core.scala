@@ -1,7 +1,7 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Ntrl, PulseT, StrT}
+import fides.syntax.types.{Cnst, Ntrl, PulseT, StrT}
 
 /**
   * A value that doesn't carry any information beyond causality
@@ -14,4 +14,4 @@ case object Pulse extends Code[Ntrl[PulseT]]
 /**
   * Added mainly for convenience, so annotations and error messages can be readily readable.
   */
-final case class Str(value: String) extends Code[Ntrl[StrT]]
+final case class Str(value: String) extends Code[Cnst[StrT]]

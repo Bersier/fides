@@ -10,6 +10,7 @@ import typelevelnumbers.binary.Bits
   */
 final case class Quoted[S <: TopS](code: Code[S]) extends Code[Ntrl[QuotedT[S]]]
 // todo should Quote and Quoted really be separate?
+// todo we would have to keep track of the exact code type to satisfy the principle that no Xctr can fail
 
 /**
   * Allows escaping the body of a [[Quote]]. Ignores nested [[Quote]]s

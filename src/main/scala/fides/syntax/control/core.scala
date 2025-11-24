@@ -50,5 +50,5 @@ final case class Handled(
   body: Code[Aplr],
 ) extends Code[Aplr]
 
-final case class Error[T <: TopT](value: Code[Cnst[T]]) extends Code[Ntrl[ErrorT[T]]]
+final case class Error[T <: TopT](value: Code[Cnst[T]]) extends Code[Cnst[ErrorT[T]]]
 // todo develop
