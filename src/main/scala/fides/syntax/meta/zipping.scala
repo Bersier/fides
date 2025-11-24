@@ -2,32 +2,27 @@ package fides.syntax.meta
 
 import fides.syntax.core.Code
 import fides.syntax.types.{ArgsS, CollectedT, OffBotT, Polr, Povr, QuotedT, TopS}
-import observable.{Async, DefiniteObserver, FiniteObservable}
+import util.MultisetOps
+import util.Multisets.Multiset
 
 /**
   * Used for unordered collections of pieces of code, at the syntax level.
   */
 sealed trait Args[+S <: TopS] extends Code[ArgsS[Boolean, S]]:
-  def arguments: FiniteObservable[Code[S]] // todo should be Multiset[Code[S]]
+  def arguments: Multiset[Code[S]]
 object Args:
   def apply[S <: TopS](): None = Empty
   def apply[S <: TopS](first: Code[S], others: Code[S]*): Some[S] = new NonEmpty(first, others*)
-  def unapply[S <: TopS](arguments: Args[S]): scala.Some[FiniteObservable[Code[S]]] =
+  def unapply[S <: TopS](arguments: Args[S]): scala.Some[Multiset[Code[S]]] =
     Some(arguments.arguments)
 
   type None = Code[ArgsS[false, OffBotT]]
   type Some[+S <: TopS] = Code[ArgsS[true, S]]
 
   private case object Empty extends Args[OffBotT], None:
-    def arguments: FiniteObservable[Code[OffBotT]] =
-      (observer: DefiniteObserver[Code[OffBotT]]) => observer.withSize(0)
+    def arguments: Multiset[Code[OffBotT]] = summon[MultisetOps[Multiset]].empty
   private final class NonEmpty[+S <: TopS](first: Code[S], others: Code[S]*) extends Args[S], Some[S]:
-    val arguments: FiniteObservable[Code[S]] = new FiniteObservable[Code[S]]:
-      private val arguments = first +: others
-
-      def foreach(observer: DefiniteObserver[Code[S]]): Async =
-        for argument <- arguments do observer.update(argument)
-        observer.withSize(arguments.size)
+    val arguments: Multiset[Code[S]] = summon[MultisetOps[Multiset]].multiset(elements = first +: others*)
 end Args
 
 /**
