@@ -40,7 +40,7 @@ final case class Forward[T <: TopT](inp: Code[Expr[T]], out: Code[Xctr[T]]) exte
   * Dual of Forward. The connection between [[inp]] and [[out]] is instead achieved via variables.
   */
 final case class Backward[I <: TopPoS, O <: TopPoS](
-  declarations: Code[Args[DeclS[?]]],
+  declarations: Code[ArgsUS[DeclS[?]]],
   inp: Code[I],
   out: Code[O],
 ) extends Code[Bipo[I, O]]
@@ -59,9 +59,9 @@ final case class Deply[I <: TopPoS, O <: TopPoS](
 /**
   * Spreads a value to multiple recipients.
   *
-  * [[Spread]]`(`[[Args]]`())` is equivalent to Ignore/Sink/Forget/Discard/Drop.
+  * [[Spread]]`(`[[ArgsUS]]`())` is equivalent to Ignore/Sink/Forget/Discard/Drop.
   */
-final case class Spread[T <: TopT](recipients: Code[Args[Xctr[T]]]) extends Code[Xcvr[T]]
+final case class Spread[T <: TopT](recipients: Code[ArgsUS[Xctr[T]]]) extends Code[Xcvr[T]]
 
 /**
   * Forwards the inputted value once signalled to do so.

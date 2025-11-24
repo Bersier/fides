@@ -1,7 +1,7 @@
 package fides.syntax.processes
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Aplr, Args, ChanT, DeclS, Expr, OffTopT, TopT}
+import fides.syntax.types.{Aplr, ArgsUS, ChanT, DeclS, Expr, OffTopT, TopT}
 
 /**
   * Sends a value to an address.
@@ -28,7 +28,7 @@ final case class Send[T <: TopT](
   * @param declarations valid within this scope
   * @param body the body of the scope, in which the names are valid
   */
-final case class Scope(declarations: Code[Args[DeclS[?]]], body: Code[Aplr]) extends Code[Aplr]
+final case class Scope(declarations: Code[ArgsUS[DeclS[?]]], body: Code[Aplr]) extends Code[Aplr]
 
 /**
   * Behaviorally equivalent to an infinite number of copies of the given body
@@ -40,4 +40,4 @@ final case class Repeated(body: Code[Aplr]) extends Code[Aplr]
 /**
   * Composes the given processes concurrently.
   */
-final case class Concurrent(processes: Code[Args[Aplr]]) extends Code[Aplr]
+final case class Concurrent(processes: Code[ArgsUS[Aplr]]) extends Code[Aplr]

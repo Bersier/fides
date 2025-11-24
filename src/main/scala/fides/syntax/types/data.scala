@@ -62,7 +62,6 @@ type InpChanT[+InpT >: BotT] = ChanT[InpT, OffBotT]
 type OutChanT[-OutT <: TopT] = ChanT[OffTopT, OutT]
 
 sealed trait CollectedT[+IsNonEmpty <: Boolean, +T >: BotT] extends TopT
-type BagT[+T >: BotT] = CollectedT[Boolean, T]
 
 sealed trait OrderT extends AtomT
 sealed trait KillT extends OrderT

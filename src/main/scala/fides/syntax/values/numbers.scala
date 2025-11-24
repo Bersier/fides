@@ -1,7 +1,7 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Args, Expr, Exvr, NaturalNumberT, Ntrl, WholeNumberT}
+import fides.syntax.types.{ArgsUS, Expr, Exvr, NaturalNumberT, Ntrl, WholeNumberT}
 
 /**
   * Integer values
@@ -20,7 +20,7 @@ end NaturalNumber
 /**
   * Outputs the sum of the inputs.
   */
-final case class Add[N <: WholeNumberT](terms: Code[Args[Expr[N]]]) extends Code[Exvr[N]]
+final case class Add[N <: WholeNumberT](terms: Code[ArgsUS[Expr[N]]]) extends Code[Exvr[N]]
 // todo take a collection of numbers instead
 
 /**
@@ -31,7 +31,7 @@ final case class Negate(integer: Code[Expr[WholeNumberT]]) extends Code[Exvr[Who
 /**
   * Outputs the product of the inputs.
   */
-final case class Multiply[N <: WholeNumberT](factors: Code[Args[Expr[N]]]) extends Code[Exvr[N]]
+final case class Multiply[N <: WholeNumberT](factors: Code[ArgsUS[Expr[N]]]) extends Code[Exvr[N]]
 
 /**
   * Outputs the quotient of the two inputs.

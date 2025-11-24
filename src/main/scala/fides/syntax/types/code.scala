@@ -8,8 +8,15 @@ import scala.language.experimental.pureFunctions
   */
 sealed trait TopS private[types]()
 
+/**
+  * A type smaller than the intersection of all code types.
+  *
+  * Indicates an unreachable code type (in covariant position).
+  */
+type OffBotS = Nothing
+
 sealed trait ArgsS[+IsNonEmpty <: Boolean, +S <: TopS] extends TopS
-type Args[+S <: TopS] = ArgsS[Boolean, S]
+type ArgsUS[+S <: TopS] = ArgsS[Boolean, S]
 
 sealed trait CaseS[T <: TopT, A <: AtomT] extends TopS
 
