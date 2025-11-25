@@ -1,7 +1,6 @@
 package fides.syntax.types
 
 import typelevelnumbers.binary.Bits
-import util.ID
 
 /**
   * Parent type of all the Scala types that represent Fides data/value types
@@ -47,20 +46,22 @@ type NatT = NatBT[Bits]
 
 sealed trait QuotedT[+S <: TopS] extends TopT
 
+sealed trait SignedT[+T <: TopT] extends TopT
+
 /**
   * Data type for identifiers
   */
-sealed trait IdentifierT[+K <: ID] extends AtomT
+sealed trait IdentifierT[+K <: IdentifierID] extends AtomT
+type IdentifierIT = IdentifierT[IdentifierID]
 
-sealed trait IdentifierKeyT[+K <: ID] extends AtomT
-
-sealed trait SignedT[+T <: TopT] extends TopT
+sealed trait IdentifierKeyT[+K <: IdentifierID] extends AtomT
+type IdentifierKeyIT = IdentifierKeyT[IdentifierID]
 
 /**
   * Data type for Channels
   */
-sealed trait ChannelT[+K <: ID, +InpT >: BotT, -OutT <: InpT & TopT] extends IdentifierT[K]
-type ChanT[+InpT >: BotT, -OutT <: InpT & TopT] = ChannelT[ID, InpT, OutT]
+sealed trait ChannelT[+K <: ChannelID, +InpT >: BotT, -OutT <: InpT & TopT] extends IdentifierT[K]
+type ChanT[+InpT >: BotT, -OutT <: InpT & TopT] = ChannelT[ChannelID, InpT, OutT]
 type InpChanT[+InpT >: BotT] = ChanT[InpT, OffBotT]
 type OutChanT[-OutT <: TopT] = ChanT[OffTopT, OutT]
 

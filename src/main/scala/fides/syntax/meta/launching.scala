@@ -1,8 +1,7 @@
 package fides.syntax.meta
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Aplr, Expr, Exvr, IdentifierT, Ntrl, QuotedT, SignedT}
-import util.ID
+import fides.syntax.types.{Aplr, Expr, Exvr, IdentifierID, IdentifierT, Ntrl, QuotedT, SignedT}
 
 /**
   * Launches [[code]] as a new process, and outputs a signed value of the code, confirming the launch.
@@ -11,6 +10,3 @@ import util.ID
   * The new names are visible in the outputted code certificate.
   */
 final case class Launch(code: Code[Expr[QuotedT[Aplr]]]) extends Code[Exvr[SignedT[QuotedT[Aplr]]]]
-
-private final val LauncherID = new ID
-case object Launcher extends Code[Ntrl[IdentifierT[LauncherID.type]]]

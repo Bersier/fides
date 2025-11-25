@@ -27,9 +27,11 @@ lazy val root = (project in file("."))
     scalacOptions ++= Seq(
     //  "-Vprofile",
     //  "-Werror",
+//      "-Wall", todo try adding once Scala compiler works again
       "-Wimplausible-patterns",
       "-Wnonunit-statement",
       "-Wsafe-init",
+//      "-Wvalue-discard", todo try adding once Scala compiler works again
       "-Wunused:all",
       "-Xcook-docs",
       "-Xdebug-macros",
