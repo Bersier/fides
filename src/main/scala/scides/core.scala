@@ -25,7 +25,7 @@ def test(): Async =
   )
 
 type Consumer[T] = T => Async
-val NoOp: Consumer[Any] = m => Async()
+val NoOp: Consumer[Any] = _ => Async()
 
 final class Scidesphere:
   sealed trait Identifier derives CanEqual

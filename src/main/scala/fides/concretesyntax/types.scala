@@ -1,7 +1,6 @@
 package fides.concretesyntax
 
 import fides.concretesyntax.Precedences.Precedence
-import fides.syntax.connectors.Match
 import util.TList
 
 import scala.annotation.targetName
@@ -40,7 +39,7 @@ inline def singleLineString[T](term: T)(using Precedence): String =
       assert(s.keys.length == args.length)
       val keyedArgs = (for (key, arg) <- s.keys.zip(args) yield key + " " + arg).mkString(", ")
       s.header + keyedArgs + s.tailer
-    case _ => error(s"singleLineString is not supported for $term as of yet.")
+    case _ => error(s"singleLineString is not supported for ${term.toString} as of yet.")
   if summon[Precedence] < s.outerPrecedence then string else
     s"(${s.polarity} $string ${s.polarity})"
 
@@ -71,7 +70,7 @@ object ShowableTerm:
     */
   inline def derived[T](using mirror: Mirror.Of[T]): ShowableTerm[T] =
     inline mirror match
-      case p: Mirror.ProductOf[T] => ShowableTermImpl(
+      case _: Mirror.ProductOf[T] => ShowableTermImpl(
         outerPrecedence = Precedences.parentheses,
         innerPrecedence = Precedences.comma,
         polarity = polarityFromName(constValue[mirror.MirroredLabel]),
