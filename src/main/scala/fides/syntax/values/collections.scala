@@ -1,14 +1,14 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{ArgsS, BotT, ChanT, Cnst, CollectedT, CollectedUT, NatT, Ntrl, Polr, Povr, TopT}
+import fides.syntax.types.{ArgsS, BotT, ChanT, Cnst, CollectedT, CollectedUT, NatUT, Polar, Polr, Povr, TopT}
 
 /**
-  * A literal for a value that is made up of an unordered collection of values.
+  * General [[Polar]] for static-size collecting.
   */
-final case class Collected[IsNonEmpty <: Boolean, T >: BotT <: TopT](
-  elements: Code[ArgsS[IsNonEmpty, Cnst[T]]],
-) extends Code[Ntrl[CollectedT[IsNonEmpty, T]]]
+final case class Collected[IsNonEmpty <: Boolean, P >: BotT, N <: TopT, L <: Boolean](
+  elements: Code[ArgsS[IsNonEmpty, Polar[P, N, L]]],
+) extends Code[Polar[CollectedT[IsNonEmpty, P], CollectedT[IsNonEmpty, N], L]]
 
 /**
   * As an Expr, outputs a Collected with one element added to it.
@@ -26,7 +26,7 @@ final case class AddElementP[P <: N, N <: TopT](
   * As an Xctr, outputs the elements of a Collected to [[elementSource]], and its size to [[size]].
   */
 final case class Collect[P >: BotT, N <: P & TopT](
-  elementSource: Code[Cnst[ChanT[P, N]]], // todo replace by Loc?
-  size: Code[Polr[NatT, NatT]],
+  elementSource: Code[Cnst[ChanT[P, N]]],
+  size: Code[Polr[NatUT, NatUT]],
 ) extends Code[Povr[CollectedUT[P], CollectedUT[N]]]
 // todo does it only start collecting after having received [[size]]?

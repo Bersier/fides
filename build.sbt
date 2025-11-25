@@ -43,7 +43,7 @@ lazy val root = (project in file("."))
       "-Ydebug-pos",
       "-Yexplicit-nulls",
 //      "-Yrequire-targetName",
-//      "-Ysafe-init-global", todo compiler doesn't terminate with this option is enabled
+//      "-Ysafe-init-global", // This can cause extreme compilation slowdowns
       "-deprecation",
       "-experimental",
       "-explain",

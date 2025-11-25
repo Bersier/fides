@@ -1,7 +1,7 @@
 package fides.syntax.signatures
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Cnst, Expr, Exvr, IdentifierIT, IdentifierKeyIT, SignedT, TopT, Xctr, Xcvr}
+import fides.syntax.types.{Cnst, Expr, Exvr, IdentifierUT, IdentifierKeyUT, SignedT, TopT, Xctr, Xcvr}
 
 /**
   * Signed values are guaranteed to have been created using a key corresponding to [[signature]].
@@ -14,7 +14,7 @@ import fides.syntax.types.{Cnst, Expr, Exvr, IdentifierIT, IdentifierKeyIT, Sign
   */
 final case class Signed[T <: TopT] private[fides] (
   document: Code[Cnst[T]],
-  signature: Code[Cnst[IdentifierIT]],
+  signature: Code[Cnst[IdentifierUT]],
 ) extends Code[Cnst[SignedT[T]]]
 
 /**
@@ -22,7 +22,7 @@ final case class Signed[T <: TopT] private[fides] (
   */
 final case class Sign[T <: TopT](
   document: Code[Expr[T]],
-  signatory: Code[Expr[IdentifierKeyIT]],
+  signatory: Code[Expr[IdentifierKeyUT]],
 ) extends Code[Exvr[SignedT[T]]]
 
 /**
@@ -30,5 +30,5 @@ final case class Sign[T <: TopT](
   */
 final case class UnSign[T <: TopT](
   document: Code[Xctr[T]],
-  signature: Code[Xctr[IdentifierIT]],
+  signature: Code[Xctr[IdentifierUT]],
 ) extends Code[Xcvr[SignedT[T]]]

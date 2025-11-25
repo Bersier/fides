@@ -6,7 +6,7 @@ import fides.syntax.types.{BotT, PairT, Polar, TopT}
 import scala.compiletime.ops.boolean.&&
 
 /**
-  * General [[Polr]] for pairing.
+  * General [[Polar]] for pairing.
   */
 final case class Pair[
   P1 >: BotT,

@@ -1,11 +1,16 @@
 package fides.syntax.identifiers
 
 import fides.syntax.core.Code
-import fides.syntax.types.{Expr, Exvr, IdentifierID, IdentifierIT, IdentifierKeyIT, IdentifierKeyT, IdentifierT, Ntrl}
+import fides.syntax.types.{Expr, Exvr, IdentifierID, IdentifierUT, IdentifierKeyUT, IdentifierKeyT, IdentifierT, Ntrl}
 
 /**
   * Identifiers are structureless. They can only be compared for equality. They cannot be inspected in any other way.
   * New identifiers can be created. Identifiers are globally unique.
+  *
+  * Implementation note: Due to polarity in Fides, type widening is unsound.
+  * So every [[Ntrl]] should be singleton-typed. That is why [[Identifier]] takes an [[IdentifierID]].
+  * This way, its code type can be unique to that particular identifier.
+  * Additional access restrictions are there to enforce type tightness.
   */
 final case class Identifier[K <: IdentifierID] private(private val k: K) extends Code[Ntrl[IdentifierT[K]]]
 object Identifier:
@@ -26,12 +31,12 @@ end IdentifierKey
 /**
   * Outputs a new identifier.
   */
-final case class NewIdentifier() extends Code[Exvr[IdentifierIT]]
+final case class NewIdentifier() extends Code[Exvr[IdentifierUT]]
 
 /**
   * Outputs a new identifier key.
   */
-final case class NewIdentifierKey() extends Code[Exvr[IdentifierKeyIT]]
+final case class NewIdentifierKey() extends Code[Exvr[IdentifierKeyUT]]
 
 /**
   * Outputs the identifier corresponding to the inputted key.

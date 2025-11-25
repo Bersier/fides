@@ -41,8 +41,8 @@ sealed trait AtomT extends TopT
   */
 sealed trait PairT[+T1 >: BotT, +T2 >: BotT] extends TopT
 
-sealed trait NatBT[+B <: Bits] extends AtomT
-type NatT = NatBT[Bits]
+sealed trait NatT[+B <: Bits] extends AtomT
+type NatUT = NatT[Bits]
 
 sealed trait QuotedT[+S <: TopS] extends TopT
 
@@ -52,10 +52,10 @@ sealed trait SignedT[+T <: TopT] extends TopT
   * Data type for identifiers
   */
 sealed trait IdentifierT[+K <: IdentifierID] extends AtomT
-type IdentifierIT = IdentifierT[IdentifierID]
+type IdentifierUT = IdentifierT[IdentifierID]
 
 sealed trait IdentifierKeyT[+K <: IdentifierID] extends AtomT
-type IdentifierKeyIT = IdentifierKeyT[IdentifierID]
+type IdentifierKeyUT = IdentifierKeyT[IdentifierID]
 
 /**
   * Data type for Channels
@@ -65,6 +65,9 @@ type ChanT[+InpT >: BotT, -OutT <: InpT & TopT] = ChannelT[ChannelID, InpT, OutT
 type InpChanT[+InpT >: BotT] = ChanT[InpT, OffBotT]
 type OutChanT[-OutT <: TopT] = ChanT[OffTopT, OutT]
 
+/**
+  * Data type for unordered uniformly-typed collections of values.
+  */
 sealed trait CollectedT[+IsNonEmpty <: Boolean, +T >: BotT] extends TopT
 type CollectedUT[+T >: BotT] = CollectedT[Boolean, T]
 
