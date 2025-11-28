@@ -85,6 +85,7 @@ type Ntrl[T <: TopT] = Polar[T, T, true]
   * (i.e. no connections with external code).
   */
 sealed trait Bipo[I <: TopPoS, O <: TopPoS] extends TopS
+// todo make more stuff Bipo? Stuff in generic.scala?
 
 /**
   * [[Polr]] that is not a literal

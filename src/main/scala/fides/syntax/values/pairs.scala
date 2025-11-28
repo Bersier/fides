@@ -1,7 +1,7 @@
 package fides.syntax.values
 
 import fides.syntax.core.Code
-import fides.syntax.types.{BotT, PairT, Polar, TopT}
+import fides.syntax.types.{Aplr, BotT, PairT, Polar, Povr, TopT}
 
 import scala.compiletime.ops.boolean.&&
 
@@ -20,3 +20,12 @@ final case class Pair[
   second: Code[Polar[P2, N2, L2]],
 ) extends Code[Polar[PairT[P1, P2], PairT[N1, N2], L1 && L2]]
 // todo replace by typed dictionary?
+
+/**
+  * As an Expr, the wires are sinks that collect values from the executing body, which are then output as a bundle.
+  *
+  * As an Xctr, the inputted bundle is unbundled along the wires, 
+  * which are sources that feed values to the executing body.
+  */
+final case class Bundle(wires: Any, body: Code[Aplr]) extends Code[Povr[?, ?]]
+// todo

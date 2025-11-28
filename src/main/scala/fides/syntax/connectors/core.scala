@@ -44,7 +44,6 @@ final case class Backward[I <: TopPoS, O <: TopPoS](
   inp: Code[I],
   out: Code[O],
 ) extends Code[Bipo[I, O]]
-// todo doesn't this exert control over execution?
 
 final case class Apply[I <: TopPoS, O <: TopPoS](
   component: Code[Bipo[I, O]],
