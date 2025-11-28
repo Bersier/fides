@@ -21,21 +21,24 @@ type Decoded[S <: String] = Matches[S, "EmptyTuple"] match
         case true => DecodedInt[S]
         case false => Any
 
-type DecodedInt[S <: String] <: Int = Matches[S, "0"] match
+private type DecodedInt[S <: String] <: Int = Matches[S, "0"] match
   case true => 0
   case false => Matches[S, "-[1-9][0-9]*"] match
     case true => Negate[DecodedIntPart[Substring[S, 1, Length[S]]]]
     case false => DecodedIntPart[S]
 
-type DecodedIntPart[S <: String] <: Int = Matches[S, ""] match
+private type DecodedIntPart[S <: String] <: Int = Matches[S, ""] match
   case true => 0
   case false => FirstDigit[S] * TenPow[Length[S] - 1] + DecodedIntPart[Substring[S, 1, Length[S]]]
 
-type TenPow[I <: Int] <: Int = I match
+/**
+  * Reduces to 10^[[I]] - 1^.
+  */
+private type TenPow[I <: Int] <: Int = I match
   case 0 => 1
   case _ => 10 * TenPow[I - 1]
 
-type FirstDigit[S <: String] <: Int = Matches[S, "1[0-9]*"] match
+private type FirstDigit[S <: String] <: Int = Matches[S, "1[0-9]*"] match
   case true => 1
   case false => Matches[S, "2[0-9]*"] match
     case true => 2
@@ -53,10 +56,16 @@ type FirstDigit[S <: String] <: Int = Matches[S, "1[0-9]*"] match
                 case true => 8
                 case false => Matches[S, "9[0-9]*"] match
                   case true => 9
-                  case false => Nothing
 
 // todo doesn't take escape characters into account
-type Parsed[S <: String, I <: Int, A <: String] <: (String, String) = Matches[S, "\\).*"] match
+/**
+  * Parses a comma-separated list of arguments.
+  *
+  * @tparam S to be parsed
+  * @tparam I depth
+  * @tparam A accumulator
+  */
+private type Parsed[S <: String, I <: Int, A <: String] <: (String, String) = Matches[S, "\\).*"] match
   case true => I match
     case 1 => (A ++ ")", Substring[S, 3, Length[S]])
     case _ => Parsed[Substring[S, 1, Length[S]], I - 1, A ++ ")"]
@@ -68,17 +77,17 @@ type Parsed[S <: String, I <: Int, A <: String] <: (String, String) = Matches[S,
         case false => Parsed[Substring[S, 1, Length[S]], I, A ++ Substring[S, 0, 1]]
       case _ => Parsed[Substring[S, 1, Length[S]], I, A ++ Substring[S, 0, 1]]
 
-private def picklingTest(): Unit =
+private def picklingExamples(): Unit =
   summon[Encoded[(0, "Hel\"lo")] =:= "Tuple(0, Tuple(String(Hel\"lo), EmptyTuple))"]
   summon[Decoded["String(Hello)"] =:= "Hello"]
 
-  // summon[Decoded["Tuple(0, Tuple(String(Hel\"lo), EmptyTuple))"] =:= (0, "Hel\"lo")]
+   summon[Decoded["Tuple(0, Tuple(String(Hel\"lo), EmptyTuple))"] =:= (0, "Hel\"lo")]
 
-  // summon[Decoded["Tuple(0, EmptyTuple)"] =:= Tuple1[0]]
-  
-  // Decoded["Tuple(0, EmptyTuple)"]
-  // Parsed["0, EmptyTuple", 0, ""] match case (h, t) => Decoded[h] *: Decoded[t]
-  // Parsed[", EmptyTuple", 0, "0"] match case (h, t) => Decoded[h] *: Decoded[t]
-  // ("0", "EmptyTuple") match case (h, t) => Decoded[h] *: Decoded[t]
-  // Decoded["0"] *: Decoded["EmptyTuple"]
-  // 0 *: EmptyTuple
+   summon[Decoded["Tuple(0, EmptyTuple)"] =:= Tuple1[0]]
+
+//   Decoded["Tuple(0, EmptyTuple)"]
+//   Parsed["0, EmptyTuple", 0, ""] match case (h, t) => Decoded[h] *: Decoded[t]
+//   Parsed[", EmptyTuple", 0, "0"] match case (h, t) => Decoded[h] *: Decoded[t]
+//   ("0", "EmptyTuple") match case (h, t) => Decoded[h] *: Decoded[t]
+//   Decoded["0"] *: Decoded["EmptyTuple"]
+//   0 *: EmptyTuple
