@@ -1,6 +1,5 @@
 package fides.syntax.types
 
-sealed class IdentifierID
-final class ChannelID extends IdentifierID
+sealed class ID
 
-case object LauncherID extends IdentifierID
+case object LauncherID extends ID

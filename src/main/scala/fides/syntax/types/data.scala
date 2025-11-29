@@ -41,6 +41,9 @@ sealed trait AtomT extends TopT
   */
 sealed trait PairT[+T1 >: BotT, +T2 >: BotT] extends TopT
 
+sealed trait Record extends TopT
+// todo
+
 sealed trait NatT[+B <: Bits] extends AtomT
 type NatUT = NatT[Bits]
 
@@ -51,17 +54,17 @@ sealed trait SignedT[+T <: TopT] extends TopT
 /**
   * Data type for identifiers
   */
-sealed trait IdentifierT[+K <: IdentifierID] extends AtomT
-type IdentifierUT = IdentifierT[IdentifierID]
+sealed trait IdentifierT[+K <: ID] extends AtomT
+type IdentifierUT = IdentifierT[ID]
 
-sealed trait IdentifierKeyT[+K <: IdentifierID] extends AtomT
-type IdentifierKeyUT = IdentifierKeyT[IdentifierID]
+sealed trait IdentifierKeyT[+K <: ID] extends AtomT
+type IdentifierKeyUT = IdentifierKeyT[ID]
 
 /**
   * Data type for Channels
   */
-sealed trait ChannelT[+K <: ChannelID, +InpT >: BotT, -OutT <: InpT & TopT] extends IdentifierT[K]
-type ChanT[+InpT >: BotT, -OutT <: InpT & TopT] = ChannelT[ChannelID, InpT, OutT]
+sealed trait ChannelT[+K <: ID, +InpT >: BotT, -OutT <: InpT & TopT] extends IdentifierT[K]
+type ChanT[+InpT >: BotT, -OutT <: InpT & TopT] = ChannelT[ID, InpT, OutT]
 type InpChanT[+InpT >: BotT] = ChanT[InpT, OffBotT]
 type OutChanT[-OutT <: TopT] = ChanT[OffTopT, OutT]
 
