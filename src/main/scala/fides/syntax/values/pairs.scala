@@ -29,3 +29,4 @@ final case class Pair[
   */
 final case class Bundle(wires: Any, body: Code[Aplr]) extends Code[Povr[?, ?]]
 // todo
+// todo double-bundle extends Code[Bipo...
