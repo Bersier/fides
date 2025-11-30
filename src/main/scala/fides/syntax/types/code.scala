@@ -54,6 +54,9 @@ type TopPoS = Polr[OffTopT, OffBotT]
   *
   * Expressions should probably not be allowed to have any output effects
   * (i.e. no outgoing connections with external code).
+  *
+  * Fides is strongly typed in the sense that no expression can get stuck due to a type mismatch.
+  * If an expression of a given data type evaluates, it always evaluates to a value of that data type.
   */
 type Expr[+T <: TopT] = Polr[T, OffBotT]
 
@@ -68,6 +71,10 @@ type Expr[+T <: TopT] = Polr[T, OffBotT]
   *
   * Extractors should probably not be allowed to have any input effects
   * (i.e. no incoming connections with external code).
+  *
+  * Fides is strongly typed in the sense that no extractor can get stuck due to a type mismatch.
+  * If an extractor of a given data type is given a value of that type,
+  * it never chokes on it (like a refutable pattern could).
   */
 type Xctr[-T <: TopT] = Polr[OffTopT, T]
 
