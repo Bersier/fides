@@ -1,7 +1,7 @@
 package fides.syntax.values
 
-import fides.syntax.core.Code
-import fides.syntax.types.{Aplr, BotT, PairT, Polar, Povr, TopT}
+import fides.syntax.core.{Code, TopC}
+import fides.syntax.types.{Aplr, BotT, PairS, PairT, Polar, Povr, TopT}
 
 import scala.compiletime.ops.boolean.&&
 
@@ -9,16 +9,35 @@ import scala.compiletime.ops.boolean.&&
   * General [[Polar]] for pairing.
   */
 final case class Pair[
-  P1 >: BotT,
-  P2 >: BotT,
-  N1 <: TopT,
-  N2 <: TopT,
-  L1 <: Boolean,
-  L2 <: Boolean,
+  PP1 >: BotT,
+  PP2 >: BotT,
+  NP1 <: TopT,
+  NP2 <: TopT,
+  LP1 <: Boolean,
+  LP2 <: Boolean,
+  PN1 >: BotT,
+  PN2 >: BotT,
+  NN1 <: TopT,
+  NN2 <: TopT,
+  LN1 <: Boolean,
+  LN2 <: Boolean,
+  PS1 <: Polar[PP1, NP1, LP1],
+  PS2 <: Polar[PP2, NP2, LP2],
+  NS1 <: Polar[PN1, NN1, LN1],
+  NS2 <: Polar[PN2, NN2, LN2],
+  LS1 <: Boolean,
+  LS2 <: Boolean,
+  U1 <: TopC,
+  U2 <: TopC,
 ](
-  first: Code[Polar[P1, N1, L1]],
-  second: Code[Polar[P2, N2, L2]],
-) extends Code[Polar[PairT[P1, P2], PairT[N1, N2], L1 && L2]]
+  first: Code[PS1, NS1, LS1, U1],
+  second: Code[PS2, NS2, LS2, U2],
+) extends Code[
+  PairS[PP1, PP2, NP1, NP2, LP1, LP2, PS1, PS2],
+  PairS[PN1, PN2, NN1, NN2, LN1, LN2, NS1, NS2],
+  LS1 && LS2,
+  U1 | U2,
+]
 // todo replace by typed dictionary?
 
 /**

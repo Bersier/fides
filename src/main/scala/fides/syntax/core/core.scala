@@ -1,13 +1,15 @@
 package fides.syntax.core
 
-import fides.syntax.types.TopS
+import fides.syntax.types.{BotS, TopS}
 
 import scala.language.experimental.pureFunctions
+
+sealed trait TopC private[core]()
 
 /**
   * General type to represent Fides code
   */
-trait Code[+S <: TopS] private[syntax]()
+trait Code[+P >: BotS, -N <: TopS, +IsLiteral <: Boolean, +U <: TopC] extends TopC
 // todo add QuoteContext type parameter
 // todo CodePtrn, CodeExpr, CodeVal
 

@@ -1,5 +1,6 @@
 package fides.syntax.types
 
+import scala.compiletime.ops.boolean.&&
 import scala.language.experimental.pureFunctions
 
 /**
@@ -9,7 +10,12 @@ import scala.language.experimental.pureFunctions
 sealed trait TopS private[types]()
 
 /**
-  * A type smaller than the intersection of all code types.
+  * Lower bound for - or intersection of - all Fides code types
+  */
+type BotS = Nothing
+
+/**
+  * A type smaller than [[BotT]].
   *
   * Indicates an unreachable code type (in covariant position).
   */
@@ -115,3 +121,17 @@ type Cnst[+T <: TopT] = Polar[T, OffBotT, true]
   * [[Xctr]] that is not a literal
   */
 type Xcvr[-T <: TopT] = Polar[OffTopT, T, false]
+
+/**
+  * [[S1]] and [[S2]] are the main type parameters. The others are auxiliary, used for threading.
+  */
+sealed trait PairS[
+  P1 >: BotT,
+  P2 >: BotT,
+  N1 <: TopT,
+  N2 <: TopT,
+  L1 <: Boolean,
+  L2 <: Boolean,
+  +S1 <: Polar[P1, N1, L1],
+  +S2 <: Polar[P2, N2, L2],
+] extends Polar[PairT[P1, P2], PairT[N1, N2], L1 && L2]

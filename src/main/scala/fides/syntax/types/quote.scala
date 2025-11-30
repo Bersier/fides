@@ -1,3 +1,0 @@
-package fides.syntax.types
-
-
