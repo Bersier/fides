@@ -36,6 +36,9 @@ final abstract class MNameS[T <: TopT] extends NameS[T]
   */
 final abstract class Aplr extends TopS
 
+sealed trait NewPolar[T <: TopT, +P <: Boolean, +N <: Boolean, +C <: Boolean] extends TopS
+// todo use
+
 /**
   * [[Polr]] is a generalization of expressions and patterns.
   */
