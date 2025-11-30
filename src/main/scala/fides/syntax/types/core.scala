@@ -1,4 +1,4 @@
-package fides.syntax.core
+package fides.syntax.types
 
 import fides.syntax.types.TopS
 

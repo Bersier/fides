@@ -1,6 +1,5 @@
 package fides.syntax.connectors
 
-import fides.syntax.core.Code
 import fides.syntax.types.*
 
 /**

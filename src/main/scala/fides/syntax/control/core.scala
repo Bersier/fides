@@ -1,6 +1,5 @@
 package fides.syntax.control
 
-import fides.syntax.core.Code
 import fides.syntax.types.*
 
 case object Kill extends Code[Ntrl[KillT]]

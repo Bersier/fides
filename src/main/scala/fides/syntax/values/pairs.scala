@@ -1,7 +1,6 @@
 package fides.syntax.values
 
-import fides.syntax.core.Code
-import fides.syntax.types.{Aplr, BotT, PairT, Polar, Povr, TopT}
+import fides.syntax.types.{Aplr, BotT, Code, PairT, Polar, Povr, TopT}
 
 import scala.compiletime.ops.boolean.&&
 

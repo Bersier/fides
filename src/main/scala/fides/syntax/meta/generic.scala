@@ -1,7 +1,6 @@
 package fides.syntax.meta
 
-import fides.syntax.core.Code
-import fides.syntax.types.{CollectedUT, Expr, Exvr, QuotedT, TopS}
+import fides.syntax.types.{Code, CollectedUT, Expr, Exvr, QuotedT, TopS}
 
 /**
   * Outputs an equivariantly updated version of the inputted term.

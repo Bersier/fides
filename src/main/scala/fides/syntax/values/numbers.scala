@@ -1,7 +1,6 @@
 package fides.syntax.values
 
-import fides.syntax.core.Code
-import fides.syntax.types.{CollectedUT, Expr, Exvr, NatT, NatUT, Ntrl}
+import fides.syntax.types.{Code, CollectedUT, Expr, Exvr, NatT, NatUT, Ntrl}
 import typelevelnumbers.binary.Bits
 
 import scala.annotation.publicInBinary

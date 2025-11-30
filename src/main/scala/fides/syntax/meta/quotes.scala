@@ -1,7 +1,6 @@
 package fides.syntax.meta
 
-import fides.syntax.core.Code
-import fides.syntax.types.{Cnst, Expr, Exvr, NatUT, Ntrl, QuotedT, TopS, Xctr, Xcvr}
+import fides.syntax.types.{Cnst, Code, Expr, Exvr, NatUT, Ntrl, QuotedT, TopS, Xctr, Xcvr}
 import fides.syntax.values.Nat
 import typelevelnumbers.binary.Bits
 
