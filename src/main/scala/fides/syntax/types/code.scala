@@ -18,23 +18,23 @@ type OffBotS = Nothing
 /**
   * Fides code type for multisets of syntactic elements
   */
-sealed trait ArgsS[+IsNonEmpty <: Boolean, +S <: TopS] extends TopS
+final abstract class ArgsS[+IsNonEmpty <: Boolean, +S <: TopS] extends TopS
 type ArgsUS[+S <: TopS] = ArgsS[Boolean, S]
 
-sealed trait CaseS[T <: TopT, A <: AtomT] extends TopS
+final abstract class CaseS[T <: TopT, A <: AtomT] extends TopS
 
-sealed trait TypeS[T <: TopT] extends TopS
+final abstract class TypeS[T <: TopT] extends TopS
 
-sealed trait DeclS[T <: TopT] extends TopS
+final abstract class DeclS[T <: TopT] extends TopS
 
 sealed trait NameS[+T <: TopT] extends TopS
 
-sealed trait MNameS[T <: TopT] extends NameS[T]
+final abstract class MNameS[T <: TopT] extends NameS[T]
 
 /**
   * Fides code type for non-polar process code
   */
-sealed trait Aplr extends TopS
+final abstract class Aplr extends TopS
 
 /**
   * [[Polr]] is a generalization of expressions and patterns.
@@ -91,7 +91,7 @@ type Ntrl[T <: TopT] = Polar[T, T, true]
   * Bi-polar process code should probably not be allowed to have any side effects
   * (i.e. no connections with external code).
   */
-sealed trait Bipo[I <: TopPoS, O <: TopPoS] extends TopS
+final abstract class Bipo[I <: TopPoS, O <: TopPoS] extends TopS
 // todo make more stuff Bipo? Stuff in generic.scala?
 
 /**

@@ -39,17 +39,17 @@ sealed trait AtomT extends TopT
 /**
   * Data type for pairs
   */
-sealed trait PairT[+T1 >: BotT, +T2 >: BotT] extends TopT
+final abstract class PairT[+T1 >: BotT, +T2 >: BotT] extends TopT
 
-sealed trait Record extends TopT
+final abstract class Record extends TopT
 // todo
 
-sealed trait NatT[+B <: Bits] extends AtomT
+final abstract class NatT[+B <: Bits] extends AtomT
 type NatUT = NatT[Bits]
 
-sealed trait QuotedT[+S <: TopS] extends TopT
+final abstract class QuotedT[+S <: TopS] extends TopT
 
-sealed trait SignedT[+T <: TopT] extends TopT
+final abstract class SignedT[+T <: TopT] extends TopT
 
 /**
   * Data type for identifiers
@@ -57,13 +57,13 @@ sealed trait SignedT[+T <: TopT] extends TopT
 sealed trait IdentifierT[+K <: ID] extends AtomT
 type IdentifierUT = IdentifierT[ID]
 
-sealed trait IdentifierKeyT[+K <: ID] extends AtomT
+final abstract class IdentifierKeyT[+K <: ID] extends AtomT
 type IdentifierKeyUT = IdentifierKeyT[ID]
 
 /**
   * Data type for Channels
   */
-sealed trait ChannelT[+K <: ID, +InpT >: BotT, -OutT <: InpT & TopT] extends IdentifierT[K]
+final abstract class ChannelT[+K <: ID, +InpT >: BotT, -OutT <: InpT & TopT] extends IdentifierT[K]
 type ChanT[+InpT >: BotT, -OutT <: InpT & TopT] = ChannelT[ID, InpT, OutT]
 type InpChanT[+InpT >: BotT] = ChanT[InpT, OffBotT]
 type OutChanT[-OutT <: TopT] = ChanT[OffTopT, OutT]
@@ -71,20 +71,20 @@ type OutChanT[-OutT <: TopT] = ChanT[OffTopT, OutT]
 /**
   * Data type for unordered uniformly-typed collections of values.
   */
-sealed trait CollectedT[+IsNonEmpty <: Boolean, +T >: BotT] extends TopT
+final abstract class CollectedT[+IsNonEmpty <: Boolean, +T >: BotT] extends TopT
 type CollectedUT[+T >: BotT] = CollectedT[Boolean, T]
 
 sealed trait OrderT extends AtomT
-sealed trait KillT extends OrderT
-sealed trait PauseT extends OrderT
-sealed trait StartT extends OrderT
+final abstract class KillT extends OrderT
+final abstract class PauseT extends OrderT
+final abstract class StartT extends OrderT
 
-sealed trait ErrorT[+T <: TopT] extends TopT
+final abstract class ErrorT[+T <: TopT] extends TopT
 
 sealed trait BoolT extends AtomT
-sealed trait TrueT extends BoolT
-sealed trait FalseT extends BoolT
+final abstract class TrueT extends BoolT
+final abstract class FalseT extends BoolT
 
-sealed trait StrT extends TopT
+final abstract class StrT extends TopT
 
-sealed trait PulseT extends AtomT
+final abstract class PulseT extends AtomT
