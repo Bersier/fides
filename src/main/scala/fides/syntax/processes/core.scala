@@ -1,7 +1,6 @@
 package fides.syntax.processes
 
-import fides.syntax.core.Code
-import fides.syntax.types.{Aplr, ArgsUS, ChanT, DeclS, Expr, OffTopT, TopT}
+import fides.syntax.types.{Aplr, ArgsUS, ChanT, Code, DeclS, Expr, OffTopT, TopT}
 
 /**
   * Sends a value to an address.

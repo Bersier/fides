@@ -1,7 +1,6 @@
 package fides.syntax.signatures
 
-import fides.syntax.core.Code
-import fides.syntax.types.{Cnst, Expr, Exvr, IdentifierUT, IdentifierKeyUT, SignedT, TopT, Xctr, Xcvr}
+import fides.syntax.types.{Cnst, Code, Expr, Exvr, IdentifierKeyUT, IdentifierUT, SignedT, TopT, Xctr, Xcvr}
 
 /**
   * Signed values are guaranteed to have been created using a key corresponding to [[signature]].

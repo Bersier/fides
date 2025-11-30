@@ -1,14 +1,17 @@
 package fides.syntax.meta
 
-import fides.syntax.core.Code
-import fides.syntax.types.{Cnst, Expr, Exvr, NatUT, Ntrl, QuotedT, TopS, Xctr, Xcvr}
+import fides.syntax.types.{Aplr, BotS, Cnst, Code, Expr, Exvr, NatUT, Ntrl, QuotedT, TopS, Xctr, Xcvr, ZCode}
 import fides.syntax.values.Nat
 import typelevelnumbers.binary.Bits
 
 /**
   * Code as value, for metaprogramming
   */
-final case class Quoted[S <: TopS](code: Code[S]) extends Code[Ntrl[QuotedT[S]]]
+final case class Quoted[
+  P >: BotS,
+  N <: TopS,
+  L <: Boolean,
+](code: Code[P, N, L]) extends ZCode[Ntrl[QuotedT[P, N, L]]]
 // todo should Quote and Quoted really be separate?
 // todo we would have to keep track of the exact code type to satisfy the principle that no Xctr can fail
 
@@ -78,7 +81,11 @@ final case class MatchEscapeMatcher[S <: TopS](
   *
   * Once all the [[Escape]]s inside [[code]] have been evaluated and spliced in, reduces to a [[Quoted]].
   */
-final case class Quote[S <: TopS](code: Code[S]) extends Code[Exvr[QuotedT[S]]]
+final case class Quote[
+  P <: TopS,
+  N <: TopS,
+  L <: Boolean,
+](code: Code[P, N, L, ?]) extends Code[Polar[QuotedT[P], QuotedT[N], L]]
 
 /**
   * Code extractor.

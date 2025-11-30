@@ -1,7 +1,6 @@
 package fides.syntax.meta
 
-import fides.syntax.core.Code
-import fides.syntax.types.{Aplr, Expr, Exvr, QuotedT, SignedT}
+import fides.syntax.types.{Aplr, Code, Expr, Exvr, QuotedT, SignedT}
 
 /**
   * Launches [[code]] as a new process, and outputs a signed value of the code, confirming the launch.

@@ -14,6 +14,8 @@ sealed trait TopS private[types]()
   */
 type BotS = Nothing
 
+type OffTopS = Any
+
 /**
   * A type smaller than [[BotT]].
   *
@@ -41,6 +43,8 @@ sealed trait MNameS[T <: TopT] extends NameS[T]
   * Fides code type for non-polar process code
   */
 sealed trait Aplr extends TopS
+
+sealed trait Polar2[T <: TopT, P <: Boolean, N <: Boolean, C <: Boolean] extends TopS
 
 /**
   * [[Polr]] is a generalization of expressions and patterns.

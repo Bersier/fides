@@ -1,7 +1,6 @@
 package fides.syntax.values
 
-import fides.syntax.core.Code
-import fides.syntax.types.{ArgsUS, AtomT, BoolT, Expr, Exvr, FalseT, Ntrl, TrueT}
+import fides.syntax.types.{ArgsUS, AtomT, BoolT, Code, Expr, Exvr, FalseT, Ntrl, TrueT}
 
 case object True extends Code[Ntrl[TrueT]]
 case object False extends Code[Ntrl[FalseT]]

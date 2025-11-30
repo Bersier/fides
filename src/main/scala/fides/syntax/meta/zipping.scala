@@ -1,7 +1,6 @@
 package fides.syntax.meta
 
-import fides.syntax.core.Code
-import fides.syntax.types.{ArgsS, CollectedT, OffBotS, Polr, Povr, QuotedT, TopS}
+import fides.syntax.types.{ArgsS, Code, CollectedT, OffBotS, Polr, Povr, QuotedT, TopS}
 import util.MultisetOps
 import util.Multisets.Multiset
 

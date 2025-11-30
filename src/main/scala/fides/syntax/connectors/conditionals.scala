@@ -1,7 +1,6 @@
 package fides.syntax.connectors
 
-import fides.syntax.core.Code
-import fides.syntax.types.{TopT, TypeS, Xctr, Xcvr}
+import fides.syntax.types.{Code, TopT, TypeS, Xctr, Xcvr}
 import izumi.reflect.Tag
 
 /**
