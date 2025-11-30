@@ -10,3 +10,5 @@ import fides.syntax.types.{Aplr, Expr, Exvr, QuotedT, SignedT}
   * The new names are visible in the outputted code certificate.
   */
 final case class Launch(code: Code[Expr[QuotedT[Aplr]]]) extends Code[Exvr[SignedT[QuotedT[Aplr]]]]
+
+// todo Catchable and Catch
