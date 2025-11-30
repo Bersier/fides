@@ -9,13 +9,13 @@ import scala.annotation.publicInBinary
 /**
   * Natural number values
   */
-final case class NaturalNumber[B <: Bits] @publicInBinary private(bits: B) extends Code[Ntrl[NatT[B]]]:
+final case class Nat[B <: Bits] @publicInBinary private(bits: B) extends Code[Ntrl[NatT[B]]]:
   assert(bits.withoutTrailingZeros == bits)
   override def toString: String = bits.toBigInt.toString
-object NaturalNumber:
-  def apply[B <: Bits & Singleton](bits: B): NaturalNumber[B] = new NaturalNumber(bits)
-  inline def from[N <: Int & Singleton](n: N): NaturalNumber[Bits.FromInt[N]] = new NaturalNumber(Bits.fromInt(n))
-end NaturalNumber
+object Nat:
+  def apply[B <: Bits & Singleton](bits: B): Nat[B] = new Nat(bits)
+  inline def from[N <: Int & Singleton](n: N): Nat[Bits.FromInt[N]] = new Nat(Bits.fromInt(n))
+end Nat
 
 /**
   * Outputs the sum of the inputs.

@@ -2,7 +2,7 @@ package fides.syntax.meta
 
 import fides.syntax.core.Code
 import fides.syntax.types.{Cnst, Expr, Exvr, NatUT, Ntrl, QuotedT, TopS, Xctr, Xcvr}
-import fides.syntax.values.NaturalNumber
+import fides.syntax.values.Nat
 import typelevelnumbers.binary.Bits
 
 /**
@@ -41,7 +41,7 @@ final case class Escape[S <: TopS](code: Code[Expr[QuotedT[S]]]) extends Code[S]
   */
 final case class QuotedEscape[S <: TopS](
   code: Code[Expr[QuotedT[S]]],
-  level: Code[Cnst[NatUT]] = NaturalNumber(Bits.None),
+  level: Code[Cnst[NatUT]] = Nat(Bits.None),
 ) extends Code[S]
 
 /**
@@ -70,7 +70,7 @@ final case class MatchEscape[S <: TopS](code: Code[Xctr[QuotedT[S]]]) extends Co
   */
 final case class MatchEscapeMatcher[S <: TopS](
   code: Code[Xctr[QuotedT[S]]],
-  level: Code[Cnst[NatUT]] = NaturalNumber(Bits.None),
+  level: Code[Cnst[NatUT]] = Nat(Bits.None),
 ) extends Code[S]
 
 /**
