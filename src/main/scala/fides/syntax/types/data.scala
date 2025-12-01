@@ -41,8 +41,14 @@ sealed trait AtomT extends TopT
   */
 final abstract class PairT[+T1 >: BotT, +T2 >: BotT] extends TopT
 
-final abstract class Record extends TopT
-// todo
+/**
+  * The type of a record is a set of key-value pairs. But we cannot represent unordered types in Scala,
+  * so we instead use a list of key-value pairs. It is assumed that it is sorted by keys,
+  * so it's a canonical representation of the set of pairs.
+  */
+sealed trait RecordT extends TopT
+final abstract class EmptyRecordT extends RecordT
+final abstract class NonEmptyRecordT[+K <: ID, +V <: TopT, +T <: RecordT] extends RecordT
 
 final abstract class NatT[+B <: Bits] extends AtomT
 type NatUT = NatT[Bits]
