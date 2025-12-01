@@ -1,6 +1,6 @@
 package fides.syntax.values
 
-import fides.syntax.types.{Aplr, Code, Code2, TopM, Polar2, PairS, Povr, TopP, TopT}
+import fides.syntax.types.{Aplr, Code2, PairS, Polar2, Povr, TopM, TopP, TopT}
 
 /**
   * General [[Polar]] for pairing.
@@ -17,6 +17,6 @@ final case class Pair[T1 <: TopT, T2 <: TopT, P1 <: TopP, P2 <: TopP, M1 <: TopM
   * As an Xctr, the inputted bundle is unbundled along the wires, 
   * which are sources that feed values to the executing body.
   */
-final case class Bundle(wires: Any, body: Code[Aplr]) extends Code[Povr[?, ?]]
+final case class Bundle[M <: TopM](wires: Any, body: Code2[Aplr, M]) extends Code2[Povr[?, ?], M]
 // todo
 // todo double-bundle extends Code[Bipo...

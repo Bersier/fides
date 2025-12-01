@@ -62,6 +62,7 @@ type TopPoS = Polr[OffTopT, OffBotT]
   * If an expression of a given data type evaluates, it always evaluates to a value of that data type.
   */
 type Expr[+T <: TopT] = Polr[T, OffBotT]
+type Expr2[T <: TopT] = Polar2[T, Polarity[Bool.T, Bool, Bool]]
 
 /**
   * Fides code type for extractors (aka patterns). While extractors are really just a special type of
@@ -87,6 +88,7 @@ type Xctr[-T <: TopT] = Polr[OffTopT, T]
   * Can be used as either an [[Expr]] or as an [[Xctr]]. Is naturally a [[Cnst]].
   */
 type Ntrl[T <: TopT] = Polar[T, T, true]
+type Ntrl2[T <: TopT] = Polar2[T, BotP]
 
 /**
   * Fides code type for bi-polar process code
