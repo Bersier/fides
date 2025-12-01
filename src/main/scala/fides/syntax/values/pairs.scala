@@ -11,6 +11,10 @@ final case class Pair[T1 <: TopT, T2 <: TopT, P <: TopP, S1 <: Polar2[T1, P], S2
 ) extends Code2[PairS[T1, T2, P, S1, S2], M]
 // todo replace by record?
 
+given [
+  T1 <: TopT, T2 <: TopT, P <: TopP, S1 <: Polar2[T1, P], S2 <: Polar2[T2, P], M <: TopM
+] => (f: Code2[S1, M], s: Code2[S2, M]) => Code2[PairS[T1, T2, P, S1, S2], M] = Pair(f, s)
+
 /**
   * As an Expr, the wires are sinks that collect values from the executing body, which are then output as a bundle.
   *
