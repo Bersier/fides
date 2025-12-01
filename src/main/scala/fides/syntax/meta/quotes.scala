@@ -1,6 +1,8 @@
 package fides.syntax.meta
 
-import fides.syntax.types.{Cnst, Code, Code2, Expr, NatUT, Polar2, QuotedT, SomeM, TopM, TopP, TopS, Xctr, Xcvr}
+import fides.syntax.types.{
+  Cnst, Code, Code2, Expr, False, NatUT, Polar2, Polarity, QuotedT, SomeM, TopM, TopP, TopS, True, Xctr,
+}
 import fides.syntax.values.Nat
 import typelevelnumbers.binary.Bits
 
@@ -10,6 +12,8 @@ import typelevelnumbers.binary.Bits
 final case class Quote[S <: TopS, P <: TopP, M <: TopM](
   code: Code2[S, SomeM[P, M]],
 ) extends Code2[Polar2[QuotedT[S], P], M]
+
+// todo there might be a better escape system, where Escape is more generic, rather than being specific to Expr
 
 /**
   * Allows escaping the body of a [[Quote]]. Ignores nested [[Quote]]s
@@ -23,7 +27,9 @@ final case class Quote[S <: TopS, P <: TopP, M <: TopM](
   *
   * (At the top-level (outside of a quote), could represent macro code.)
   */
-final case class Escape[S <: TopS](code: Code[Expr[QuotedT[S]]]) extends Code[S]
+final case class Escape[S <: TopS, M <: TopM](
+  code: Code2[Expr[QuotedT[S]], M],
+) extends Code2[S, SomeM[Polarity[True, False, False], M]]
 
 /**
   * Represents an [[Escape]] within a (nested) [[Quote]], so it is simply treated like code of an [[Escape]],
@@ -71,9 +77,3 @@ final case class MatchEscapeMatcher[S <: TopS](
   code: Code[Xctr[QuotedT[S]]],
   level: Code[Cnst[NatUT]] = Nat(Bits.None),
 ) extends Code[S]
-
-/**
-  * Code extractor.
-  */
-final case class MatchQuote[S <: TopS](code: Code[S]) extends Code[Xcvr[QuotedT[S]]]
-// todo lossy type
