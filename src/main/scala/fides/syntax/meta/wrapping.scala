@@ -1,6 +1,6 @@
 package fides.syntax.meta
 
-import fides.syntax.types.{Code2, Expr2, Ntrl2, QuotedT, TopM, TopT}
+import fides.syntax.types.*
 
 /**
   * As an Expr, wraps a value into a Quoted.

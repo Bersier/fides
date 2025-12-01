@@ -1,6 +1,6 @@
 package fides.syntax.identifiers
 
-import fides.syntax.types.{ChannelT, Code, ID, Ntrl, OffBotT, OffTopT, TopT}
+import fides.syntax.types.*
 
 /**
   * Channel identifier

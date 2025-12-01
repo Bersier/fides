@@ -1,8 +1,6 @@
 package fides.syntax.meta
 
-import fides.syntax.types.{
-  Bool, Cnst, Code, Code2, Expr, NatUT, Polar2, Polarity, QuotedT, SomeM, TopM, TopP, TopS, Xctr,
-}
+import fides.syntax.types.*
 import fides.syntax.values.Nat
 import typelevelnumbers.binary.Bits
 
@@ -28,7 +26,7 @@ final case class Quote[S <: TopS, P <: TopP, M <: TopM](
   * (At the top-level (outside of a quote), could represent macro code.)
   */
 final case class Escape[S <: TopS, M <: TopM](
-  code: Code2[Polar2[QuotedT[S], Polarity[Bool.T, Bool, Bool]], M],
+  code: Code2[Expr2[QuotedT[S]], M],
 ) extends Code2[S, SomeM[Polarity[Bool.T, Bool.F, Bool.F], M]]
 
 /**
@@ -44,10 +42,12 @@ final case class Escape[S <: TopS, M <: TopM](
   * When [[QuotedEscape]] is used within [[MatchQuote]], nothing special happens.
   * So [[QuotedEscape]]s within quotes are matched by [[QuotedEscape]]s within [[MatchQuote]], as expected.
   */
-final case class QuotedEscape[S <: TopS](
-  code: Code[Expr[QuotedT[S]]],
-  level: Code[Cnst[NatUT]] = Nat(Bits.None),
-) extends Code[S]
+final case class QuotedEscape[S <: TopS, B <: Bits, M >: BotM <: TopM](
+  // todo add lower bounds such as for M everywhere?
+  code: Code2[Expr2[QuotedT[S]], M],
+  level: Code2[Cnst2[NatT[B]], M] = Nat(Bits.None),
+) extends Code2[S, SomeM[Polarity[Bool.T, Bool.F, Bool.F], M]]
+// todo is SomeM's first type argument correct?
 
 /**
   * Allows escaping the body of a [[MatchQuote]]. Ignores nested [[MatchQuote]]s
@@ -58,8 +58,8 @@ final case class QuotedEscape[S <: TopS](
   * To quote a [[MatchEscape]] from a nested [[MatchQuote]], rather than escaping the top-level [[MatchEscape]],
   * use [[MatchEscapeMatcher]].
   */
-final case class MatchEscape[S <: TopS](code: Code[Xctr[QuotedT[S]]]) extends Code[S]
-// todo lossy type
+final case class MatchEscape[S <: TopS, M <: TopM](code: Code2[Xctr2[QuotedT[S]], M]) extends Code2[S, ?]
+// todo set second type argument
 
 /**
   * Allows matching a [[MatchEscape]](Matcher) within a [[MatchQuote]]. See also [[SignedMatcher]].
@@ -73,7 +73,7 @@ final case class MatchEscape[S <: TopS](code: Code[Xctr[QuotedT[S]]]) extends Co
   * [[MatchEscapeMatcher]]`(c, 0)` matches [[MatchEscape]]`(c)`.
   * For `level > 0`, [[MatchEscapeMatcher]]`(c, level)` matches [[MatchEscapeMatcher]]`(c, level - 1)`.
   */
-final case class MatchEscapeMatcher[S <: TopS](
-  code: Code[Xctr[QuotedT[S]]],
-  level: Code[Cnst[NatUT]] = Nat(Bits.None),
-) extends Code[S]
+final case class MatchEscapeMatcher[S <: TopS, B <: Bits, M >: BotM <: TopM](
+  code: Code2[Xctr[QuotedT[S]], M],
+  level: Code2[Cnst2[NatT[B]], M] = Nat(Bits.None),
+) extends Code2[S, ?] // todo set second type argument

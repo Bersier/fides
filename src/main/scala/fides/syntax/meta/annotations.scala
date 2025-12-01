@@ -1,6 +1,6 @@
 package fides.syntax.meta
 
-import fides.syntax.types.{Cnst, Code, Expr, Exvr, NatUT, QuotedT, TopS, TopT}
+import fides.syntax.types.*
 import fides.syntax.values.Nat
 import typelevelnumbers.binary.Bits
 
@@ -8,15 +8,13 @@ import typelevelnumbers.binary.Bits
   * An annotated piece of code. The annotation does not change the semantics of the code.
   * It acts as a structured comment.
   */
-final case class Annotated[S <: TopS, T <: TopT](code: Code[S], annotation: Code[Cnst[T]]) extends Code[S]
+final case class Annotated[S <: TopS, T <: TopT, M <: TopM](
+  code: Code2[S, M],
+  annotation: Code2[Cnst2[T], M],
+) extends Code2[S, M]
 
-final case class AnnotatedMatcher[S <: TopS, T <: TopT](
-  code: Code[S],
-  annotation: Code[Cnst[T]],
-  level: Code[Cnst[NatUT]] = Nat(Bits.None),
-) extends Code[S]
-
-/**
-  * Removes all the annotations from a Quoted.
-  */
-final case class RemoveAnnotations[S <: TopS](code: Code[Expr[QuotedT[S]]]) extends Code[Exvr[QuotedT[S]]]
+final case class AnnotatedMatcher[S <: TopS, B <: Bits, T <: TopT, M <: TopM](
+  code: Code2[S, M],
+  annotation: Code2[Cnst2[T], M],
+  level: Code2[Cnst2[NatT[B]], M] = Nat(Bits.None),
+) extends Code2[S, M]

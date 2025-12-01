@@ -1,6 +1,6 @@
 package fides.syntax.identifiers
 
-import fides.syntax.types.{Code, Expr, Exvr, ID, IdentifierKeyT, IdentifierKeyUT, IdentifierT, IdentifierUT, Ntrl}
+import fides.syntax.types.*
 
 /**
   * Identifiers are structureless. They can only be compared for equality. They cannot be inspected in any other way.

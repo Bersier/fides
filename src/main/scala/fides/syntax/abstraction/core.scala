@@ -1,6 +1,6 @@
 package fides.syntax.abstraction
 
-import fides.syntax.types.{Bipo, Cnst, Code, TopPoS}
+import fides.syntax.types.*
 
 // todo polymorphic abstractions?
 //  Variance? Type bounds ?!

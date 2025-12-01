@@ -1,6 +1,6 @@
 package fides.syntax.values
 
-import fides.syntax.types.{Cnst, Code, Ntrl, PulseT, StrT}
+import fides.syntax.types.*
 
 /**
   * A value that doesn't carry any information beyond causality

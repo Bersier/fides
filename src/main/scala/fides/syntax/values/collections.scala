@@ -1,8 +1,6 @@
 package fides.syntax.values
 
-import fides.syntax.types.{
-  ArgsS, Bool, BotT, ChanT, Cnst, Code, CollectedT, CollectedUT, NatUT, Polar, Polr, Povr, TopT,
-}
+import fides.syntax.types.*
 
 /**
   * General [[Polar]] for static-size collecting.

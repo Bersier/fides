@@ -1,5 +1,5 @@
 package fides.syntax.identifiers
 
-import fides.syntax.types.{Cnst, Code, IdentifierUT, NameS, TopT}
+import fides.syntax.types.*
 
 final case class Name[T <: TopT](identifier: Code[Cnst[IdentifierUT]]) extends Code[NameS[T]]

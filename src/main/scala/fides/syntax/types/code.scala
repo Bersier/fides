@@ -116,6 +116,7 @@ type Exvr[+T <: TopT] = Polar[T, OffBotT, false]
   * It differs from [[Ntrl]] in that it allows for covariance, which is what we want when a constant is needed.
   */
 type Cnst[+T <: TopT] = Polar[T, OffBotT, true]
+type Cnst2[T <: TopT] = Polar2[T, Polarity[Bool.T, Bool, Bool.T]]
 
 /**
   * [[Xctr]] that is not a literal
