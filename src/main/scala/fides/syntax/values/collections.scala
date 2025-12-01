@@ -1,11 +1,13 @@
 package fides.syntax.values
 
-import fides.syntax.types.{ArgsS, BotT, ChanT, Cnst, Code, CollectedT, CollectedUT, NatUT, Polar, Polr, Povr, TopT}
+import fides.syntax.types.{
+  ArgsS, Bool, BotT, ChanT, Cnst, Code, CollectedT, CollectedUT, NatUT, Polar, Polr, Povr, TopT,
+}
 
 /**
   * General [[Polar]] for static-size collecting.
   */
-final case class Collected[IsNonEmpty <: Boolean, P >: BotT, N <: TopT, L <: Boolean](
+final case class Collected[IsNonEmpty <: Bool, P >: BotT, N <: TopT, L <: Boolean](
   elements: Code[ArgsS[IsNonEmpty, Polar[P, N, L]]],
 ) extends Code[Polar[CollectedT[IsNonEmpty, P], CollectedT[IsNonEmpty, N], L]]
 
@@ -17,7 +19,7 @@ final case class Collected[IsNonEmpty <: Boolean, P >: BotT, N <: TopT, L <: Boo
 final case class AddElementP[P <: N, N <: TopT](
   element: Code[Polr[P, N]],
   others: Code[Polr[CollectedUT[P], CollectedUT[N]]],
-) extends Code[Povr[CollectedT[true, P], CollectedT[true, N]]]
+) extends Code[Povr[CollectedT[Bool.T, P], CollectedT[Bool.T, N]]]
 
 /**
   * As an Expr, waits for [[size]] elements from [[elementSource]], then outputs them as a Collected.

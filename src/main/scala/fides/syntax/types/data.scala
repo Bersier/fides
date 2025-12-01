@@ -71,9 +71,8 @@ type OutChanT[-OutT <: TopT] = ChanT[OffTopT, OutT]
 /**
   * Data type for unordered uniformly-typed collections of values.
   */
-final abstract class CollectedT[+IsNonEmpty <: Boolean, +T >: BotT] extends TopT
-type CollectedUT[+T >: BotT] = CollectedT[Boolean, T]
-// todo don't use Boolean anywhere, use Bool instead
+final abstract class CollectedT[+IsNonEmpty <: Bool, +T >: BotT] extends TopT
+type CollectedUT[+T >: BotT] = CollectedT[Bool, T]
 
 sealed trait OrderT extends AtomT
 final abstract class KillT extends OrderT

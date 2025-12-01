@@ -18,8 +18,8 @@ type OffBotS = Nothing
 /**
   * Fides code type for multisets of syntactic elements
   */
-final abstract class ArgsS[+IsNonEmpty <: Boolean, +S <: TopS] extends TopS
-type ArgsUS[+S <: TopS] = ArgsS[Boolean, S]
+final abstract class ArgsS[+IsNonEmpty <: Bool, +S <: TopS] extends TopS
+type ArgsUS[+S <: TopS] = ArgsS[Bool, S]
 
 final abstract class CaseS[T <: TopT, A <: AtomT] extends TopS
 

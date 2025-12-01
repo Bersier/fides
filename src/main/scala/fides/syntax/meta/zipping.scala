@@ -1,13 +1,13 @@
 package fides.syntax.meta
 
-import fides.syntax.types.{ArgsS, Code, CollectedT, OffBotS, Polr, Povr, QuotedT, TopS}
+import fides.syntax.types.{ArgsS, Bool, Code, CollectedT, OffBotS, Polr, Povr, QuotedT, TopS}
 import util.MultisetOps
 import util.Multisets.Multiset
 
 /**
   * Used for multisets of pieces of code, at the syntax level.
   */
-sealed trait Args[+S <: TopS] extends Code[ArgsS[Boolean, S]]:
+sealed trait Args[+S <: TopS] extends Code[ArgsS[Bool, S]]:
   def arguments: Multiset[Code[S]]
   override def toString: String = s"Args{${arguments.asInstanceOf[Vector[?]].mkString(", ")}}"
 object Args:
@@ -16,8 +16,8 @@ object Args:
   def unapply[S <: TopS](arguments: Args[S]): scala.Some[Multiset[Code[S]]] =
     Some(arguments.arguments)
 
-  type None = Code[ArgsS[false, OffBotS]]
-  type Some[+S <: TopS] = Code[ArgsS[true, S]]
+  type None = Code[ArgsS[Bool.F, OffBotS]]
+  type Some[+S <: TopS] = Code[ArgsS[Bool.T, S]]
 
   private case object Empty extends Args[OffBotS], None:
     def arguments: Multiset[Code[OffBotS]] = summon[MultisetOps[Multiset]].empty
@@ -31,8 +31,8 @@ end Args
   * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Args]].
   */
 final case class Zip[
-  IsNonEmptyP <: Boolean,
-  IsNonEmptyN <: Boolean,
+  IsNonEmptyP <: Bool,
+  IsNonEmptyN <: Bool,
   P <: TopS,
   N <: TopS,
 ](

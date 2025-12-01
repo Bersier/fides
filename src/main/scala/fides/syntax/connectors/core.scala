@@ -81,7 +81,7 @@ final case class Signal(trigger: Code[Expr[?]]) extends Code[Exvr[PulseT]]
   */
 type Pick[T <: TopT] = PickP[T, OffBotT]
 object Pick:
-  def apply[T <: TopT](inputs: Code[ArgsS[true, Expr[T]]]): Pick[T] = PickP(inputs)
+  def apply[T <: TopT](inputs: Code[ArgsS[Bool.T, Expr[T]]]): Pick[T] = PickP(inputs)
 
 /**
   * Internal choice. Non-deterministically forwards the input to one of the outputs.
@@ -90,10 +90,10 @@ object Pick:
   */
 type UnPick[T <: TopT] = PickP[OffTopT, T]
 object UnPick:
-  def apply[T <: TopT](recipients: Code[ArgsS[true, Xctr[T]]]): UnPick[T] = PickP(recipients)
+  def apply[T <: TopT](recipients: Code[ArgsS[Bool.T, Xctr[T]]]): UnPick[T] = PickP(recipients)
 end UnPick
 
 /**
   * General [[Polr]] for picking. Note that it can only be an [[Expr]] or an [[Xctr]].
   */
-final case class PickP[P >: BotT, N <: TopT](connections: Code[ArgsS[true, Polr[P, N]]]) extends Code[Povr[P, N]]
+final case class PickP[P >: BotT, N <: TopT](connections: Code[ArgsS[Bool.T, Polr[P, N]]]) extends Code[Povr[P, N]]

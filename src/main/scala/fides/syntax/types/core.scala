@@ -15,6 +15,19 @@ sealed trait TopM
 sealed trait SomeM[+H <: TopP, +T <: TopM] extends TopM
 final abstract class NoneM extends SomeM[BotP, NoneM]
 
+sealed trait Bool
+object Bool:
+  type F = Bool
+  final abstract class T extends Bool
+end Bool
+
+type TopP = Polarity[Bool.F, Bool.F, Bool.F]
+final abstract class Polarity[+P <: Bool, +N <: Bool, +C <: Bool]
+type BotP = Polarity[Bool.T, Bool.T, Bool.T]
+
+sealed class ID
+case object LauncherID extends ID
+
 /**
   * Unused so far. Could be used to keep track of the quote context with an additional Code parameter.
   */
