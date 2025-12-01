@@ -9,7 +9,7 @@ import scala.language.experimental.pureFunctions
   */
 trait Code[+S <: TopS] private[syntax]()
 
-trait Code2[+S <: TopS, +M <: TopM] extends Code[S]
+trait Code2[S <: TopS, +M <: TopM] extends Code[S]
 type NtrlC[T <: TopT] = Code2[Ntrl2[T], BotM]
 
 sealed trait TopM

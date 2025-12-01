@@ -16,5 +16,5 @@ final case class Annotated[S <: TopS, T <: TopT, M <: TopM](
 final case class AnnotatedMatcher[S <: TopS, B <: Bits, T <: TopT, M <: TopM](
   code: Code2[S, M],
   annotation: Code2[Cnst2[T], M],
-  level: Code2[Cnst2[NatT[B]], M] = Nat(Bits.None),
+  level: Code2[Ntrl2[NatT[B]], M] = Nat(Bits.None),
 ) extends Code2[S, M]

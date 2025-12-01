@@ -45,7 +45,7 @@ final case class Escape[S <: TopS, M <: TopM](
 final case class QuotedEscape[S <: TopS, B <: Bits, M >: BotM <: TopM](
   // todo add lower bounds such as for M everywhere?
   code: Code2[Expr2[QuotedT[S]], M],
-  level: Code2[Cnst2[NatT[B]], M] = Nat(Bits.None),
+  level: Code2[Ntrl2[NatT[B]], M] = Nat(Bits.None),
 ) extends Code2[S, SomeM[Polarity[Bool.T, Bool.F, Bool.F], M]]
 // todo is SomeM's first type argument correct?
 
@@ -58,8 +58,9 @@ final case class QuotedEscape[S <: TopS, B <: Bits, M >: BotM <: TopM](
   * To quote a [[MatchEscape]] from a nested [[MatchQuote]], rather than escaping the top-level [[MatchEscape]],
   * use [[MatchEscapeMatcher]].
   */
-final case class MatchEscape[S <: TopS, M <: TopM](code: Code2[Xctr2[QuotedT[S]], M]) extends Code2[S, ?]
+final case class MatchEscape[S <: U, U <: TopS, M <: TopM](code: Code2[Xctr2[QuotedT[U]], M]) extends Code2[S, ?]
 // todo set second type argument
+// todo MatchEscapeS
 
 /**
   * Allows matching a [[MatchEscape]](Matcher) within a [[MatchQuote]]. See also [[SignedMatcher]].
@@ -75,5 +76,5 @@ final case class MatchEscape[S <: TopS, M <: TopM](code: Code2[Xctr2[QuotedT[S]]
   */
 final case class MatchEscapeMatcher[S <: TopS, B <: Bits, M >: BotM <: TopM](
   code: Code2[Xctr[QuotedT[S]], M],
-  level: Code2[Cnst2[NatT[B]], M] = Nat(Bits.None),
+  level: Code2[Ntrl2[NatT[B]], M] = Nat(Bits.None),
 ) extends Code2[S, ?] // todo set second type argument

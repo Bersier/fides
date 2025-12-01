@@ -7,24 +7,24 @@ import util.Multisets.Multiset
 /**
   * Used for multisets of pieces of code, at the syntax level.
   */
-sealed trait Args[S <: TopS, M <: TopM] extends Code2[ArgsS[Bool, S], M]:
+sealed trait Args[S <: TopS, I <: Bool, M <: TopM] extends Code2[ArgsS[I, S], M]:
   def arguments: Multiset[Code2[S, M]]
   override def toString: String = s"Args{${arguments.asInstanceOf[Vector[?]].mkString(", ")}}"
 object Args:
   def apply[S <: TopS](): None = Empty
   def apply[S <: TopS, M <: TopM](first: Code2[S, M], others: Code2[S, M]*): Some[S, M] = new NonEmpty(first, others*)
-  def unapply[S <: TopS, M <: TopM](arguments: Args[S, M]): scala.Some[Multiset[Code2[S, M]]] =
+  def unapply[S <: TopS, M <: TopM](arguments: Args[S, ?, M]): scala.Some[Multiset[Code2[S, M]]] =
     Some(arguments.arguments)
 
   type None = Code2[ArgsS[Bool.F, OffBotS], BotM]
   type Some[S <: TopS, M <: TopM] = Code2[ArgsS[Bool.T, S], M]
 
-  private case object Empty extends Args[OffBotS, BotM], None:
+  private case object Empty extends Args[OffBotS, Bool.F, BotM], None:
     def arguments: Multiset[Code2[OffBotS, BotM]] = summon[MultisetOps[Multiset]].empty
   private final class NonEmpty[S <: TopS, M <: TopM](
     first: Code2[S, M],
     others: Code2[S, M]*,
-  ) extends Args[S, M], Some[S, M]:
+  ) extends Args[S, Bool.T, M], Some[S, M]:
     val arguments: Multiset[Code2[S, M]] = summon[MultisetOps[Multiset]].multiset(elements = first +: others*)
 end Args
 

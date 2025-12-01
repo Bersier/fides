@@ -53,7 +53,7 @@ final abstract class NonEmptyRecordT[+K <: ID, +V <: TopT, +T <: RecordT] extend
 final abstract class NatT[+B <: Bits] extends AtomT
 type NatUT = NatT[Bits]
 
-final abstract class QuotedT[+S <: TopS] extends TopT
+final abstract class QuotedT[S <: TopS] extends TopT
 
 final abstract class SignedT[+T <: TopT] extends TopT
 
