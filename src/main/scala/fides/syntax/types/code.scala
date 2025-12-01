@@ -81,6 +81,7 @@ type Expr2[T <: TopT] = Polar2[T, Polarity[Bool.T, Bool, Bool]]
   * it never chokes on it (like a refutable pattern could).
   */
 type Xctr[-T <: TopT] = Polr[OffTopT, T]
+type Xctr2[T <: TopT] = Polar2[T, Polarity[Bool, Bool.T, Bool]]
 
 /**
   * Fides code type for Literals

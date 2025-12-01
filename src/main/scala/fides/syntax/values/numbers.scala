@@ -30,3 +30,4 @@ final case class Multiply(factors: Code[Expr[CollectedUT[NatUT]]]) extends Code[
   * Outputs -1 if the lhs is larger, 0 if they are equal, 1 if the rhs is larger.
   */
 final case class Compare(lhs: Code[Expr[NatUT]], rhs: Code[Expr[NatUT]]) extends Code[Exvr[NatUT]]
+// todo return a trit instead?

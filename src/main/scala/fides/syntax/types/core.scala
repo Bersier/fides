@@ -13,7 +13,7 @@ trait Code2[+S <: TopS, +M <: TopM] extends Code[S]
 
 sealed trait TopM
 sealed trait SomeM[+H <: TopP, +T <: TopM] extends TopM
-final abstract class NoneM extends SomeM[BotP, NoneM]
+final abstract class BotM extends SomeM[BotP, BotM]
 
 sealed trait Bool
 object Bool:
