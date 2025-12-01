@@ -9,10 +9,10 @@ import scala.language.experimental.pureFunctions
   */
 trait Code[+S <: TopS] private[syntax]()
 
-sealed trait Code2[+S <: TopS, +M <: MetaContext]
+trait Code2[+S <: TopS, +M <: TopM] extends Code[S]
 
-sealed trait MetaContext
-sealed trait SomeM[+H <: TopP, +T <: MetaContext] extends MetaContext
+sealed trait TopM
+sealed trait SomeM[+H <: TopP, +T <: TopM] extends TopM
 final abstract class NoneM extends SomeM[BotP, NoneM]
 
 /**

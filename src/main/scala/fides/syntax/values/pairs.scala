@@ -1,14 +1,14 @@
 package fides.syntax.values
 
-import fides.syntax.types.{Aplr, Code, Polar2, PairS, Polar, Povr, TopP, TopT}
+import fides.syntax.types.{Aplr, Code, Code2, TopM, Polar2, PairS, Povr, TopP, TopT}
 
 /**
   * General [[Polar]] for pairing.
   */
-final case class Pair[T1 <: TopT, T2 <: TopT, P1 <: TopP, P2 <: TopP](
-  first: Code[Polar2[T1, P1]],
-  second: Code[Polar2[T2, P2]],
-) extends Code[PairS[T1, T2, P1, P2]]
+final case class Pair[T1 <: TopT, T2 <: TopT, P1 <: TopP, P2 <: TopP, M1 <: TopM, M2 <: TopM](
+  first: Code2[Polar2[T1, P1], M1],
+  second: Code2[Polar2[T2, P2], M2],
+) extends Code2[PairS[T1, T2, P1, P2], M1 | M2]
 // todo replace by record?
 
 /**

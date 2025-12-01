@@ -125,3 +125,4 @@ final abstract class PairS[
   +P1 <: TopP,
   +P2 <: TopP,
 ] extends Polar2[PairT[T1, T2], P1 | P2]
+// todo more of this

@@ -1,15 +1,15 @@
 package fides.syntax.meta
 
-import fides.syntax.types.{Cnst, Code, Expr, Exvr, NatUT, Ntrl, QuotedT, TopS, Xctr, Xcvr}
+import fides.syntax.types.{Cnst, Code, Code2, Expr, NatUT, Polar2, QuotedT, SomeM, TopM, TopP, TopS, Xctr, Xcvr}
 import fides.syntax.values.Nat
 import typelevelnumbers.binary.Bits
 
 /**
-  * Code as value, for metaprogramming
+  * Analogous to s-Strings in Scala, but for code-as-value, for metaprogramming
   */
-final case class Quoted[S <: TopS](code: Code[S]) extends Code[Ntrl[QuotedT[S]]]
-// todo should Quote and Quoted really be separate?
-// todo we would have to keep track of the exact code type to satisfy the principle that no Xctr can fail
+final case class Quote[S <: TopS, P <: TopP, M <: TopM](
+  code: Code2[S, SomeM[P, M]],
+) extends Code2[Polar2[QuotedT[S], P], M]
 
 /**
   * Allows escaping the body of a [[Quote]]. Ignores nested [[Quote]]s
@@ -71,13 +71,6 @@ final case class MatchEscapeMatcher[S <: TopS](
   code: Code[Xctr[QuotedT[S]]],
   level: Code[Cnst[NatUT]] = Nat(Bits.None),
 ) extends Code[S]
-
-/**
-  * Analogous to s-Strings in Scala, but for code
-  *
-  * Once all the [[Escape]]s inside [[code]] have been evaluated and spliced in, reduces to a [[Quoted]].
-  */
-final case class Quote[S <: TopS](code: Code[S]) extends Code[Exvr[QuotedT[S]]]
 
 /**
   * Code extractor.
