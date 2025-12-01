@@ -125,7 +125,8 @@ type Xcvr[-T <: TopT] = Polar[OffTopT, T, false]
 final abstract class PairS[
   T1 <: TopT,
   T2 <: TopT,
-  +P1 <: TopP,
-  +P2 <: TopP,
-] extends Polar2[PairT[T1, T2], P1 | P2]
+  +P <: TopP,
+  +S1 <: Polar2[T1, P],
+  +S2 <: Polar2[T2, P],
+] extends Polar2[PairT[T1, T2], P]
 // todo more of this

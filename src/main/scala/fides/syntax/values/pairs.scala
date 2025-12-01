@@ -5,10 +5,10 @@ import fides.syntax.types.{Aplr, Code2, PairS, Polar2, Povr, TopM, TopP, TopT}
 /**
   * General [[Polar]] for pairing.
   */
-final case class Pair[T1 <: TopT, T2 <: TopT, P1 <: TopP, P2 <: TopP, M1 <: TopM, M2 <: TopM](
-  first: Code2[Polar2[T1, P1], M1],
-  second: Code2[Polar2[T2, P2], M2],
-) extends Code2[PairS[T1, T2, P1, P2], M1 | M2]
+final case class Pair[T1 <: TopT, T2 <: TopT, P <: TopP, S1 <: Polar2[T1, P], S2 <: Polar2[T2, P], M <: TopM](
+  first: Code2[S1, M],
+  second: Code2[S2, M],
+) extends Code2[PairS[T1, T2, P, S1, S2], M]
 // todo replace by record?
 
 /**
