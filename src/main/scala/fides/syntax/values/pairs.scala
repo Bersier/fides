@@ -1,24 +1,15 @@
 package fides.syntax.values
 
-import fides.syntax.types.{Aplr, BotT, Code, PairT, Polar, Povr, TopT}
-
-import scala.compiletime.ops.boolean.&&
+import fides.syntax.types.{Aplr, Code, NewPolar, PairS, Polar, Povr, TopP, TopT}
 
 /**
   * General [[Polar]] for pairing.
   */
-final case class Pair[
-  P1 >: BotT,
-  P2 >: BotT,
-  N1 <: TopT,
-  N2 <: TopT,
-  L1 <: Boolean,
-  L2 <: Boolean,
-](
-  first: Code[Polar[P1, N1, L1]],
-  second: Code[Polar[P2, N2, L2]],
-) extends Code[Polar[PairT[P1, P2], PairT[N1, N2], L1 && L2]]
-// todo replace by typed dictionary?
+final case class Pair[T1 <: TopT, T2 <: TopT, P1 <: TopP, P2 <: TopP](
+  first: Code[NewPolar[T1, P1]],
+  second: Code[NewPolar[T2, P2]],
+) extends Code[PairS[T1, T2, P1, P2]]
+// todo replace by record?
 
 /**
   * As an Expr, the wires are sinks that collect values from the executing body, which are then output as a bundle.

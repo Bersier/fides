@@ -36,7 +36,7 @@ final abstract class MNameS[T <: TopT] extends NameS[T]
   */
 final abstract class Aplr extends TopS
 
-sealed trait NewPolar[T <: TopT, +P <: Boolean, +N <: Boolean, +C <: Boolean] extends TopS
+sealed trait NewPolar[T <: TopT, +P <: TopP] extends TopS
 // todo use
 
 /**
@@ -118,3 +118,10 @@ type Cnst[+T <: TopT] = Polar[T, OffBotT, true]
   * [[Xctr]] that is not a literal
   */
 type Xcvr[-T <: TopT] = Polar[OffTopT, T, false]
+
+final abstract class PairS[
+  T1 <: TopT,
+  T2 <: TopT,
+  +P1 <: TopP,
+  +P2 <: TopP,
+] extends NewPolar[PairT[T1, T2], P1 | P2]

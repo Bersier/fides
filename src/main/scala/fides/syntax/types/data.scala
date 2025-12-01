@@ -73,6 +73,7 @@ type OutChanT[-OutT <: TopT] = ChanT[OffTopT, OutT]
   */
 final abstract class CollectedT[+IsNonEmpty <: Boolean, +T >: BotT] extends TopT
 type CollectedUT[+T >: BotT] = CollectedT[Boolean, T]
+// todo don't use Boolean anywhere, use Bool instead
 
 sealed trait OrderT extends AtomT
 final abstract class KillT extends OrderT
