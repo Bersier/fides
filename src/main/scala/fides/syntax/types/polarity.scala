@@ -6,3 +6,4 @@ final abstract class True extends False
 
 type TopP = Polarity[False, False, False]
 final abstract class Polarity[+P <: Bool, +N <: Bool, +C <: Bool]
+type BotP = Polarity[True, True, True]

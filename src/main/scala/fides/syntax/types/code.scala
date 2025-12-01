@@ -36,7 +36,7 @@ final abstract class MNameS[T <: TopT] extends NameS[T]
   */
 final abstract class Aplr extends TopS
 
-sealed trait NewPolar[T <: TopT, +P <: TopP] extends TopS
+sealed trait Polar2[T <: TopT, +P <: TopP] extends TopS
 // todo use
 
 /**
@@ -124,4 +124,4 @@ final abstract class PairS[
   T2 <: TopT,
   +P1 <: TopP,
   +P2 <: TopP,
-] extends NewPolar[PairT[T1, T2], P1 | P2]
+] extends Polar2[PairT[T1, T2], P1 | P2]
