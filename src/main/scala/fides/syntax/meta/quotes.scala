@@ -1,7 +1,7 @@
 package fides.syntax.meta
 
 import fides.syntax.types.{
-  Cnst, Code, Code2, Expr, False, NatUT, Polar2, Polarity, QuotedT, SomeM, TopM, TopP, TopS, True, Xctr,
+  Bool, Cnst, Code, Code2, Expr, False, NatUT, Polar2, Polarity, QuotedT, SomeM, TopM, TopP, TopS, True, Xctr,
 }
 import fides.syntax.values.Nat
 import typelevelnumbers.binary.Bits
@@ -28,7 +28,7 @@ final case class Quote[S <: TopS, P <: TopP, M <: TopM](
   * (At the top-level (outside of a quote), could represent macro code.)
   */
 final case class Escape[S <: TopS, M <: TopM](
-  code: Code2[Expr[QuotedT[S]], M],
+  code: Code2[Polar2[QuotedT[S], Polarity[True, Bool, Bool]], M],
 ) extends Code2[S, SomeM[Polarity[True, False, False], M]]
 
 /**
