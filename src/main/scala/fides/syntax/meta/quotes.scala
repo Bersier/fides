@@ -12,6 +12,7 @@ final case class Quote[S <: TopS, P <: TopP, M <: TopM](
 ) extends Code2[Polar2[QuotedT[S], P], M]
 
 // todo there might be a better escape system, where Escape is more generic, rather than being specific to Expr
+// todo Only keep Quote and Escape, and add EscapeRaiser, to lengthen the jump produced by an escape.
 
 /**
   * Allows escaping the body of a [[Quote]]. Ignores nested [[Quote]]s
@@ -59,6 +60,7 @@ final case class QuotedEscape[S <: TopS, B <: Bits, M >: BotM <: TopM](
   * use [[MatchEscapeMatcher]].
   */
 final case class MatchEscape[S <: U, U <: TopS, M <: TopM](code: Code2[Xctr2[QuotedT[U]], M]) extends Code2[S, ?]
+// todo add type weakening primitives instead of U
 // todo set second type argument
 // todo MatchEscapeS
 
