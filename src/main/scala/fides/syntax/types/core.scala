@@ -12,7 +12,8 @@ trait Code[+S <: TopS] private[syntax]()
 trait Code2[S <: TopS, +M <: TopM] extends Code[S]
 type NtrlC[T <: TopT] = Code2[Ntrl2[T], BotM]
 
-trait Code3[C <: TopC, +M <: TopM] private[syntax]()
+trait Code3[C <: TopC] private[syntax]()
+// todo perhaps we can get rid of this wrapper entirely
 
 sealed trait TopM
 sealed trait SomeM[+H <: TopP, +T <: TopM] extends TopM

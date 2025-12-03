@@ -8,8 +8,6 @@ import scala.language.experimental.pureFunctions
   */
 sealed trait TopS private[types]()
 
-final abstract class ScapeS[C <: TopC, P <: TopP] extends TopS
-
 /**
   * A type smaller than the intersection of all code types.
   *
@@ -125,24 +123,14 @@ type Cnst2[T <: TopT] = Polar2[T, Polarity[Bool.T, Bool, Bool.T]]
   */
 type Xcvr[-T <: TopT] = Polar[OffTopT, T, false]
 
-/**
-  * Only [[S1]] and [[S2]] are non-auxiliary.
-  */
 final abstract class PairS[
-  T1 <: TopT,
-  T2 <: TopT,
-  +P <: TopP,
-  +S1 <: Polar2[T1, P],
-  +S2 <: Polar2[T2, P],
+  T1 <: TopT, T2 <: TopT, +P <: TopP,
+  +S1 <: Polar2[T1, P], +S2 <: Polar2[T2, P],
 ] extends Polar2[PairT[T1, T2], P]
 
-
 final abstract class QuoteS[
-  P <: TopP,
-  C <: TopC,
-] extends Polar2[QuoteT[ScapeS[C, P]], P]
-
-//final abstract class QuoteS[
-//  P <: TopP,
-//  U <: TopS,
-//] extends Polar2[QuoteT[ScapeS[Scape[U], P]], P]
+  S <: TopS, P <: TopP,
+  C <: Scape[S, SomeM[P, ?]],
+] extends Polar2[QuoteT[S], P]
+// todo do we need subtyping of QuoteS with respect to C (covariantly) to work directly?
+//  If so, this is incorrect, and we need a flattened C instead i.e. S_1).
