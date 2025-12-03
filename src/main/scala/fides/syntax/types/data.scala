@@ -55,6 +55,8 @@ type NatUT = NatT[Bits]
 
 final abstract class QuotedT[S <: TopS] extends TopT
 
+final abstract class QuoteT[S <: ScapeS[?, ?]] extends TopT
+
 final abstract class SignedT[+T <: TopT] extends TopT
 
 /**

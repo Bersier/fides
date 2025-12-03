@@ -7,6 +7,13 @@ import typelevelnumbers.binary.Bits
 /**
   * Analogous to s-Strings in Scala, but for code-as-value, for metaprogramming
   */
+final case class Quote2[C <: TopC, P <: TopP, M <: TopM](
+  code: Code3[C, SomeM[P, M]],
+) extends Code3[?, M]
+
+/**
+  * Analogous to s-Strings in Scala, but for code-as-value, for metaprogramming
+  */
 final case class Quote[S <: TopS, P <: TopP, M <: TopM](
   code: Code2[S, SomeM[P, M]],
 ) extends Code2[Polar2[QuotedT[S], P], M]

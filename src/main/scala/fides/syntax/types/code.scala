@@ -8,7 +8,7 @@ import scala.language.experimental.pureFunctions
   */
 sealed trait TopS private[types]()
 
-final abstract class ScapeS[C <: TopC] extends TopS
+final abstract class ScapeS[C <: TopC, P <: TopP] extends TopS
 
 /**
   * A type smaller than the intersection of all code types.
@@ -135,4 +135,14 @@ final abstract class PairS[
   +S1 <: Polar2[T1, P],
   +S2 <: Polar2[T2, P],
 ] extends Polar2[PairT[T1, T2], P]
-// todo more of this
+
+
+final abstract class QuoteS[
+  P <: TopP,
+  C <: TopC,
+] extends Polar2[QuoteT[ScapeS[C, P]], P]
+
+//final abstract class QuoteS[
+//  P <: TopP,
+//  U <: TopS,
+//] extends Polar2[QuoteT[ScapeS[Scape[U], P]], P]
