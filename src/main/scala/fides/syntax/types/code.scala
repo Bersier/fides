@@ -1,5 +1,7 @@
 package fides.syntax.types
 
+import util.Bool
+
 import scala.language.experimental.pureFunctions
 
 /**

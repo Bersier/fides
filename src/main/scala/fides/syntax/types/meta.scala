@@ -8,6 +8,7 @@ final abstract class QuoteC[
   S <: TopS, P <: TopP, M <: TopM,
   +C <: Scape[S, SomeM[P, M]], +RC <: Scape[S, SomeM[P, BotM]],
 ](using TrimmedR[S, C, RC]) extends Scape[QuoteS[S, P, RC], M]
+// todo using doesn't do anything for a phantom type. Looks like we might have to get rid of the Code wrapper
 
 final abstract class EscapeC[
   S <: TopS, P <: TopP, M <: TopM,

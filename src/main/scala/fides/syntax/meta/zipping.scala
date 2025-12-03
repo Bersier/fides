@@ -1,7 +1,7 @@
 package fides.syntax.meta
 
 import fides.syntax.types.*
-import util.MultisetOps
+import util.{Bool, MultisetOps}
 import util.Multisets.Multiset
 
 /**

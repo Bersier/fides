@@ -1,6 +1,7 @@
 package fides.syntax.types
 
 import typelevelnumbers.binary.Bits
+import util.Bool
 
 /**
   * Parent type of all the Scala types that represent Fides data/value types

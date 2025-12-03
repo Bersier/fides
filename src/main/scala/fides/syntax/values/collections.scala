@@ -1,6 +1,7 @@
 package fides.syntax.values
 
 import fides.syntax.types.*
+import util.Bool
 
 /**
   * General [[Polar]] for static-size collecting.
