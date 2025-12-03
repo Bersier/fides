@@ -8,7 +8,6 @@ final abstract class QuoteC[
   S <: TopS, P <: TopP, M <: TopM,
   C <: Scape[S, SomeM[P, M]], RC <: Scape[S, SomeM[P, BotM]],
 ](using TrimmedR[S, C, RC]) extends Scape[QuoteS[S, P, RC], M]
-// todo Do additional arguments mess up subtyping? I think so.
 
 sealed trait TrimmedR[S <: TopS, C <: Scape[S, TopM], RC <: Scape[S, SomeM[TopP, BotM]]]
 // todo not sure if we should keep the type parameter S

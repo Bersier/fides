@@ -130,7 +130,5 @@ final abstract class PairS[
 
 final abstract class QuoteS[
   S <: TopS, P <: TopP,
-  +C <: Scape[S, SomeM[P, BotM]],
-] extends Polar2[QuoteT[S], P]
-// todo do we need subtyping of QuoteS with respect to C (covariantly) to work directly?
-//  If so, this is incorrect, and we need a flattened C instead i.e. S_1).
+  +RC <: Scape[S, SomeM[P, BotM]],
+](using TrimmedR[S, ?, RC]) extends Polar2[QuoteT[S], P]
