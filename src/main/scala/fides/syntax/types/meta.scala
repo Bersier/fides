@@ -3,22 +3,27 @@ package fides.syntax.types
 type TopC = Scape[TopS, TopM]
 
 sealed trait Scape[+S <: TopS, +M <: TopM]
-// todo make Scape subtyping work so that if one scape is smaller than another,
-//  it's similar to how one polarity is smaller than another? Dunno
-//  Or the other way around? We'd need another level to do such stuff.
-
-// todo get correct S from QuoteC? Probably circular... Let's code QuoteC and see
 
 final abstract class QuoteC[
   S <: TopS, P <: TopP, M <: TopM,
-  C <: Scape[S, SomeM[P, M]],
-] extends Scape[QuoteS[S, P, TrimmedC[S, P, C]], M]
+  C <: Scape[S, SomeM[P, M]], RC <: Scape[S, SomeM[P, BotM]],
+](using TrimmedR[S, C, RC]) extends Scape[QuoteS[S, P, RC], M]
+// todo Do additional arguments mess up subtyping? I think so.
 
-type Trimmed[C <: TopC] <: Scape[TopS, SomeM[TopP, BotM]] = C match
-  case PairC[t1, t2, p, s1, s2, m, c1, c2] => m match
-    case SomeM[p2, _] => PairC[t1, t2, p, s1, s2, SomeM[p2, BotM], Trimmed[c1], Trimmed[c2]]
-
-final abstract class TrimmedC[+S <: TopS, +P <: TopP, +C <: Scape[S, SomeM[P, ?]]] extends Scape[S, SomeM[P, BotM]]
+sealed trait TrimmedR[S <: TopS, C <: Scape[S, TopM], RC <: Scape[S, SomeM[TopP, BotM]]]
+// todo not sure if we should keep the type parameter S
+object TrimmedR:
+  given [
+    T1 <: TopT, T2 <: TopT, P <: TopP,
+    S1 <: Polar2[T1, P], S2 <: Polar2[T2, P], H <: TopP, M <: TopM,
+    C1 <: Scape[S1, SomeM[H, M]], C2 <: Scape[S2, SomeM[H, M]],
+    RC1 <: Scape[S1, SomeM[H, BotM]], RC2 <: Scape[S2, SomeM[H, BotM]],
+  ] => (TrimmedR[S1, C1, RC1], TrimmedR[S2, C2, RC2]) => TrimmedR[
+    PairS[T1, T2, P, S1, S2],
+    PairC[T1, T2, P, S1, S2, SomeM[H, M], C1, C2],
+    PairC[T1, T2, P, S1, S2, SomeM[H, BotM], RC1, RC2],
+  ]()
+end TrimmedR
 
 final abstract class EscapeC[
   S <: TopS, P <: TopP,
