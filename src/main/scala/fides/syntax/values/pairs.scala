@@ -4,6 +4,23 @@ import fides.syntax.types.*
 
 /**
   * General [[Polar]] for pairing.
+  *
+  * Only [[C1]], [[C2]] and [[M]] are non-auxiliary.
+  */
+final case class Pair2[
+  T1 <: TopT, T2 <: TopT,
+  P <: TopP,
+  S1 <: Polar2[T1, P], S2 <: Polar2[T2, P],
+  C1 <: Scape[S1], C2 <: Scape[S2],
+  M <: TopM,
+](
+  first: Code3[C1, M],
+  second: Code3[C2, M],
+) extends Code3[PairC[T1, T2, P, S1, S2, C1, C2], M]
+// todo replace by record?
+
+/**
+  * General [[Polar]] for pairing.
   */
 final case class Pair[T1 <: TopT, T2 <: TopT, P <: TopP, S1 <: Polar2[T1, P], S2 <: Polar2[T2, P], M <: TopM](
   first: Code2[S1, M],

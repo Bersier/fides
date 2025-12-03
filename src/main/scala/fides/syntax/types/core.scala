@@ -12,6 +12,8 @@ trait Code[+S <: TopS] private[syntax]()
 trait Code2[S <: TopS, +M <: TopM] extends Code[S]
 type NtrlC[T <: TopT] = Code2[Ntrl2[T], BotM]
 
+trait Code3[C <: TopC, +M <: TopM] private[syntax]()
+
 sealed trait TopM
 sealed trait SomeM[+H <: TopP, +T <: TopM] extends TopM
 final abstract class BotM extends SomeM[BotP, BotM]

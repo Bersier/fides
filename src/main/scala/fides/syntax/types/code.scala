@@ -8,6 +8,8 @@ import scala.language.experimental.pureFunctions
   */
 sealed trait TopS private[types]()
 
+final abstract class ScapeS[C <: TopC] extends TopS
+
 /**
   * A type smaller than the intersection of all code types.
   *
@@ -123,6 +125,9 @@ type Cnst2[T <: TopT] = Polar2[T, Polarity[Bool.T, Bool, Bool.T]]
   */
 type Xcvr[-T <: TopT] = Polar[OffTopT, T, false]
 
+/**
+  * Only [[S1]] and [[S2]] are non-auxiliary.
+  */
 final abstract class PairS[
   T1 <: TopT,
   T2 <: TopT,

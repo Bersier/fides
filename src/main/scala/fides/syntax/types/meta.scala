@@ -1,20 +1,20 @@
 package fides.syntax.types
 
-type TopQ = Q[TopS]
+type TopC = Scape[TopS]
 
-sealed trait Q[+S <: TopS]
+sealed trait Scape[+S <: TopS]
 
-final abstract class EscapeQ[S <: TopS, +ES <: Polar2[QuotedT[S], ?], Level] extends Q[S]
+final abstract class EscapeC[S <: TopS, +ES <: Polar2[QuotedT[S], ?], Level] extends Scape[S]
 
-final abstract class PairQ[
+/**
+  * Only [[C1]] and [[C2]] are non-auxiliary.
+  */
+final abstract class PairC[
   T1 <: TopT,
   T2 <: TopT,
-  +P <: TopP,
-  +S1 <: Polar2[T1, P],
-  +S2 <: Polar2[T2, P],
-  +Q1 <: Q[S1],
-  +Q2 <: Q[S2],
-] extends Q[PairS[T1, T2, P, S1, S2]]
-
-// todo variance
-// todo add M here instead?
+  P <: TopP,
+  S1 <: Polar2[T1, P],
+  S2 <: Polar2[T2, P],
+  +C1 <: Scape[S1],
+  +C2 <: Scape[S2],
+] extends Scape[PairS[T1, T2, P, S1, S2]]
