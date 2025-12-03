@@ -134,3 +134,6 @@ final abstract class QuoteS[
 ] extends Polar2[QuoteT[S], P]
 // todo do we need subtyping of QuoteS with respect to C (covariantly) to work directly?
 //  If so, this is incorrect, and we need a flattened C instead i.e. S_1).
+
+// todo we need to figure out the correct subtyping relation on Scape
+//  QuoteS should be able to show us the way

@@ -5,7 +5,7 @@ type TopC = Scape[TopS, TopM]
 sealed trait Scape[+S <: TopS, +M <: TopM]
 // todo make Scape subtyping work so that if one scape is smaller than another,
 //  it's similar to how one polarity is smaller than another? Dunno
-//  Or the other way around?
+//  Or the other way around? We'd need another level to do such stuff.
 
 // todo get correct S from QuoteC? Probably circular... Let's code QuoteC and see
 
@@ -22,7 +22,7 @@ final abstract class TrimmedC[+S <: TopS, +P <: TopP, +C <: Scape[S, SomeM[P, ?]
 
 final abstract class EscapeC[
   S <: TopS, P <: TopP,
-  ES <: Polar2[QuotedT[S], P], M <: TopM,
+  ES <: Polar2[QuotedT[S], P], M <: TopM, // todo note that ES cannot just be any TopS...
   +C <: Scape[ES, M],
 ] extends Scape[S, SomeM[P, M]]
 // todo Level
