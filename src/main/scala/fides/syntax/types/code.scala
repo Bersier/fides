@@ -135,6 +135,9 @@ final abstract class QuoteS[
   +RC <: Code[S, SomeM[P, BotM]],
 ] extends Polar2[QuoteT[S], P]
 
+// todo summon[QuoteT[QuoteS[QuoteS[?, ?, RC], ?, ?]]] is invariant in RC!
+//  This might be the key to matching escape matchers at nauseam.
+
 final abstract class WrapS[
   T <: TopT,
   +S <: Expr2[T],

@@ -12,6 +12,8 @@ final case class Pair[
 // todo now that we have removed the wrapper, we have to make this covariant in C1 and C2, which is not ideal,
 //  because it could lead to lost type information; we are relying on the compiler typing stuff tightly
 //  but if code is in a contravariant position, won't the compiler loosen it as needed?
+//  Also, it means that illegal code can be built simply with the help of Scala type ascriptions.
+//  It does come in handy for Escape.Matcher, though...
 ](first: C1, second: C2) extends Code[PairS[T1, T2, P, S1, S2], M]
 // todo replace by record?
 
