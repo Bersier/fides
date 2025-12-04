@@ -1,7 +1,7 @@
 package fides.syntax.types
 
 import typelevelnumbers.binary.Bits
-import util.Bool
+import util.TopB
 
 /**
   * Parent type of all the Scala types that represent Fides data/value types
@@ -80,8 +80,8 @@ type OutChanT[-OutT <: TopT] = ChanT[OffTopT, OutT]
 /**
   * Data type for unordered uniformly-typed collections of values.
   */
-final abstract class CollectedT[+IsNonEmpty <: Bool, +T >: BotT] extends TopT
-type CollectedUT[+T >: BotT] = CollectedT[Bool, T]
+final abstract class CollectedT[+IsNonEmpty <: TopB, +T >: BotT] extends TopT
+type CollectedUT[+T >: BotT] = CollectedT[TopB, T]
 
 sealed trait OrderT extends AtomT
 final abstract class KillT extends OrderT

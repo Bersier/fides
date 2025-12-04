@@ -1,6 +1,6 @@
 package fides.syntax.types
 
-import util.Bool
+import util.TopB
 
 import scala.language.experimental.pureFunctions
 
@@ -20,8 +20,8 @@ type OffBotS = Nothing
 /**
   * Fides code type for multisets of syntactic elements
   */
-final abstract class ArgsS[+IsNonEmpty <: Bool, +S <: TopS] extends TopS
-type ArgsUS[+S <: TopS] = ArgsS[Bool, S]
+final abstract class ArgsS[+IsNonEmpty <: TopB, +S <: TopS] extends TopS
+type ArgsUS[+S <: TopS] = ArgsS[TopB, S]
 
 final abstract class CaseS[T <: TopT, A <: AtomT] extends TopS
 
@@ -64,7 +64,7 @@ type TopPoS = Polr[OffTopT, OffBotT]
   * If an expression of a given data type evaluates, it always evaluates to a value of that data type.
   */
 type Expr[+T <: TopT] = Polr[T, OffBotT]
-type Expr2[T <: TopT] = Polar2[T, Polarity[Bool.T, Bool, Bool]]
+type Expr2[T <: TopT] = Polar2[T, Polarity[TopB.T, TopB, TopB]]
 
 /**
   * Fides code type for extractors (aka patterns). While extractors are really just a special type of
@@ -83,7 +83,7 @@ type Expr2[T <: TopT] = Polar2[T, Polarity[Bool.T, Bool, Bool]]
   * it never chokes on it (like a refutable pattern could).
   */
 type Xctr[-T <: TopT] = Polr[OffTopT, T]
-type Xctr2[T <: TopT] = Polar2[T, Polarity[Bool, Bool.T, Bool]]
+type Xctr2[T <: TopT] = Polar2[T, Polarity[TopB, TopB.T, TopB]]
 
 /**
   * Fides code type for Literals
@@ -118,7 +118,7 @@ type Exvr[+T <: TopT] = Polar[T, OffBotT, false]
   * It differs from [[Ntrl]] in that it allows for covariance, which is what we want when a constant is needed.
   */
 type Cnst[+T <: TopT] = Polar[T, OffBotT, true]
-type Cnst2[T <: TopT] = Polar2[T, Polarity[Bool.T, Bool, Bool.T]]
+type Cnst2[T <: TopT] = Polar2[T, Polarity[TopB.T, TopB, TopB.T]]
 
 /**
   * [[Xctr]] that is not a literal

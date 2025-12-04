@@ -1,12 +1,14 @@
 package util
 
-sealed trait Bool
+sealed trait TopB
+object TopB:
+  type F = TopB
+  final abstract class T extends TopB
+end TopB
 
-object Bool:
-  type F = Bool
-  final abstract class T extends Bool
-end Bool
-
-sealed trait NatN
-final abstract class Zero extends NatN
-final abstract class Succ[+N <: NatN] extends NatN
+sealed trait TopN
+object TopN:
+  final abstract class S[+N <: TopN] extends TopN
+  final abstract class `0` extends TopN
+  type `1` = S[`0`]
+end TopN

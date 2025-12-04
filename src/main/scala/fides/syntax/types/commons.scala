@@ -1,6 +1,6 @@
 package fides.syntax.types
 
-import util.Bool
+import util.TopB
 
 sealed class ID
 case object LauncherID extends ID
@@ -10,8 +10,8 @@ case object LauncherID extends ID
   * @tparam N whether a quote of this code can be used as an extractor
   * @tparam C whether a quote of this code can be used as a constant
   */
-final abstract class Polarity[+P <: Bool, +N <: Bool, +C <: Bool]
-type TopP = Polarity[Bool.F, Bool.F, Bool.F]
-type BotP = Polarity[Bool.T, Bool.T, Bool.T]
+final abstract class Polarity[+P <: TopB, +N <: TopB, +C <: TopB]
+type TopP = Polarity[TopB.F, TopB.F, TopB.F]
+type BotP = Polarity[TopB.T, TopB.T, TopB.T]
 
 trait OldCode[+S <: TopS] private[syntax]()

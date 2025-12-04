@@ -3,7 +3,7 @@ package fides.syntax.meta
 import fides.syntax.types.*
 import fides.syntax.values.Nat
 import typelevelnumbers.binary.Bits
-import util.Bool
+import util.TopB
 
 /**
   * Analogous to s-Strings in Scala, but for code-as-value, for metaprogramming
@@ -50,7 +50,7 @@ final case class QuotedEscape[S <: TopS, B <: Bits, M >: BotM <: TopM](
   // todo add lower bounds such as for M everywhere?
   code: Code[Expr2[QuotedT[S]], M],
   level: Code[Ntrl2[NatT[B]], M] = Nat(Bits.None),
-) extends Code[S, SomeM[Polarity[Bool.T, Bool.F, Bool.F], M]]
+) extends Code[S, SomeM[Polarity[TopB.T, TopB.F, TopB.F], M]]
 // todo is SomeM's first type argument correct?
 
 /**
