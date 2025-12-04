@@ -1,13 +1,13 @@
 package fides.syntax.types
 
-import util.TopN
+trait Code[C <: TopC] private[syntax]()
 
 /**
   * General type to represent Fides code
   */
-trait Code[+S <: TopS, +Q <: TopQ] private[syntax]() extends OldCode[S]
-type TopC = Code[TopS, TopQ]
+trait ConsC[+S <: TopS, +Q <: TopQ] private[syntax]() // todo seal
+type TopC = ConsC[TopS, TopQ]
 
-sealed trait TopQ
-sealed trait SomeQ[+H <: TopP, +T <: TopQ] extends TopQ
-final abstract class BotQ extends SomeQ[BotP, BotQ]
+sealed trait ConsQ[+H <: TopP, +T <: TopQ]
+type TopQ = ConsQ[TopP, ?]
+final abstract class BotQ extends ConsQ[BotP, BotQ]

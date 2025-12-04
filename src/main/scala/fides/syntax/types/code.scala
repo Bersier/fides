@@ -132,7 +132,7 @@ final abstract class PairS[
 
 final abstract class QuoteS[
   S <: TopS, P <: TopP,
-  +RC <: Code[S, SomeQ[P, BotQ]],
+  +RC <: ConsC[S, ConsQ[P, BotQ]],
 ] extends Polar2[QuoteT[S], P]
 
 // todo summon[QuoteT[QuoteS[QuoteS[?, ?, RC], ?, ?]]] is invariant in RC!
