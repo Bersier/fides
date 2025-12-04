@@ -14,7 +14,7 @@ final case class Quote[
 ](code: C)(using TrimmedR[S, C, RC]) extends Code[QuoteS[S, P, RC], M]
 
 // todo Only keep Quote and Escape.
-// todo how to match escape (chunks) generically?
+// todo how to match escape (chunks) generically? With a generic Escape.Matcher. But then how to match the matcher?
 // todo update documentation
 
 /**
@@ -57,7 +57,7 @@ end Escape
   */
 final case class QuotedEscape[S <: TopS, B <: Bits, M >: BotM <: TopM](
   // todo add lower bounds such as for M everywhere?
-  code: Code[Expr2[QuotedT[S]], M],
+  code: Code[Expr2[QuoteT[S]], M],
   level: Code[Ntrl2[NatT[B]], M] = Nat(Bits.None),
 ) extends Code[S, SomeM[Polarity[TopB.T, TopB.F, TopB.F], M]]
 // todo is SomeM's first type argument correct?
@@ -71,7 +71,7 @@ final case class QuotedEscape[S <: TopS, B <: Bits, M >: BotM <: TopM](
   * To quote a [[MatchEscape]] from a nested [[MatchQuote]], rather than escaping the top-level [[MatchEscape]],
   * use [[MatchEscapeMatcher]].
   */
-final case class MatchEscape[S <: U, U <: TopS, M <: TopM](code: Code[Xctr2[QuotedT[U]], M]) extends Code[S, ?]
+final case class MatchEscape[S <: U, U <: TopS, M <: TopM](code: Code[Xctr2[QuoteT[U]], M]) extends Code[S, ?]
 // todo add type weakening primitives instead of U
 // todo set second type argument
 // todo MatchEscapeS
@@ -89,6 +89,6 @@ final case class MatchEscape[S <: U, U <: TopS, M <: TopM](code: Code[Xctr2[Quot
   * For `level > 0`, [[MatchEscapeMatcher]]`(c, level)` matches [[MatchEscapeMatcher]]`(c, level - 1)`.
   */
 final case class MatchEscapeMatcher[S <: TopS, B <: Bits, M >: BotM <: TopM](
-  code: Code[Xctr[QuotedT[S]], M],
+  code: Code[Xctr[QuoteT[S]], M],
   level: Code[Ntrl2[NatT[B]], M] = Nat(Bits.None),
 ) extends Code[S, ?] // todo set second type argument

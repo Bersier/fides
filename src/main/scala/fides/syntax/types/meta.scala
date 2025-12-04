@@ -1,6 +1,5 @@
 package fides.syntax.types
 
-import typelevelnumbers.binary.Bits
 import util.TopN
 
 /**

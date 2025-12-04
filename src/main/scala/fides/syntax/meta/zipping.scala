@@ -22,6 +22,7 @@ object Args:
 
   type Matcher = Matcher.type
   case object Matcher extends Code[ArgsS[TopB, TopS], SomeM[Polarity[TopB.F, TopB.T, TopB.T], BotM]]
+  // todo how to match the matcher?
 
   private case object Empty extends Args[OffBotS, TopB.F, BotM], None:
     def arguments: Multiset[Code[OffBotS, BotM]] = summon[MultisetOps[Multiset]].empty
@@ -38,5 +39,5 @@ end Args
   * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Args]].
   */
 final case class Zip[IsNonEmpty <: TopB, S <: TopS, P <: TopP, M <: TopM](
-  pieces: Code[Polar2[CollectedT[IsNonEmpty, QuotedT[S]], P], M],
-) extends Code[Polar2[QuotedT[ArgsS[IsNonEmpty, S]], P], M]
+  pieces: Code[Polar2[CollectedT[IsNonEmpty, QuoteT[S]], P], M],
+) extends Code[Polar2[QuoteT[ArgsS[IsNonEmpty, S]], P], M]
