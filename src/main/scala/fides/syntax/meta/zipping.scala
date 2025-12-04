@@ -20,8 +20,10 @@ object Args:
   type None = Code[ArgsS[TopB.F, OffBotS], BotM]
   type Some[S <: TopS, M <: TopM] = Code[ArgsS[TopB.T, S], M]
 
-  type Matcher = Matcher.type
-  case object Matcher extends Code[ArgsS[TopB, TopS], SomeM[Polarity[TopB.F, TopB.T, TopB.T], BotM]]
+  final case class Matcher[S <: TopS, M <: TopM](
+    typeRepr: Code[S, M],
+  ) extends Code[ArgsS[TopB, S], M | SomeM[Polarity[TopB.F, TopB.T, TopB.T], BotM]]
+  // todo add another type parameter I?
 
   private case object Empty extends Args[OffBotS, TopB.F, BotM], None:
     def arguments: Multiset[Code[OffBotS, BotM]] = summon[MultisetOps[Multiset]].empty

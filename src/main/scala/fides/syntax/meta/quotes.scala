@@ -11,14 +11,12 @@ final case class Quote[
   +C <: Code[S, SomeM[P, M]], +RC <: Code[S, SomeM[P, BotM]],
 ](code: C)(using TrimmedR[S, C, RC]) extends Code[QuoteS[S, P, RC], M]
 
-// todo Only keep Quote and Escape.
 // todo how to match escape (chunks) generically? With a generic Escape.Matcher. But then how to match the matcher?
-// todo update documentation
 
 /**
   * Allows escaping the body of a [[Quote]].
   */
-sealed trait Escape[S <: TopS, M <: TopM] extends Code[S, M]
+sealed trait Escape[+S <: TopS, +M <: TopM] extends Code[S, M]
 object Escape:
   /**
     * Escapes one quotation level.
@@ -35,4 +33,11 @@ object Escape:
     S <: TopS, M <: TopM,
     +C <: Escape[S, M],
   ](escape: C) extends Escape[S, SomeM[BotP, M]]
+
+  // todo doesn't work as such, because neither Step nor Top are subtypes of it
+  final case class Matcher[S <: TopS, M <: TopM](
+    typeRepr: Code[S, M],
+    // todo M should be tunable as well (?), independently of typeRepr's native M
+    //  have a wrapper primitive that tunes M?
+  ) extends Escape[S, M | SomeM[Polarity[TopB.F, TopB.T, TopB.T], BotM]]
 end Escape
