@@ -22,7 +22,6 @@ object Args:
 
   type Matcher = Matcher.type
   case object Matcher extends Code[ArgsS[TopB, TopS], SomeM[Polarity[TopB.F, TopB.T, TopB.T], BotM]]
-  // todo how to match the matcher?
 
   private case object Empty extends Args[OffBotS, TopB.F, BotM], None:
     def arguments: Multiset[Code[OffBotS, BotM]] = summon[MultisetOps[Multiset]].empty
