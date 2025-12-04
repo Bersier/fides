@@ -7,7 +7,8 @@ import util.Multisets.Multiset
 /**
   * Used for multisets of pieces of code, at the syntax level.
   */
-sealed trait Args[S <: TopS, I <: TopB, M <: TopM] extends Code[ArgsS[I, S], M]:
+// todo using TopB to represent inhabitation is wrong here, since Inhabited should not be a subtype of uninhabited
+transparent sealed trait Args[S <: TopS, I <: TopB, M <: TopM] extends Code[ArgsS[I, S], M]:
   def arguments: Multiset[Code[S, M]]
   override def toString: String = s"Args{${arguments.asInstanceOf[Vector[?]].mkString(", ")}}"
 object Args:
@@ -18,6 +19,9 @@ object Args:
 
   type None = Code[ArgsS[TopB.F, OffBotS], BotM]
   type Some[S <: TopS, M <: TopM] = Code[ArgsS[TopB.T, S], M]
+
+  type Matcher = Matcher.type
+  case object Matcher extends Code[ArgsS[TopB, TopS], SomeM[Polarity[TopB.F, TopB.T, TopB.T], BotM]]
 
   private case object Empty extends Args[OffBotS, TopB.F, BotM], None:
     def arguments: Multiset[Code[OffBotS, BotM]] = summon[MultisetOps[Multiset]].empty

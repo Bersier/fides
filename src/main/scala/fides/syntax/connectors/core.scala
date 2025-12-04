@@ -83,6 +83,7 @@ final case class Signal(trigger: OldCode[Expr[?]]) extends OldCode[Exvr[PulseT]]
 type Pick[T <: TopT] = PickP[T, OffBotT]
 object Pick:
   def apply[T <: TopT](inputs: OldCode[ArgsS[TopB.T, Expr[T]]]): Pick[T] = PickP(inputs)
+end Pick
 
 /**
   * Internal choice. Non-deterministically forwards the input to one of the outputs.
