@@ -133,4 +133,4 @@ final abstract class PairS[
 final abstract class QuoteS[
   S <: TopS, P <: TopP,
   +RC <: Scape[S, SomeM[P, BotM]],
-](using TrimmedR[S, ?, RC]) extends Polar2[QuoteT[S], P]
+] extends Polar2[QuoteT[S], P]

@@ -8,11 +8,18 @@ import util.Bool
 /**
   * Analogous to s-Strings in Scala, but for code-as-value, for metaprogramming
   */
+final case class Quote2[
+  S <: TopS, P <: TopP, M <: TopM,
+  C <: Scape[S, SomeM[P, M]], RC <: Scape[S, SomeM[P, BotM]],
+](code: Code3[C])(using TrimmedR[S, C, RC]) extends Code3[QuoteC[S, P, M, C, RC]]
+
+/**
+  * Analogous to s-Strings in Scala, but for code-as-value, for metaprogramming
+  */
 final case class Quote[S <: TopS, P <: TopP, M <: TopM](
   code: Code2[S, SomeM[P, M]],
 ) extends Code2[Polar2[QuotedT[S], P], M]
 
-// todo there might be a better escape system, where Escape is more generic, rather than being specific to Expr
 // todo Only keep Quote and Escape, and add EscapeStool, to lengthen the jump produced by an escape.
 
 /**
@@ -30,6 +37,22 @@ final case class Quote[S <: TopS, P <: TopP, M <: TopM](
 final case class Escape[S <: TopS, M <: TopM](
   code: Code2[Expr2[QuotedT[S]], M],
 ) extends Code2[S, SomeM[Polarity[Bool.T, Bool.F, Bool.F], M]]
+
+/**
+  * Allows escaping the body of a [[Quote]]. Ignores nested [[Quote]]s
+  * (as well as nested [[Quoted]] and [[MatchQuote]]). Directly escapes the whole quote.
+  *
+  * Doesn't have a special meaning within [[MatchQuote]]s.
+  *
+  * [[Escape]] never needs to be matched against, as it cannot appear in a [[Quoted]].
+  *
+  * To quote an [[Escape]] from a nested quote, rather than escaping the top-level quote, use [[QuotedEscape]].
+  *
+  * (At the top-level (outside of a quote), could represent macro code.)
+  */
+final case class Escape2[S <: TopS, M <: TopM, P <: TopP, C <: Scape[Polar2[QuoteT[S], P], M]](
+  code: Code3[C],
+) extends Code3[EscapeC[S, P, M, C]]
 
 /**
   * Represents an [[Escape]] within a (nested) [[Quote]], so it is simply treated like code of an [[Escape]],

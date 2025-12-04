@@ -3,6 +3,7 @@ package fides.syntax.types
 type TopC = Scape[TopS, TopM]
 
 sealed trait Scape[+S <: TopS, +M <: TopM]
+// todo could we keep a stack of Ss, instead of a single one?
 
 final abstract class QuoteC[
   S <: TopS, P <: TopP, M <: TopM,
@@ -12,7 +13,7 @@ final abstract class QuoteC[
 
 final abstract class EscapeC[
   S <: TopS, P <: TopP, M <: TopM,
-  +C <: Scape[? <: Polar2[QuotedT[S], P], M],
+  +C <: Scape[Polar2[QuoteT[S], P], M],
 ] extends Scape[S, SomeM[P, M]]
 // todo Level
 

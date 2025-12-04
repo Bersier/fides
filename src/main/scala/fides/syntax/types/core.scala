@@ -20,8 +20,13 @@ sealed trait TopM
 sealed trait SomeM[+H <: TopP, +T <: TopM] extends TopM
 final abstract class BotM extends SomeM[BotP, BotM]
 
-type TopP = Polarity[Bool.F, Bool.F, Bool.F]
+/**
+  * @tparam P whether a quote of this code can be used as an expression
+  * @tparam N whether a quote of this code can be used as an extractor
+  * @tparam C whether a quote of this code can be used as a constant
+  */
 final abstract class Polarity[+P <: Bool, +N <: Bool, +C <: Bool]
+type TopP = Polarity[Bool.F, Bool.F, Bool.F]
 type BotP = Polarity[Bool.T, Bool.T, Bool.T]
 
 sealed class ID
