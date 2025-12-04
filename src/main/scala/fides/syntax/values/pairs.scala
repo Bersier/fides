@@ -4,31 +4,19 @@ import fides.syntax.types.*
 
 /**
   * General [[Polar]] for pairing.
-  *
-  * Only [[C1]], [[C2]] and [[M]] are non-auxiliary.
   */
-final case class Pair2[
+final case class Pair[
   T1 <: TopT, T2 <: TopT, P <: TopP,
   S1 <: Polar2[T1, P], S2 <: Polar2[T2, P], M <: TopM,
-  C1 <: Scape[S1, M], C2 <: Scape[S2, M],
-](
-  first: Code3[C1],
-  second: Code3[C2],
-) extends Code3[PairC[T1, T2, P, S1, S2, M, C1, C2]]
-// todo replace by record?
-
-/**
-  * General [[Polar]] for pairing.
-  */
-final case class Pair[T1 <: TopT, T2 <: TopT, P <: TopP, S1 <: Polar2[T1, P], S2 <: Polar2[T2, P], M <: TopM](
-  first: Code2[S1, M],
-  second: Code2[S2, M],
-) extends Code2[PairS[T1, T2, P, S1, S2], M]
+  +C1 <: Code3[S1, M], +C2 <: Code3[S2, M],
+](first: C1, second: C2) extends Code3[PairS[T1, T2, P, S1, S2], M]
 // todo replace by record?
 
 given [
-  T1 <: TopT, T2 <: TopT, P <: TopP, S1 <: Polar2[T1, P], S2 <: Polar2[T2, P], M <: TopM
-] => (f: Code2[S1, M], s: Code2[S2, M]) => Code2[PairS[T1, T2, P, S1, S2], M] = Pair(f, s)
+  T1 <: TopT, T2 <: TopT, P <: TopP,
+  S1 <: Polar2[T1, P], S2 <: Polar2[T2, P], M <: TopM,
+  C1 <: Code3[S1, M], C2 <: Code3[S2, M],
+] => (f: Code3[S1, M], s: Code3[S2, M]) => Code3[PairS[T1, T2, P, S1, S2], M] = Pair(f, s)
 
 /**
   * As an Expr, the wires are sinks that collect values from the executing body, which are then output as a bundle.

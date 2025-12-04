@@ -5,7 +5,11 @@ import fides.syntax.types.*
 /**
   * Wraps a value into a Quoted.
   */
-final case class Wrap[T <: TopT, M <: TopM](value: Code2[Expr2[T], M]) extends Code2[Expr2[QuotedT[Ntrl2[T]]], M]
+final case class Wrap[
+  T <: TopT,
+  S <: Expr2[T], M <: TopM,
+  +C <: Code3[S, M],
+](value: C) extends Code3[WrapS[T, S], M]
 
 /**
   * Wraps a value into a Quoted, but raises all partial escapes by one,
