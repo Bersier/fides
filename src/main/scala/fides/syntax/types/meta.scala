@@ -5,9 +5,9 @@ import util.TopN
 /**
   * General type to represent Fides code
   */
-trait Code[+S <: TopS, +M <: TopM] private[syntax]() extends OldCode[S]
-type TopC = Code[TopS, TopM]
+trait Code[+S <: TopS, +Q <: TopQ] private[syntax]() extends OldCode[S]
+type TopC = Code[TopS, TopQ]
 
-sealed trait TopM
-sealed trait SomeM[+H <: TopP, +T <: TopM] extends TopM
-final abstract class BotM extends SomeM[BotP, BotM]
+sealed trait TopQ
+sealed trait SomeQ[+H <: TopP, +T <: TopQ] extends TopQ
+final abstract class BotQ extends SomeQ[BotP, BotQ]
