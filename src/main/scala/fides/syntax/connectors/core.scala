@@ -9,7 +9,7 @@ import util.Bool
   * Dual of [[Out]]
   */
 object Inp:
-  def apply[T <: TopT](iD: Code[Cnst[ChanT[T, OffBotT]]]): Code[Exvr[T]] = Loc(iD)
+  def apply[T <: TopT](iD: OldCode[Cnst[ChanT[T, OffBotT]]]): OldCode[Exvr[T]] = Loc(iD)
 end Inp
 // todo add variance, like here, to all primitives, for the sake of metaprogramming?
 // todo  | Code[Name[? <: T]]
@@ -22,56 +22,56 @@ end Inp
   * Dual of [[Inp]]
   */
 object Out:
-  def apply[T <: TopT](iD: Code[Cnst[ChanT[OffTopT, T]]]): Code[Xcvr[T]] = Loc(iD)
+  def apply[T <: TopT](iD: OldCode[Cnst[ChanT[OffTopT, T]]]): OldCode[Xcvr[T]] = Loc(iD)
 end Out
 // todo  | Code[Name[? >: T]]
 
 /**
   * General [[Polr]] for input and output. Note that it can only be an [[Expr]] or a [[Xctr]].
   */
-final case class Loc[P >: BotT, N <: P & TopT](iD: Code[Cnst[ChanT[P, N]]]) extends Code[Povr[P, N]]
+final case class Loc[P >: BotT, N <: P & TopT](iD: OldCode[Cnst[ChanT[P, N]]]) extends OldCode[Povr[P, N]]
 
 /**
   * A hard-coded connection between one input and one output
   */
-final case class Forward[T <: TopT](inp: Code[Expr[T]], out: Code[Xctr[T]]) extends Code[Aplr]
+final case class Forward[T <: TopT](inp: OldCode[Expr[T]], out: OldCode[Xctr[T]]) extends OldCode[Aplr]
 
 /**
   * Dual of Forward. The connection between [[inp]] and [[out]] is instead achieved via variables.
   */
 final case class Backward[I <: TopPoS, O <: TopPoS](
-  declarations: Code[ArgsUS[DeclS[?]]],
-  inp: Code[I],
-  out: Code[O],
-) extends Code[Bipo[I, O]]
+  declarations: OldCode[ArgsUS[DeclS[?]]],
+  inp: OldCode[I],
+  out: OldCode[O],
+) extends OldCode[Bipo[I, O]]
 
 final case class Apply[I <: TopPoS, O <: TopPoS](
-  component: Code[Bipo[I, O]],
-  input: Code[I],
-) extends Code[O]
+  component: OldCode[Bipo[I, O]],
+  input: OldCode[I],
+) extends OldCode[O]
 
 final case class Deply[I <: TopPoS, O <: TopPoS](
-  component: Code[Bipo[I, O]],
-  input: Code[O],
-) extends Code[I]
+  component: OldCode[Bipo[I, O]],
+  input: OldCode[O],
+) extends OldCode[I]
 
 /**
   * Spreads a value to multiple recipients.
   *
   * [[Spread]]`(`[[ArgsUS]]`())` is equivalent to Ignore/Sink/Forget/Discard/Drop.
   */
-final case class Spread[T <: TopT](recipients: Code[ArgsUS[Xctr[T]]]) extends Code[Xcvr[T]]
+final case class Spread[T <: TopT](recipients: OldCode[ArgsUS[Xctr[T]]]) extends OldCode[Xcvr[T]]
 
 /**
   * Forwards the inputted value once signalled to do so.
   */
-final case class Hold[T <: TopT](signal: Code[Expr[PulseT]], value: Code[Expr[T]]) extends Code[Exvr[T]]
+final case class Hold[T <: TopT](signal: OldCode[Expr[PulseT]], value: OldCode[Expr[T]]) extends OldCode[Exvr[T]]
 
 /**
   * Upon reception of a value, outputs a pulse. It only communicates the arrival of the value,
   * but forgets/ignores about the actual value.
   */
-final case class Signal(trigger: Code[Expr[?]]) extends Code[Exvr[PulseT]]
+final case class Signal(trigger: OldCode[Expr[?]]) extends OldCode[Exvr[PulseT]]
 
 /**
   * Forwards one of the inputs. Is guaranteed to forward a value if any of the inputs yields a value.
@@ -82,7 +82,7 @@ final case class Signal(trigger: Code[Expr[?]]) extends Code[Exvr[PulseT]]
   */
 type Pick[T <: TopT] = PickP[T, OffBotT]
 object Pick:
-  def apply[T <: TopT](inputs: Code[ArgsS[Bool.T, Expr[T]]]): Pick[T] = PickP(inputs)
+  def apply[T <: TopT](inputs: OldCode[ArgsS[Bool.T, Expr[T]]]): Pick[T] = PickP(inputs)
 
 /**
   * Internal choice. Non-deterministically forwards the input to one of the outputs.
@@ -91,10 +91,10 @@ object Pick:
   */
 type UnPick[T <: TopT] = PickP[OffTopT, T]
 object UnPick:
-  def apply[T <: TopT](recipients: Code[ArgsS[Bool.T, Xctr[T]]]): UnPick[T] = PickP(recipients)
+  def apply[T <: TopT](recipients: OldCode[ArgsS[Bool.T, Xctr[T]]]): UnPick[T] = PickP(recipients)
 end UnPick
 
 /**
   * General [[Polr]] for picking. Note that it can only be an [[Expr]] or an [[Xctr]].
   */
-final case class PickP[P >: BotT, N <: TopT](connections: Code[ArgsS[Bool.T, Polr[P, N]]]) extends Code[Povr[P, N]]
+final case class PickP[P >: BotT, N <: TopT](connections: OldCode[ArgsS[Bool.T, Polr[P, N]]]) extends OldCode[Povr[P, N]]

@@ -1,5 +1,11 @@
 package fides.syntax.types
 
-type TopC = Code3[TopS, TopM]
+/**
+  * General type to represent Fides code
+  */
+trait Code[+S <: TopS, +M <: TopM] private[syntax]() extends OldCode[S]
+type TopC = Code[TopS, TopM]
 
-trait Code3[+S <: TopS, +M <: TopM] private[syntax]()
+sealed trait TopM
+sealed trait SomeM[+H <: TopP, +T <: TopM] extends TopM
+final abstract class BotM extends SomeM[BotP, BotM]

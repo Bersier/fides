@@ -12,7 +12,7 @@ import fides.syntax.types.*
   */
 final case class Chan[K <: ID, InpT >: OutT, OutT <: TopT] private[identifiers](
   private val k: K,
-) extends Code[Ntrl[ChannelT[K, InpT, OutT]]]
+) extends OldCode[Ntrl[ChannelT[K, InpT, OutT]]]
 
 object InpChan:
   def apply[T <: TopT](): Chan[?, T, OffBotT] = Chan(ID())

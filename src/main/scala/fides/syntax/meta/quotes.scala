@@ -10,8 +10,8 @@ import util.Bool
   */
 final case class Quote[
   S <: TopS, P <: TopP, M <: TopM,
-  +C <: Code3[S, SomeM[P, M]], +RC <: Code3[S, SomeM[P, BotM]],
-](code: C)(using TrimmedR[S, C, RC]) extends Code3[QuoteS[S, P, RC], M]
+  +C <: Code[S, SomeM[P, M]], +RC <: Code[S, SomeM[P, BotM]],
+](code: C)(using TrimmedR[S, C, RC]) extends Code[QuoteS[S, P, RC], M]
 
 // todo Only keep Quote and Escape, and add EscapeStool, to lengthen the jump produced by an escape.
 
@@ -29,8 +29,8 @@ final case class Quote[
   */
 final case class Escape[
   S <: TopS, P <: TopP, M <: TopM,
-  +C <: Code3[Polar2[QuoteT[S], P], M],
-](code: C) extends Code3[S, SomeM[P, M]]
+  +C <: Code[Polar2[QuoteT[S], P], M],
+](code: C) extends Code[S, SomeM[P, M]]
 // todo Level
 
 /**
@@ -48,9 +48,9 @@ final case class Escape[
   */
 final case class QuotedEscape[S <: TopS, B <: Bits, M >: BotM <: TopM](
   // todo add lower bounds such as for M everywhere?
-  code: Code2[Expr2[QuotedT[S]], M],
-  level: Code2[Ntrl2[NatT[B]], M] = Nat(Bits.None),
-) extends Code2[S, SomeM[Polarity[Bool.T, Bool.F, Bool.F], M]]
+  code: Code[Expr2[QuotedT[S]], M],
+  level: Code[Ntrl2[NatT[B]], M] = Nat(Bits.None),
+) extends Code[S, SomeM[Polarity[Bool.T, Bool.F, Bool.F], M]]
 // todo is SomeM's first type argument correct?
 
 /**
@@ -62,7 +62,7 @@ final case class QuotedEscape[S <: TopS, B <: Bits, M >: BotM <: TopM](
   * To quote a [[MatchEscape]] from a nested [[MatchQuote]], rather than escaping the top-level [[MatchEscape]],
   * use [[MatchEscapeMatcher]].
   */
-final case class MatchEscape[S <: U, U <: TopS, M <: TopM](code: Code2[Xctr2[QuotedT[U]], M]) extends Code2[S, ?]
+final case class MatchEscape[S <: U, U <: TopS, M <: TopM](code: Code[Xctr2[QuotedT[U]], M]) extends Code[S, ?]
 // todo add type weakening primitives instead of U
 // todo set second type argument
 // todo MatchEscapeS
@@ -80,6 +80,6 @@ final case class MatchEscape[S <: U, U <: TopS, M <: TopM](code: Code2[Xctr2[Quo
   * For `level > 0`, [[MatchEscapeMatcher]]`(c, level)` matches [[MatchEscapeMatcher]]`(c, level - 1)`.
   */
 final case class MatchEscapeMatcher[S <: TopS, B <: Bits, M >: BotM <: TopM](
-  code: Code2[Xctr[QuotedT[S]], M],
-  level: Code2[Ntrl2[NatT[B]], M] = Nat(Bits.None),
-) extends Code2[S, ?] // todo set second type argument
+  code: Code[Xctr[QuotedT[S]], M],
+  level: Code[Ntrl2[NatT[B]], M] = Nat(Bits.None),
+) extends Code[S, ?] // todo set second type argument

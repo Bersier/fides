@@ -132,7 +132,7 @@ final abstract class PairS[
 
 final abstract class QuoteS[
   S <: TopS, P <: TopP,
-  +RC <: Code3[S, SomeM[P, BotM]],
+  +RC <: Code[S, SomeM[P, BotM]],
 ] extends Polar2[QuoteT[S], P]
 
 final abstract class WrapS[

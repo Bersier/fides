@@ -2,9 +2,9 @@ package fides.syntax.control
 
 import fides.syntax.types.*
 
-case object Kill extends Code[Ntrl[KillT]]
-case object Pause extends Code[Ntrl[PauseT]]
-case object Start extends Code[Ntrl[StartT]]
+case object Kill extends OldCode[Ntrl[KillT]]
+case object Pause extends OldCode[Ntrl[PauseT]]
+case object Start extends OldCode[Ntrl[StartT]]
 
 /**
   * A pausable process
@@ -13,7 +13,7 @@ case object Start extends Code[Ntrl[StartT]]
   *              is like a mutable variable declaration // todo no scope; more like a loc, but with different semantics?
   * @param body the process that can be paused
   */
-final case class Pausable(awake: Code[NameS[BoolT]], body: Code[Aplr]) extends Code[Aplr]
+final case class Pausable(awake: OldCode[NameS[BoolT]], body: OldCode[Aplr]) extends OldCode[Aplr]
 
 /**
    * Delays [[body]] until [[signal]] is received.
@@ -21,7 +21,7 @@ final case class Pausable(awake: Code[NameS[BoolT]], body: Code[Aplr]) extends C
    * Executes the body only if the received signal is [[True]].
    * If [[False]], the body is discarded without getting executed.
   */
-final case class Contingent(signal: Code[Expr[BoolT]], body: Code[Aplr]) extends Code[Aplr]
+final case class Contingent(signal: OldCode[Expr[BoolT]], body: OldCode[Aplr]) extends OldCode[Aplr]
 
 /**
   * A killable process
@@ -33,21 +33,21 @@ final case class Contingent(signal: Code[Expr[BoolT]], body: Code[Aplr]) extends
   * @param body the process that can be stopped
   */
 final case class Mortal(
-  killSignal: Code[Expr[PulseT]],
-  deathSignal: Code[Xctr[PulseT]],
-  body: Code[Aplr],
-) extends Code[Aplr]
+  killSignal: OldCode[Expr[PulseT]],
+  deathSignal: OldCode[Xctr[PulseT]],
+  body: OldCode[Aplr],
+) extends OldCode[Aplr]
 
 /**
   * No message can reach and/or exit the sandboxed process directly. The monitor serves as the intermediate.
   * It can send and receive messages to and from the sandboxed process.
   */
-final case class Sandboxed(monitor: Code[Aplr], sandboxed: Code[Aplr]) extends Code[Aplr]
+final case class Sandboxed(monitor: OldCode[Aplr], sandboxed: OldCode[Aplr]) extends OldCode[Aplr]
 
 final case class Handled(
-  errorHandler: Code[Cnst[ChanT[OffTopT, ErrorT[TopT]]]],
-  body: Code[Aplr],
-) extends Code[Aplr]
+  errorHandler: OldCode[Cnst[ChanT[OffTopT, ErrorT[TopT]]]],
+  body: OldCode[Aplr],
+) extends OldCode[Aplr]
 
-final case class Error[T <: TopT](value: Code[Cnst[T]]) extends Code[Cnst[ErrorT[T]]]
+final case class Error[T <: TopT](value: OldCode[Cnst[T]]) extends OldCode[Cnst[ErrorT[T]]]
 // todo develop

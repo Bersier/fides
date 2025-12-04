@@ -8,5 +8,5 @@ import fides.syntax.types.*
 /**
   * Lambda abstraction literal
   */
-final case class Lambda[I <: TopPoS, O <: TopPoS](body: Code[Bipo[I, O]]) extends Code[Cnst[?]]
+final case class Lambda[I <: TopPoS, O <: TopPoS](body: OldCode[Bipo[I, O]]) extends OldCode[Cnst[?]]
 // todo
