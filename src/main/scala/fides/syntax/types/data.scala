@@ -40,7 +40,7 @@ sealed trait AtomT extends TopT
 /**
   * Data type for pairs
   */
-final abstract class PairT[+T1 >: BotT, +T2 >: BotT] extends TopT
+final abstract class PairT[+T1 <: TopT, +T2 <: TopT] extends TopT
 
 /**
   * The type of a record is a set of key-value pairs. But we cannot represent unordered types in Scala,
