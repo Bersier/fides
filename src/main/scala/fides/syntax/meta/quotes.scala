@@ -28,10 +28,15 @@ final case class Quote[
   * (At the top-level (outside of a quote), could represent macro code.)
   */
 final case class Escape[
-  S <: TopS, P <: TopP, M <: TopM,
-  +C <: Code[Polar2[QuoteT[S], P], M],
-](code: C) extends Code[S, SomeM[P, M]]
-// todo Level
+  S <: TopS, P <: TopP, M <: TopM, NM <: TopM, RM <: TopM, B <: Bits /* todo N <: TopN.S[?] */,
+  +C <: Code[Polar2[QuoteT[S], P], M], +NC <: Code[Ntrl2[NatT[B]], NM],
+](code: C, height: NC)(using RepR[P, ?, M, RM]) extends Code[S, RM | NM]
+// todo actually, P should not be repeated, but BotP should be introduced in between
+
+//final case class EscapeStool1[
+//  S <: TopS, P <: TopP, M <: TopM,
+//  +C <: Escape[S, P, M, ?],
+//](escape: C) extends Code[S, SomeM[P, SomeM[P, M]]]
 
 /**
   * Represents an [[Escape]] within a (nested) [[Quote]], so it is simply treated like code of an [[Escape]],
