@@ -13,7 +13,9 @@ final case class Quote[
   +C <: Code[S, SomeM[P, M]], +RC <: Code[S, SomeM[P, BotM]],
 ](code: C)(using TrimmedR[S, C, RC]) extends Code[QuoteS[S, P, RC], M]
 
-// todo Only keep Quote and Escape, and add EscapeStool, to lengthen the jump produced by an escape.
+// todo Only keep Quote and Escape.
+// todo how to match escape (chunks) generically?
+// todo update documentation
 
 /**
   * Allows escaping the body of a [[Quote]]. Ignores nested [[Quote]]s
@@ -27,16 +29,18 @@ final case class Quote[
   *
   * (At the top-level (outside of a quote), could represent macro code.)
   */
-final case class Escape[
-  S <: TopS, P <: TopP, M <: TopM, NM <: TopM, RM <: TopM, B <: Bits /* todo N <: TopN.S[?] */,
-  +C <: Code[Polar2[QuoteT[S], P], M], +NC <: Code[Ntrl2[NatT[B]], NM],
-](code: C, height: NC)(using RepR[P, ?, M, RM]) extends Code[S, RM | NM]
-// todo actually, P should not be repeated, but BotP should be introduced in between
+sealed trait Escape[S <: TopS, M <: TopM] extends Code[S, M]
+object Escape:
+  final case class Top[
+    S <: TopS, P <: TopP, M <: TopM,
+    +C <: Code[Polar2[QuoteT[S], P], M],
+  ](code: C) extends Escape[S, SomeM[P | Polarity[TopB.T, TopB.T, TopB.F], M]]
 
-//final case class EscapeStool1[
-//  S <: TopS, P <: TopP, M <: TopM,
-//  +C <: Escape[S, P, M, ?],
-//](escape: C) extends Code[S, SomeM[P, SomeM[P, M]]]
+  final case class Step[
+    S <: TopS, M <: TopM,
+    +C <: Escape[S, M],
+  ](escape: C) extends Escape[S, SomeM[BotP, M]]
+end Escape
 
 /**
   * Represents an [[Escape]] within a (nested) [[Quote]], so it is simply treated like code of an [[Escape]],
