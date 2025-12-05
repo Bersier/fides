@@ -1,7 +1,5 @@
 package fides.syntax.types
 
-import util.{BotB, TopB}
-
 /**
   * Parent type of all the Scala types that represent
   * the different types of possible Fides code, including the full metaprogramming landscape

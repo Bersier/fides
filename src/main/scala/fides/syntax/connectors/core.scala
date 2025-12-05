@@ -1,7 +1,6 @@
 package fides.syntax.connectors
 
 import fides.syntax.types.*
-import util.TrueT
 
 /**
   * Absorbs from the location referred to by [[iD]]. Reduces to the received val after reception.
@@ -82,7 +81,7 @@ final case class Signal(trigger: OldCode[ExprS[?]]) extends OldCode[ExvrS[PulseD
   */
 type Pick[D <: TopD] = PickP[D, OffBotD]
 object Pick:
-  def apply[D <: TopD](inputs: OldCode[ArgsS[TrueT, ExprS[D]]]): Pick[D] = PickP(inputs)
+  def apply[D <: TopD](inputs: OldCode[ArgsS[Empty.F, ExprS[D]]]): Pick[D] = PickP(inputs)
 end Pick
 
 /**
@@ -92,12 +91,12 @@ end Pick
   */
 type UnPick[D <: TopD] = PickP[OffTopD, D]
 object UnPick:
-  def apply[D <: TopD](recipients: OldCode[ArgsS[TrueT, XctrS[D]]]): UnPick[D] = PickP(recipients)
+  def apply[D <: TopD](recipients: OldCode[ArgsS[Empty.F, XctrS[D]]]): UnPick[D] = PickP(recipients)
 end UnPick
 
 /**
   * General [[PolrS]] for picking. Note that it can only be an [[ExprS]] or an [[XctrS]].
   */
 final case class PickP[P >: BotD, N <: TopD](
-  connections: OldCode[ArgsS[TrueT, PolrS[P, N]]],
+  connections: OldCode[ArgsS[Empty.F, PolrS[P, N]]],
 ) extends OldCode[PovrS[P, N]]

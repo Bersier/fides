@@ -1,7 +1,5 @@
 package fides.syntax.types
 
-import util.TopN
-
 type TrimmedR[S <: TopS, M <: ConsM[S, TopQ], RM <: ConsM[S, ConsQ[TopP, BotQ]]] = TrimmedGR[S, TopN.`1`, M, RM]
 
 sealed trait TrimmedGR[S <: TopS, Height <: TopN, M <: ConsM[S, TopQ], RM <: ConsM[S, ConsQ[TopP, BotQ]]]
