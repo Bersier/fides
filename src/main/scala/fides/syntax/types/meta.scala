@@ -1,5 +1,7 @@
 package fides.syntax.types
 
+import typelevelnumbers.binary.Bits
+
 /**
   * Parent type of all the Scala types that represent
   * the different types of possible Fides code, including the full metaprogramming landscape
@@ -29,28 +31,28 @@ end EscapeM
 final abstract class ConjoinM[
   G <: Expr2G[CollectedUD[BoolD]], Q <: TopQ,
   +M <: ConsM[G, Q],
-] extends ConsM[ConjoinS[G], Q]
+] extends ConsM[ConjoinG[G], Q]
 
 final abstract class DisjoinM[
   G <: Expr2G[CollectedUD[BoolD]], Q <: TopQ,
   +M <: ConsM[G, Q],
-] extends ConsM[DisjoinS[G], Q]
+] extends ConsM[DisjoinG[G], Q]
 
 final abstract class NegateM[
   D <: BoolD, P <: TopP,
   G <: Polar2G[D, P], Q <: TopQ,
   +M <: ConsM[G, Q],
-] extends ConsM[NegateS[D, P, G], Q]
+] extends ConsM[NegateG[D, P, G], Q]
 
 final abstract class EqualM[
   G <: Expr2G[CollectedUD[AtomD]], Q <: TopQ,
   +M <: ConsM[G, Q],
-] extends ConsM[EqualS[G], Q]
+] extends ConsM[EqualG[G], Q]
 
 final abstract class RandomBitM[
   Q <: TopQ,
-  +M <: ConsM[RandomBitS, Q],
-] extends ConsM[RandomBitS, Q]
+  +M <: ConsM[RandomBitG, Q],
+] extends ConsM[RandomBitG, Q]
 
 final abstract class AddM[
   G <: Expr2G[CollectedUD[NatUD]], Q <: TopQ,

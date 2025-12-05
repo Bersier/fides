@@ -44,5 +44,5 @@ final case class Equal[
   */
 final case class RandomBit[
   Q <: TopQ,
-  M <: ConsM[RandomBitS, Q],
+  M <: ConsM[RandomBitG, Q],
 ]() extends Code[RandomBitM[Q, M]]
