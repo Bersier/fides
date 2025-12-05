@@ -1,32 +1,32 @@
 package fides.syntax.types
 
 import typelevelnumbers.binary.Bits
-import util.{BotB, TopB}
+import util.TopB
 
 /**
   * Parent type of all the Scala types that represent Fides data/value types
   */
-sealed trait TopT private[types]()
+sealed trait TopD private[types]()
 
 /**
   * Lower bound for all data types
   */
-type BotT = Nothing
+type BotD = Nothing
 // todo replace by true intersection, and use as bound everywhere appropriate
 
 /**
-  * A type greater than [[TopT]]
+  * A type greater than [[TopD]]
   *
   * Indicates an unreachable data type in contravariant position.
   */
-type OffTopT = Any
+type OffTopD = Any
 
 /**
-  * A type smaller than [[BotT]]
+  * A type smaller than [[BotD]]
   *
   * Indicates an unreachable data type (in covariant position).
   */
-type OffBotT = Nothing
+type OffBotD = Nothing
 
 /**
   * Data type for atomic values
@@ -35,63 +35,63 @@ type OffBotT = Nothing
   *  - can be tested for equality.
   *  - cannot be decomposed.
   */
-sealed trait AtomT extends TopT
+sealed trait AtomD extends TopD
 
 /**
   * Data type for pairs
   */
-final abstract class PairT[+T1 <: TopT, +T2 <: TopT] extends TopT
+final abstract class PairD[+D1 <: TopD, +D2 <: TopD] extends TopD
 
 /**
   * The type of a record is a set of key-value pairs. But we cannot represent unordered types in Scala,
   * so we instead use a list of key-value pairs. It is assumed that it is sorted by keys,
   * so it's a canonical representation of the set of pairs.
   */
-sealed trait RecordT extends TopT
-final abstract class EmptyRecordT extends RecordT
-final abstract class NonEmptyRecordT[+K <: ID, +V <: TopT, +T <: RecordT] extends RecordT
+sealed trait RecordD extends TopD
+final abstract class EmptyRecordD extends RecordD
+final abstract class NonEmptyRecordD[+K <: ID, +V <: TopD, +D <: RecordD] extends RecordD
 
-final abstract class NatT[+B <: Bits] extends AtomT
-type NatUT = NatT[Bits]
+final abstract class NatD[+B <: Bits] extends AtomD
+type NatUD = NatD[Bits]
 
-final abstract class QuoteT[+S <: TopS] extends TopT
+final abstract class QuoteD[+S <: TopS] extends TopD
 
-final abstract class SignedT[+T <: TopT] extends TopT
+final abstract class SignedD[+D <: TopD] extends TopD
 
 /**
   * Data type for identifiers
   */
-sealed trait IdentifierT[+K <: ID] extends AtomT
-type IdentifierUT = IdentifierT[ID]
+sealed trait IdentifierD[+K <: ID] extends AtomD
+type IdentifierUD = IdentifierD[ID]
 
-final abstract class IdentifierKeyT[+K <: ID] extends AtomT
-type IdentifierKeyUT = IdentifierKeyT[ID]
+final abstract class IdentifierKeyD[+K <: ID] extends AtomD
+type IdentifierKeyUD = IdentifierKeyD[ID]
 
 /**
   * Data type for Channels
   */
-final abstract class ChannelT[+K <: ID, +InpT >: BotT, -OutT <: InpT & TopT] extends IdentifierT[K]
-type ChanT[+InpT >: BotT, -OutT <: InpT & TopT] = ChannelT[ID, InpT, OutT]
-type InpChanT[+InpT >: BotT] = ChanT[InpT, OffBotT]
-type OutChanT[-OutT <: TopT] = ChanT[OffTopT, OutT]
+final abstract class ChannelD[+K <: ID, +InpD >: BotD, -OutD <: InpD & TopD] extends IdentifierD[K]
+type ChanD[+InpD >: BotD, -OutD <: InpD & TopD] = ChannelD[ID, InpD, OutD]
+type InpChanD[+InpD >: BotD] = ChanD[InpD, OffBotD]
+type OutChanD[-OutD <: TopD] = ChanD[OffTopD, OutD]
 
 /**
   * Data type for unordered uniformly-typed collections of values.
   */
-final abstract class CollectedT[+IsNonEmpty <: TopB, +T >: BotT] extends TopT
-type CollectedUT[+T >: BotT] = CollectedT[TopB, T]
+final abstract class CollectedD[+IsNonEmpty <: TopB, +D >: BotD] extends TopD
+type CollectedUD[+D >: BotD] = CollectedD[TopB, D]
 
-sealed trait OrderT extends AtomT
-final abstract class KillT extends OrderT
-final abstract class PauseT extends OrderT
-final abstract class StartT extends OrderT
+sealed trait OrderD extends AtomD
+final abstract class KillD extends OrderD
+final abstract class PauseD extends OrderD
+final abstract class StartD extends OrderD
 
-final abstract class ErrorT[+T <: TopT] extends TopT
+final abstract class ErrorD[+D <: TopD] extends TopD
 
-sealed trait BoolT extends AtomT
-final abstract class TrueT extends BoolT
-final abstract class FalseT extends BoolT
+sealed trait BoolD extends AtomD
+final abstract class TrueD extends BoolD
+final abstract class FalseD extends BoolD
 
-final abstract class StrT extends TopT
+final abstract class StrD extends TopD
 
-final abstract class PulseT extends AtomT
+final abstract class PulseD extends AtomD

@@ -1,8 +1,8 @@
 package fides.syntax.meta
 
 import fides.syntax.types.*
-import util.{BotB, TopB, MultisetOps}
 import util.Multisets.Multiset
+import util.{BotB, MultisetOps, TopB}
 
 /**
   * Used for multisets of pieces of code, at the syntax level.
@@ -40,5 +40,5 @@ end Args
   * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Args]].
   */
 final case class Zip[IsNonEmpty <: TopB, S <: TopS, P <: TopP, Q <: TopQ](
-  pieces: ConsC[Polar2[CollectedT[IsNonEmpty, QuoteT[S]], P], Q],
-) extends ConsC[Polar2[QuoteT[ArgsS[IsNonEmpty, S]], P], Q]
+  pieces: ConsC[Polar2[CollectedD[IsNonEmpty, QuoteD[S]], P], Q],
+) extends ConsC[Polar2[QuoteD[ArgsS[IsNonEmpty, S]], P], Q]

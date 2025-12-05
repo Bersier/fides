@@ -9,6 +9,6 @@ trait Code[C <: TopC] private[syntax]()
 trait ConsC[+S <: TopS, +Q <: TopQ] private[syntax]() // todo seal
 type TopC = ConsC[TopS, TopQ]
 
-sealed trait ConsQ[+H <: TopP, +T <: TopQ]
+sealed trait ConsQ[+H <: TopP, +D <: TopQ]
 type TopQ = ConsQ[TopP, ?]
 final abstract class BotQ extends ConsQ[BotP, BotQ]

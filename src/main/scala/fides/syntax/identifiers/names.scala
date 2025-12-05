@@ -2,4 +2,4 @@ package fides.syntax.identifiers
 
 import fides.syntax.types.*
 
-final case class Name[T <: TopT](identifier: OldCode[Cnst[IdentifierUT]]) extends OldCode[NameS[T]]
+final case class Name[D <: TopD](identifier: OldCode[Cnst[IdentifierUD]]) extends OldCode[NameS[D]]

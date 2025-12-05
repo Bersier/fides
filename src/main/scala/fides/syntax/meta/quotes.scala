@@ -21,7 +21,7 @@ object Escape:
     */
   final case class Top[
     S <: TopS, P <: TopP, Q <: TopQ,
-    +C <: ConsC[Polar2[QuoteT[S], P], Q],
+    +C <: ConsC[Polar2[QuoteD[S], P], Q],
   ](code: C) extends Escape[S, ConsQ[P | Polarity[BotB, BotB, TopB], Q]]
 
   /**

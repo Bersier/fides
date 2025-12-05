@@ -8,9 +8,9 @@ import fides.syntax.types.*
   *
   * The corresponding type is akin to the Unit type.
   */
-case object Pulse extends OldCode[Ntrl[PulseT]]
+case object Pulse extends OldCode[Ntrl[PulseD]]
 
 /**
   * Added mainly for convenience, so annotations and error messages can be readily readable.
   */
-final case class Str(value: String) extends OldCode[Cnst[StrT]]
+final case class Str(value: String) extends OldCode[Cnst[StrD]]

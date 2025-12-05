@@ -2,9 +2,9 @@ package fides.syntax.control
 
 import fides.syntax.types.*
 
-case object Kill extends OldCode[Ntrl[KillT]]
-case object Pause extends OldCode[Ntrl[PauseT]]
-case object Start extends OldCode[Ntrl[StartT]]
+case object Kill extends OldCode[Ntrl[KillD]]
+case object Pause extends OldCode[Ntrl[PauseD]]
+case object Start extends OldCode[Ntrl[StartD]]
 
 /**
   * A pausable process
@@ -13,7 +13,7 @@ case object Start extends OldCode[Ntrl[StartT]]
   *              is like a mutable variable declaration // todo no scope; more like a loc, but with different semantics?
   * @param body the process that can be paused
   */
-final case class Pausable(awake: OldCode[NameS[BoolT]], body: OldCode[Aplr]) extends OldCode[Aplr]
+final case class Pausable(awake: OldCode[NameS[BoolD]], body: OldCode[Aplr]) extends OldCode[Aplr]
 
 /**
    * Delays [[body]] until [[signal]] is received.
@@ -21,7 +21,7 @@ final case class Pausable(awake: OldCode[NameS[BoolT]], body: OldCode[Aplr]) ext
    * Executes the body only if the received signal is [[True]].
    * If [[False]], the body is discarded without getting executed.
   */
-final case class Contingent(signal: OldCode[Expr[BoolT]], body: OldCode[Aplr]) extends OldCode[Aplr]
+final case class Contingent(signal: OldCode[Expr[BoolD]], body: OldCode[Aplr]) extends OldCode[Aplr]
 
 /**
   * A killable process
@@ -33,8 +33,8 @@ final case class Contingent(signal: OldCode[Expr[BoolT]], body: OldCode[Aplr]) e
   * @param body the process that can be stopped
   */
 final case class Mortal(
-  killSignal: OldCode[Expr[PulseT]],
-  deathSignal: OldCode[Xctr[PulseT]],
+  killSignal: OldCode[Expr[PulseD]],
+  deathSignal: OldCode[Xctr[PulseD]],
   body: OldCode[Aplr],
 ) extends OldCode[Aplr]
 
@@ -45,9 +45,9 @@ final case class Mortal(
 final case class Sandboxed(monitor: OldCode[Aplr], sandboxed: OldCode[Aplr]) extends OldCode[Aplr]
 
 final case class Handled(
-  errorHandler: OldCode[Cnst[ChanT[OffTopT, ErrorT[TopT]]]],
+  errorHandler: OldCode[Cnst[ChanD[OffTopD, ErrorD[TopD]]]],
   body: OldCode[Aplr],
 ) extends OldCode[Aplr]
 
-final case class Error[T <: TopT](value: OldCode[Cnst[T]]) extends OldCode[Cnst[ErrorT[T]]]
+final case class Error[D <: TopD](value: OldCode[Cnst[D]]) extends OldCode[Cnst[ErrorD[D]]]
 // todo develop

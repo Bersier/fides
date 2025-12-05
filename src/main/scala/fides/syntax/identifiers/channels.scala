@@ -7,24 +7,24 @@ import fides.syntax.types.*
   *
   * At runtime, a channel identifier value does not keep track of its type.
   *
-  * @tparam InpT this identifier, when used to receive, might receive any value of this type
-  * @tparam OutT this identifier, when used to send, can be used to send any value of this type
+  * @tparam InpD this identifier, when used to receive, might receive any value of this type
+  * @tparam OutD this identifier, when used to send, can be used to send any value of this type
   */
-final case class Chan[K <: ID, InpT >: OutT, OutT <: TopT] private[identifiers](
+final case class Chan[K <: ID, InpD >: OutD, OutD <: TopD] private[identifiers](
   private val k: K,
-) extends OldCode[Ntrl[ChannelT[K, InpT, OutT]]]
+) extends OldCode[Ntrl[ChannelD[K, InpD, OutD]]]
 
 object InpChan:
-  def apply[T <: TopT](): Chan[?, T, OffBotT] = Chan(ID())
-  def apply[K <: ID & Singleton, T <: TopT](k: K): Chan[K, T, OffBotT] = Chan(k)
+  def apply[D <: TopD](): Chan[?, D, OffBotD] = Chan(ID())
+  def apply[K <: ID & Singleton, D <: TopD](k: K): Chan[K, D, OffBotD] = Chan(k)
 end InpChan
 
 object OutChan:
-  def apply[T <: TopT](): Chan[?, OffTopT, T] = Chan(ID())
-  def apply[K <: ID & Singleton, T <: TopT](k: K): Chan[K, OffTopT, T] = Chan(k)
+  def apply[D <: TopD](): Chan[?, OffTopD, D] = Chan(ID())
+  def apply[K <: ID & Singleton, D <: TopD](k: K): Chan[K, OffTopD, D] = Chan(k)
 end OutChan
 
 object Channel:
-  def apply[T <: TopT](): Chan[?, T, T] = Chan(ID())
-  def apply[K <: ID & Singleton, T <: TopT](k: K): Chan[K, T, T] = Chan(k)
+  def apply[D <: TopD](): Chan[?, D, D] = Chan(ID())
+  def apply[K <: ID & Singleton, D <: TopD](k: K): Chan[K, D, D] = Chan(k)
 end Channel

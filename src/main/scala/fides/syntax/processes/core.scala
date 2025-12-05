@@ -16,9 +16,9 @@ import fides.syntax.types.*
   * @param contents the value to be sent
   * @param recipient address of the recipient
   */
-final case class Send[T <: TopT](
-  contents: OldCode[Expr[T]],
-  recipient: OldCode[Expr[ChanT[OffTopT, T]]],
+final case class Send[D <: TopD](
+  contents: OldCode[Expr[D]],
+  recipient: OldCode[Expr[ChanD[OffTopD, D]]],
 ) extends OldCode[Aplr]
 
 /**
