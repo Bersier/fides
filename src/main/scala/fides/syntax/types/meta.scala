@@ -28,6 +28,16 @@ object EscapeM:
   ] extends EscapeM[G, ConsQ[BotP, Q]]
 end EscapeM
 
+final abstract class RepeatedM[
+  G <: AplrG, Q <: TopQ,
+  +M <: ConsM[G, Q],
+] extends ConsM[RepeatedG[G], Q]
+
+final abstract class ConcurrentM[
+  G <: ArgsUG[AplrG], Q <: TopQ,
+  +M <: ConsM[G, Q],
+] extends ConsM[ConcurrentG[G], Q]
+
 final abstract class ConjoinM[
   G <: Expr2G[CollectedUD[BoolD]], Q <: TopQ,
   +M <: ConsM[G, Q],

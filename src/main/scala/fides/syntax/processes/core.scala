@@ -34,9 +34,15 @@ final case class Scope(declarations: OldCode[ArgsUG[DeclG[?]]], body: OldCode[Ap
   *
   * @param body the process to be repeated
   */
-final case class Repeated(body: OldCode[AplrG]) extends OldCode[AplrG]
+final case class Repeated[
+  G <: AplrG, Q <: TopQ,
+  M <: ConsM[G, Q],
+](body: Code[M]) extends Code[RepeatedM[G, Q, M]]
 
 /**
   * Composes the given processes concurrently.
   */
-final case class Concurrent(processes: OldCode[ArgsUG[AplrG]]) extends OldCode[AplrG]
+final case class Concurrent[
+  G <: ArgsUG[AplrG], Q <: TopQ,
+  M <: ConsM[G, Q],
+](processes: Code[M]) extends Code[ConcurrentM[G, Q, M]]

@@ -39,7 +39,10 @@ final abstract class MNameG[D <: TopD] extends NameG[D]
 /**
   * Fides code type for non-polar process code
   */
-final abstract class AplrG extends TopG
+sealed trait AplrG extends TopG
+
+final abstract class RepeatedG[+G <: AplrG] extends AplrG
+final abstract class ConcurrentG[+G <: ArgsUG[AplrG]] extends AplrG
 
 sealed trait Polar2G[D <: TopD, +P <: TopP] extends TopG
 type PosG[+D <: TopD, +C <: TopB] = Polar2G[D @uncheckedVariance, GenP[BotB, TopB, C]]
