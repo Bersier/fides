@@ -5,3 +5,5 @@ package fides.syntax.types
   */
 trait Code[M <: TopM] private[syntax]()
 // todo use
+
+trait OldCode[+S <: TopS] private[syntax]()

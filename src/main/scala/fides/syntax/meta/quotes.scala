@@ -8,41 +8,33 @@ import util.{BotB, TopB}
   */
 final case class Quote[
   S <: TopS, P <: TopP, Q <: TopQ,
-  +M <: ConsM[S, ConsQ[P, Q]], +RM <: ConsM[S, ConsQ[P, BotQ]],
-](code: M)(using TrimmedR[S, M, RM]) extends ConsM[QuoteS[S, P, RM], Q]
+  RM <: ConsM[S, ConsQ[P, BotQ]],
+  M <: ConsM[S, ConsQ[P, Q]],
+](code: Code[M])(using TrimmedR[S, M, RM]) extends Code[QuoteM[S, P, Q, RM, M]]
 
 /**
   * Allows escaping the body of a [[Quote]].
   */
-sealed trait Escape[+S <: TopS, +Q <: TopQ] extends ConsM[S, Q]
 object Escape:
   /**
     * Escapes one quotation level.
     */
-  final case class Top[
+  final case class Head[
     S <: TopS, P <: TopP, Q <: TopQ,
-    +M <: ConsM[Polar2S[QuoteD[S], P], Q],
-  ](code: M) extends Escape[S, ConsQ[P | Polarity[BotB, BotB, TopB], Q]]
+    M <: ConsM[Polar2S[QuoteD[S], P], Q],
+  ](quote: Code[M]) extends Code[EscapeM.Head[S, P, Q, M]]
 
   /**
     * Allows its parameter to escape one more quotation level.
     */
   final case class Step[
     S <: TopS, Q <: TopQ,
-    +M <: Escape[S, Q],
-  ](escape: M) extends Escape[S, ConsQ[BotP, Q]]
+    M <: EscapeM[S, Q],
+  ](escape: Code[M]) extends Code[EscapeM.Step[S, Q, M]]
 
-  // todo how to match the matcher?
-  private final case class Matcher[S <: TopS, Q <: TopQ](
-    typeRepr: ConsM[S, Q],
+  final case class Matcher[S <: TopS, Q <: TopQ](
+    typeRepr: Code[ConsM[S, Q]],
     // todo M should be tunable as well (?), independently of typeRepr's native M
     //  have a wrapper primitive that tunes M?
-  ) extends Escape[S, Q | ConsQ[Polarity[TopB, BotB, BotB], BotQ]]
-  object Matcher:
-    // todo this seems like a hacky way to make Matcher behave like a supertype of Step and Top
-    //  (which I believe is what we want for matching purposes)
-    def apply[S <: TopS, Q <: TopQ](
-      typeRepr: ConsM[S, Q],
-    ): Escape[S, Q | ConsQ[Polarity[TopB, BotB, BotB], BotQ]] = new Matcher(typeRepr)
-  end Matcher
+  ) extends Code[EscapeM[S, Q | ConsQ[Polarity[TopB, BotB, BotB], BotQ]]]
 end Escape
