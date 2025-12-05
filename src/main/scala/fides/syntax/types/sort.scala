@@ -1,6 +1,6 @@
 package fides.syntax.types
 
-import util.{BotB, TopB}
+import util.{BoolT, BotB, TopB}
 
 import scala.language.experimental.pureFunctions
 
@@ -19,9 +19,11 @@ type OffBotS = Nothing
 
 /**
   * Fides code type for multisets of syntactic elements
+  *
+  * @tparam I keeps track of whether the collection is populated (i.e. non-empty)
   */
-final abstract class ArgsS[+IsNonEmpty <: TopB, +S <: TopS] extends TopS
-type ArgsUS[+S <: TopS] = ArgsS[TopB, S]
+final abstract class ArgsS[+I <: BoolT, +S <: TopS] extends TopS
+type ArgsUS[+S <: TopS] = ArgsS[BoolT, S]
 
 final abstract class CaseS[D <: TopD, A <: AtomD] extends TopS
 
