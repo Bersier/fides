@@ -127,29 +127,29 @@ type Cnst2G[D <: TopD] = Polar2G[D, GenP[BotB, TopB, BotB]]
   */
 type XcvrG[-D <: TopD] = PolarG[OffTopD, D, false]
 
-final abstract class ConjoinS[+G <: Expr2G[CollectedUD[BoolD]]] extends Expr2G[BoolD]
-final abstract class DisjoinS[+G <: Expr2G[CollectedUD[BoolD]]] extends Expr2G[BoolD]
+final abstract class ConjoinG[+G <: Expr2G[CollectedUD[BoolD]]] extends Expr2G[BoolD]
+final abstract class DisjoinG[+G <: Expr2G[CollectedUD[BoolD]]] extends Expr2G[BoolD]
 
-final abstract class NegateS[
+final abstract class NegateG[
   D <: BoolD, P <: TopP,
   +G <: Polar2G[D, P],
 ] extends Polar2G[BoolD.Not[D], P | GenP[BotB, BotB, TopB]]
 
-final abstract class EqualS[+G <: Expr2G[CollectedUD[AtomD]]] extends Expr2G[BoolD]
-final abstract class RandomBitS extends Expr2G[BoolD]
+final abstract class EqualG[+G <: Expr2G[CollectedUD[AtomD]]] extends Expr2G[BoolD]
+final abstract class RandomBitG extends Expr2G[BoolD]
 
-final abstract class CollectedS[
+final abstract class CollectedG[
   D <: TopD, P <: TopP,
   E <: TopE, EG <: Polar2G[D, P],
   +G <: ArgsG[E, EG],
 ] extends Polar2G[CollectedD[E, D], P]
 
-final abstract class AddElementS[
+final abstract class AddElementG[
   D <: TopD, P <: TopP,
   +EG <: Polar2G[D, P], +G <: Polar2G[CollectedUD[D], P],
 ] extends Polar2G[CollectedD[TopE.F, D], P]
 
-final abstract class CollectS[
+final abstract class CollectG[
   D <: TopD, P <: TopP, B <: Bits,
   +SG <: Ntrl2G[ChanD[?, ?]], +NG <: Ntrl2G[NatD[B]], // todo
 ] extends Polar2G[CollectedUD[D], P]
