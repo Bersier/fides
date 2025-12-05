@@ -138,7 +138,7 @@ final abstract class RandomBitS extends Expr2G[BoolD]
 
 final abstract class AddG[+G <: Expr2G[CollectedUD[NatUD]]] extends Expr2G[NatUD]
 final abstract class MultiplyG[+G <: Expr2G[CollectedUD[NatUD]]] extends Expr2G[NatUD]
-final abstract class CompareG[+G1 <: Expr2G[NatUD], +G2 <: Expr2G[NatUD]] extends Expr2G[NatUD]
+final abstract class CompareG[+G1 <: Expr2G[NatUD], +G2 <: Expr2G[NatUD]] extends Expr2G[BoolD]
 
 final abstract class PairG[
   D1 <: TopD, D2 <: TopD, +P <: TopP,

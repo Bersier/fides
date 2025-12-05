@@ -33,10 +33,9 @@ final case class Multiply[
 ](factors: Code[M]) extends Code[MultiplyM[G, Q, M]]
 
 /**
-  * Outputs -1 if the lhs is larger, 0 if they are equal, 1 if the rhs is larger.
+  * Outputs [[True]] iff [[lhs]] is strictly smaller than [[rhs]].
   */
 final case class Compare[
   G1 <: Expr2G[NatUD], G2 <: Expr2G[NatUD], Q <: TopQ,
   M1 <: ConsM[G1, Q], M2 <: ConsM[G2, Q],
 ](lhs: Code[M1], rhs: Code[M2]) extends Code[CompareM[G1, G2, Q, M1, M2]]
-// todo return a trit instead? -1 is not even an option anymore
