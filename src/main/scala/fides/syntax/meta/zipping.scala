@@ -40,5 +40,5 @@ end Args
   * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Args]].
   */
 final case class Zip[IsNonEmpty <: TopB, S <: TopS, P <: TopP, Q <: TopQ](
-  pieces: ConsC[Polar2[CollectedD[IsNonEmpty, QuoteD[S]], P], Q],
-) extends ConsC[Polar2[QuoteD[ArgsS[IsNonEmpty, S]], P], Q]
+  pieces: ConsC[Polar2S[CollectedD[IsNonEmpty, QuoteD[S]], P], Q],
+) extends ConsC[Polar2S[QuoteD[ArgsS[IsNonEmpty, S]], P], Q]

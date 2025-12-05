@@ -7,14 +7,14 @@ import izumi.reflect.Tag
   * Tries to match a value to the given pattern. Upon failure, outputs the value to the alternative instead.
   */
 final case class Match[D1 <: TopD, D2 <: TopD](
-  pattern: OldCode[Xctr[D1]],
-  alternative: OldCode[Xctr[D2]],
-) extends OldCode[Xcvr[D1 | D2]]
+  pattern: OldCode[XctrS[D1]],
+  alternative: OldCode[XctrS[D2]],
+) extends OldCode[XcvrS[D1 | D2]]
 
 /**
   * Matches any value of type [[D]].
   */
-final case class MatchType[D <: TopD](t: OldCode[TypeS[D]]) extends OldCode[Xcvr[D]]
+final case class MatchType[D <: TopD](t: OldCode[TypeS[D]]) extends OldCode[XcvrS[D]]
 
 /**
   * Represents a Fides type

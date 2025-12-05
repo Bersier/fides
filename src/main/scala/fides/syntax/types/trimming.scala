@@ -10,7 +10,7 @@ sealed trait TrimmedGR[S <: TopS, Height <: TopN, C <: ConsC[S, TopQ], RC <: Con
 object TrimmedGR:
   given [
     D1 <: TopD, D2 <: TopD, P <: TopP,
-    S1 <: Polar2[D1, P], S2 <: Polar2[D2, P], H <: TopP, Q <: TopQ,
+    S1 <: Polar2S[D1, P], S2 <: Polar2S[D2, P], H <: TopP, Q <: TopQ,
     Height <: TopN, C1 <: ConsC[S1, ConsQ[H, Q]], C2 <: ConsC[S2, ConsQ[H, Q]],
     RC1 <: ConsC[S1, ConsQ[H, BotQ]], RC2 <: ConsC[S2, ConsQ[H, BotQ]],
   ] => (TrimmedGR[S1, Height, C1, RC1], TrimmedGR[S2, Height, C2, RC2]) => TrimmedGR[

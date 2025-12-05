@@ -9,7 +9,7 @@ import util.BotB
   * Dual of [[Out]]
   */
 object Inp:
-  def apply[D <: TopD](iD: OldCode[Cnst[ChanD[D, OffBotD]]]): OldCode[Exvr[D]] = Loc(iD)
+  def apply[D <: TopD](iD: OldCode[CnstS[ChanD[D, OffBotD]]]): OldCode[ExvrS[D]] = Loc(iD)
 end Inp
 // todo add variance, like here, to all primitives, for the sake of metaprogramming?
 // todo  | Code[Name[? <: D]]
@@ -22,19 +22,19 @@ end Inp
   * Dual of [[Inp]]
   */
 object Out:
-  def apply[D <: TopD](iD: OldCode[Cnst[ChanD[OffTopD, D]]]): OldCode[Xcvr[D]] = Loc(iD)
+  def apply[D <: TopD](iD: OldCode[CnstS[ChanD[OffTopD, D]]]): OldCode[XcvrS[D]] = Loc(iD)
 end Out
 // todo  | Code[Name[? >: D]]
 
 /**
-  * General [[Polr]] for input and output. Note that it can only be an [[Expr]] or a [[Xctr]].
+  * General [[PolrS]] for input and output. Note that it can only be an [[ExprS]] or a [[XctrS]].
   */
-final case class Loc[P >: BotD, N <: P & TopD](iD: OldCode[Cnst[ChanD[P, N]]]) extends OldCode[Povr[P, N]]
+final case class Loc[P >: BotD, N <: P & TopD](iD: OldCode[CnstS[ChanD[P, N]]]) extends OldCode[PovrS[P, N]]
 
 /**
   * A hard-coded connection between one input and one output
   */
-final case class Forward[D <: TopD](inp: OldCode[Expr[D]], out: OldCode[Xctr[D]]) extends OldCode[Aplr]
+final case class Forward[D <: TopD](inp: OldCode[ExprS[D]], out: OldCode[XctrS[D]]) extends OldCode[AplrS]
 
 /**
   * Dual of Forward. The connection between [[inp]] and [[out]] is instead achieved via variables.
@@ -43,15 +43,15 @@ final case class Backward[I <: TopPoS, O <: TopPoS](
   declarations: OldCode[ArgsUS[DeclS[?]]],
   inp: OldCode[I],
   out: OldCode[O],
-) extends OldCode[Bipo[I, O]]
+) extends OldCode[BipoS[I, O]]
 
 final case class Apply[I <: TopPoS, O <: TopPoS](
-  component: OldCode[Bipo[I, O]],
+  component: OldCode[BipoS[I, O]],
   input: OldCode[I],
 ) extends OldCode[O]
 
 final case class Deply[I <: TopPoS, O <: TopPoS](
-  component: OldCode[Bipo[I, O]],
+  component: OldCode[BipoS[I, O]],
   input: OldCode[O],
 ) extends OldCode[I]
 
@@ -60,42 +60,42 @@ final case class Deply[I <: TopPoS, O <: TopPoS](
   *
   * [[Spread]]`(`[[ArgsUS]]`())` is equivalent to Ignore/Sink/Forget/Discard/Drop.
   */
-final case class Spread[D <: TopD](recipients: OldCode[ArgsUS[Xctr[D]]]) extends OldCode[Xcvr[D]]
+final case class Spread[D <: TopD](recipients: OldCode[ArgsUS[XctrS[D]]]) extends OldCode[XcvrS[D]]
 
 /**
   * Forwards the inputted value once signalled to do so.
   */
-final case class Hold[D <: TopD](signal: OldCode[Expr[PulseD]], value: OldCode[Expr[D]]) extends OldCode[Exvr[D]]
+final case class Hold[D <: TopD](signal: OldCode[ExprS[PulseD]], value: OldCode[ExprS[D]]) extends OldCode[ExvrS[D]]
 
 /**
   * Upon reception of a value, outputs a pulse. It only communicates the arrival of the value,
   * but forgets/ignores about the actual value.
   */
-final case class Signal(trigger: OldCode[Expr[?]]) extends OldCode[Exvr[PulseD]]
+final case class Signal(trigger: OldCode[ExprS[?]]) extends OldCode[ExvrS[PulseD]]
 
 /**
   * Forwards one of the inputs. Is guaranteed to forward a value if any of the inputs yields a value.
   *
   * Another way to think about this is that it forwards the value of the expression that "first" reduces to a value.
   *
-  * [[Pick]]`[D] <: `[[Expr]]`[D]`
+  * [[Pick]]`[D] <: `[[ExprS]]`[D]`
   */
 type Pick[D <: TopD] = PickP[D, OffBotD]
 object Pick:
-  def apply[D <: TopD](inputs: OldCode[ArgsS[BotB, Expr[D]]]): Pick[D] = PickP(inputs)
+  def apply[D <: TopD](inputs: OldCode[ArgsS[BotB, ExprS[D]]]): Pick[D] = PickP(inputs)
 end Pick
 
 /**
   * Internal choice. Non-deterministically forwards the input to one of the outputs.
   *
-  * [[UnPick]]`[D] <: `[[Xctr]]`[D]`
+  * [[UnPick]]`[D] <: `[[XctrS]]`[D]`
   */
 type UnPick[D <: TopD] = PickP[OffTopD, D]
 object UnPick:
-  def apply[D <: TopD](recipients: OldCode[ArgsS[BotB, Xctr[D]]]): UnPick[D] = PickP(recipients)
+  def apply[D <: TopD](recipients: OldCode[ArgsS[BotB, XctrS[D]]]): UnPick[D] = PickP(recipients)
 end UnPick
 
 /**
-  * General [[Polr]] for picking. Note that it can only be an [[Expr]] or an [[Xctr]].
+  * General [[PolrS]] for picking. Note that it can only be an [[ExprS]] or an [[XctrS]].
   */
-final case class PickP[P >: BotD, N <: TopD](connections: OldCode[ArgsS[BotB, Polr[P, N]]]) extends OldCode[Povr[P, N]]
+final case class PickP[P >: BotD, N <: TopD](connections: OldCode[ArgsS[BotB, PolrS[P, N]]]) extends OldCode[PovrS[P, N]]

@@ -3,11 +3,11 @@ package fides.syntax.values
 import fides.syntax.types.*
 
 /**
-  * General [[Polar]] for pairing.
+  * General [[PolarS]] for pairing.
   */
 final case class Pair[
   D1 <: TopD, D2 <: TopD, P <: TopP,
-  S1 <: Polar2[D1, P], S2 <: Polar2[D2, P], Q <: TopQ,
+  S1 <: Polar2S[D1, P], S2 <: Polar2S[D2, P], Q <: TopQ,
   +C1 <: ConsC[S1, Q], +C2 <: ConsC[S2, Q],
 // todo now that we have removed the wrapper, we have to make this covariant in C1 and C2, which is not ideal,
 //  because it could lead to lost type information; we are relying on the compiler typing stuff tightly
@@ -19,7 +19,7 @@ final case class Pair[
 
 given [
   D1 <: TopD, D2 <: TopD, P <: TopP,
-  S1 <: Polar2[D1, P], S2 <: Polar2[D2, P], Q <: TopQ,
+  S1 <: Polar2S[D1, P], S2 <: Polar2S[D2, P], Q <: TopQ,
   C1 <: ConsC[S1, Q], C2 <: ConsC[S2, Q],
 ] => (f: ConsC[S1, Q], s: ConsC[S2, Q]) => ConsC[PairS[D1, D2, P, S1, S2], Q] = Pair(f, s)
 
@@ -29,6 +29,6 @@ given [
   * As an Xctr, the inputted bundle is unbundled along the wires,
   * which are sources that feed values to the executing body.
   */
-final case class Bundle[Q <: TopQ](wires: Any, body: ConsC[Aplr, Q]) extends ConsC[Povr[?, ?], Q]
+final case class Bundle[Q <: TopQ](wires: Any, body: ConsC[AplrS, Q]) extends ConsC[PovrS[?, ?], Q]
 // todo
 // todo double-bundle extends Code[Bipo...

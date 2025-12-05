@@ -4,22 +4,22 @@ package fides.syntax.declarations
 import fides.syntax.types.*
 
 // todo generalize Loc for both channels and variables?
-final case class Use[D <: TopD](variableName: OldCode[NameS[D]]) extends OldCode[Exvr[D]]
+final case class Use[D <: TopD](variableName: OldCode[NameS[D]]) extends OldCode[ExvrS[D]]
 
 // todo merge Use and Assign into something like Loc
-final case class Assign[D <: TopD](variableName: OldCode[NameS[D]]) extends OldCode[Xcvr[D]]
+final case class Assign[D <: TopD](variableName: OldCode[NameS[D]]) extends OldCode[XcvrS[D]]
 
 object Declaration:
   final case class ImmutableVariable[D <: TopD](
     name: OldCode[NameS[D]],
     tipe: OldCode[TypeS[D]],
-    body: OldCode[Expr[D]],
+    body: OldCode[ExprS[D]],
   ) extends OldCode[DeclS[D]]
 
   final case class MutableVariable[D <: TopD](
     name: OldCode[NameS[D]],
     tipe: OldCode[TypeS[D]],
-    body: OldCode[Expr[D]],
+    body: OldCode[ExprS[D]],
   ) extends OldCode[DeclS[D]]
 
   // todo do we need a separate one for channels?

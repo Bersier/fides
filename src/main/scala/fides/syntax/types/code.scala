@@ -36,18 +36,18 @@ final abstract class MNameS[D <: TopD] extends NameS[D]
 /**
   * Fides code type for non-polar process code
   */
-final abstract class Aplr extends TopS
+final abstract class AplrS extends TopS
 
-sealed trait Polar2[D <: TopD, +P <: TopP] extends TopS
+sealed trait Polar2S[D <: TopD, +P <: TopP] extends TopS
 // todo use
 
 /**
-  * [[Polr]] is a generalization of expressions and patterns.
+  * [[PolrS]] is a generalization of expressions and patterns.
   */
-sealed trait Polar[+P >: BotD, -N <: TopD, +IsLiteral <: Boolean] extends TopS
-type Polr[+P >: BotD, -N <: TopD] = Polar[P, N, Boolean]
+sealed trait PolarS[+P >: BotD, -N <: TopD, +IsLiteral <: Boolean] extends TopS
+type PolrS[+P >: BotD, -N <: TopD] = PolarS[P, N, Boolean]
 
-type TopPoS = Polr[OffTopD, OffBotD]
+type TopPoS = PolrS[OffTopD, OffBotD]
 
 /**
   * Fides code type for expressions. While expressions are really just a special type of process with a single output,
@@ -63,8 +63,8 @@ type TopPoS = Polr[OffTopD, OffBotD]
   * Fides is strongly typed in the sense that no expression can get stuck due to a type mismatch.
   * If an expression of a given data type evaluates, it always evaluates to a value of that data type.
   */
-type Expr[+D <: TopD] = Polr[D, OffBotD]
-type Expr2[D <: TopD] = Polar2[D, Polarity[BotB, TopB, TopB]]
+type ExprS[+D <: TopD] = PolrS[D, OffBotD]
+type Expr2S[D <: TopD] = Polar2S[D, Polarity[BotB, TopB, TopB]]
 
 /**
   * Fides code type for extractors (aka patterns). While extractors are really just a special type of
@@ -82,16 +82,16 @@ type Expr2[D <: TopD] = Polar2[D, Polarity[BotB, TopB, TopB]]
   * If an extractor of a given data type is given a value of that type,
   * it never chokes on it (like a refutable pattern could).
   */
-type Xctr[-D <: TopD] = Polr[OffTopD, D]
-type Xctr2[D <: TopD] = Polar2[D, Polarity[TopB, BotB, TopB]]
+type XctrS[-D <: TopD] = PolrS[OffTopD, D]
+type Xctr2S[D <: TopD] = Polar2S[D, Polarity[TopB, BotB, TopB]]
 
 /**
   * Fides code type for Literals
   *
-  * Can be used as either an [[Expr]] or as an [[Xctr]]. Is naturally a [[Cnst]].
+  * Can be used as either an [[ExprS]] or as an [[XctrS]]. Is naturally a [[CnstS]].
   */
-type Ntrl[D <: TopD] = Polar[D, D, true]
-type Ntrl2[D <: TopD] = Polar2[D, BotP]
+type NtrlS[D <: TopD] = PolarS[D, D, true]
+type Ntrl2S[D <: TopD] = Polar2S[D, BotP]
 
 /**
   * Fides code type for bi-polar process code
@@ -99,46 +99,46 @@ type Ntrl2[D <: TopD] = Polar2[D, BotP]
   * Bi-polar process code should probably not be allowed to have any side effects
   * (i.e. no connections with external code).
   */
-final abstract class Bipo[I <: TopPoS, O <: TopPoS] extends TopS
+final abstract class BipoS[I <: TopPoS, O <: TopPoS] extends TopS
 // todo make more stuff Bipo? Stuff in generic.scala?
 
 /**
-  * [[Polr]] that is not a literal
+  * [[PolrS]] that is not a literal
   */
-type Povr[+P >: BotD, -N <: TopD] = Polar[P, N, false]
+type PovrS[+P >: BotD, -N <: TopD] = PolarS[P, N, false]
 
 /**
-  * [[Expr]] that is not a literal
+  * [[ExprS]] that is not a literal
   */
-type Exvr[+D <: TopD] = Polar[D, OffBotD, false]
+type ExvrS[+D <: TopD] = PolarS[D, OffBotD, false]
 
 /**
   * Fides code type for constants
   *
-  * It differs from [[Ntrl]] in that it allows for covariance, which is what we want when a constant is needed.
+  * It differs from [[NtrlS]] in that it allows for covariance, which is what we want when a constant is needed.
   */
-type Cnst[+D <: TopD] = Polar[D, OffBotD, true]
-type Cnst2[D <: TopD] = Polar2[D, Polarity[BotB, TopB, BotB]]
+type CnstS[+D <: TopD] = PolarS[D, OffBotD, true]
+type Cnst2S[D <: TopD] = Polar2S[D, Polarity[BotB, TopB, BotB]]
 
 /**
-  * [[Xctr]] that is not a literal
+  * [[XctrS]] that is not a literal
   */
-type Xcvr[-D <: TopD] = Polar[OffTopD, D, false]
+type XcvrS[-D <: TopD] = PolarS[OffTopD, D, false]
 
 final abstract class PairS[
   D1 <: TopD, D2 <: TopD, +P <: TopP,
-  +S1 <: Polar2[D1, P], +S2 <: Polar2[D2, P],
-] extends Polar2[PairD[D1, D2], P]
+  +S1 <: Polar2S[D1, P], +S2 <: Polar2S[D2, P],
+] extends Polar2S[PairD[D1, D2], P]
 
 final abstract class QuoteS[
   S <: TopS, P <: TopP,
   +RC <: ConsC[S, ConsQ[P, BotQ]],
-] extends Polar2[QuoteD[S], P]
+] extends Polar2S[QuoteD[S], P]
 
 // todo summon[QuoteD[QuoteS[QuoteS[?, ?, RC], ?, ?]]] is invariant in RC!
 //  This might be the key to matching escape matchers at nauseam.
 
 final abstract class WrapS[
   D <: TopD,
-  +S <: Expr2[D],
-] extends Expr2[QuoteD[Ntrl2[D]]]
+  +S <: Expr2S[D],
+] extends Expr2S[QuoteD[Ntrl2S[D]]]
