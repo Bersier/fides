@@ -42,7 +42,8 @@ final abstract class MNameG[D <: TopD] extends NameG[D]
 final abstract class AplrG extends TopG
 
 sealed trait Polar2G[D <: TopD, +P <: TopP] extends TopG
-// todo use
+type PosG[+D <: TopD, +C <: TopB] = Polar2G[D @uncheckedVariance, GenP[BotB, TopB, C]]
+type NegG[-D <: TopD, +C <: TopB] = Polar2G[D @uncheckedVariance, GenP[TopB, BotB, C]]
 
 /**
   * [[PolrG]] is a generalization of expressions and patterns.
@@ -67,7 +68,7 @@ type TopPoG = PolrG[OffTopD, OffBotD]
   * If an expression of a given data type evaluates, it always evaluates to a value of that data type.
   */
 type ExprG[+D <: TopD] = PolrG[D, OffBotD]
-type Expr2G[+D <: TopD] = Polar2G[D @uncheckedVariance, GenP[BotB, TopB, TopB]]
+type Expr2G[+D <: TopD] = PosG[D, TopB]
 
 /**
   * Fides code type for extractors (aka patterns). While extractors are really just a special type of
@@ -86,7 +87,7 @@ type Expr2G[+D <: TopD] = Polar2G[D @uncheckedVariance, GenP[BotB, TopB, TopB]]
   * it never chokes on it (like a refutable pattern could).
   */
 type XctrG[-D <: TopD] = PolrG[OffTopD, D]
-type Xctr2G[-D <: TopD] = Polar2G[D @uncheckedVariance, GenP[TopB, BotB, TopB]]
+type Xctr2G[-D <: TopD] = NegG[D, TopB]
 
 /**
   * Fides code type for Literals
@@ -121,7 +122,7 @@ type ExvrG[+D <: TopD] = PolarG[D, OffBotD, false]
   * It differs from [[NtrlG]] in that it allows for covariance, which is what we want when a constant is needed.
   */
 type CnstG[+D <: TopD] = PolarG[D, OffBotD, true]
-type Cnst2G[D <: TopD] = Polar2G[D, GenP[BotB, TopB, BotB]]
+type Cnst2G[+D <: TopD] = PosG[D, BotB]
 
 /**
   * [[XctrG]] that is not a literal
@@ -160,7 +161,7 @@ final abstract class MultiplyG[+G <: Expr2G[CollectedUD[NatUD]]] extends Expr2G[
 final abstract class CompareG[+G1 <: Expr2G[NatUD], +G2 <: Expr2G[NatUD]] extends Expr2G[BoolD]
 
 final abstract class PairG[
-  D1 <: TopD, D2 <: TopD, +P <: TopP,
+  D1 <: TopD, D2 <: TopD, P <: TopP,
   +G1 <: Polar2G[D1, P], +G2 <: Polar2G[D2, P],
 ] extends Polar2G[PairD[D1, D2], P]
 
