@@ -79,8 +79,8 @@ type OutChanD[-OutD <: TopD] = ChanD[OffTopD, OutD]
   *
   * @tparam E keeps track of whether the collection is empty
   */
-final abstract class CollectedD[+E <: Empty, +D <: TopD] extends TopD
-type CollectedUD[+D <: TopD] = CollectedD[Empty, D]
+final abstract class CollectedD[+E <: TopE, +D <: TopD] extends TopD
+type CollectedUD[+D <: TopD] = CollectedD[TopE, D]
 
 sealed trait OrderD extends AtomD
 final abstract class KillD extends OrderD

@@ -3,24 +3,35 @@ package fides.syntax.types
 sealed class ID
 case object LauncherID extends ID
 
+/**
+  * Polarity stack for all meta-levels
+  *
+  * @tparam H polarity at first code level
+  * @tparam D remaining/meta polarities
+  */
 sealed trait ConsQ[+H <: TopP, +D <: TopQ]
 type TopQ = ConsQ[TopP, ?]
 final abstract class BotQ extends ConsQ[BotP, BotQ]
 
 /**
-  * @tparam P whether a quote of this code can be used as an expression
-  * @tparam N whether a quote of this code can be used as an extractor
-  * @tparam C whether a quote of this code can be used as a constant
+  * Polarity
+  *
+  * @tparam Positive whether a quote of this code can be used as an expression
+  * @tparam Negative whether a quote of this code can be used as an extractor
+  * @tparam Constant whether a quote of this code can be used as a constant
   */
-final abstract class Polarity[+P <: TopB, +N <: TopB, +C <: TopB]
-type TopP = Polarity[TopB, TopB, TopB]
-type BotP = Polarity[BotB, BotB, BotB]
+final abstract class GenP[+Positive <: TopB, +Negative <: TopB, +Constant <: TopB]
+type TopP = GenP[TopB, TopB, TopB]
+type BotP = GenP[BotB, BotB, BotB]
 
-sealed trait Empty
-object Empty:
-  final abstract class T extends Empty
-  final abstract class F extends Empty
-end Empty
+/**
+  * Type-level Boolean used to keep track of whether a collection is empty
+  */
+sealed trait TopE
+object TopE:
+  final abstract class T extends TopE
+  final abstract class F extends TopE
+end TopE
 
 sealed trait TopB
 final abstract class BotB extends TopB

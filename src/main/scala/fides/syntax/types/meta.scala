@@ -18,7 +18,7 @@ object EscapeM:
   final abstract class Head[
     G <: TopG, P <: TopP, Q <: TopQ,
     +M <: ConsM[Polar2G[QuoteD[G], P], Q],
-  ] extends EscapeM[G, ConsQ[P | Polarity[BotB, BotB, TopB], Q]]
+  ] extends EscapeM[G, ConsQ[P | GenP[BotB, BotB, TopB], Q]]
 
   final abstract class Step[
     G <: TopG, Q <: TopQ,

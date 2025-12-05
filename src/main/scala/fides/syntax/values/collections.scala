@@ -5,7 +5,7 @@ import fides.syntax.types.*
 /**
   * General [[PolarG]] for static-size collecting.
   */
-final case class Collected[I <: Empty, P <: TopD, N <: TopD, L <: Boolean](
+final case class Collected[I <: TopE, P <: TopD, N <: TopD, L <: Boolean](
   elements: OldCode[ArgsG[I, PolarG[P, N, L]]],
 ) extends OldCode[PolarG[CollectedD[I, P], CollectedD[I, N], L]]
 // todo should we have a typeful version of this?
@@ -18,7 +18,7 @@ final case class Collected[I <: Empty, P <: TopD, N <: TopD, L <: Boolean](
 final case class AddElementP[P <: N, N <: TopD](
   element: OldCode[PolrG[P, N]],
   others: OldCode[PolrG[CollectedUD[P], CollectedUD[N]]],
-) extends OldCode[PovrG[CollectedD[Empty.T, P], CollectedD[Empty.T, N]]]
+) extends OldCode[PovrG[CollectedD[TopE.T, P], CollectedD[TopE.T, N]]]
 
 /**
   * As an Expr, waits for [[size]] elements from [[elementSource]], then outputs them as a Collected.

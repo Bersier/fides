@@ -7,7 +7,7 @@ import util.Multisets.Multiset
 /**
   * Used for multisets of pieces of code, at the syntax level.
   */
-transparent sealed trait Args[E <: Empty, G <: TopG, Q <: TopQ] extends ConsM[ArgsG[E, G], Q]:
+transparent sealed trait Args[E <: TopE, G <: TopG, Q <: TopQ] extends ConsM[ArgsG[E, G], Q]:
   def arguments: Multiset[ConsM[G, Q]]
   override def toString: String = s"Args{${arguments.asInstanceOf[Vector[?]].mkString(", ")}}"
 object Args:
@@ -16,20 +16,20 @@ object Args:
   def unapply[G <: TopG, Q <: TopQ](arguments: Args[?, G, Q]): scala.Some[Multiset[ConsM[G, Q]]] =
     Some(arguments.arguments)
 
-  type None = ConsM[ArgsG[Empty.T, OffBotG], BotQ]
-  type Some[G <: TopG, Q <: TopQ] = ConsM[ArgsG[Empty.F, G], Q]
+  type None = ConsM[ArgsG[TopE.T, OffBotG], BotQ]
+  type Some[G <: TopG, Q <: TopQ] = ConsM[ArgsG[TopE.F, G], Q]
 
   final case class Matcher[G <: TopG, Q <: TopQ](
     typeRepr: ConsM[G, Q],
-  ) extends ConsM[ArgsG[Empty, G], Q | ConsQ[Polarity[TopB, BotB, BotB], BotQ]]
+  ) extends ConsM[ArgsG[TopE, G], Q | ConsQ[GenP[TopB, BotB, BotB], BotQ]]
   // todo add another type parameter I?
 
-  private case object NoneImpl extends Args[Empty.T, OffBotG, BotQ], None:
+  private case object NoneImpl extends Args[TopE.T, OffBotG, BotQ], None:
     def arguments: Multiset[ConsM[OffBotG, BotQ]] = summon[MultisetOps[Multiset]].empty
   private final class SomeImpl[G <: TopG, Q <: TopQ](
     first: ConsM[G, Q],
     others: ConsM[G, Q]*,
-  ) extends Args[Empty.F, G, Q], Some[G, Q]:
+  ) extends Args[TopE.F, G, Q], Some[G, Q]:
     val arguments: Multiset[ConsM[G, Q]] = summon[MultisetOps[Multiset]].multiset(elements = first +: others*)
 end Args
 
@@ -38,6 +38,6 @@ end Args
   *
   * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Args]].
   */
-final case class Zip[E <: Empty, G <: TopG, P <: TopP, Q <: TopQ](
+final case class Zip[E <: TopE, G <: TopG, P <: TopP, Q <: TopQ](
   pieces: ConsM[Polar2G[CollectedD[E, QuoteD[G]], P], Q],
 ) extends ConsM[Polar2G[QuoteD[ArgsG[E, G]], P], Q]

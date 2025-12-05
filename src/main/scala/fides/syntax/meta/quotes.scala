@@ -35,5 +35,5 @@ object Escape:
     typeRepr: Code[ConsM[G, Q]],
     // todo M should be tunable as well (?), independently of typeRepr's native M
     //  have a wrapper primitive that tunes M?
-  ) extends Code[EscapeM[G, Q | ConsQ[Polarity[TopB, BotB, BotB], BotQ]]]
+  ) extends Code[EscapeM[G, Q | ConsQ[GenP[TopB, BotB, BotB], BotQ]]]
 end Escape

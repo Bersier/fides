@@ -81,7 +81,7 @@ final case class Signal(trigger: OldCode[ExprG[?]]) extends OldCode[ExvrG[PulseD
   */
 type Pick[D <: TopD] = PickP[D, OffBotD]
 object Pick:
-  def apply[D <: TopD](inputs: OldCode[ArgsG[Empty.F, ExprG[D]]]): Pick[D] = PickP(inputs)
+  def apply[D <: TopD](inputs: OldCode[ArgsG[TopE.F, ExprG[D]]]): Pick[D] = PickP(inputs)
 end Pick
 
 /**
@@ -91,12 +91,12 @@ end Pick
   */
 type UnPick[D <: TopD] = PickP[OffTopD, D]
 object UnPick:
-  def apply[D <: TopD](recipients: OldCode[ArgsG[Empty.F, XctrG[D]]]): UnPick[D] = PickP(recipients)
+  def apply[D <: TopD](recipients: OldCode[ArgsG[TopE.F, XctrG[D]]]): UnPick[D] = PickP(recipients)
 end UnPick
 
 /**
   * General [[PolrG]] for picking. Note that it can only be an [[ExprG]] or an [[XctrG]].
   */
 final case class PickP[P >: BotD, N <: TopD](
-  connections: OldCode[ArgsG[Empty.F, PolrG[P, N]]],
+  connections: OldCode[ArgsG[TopE.F, PolrG[P, N]]],
 ) extends OldCode[PovrG[P, N]]

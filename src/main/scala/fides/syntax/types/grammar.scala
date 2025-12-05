@@ -20,8 +20,8 @@ type OffBotG = Nothing
   *
   * @tparam E keeps track of whether the collection is empty
   */
-final abstract class ArgsG[+E <: Empty, +G <: TopG] extends TopG
-type ArgsUG[+G <: TopG] = ArgsG[Empty, G]
+final abstract class ArgsG[+E <: TopE, +G <: TopG] extends TopG
+type ArgsUG[+G <: TopG] = ArgsG[TopE, G]
 
 final abstract class CaseG[D <: TopD, A <: AtomD] extends TopG
 
@@ -64,7 +64,7 @@ type TopPoG = PolrG[OffTopD, OffBotD]
   * If an expression of a given data type evaluates, it always evaluates to a value of that data type.
   */
 type ExprG[+D <: TopD] = PolrG[D, OffBotD]
-type Expr2G[D <: TopD] = Polar2G[D, Polarity[BotB, TopB, TopB]]
+type Expr2G[D <: TopD] = Polar2G[D, GenP[BotB, TopB, TopB]]
 
 /**
   * Fides code type for extractors (aka patterns). While extractors are really just a special type of
@@ -83,7 +83,7 @@ type Expr2G[D <: TopD] = Polar2G[D, Polarity[BotB, TopB, TopB]]
   * it never chokes on it (like a refutable pattern could).
   */
 type XctrG[-D <: TopD] = PolrG[OffTopD, D]
-type Xctr2G[D <: TopD] = Polar2G[D, Polarity[TopB, BotB, TopB]]
+type Xctr2G[D <: TopD] = Polar2G[D, GenP[TopB, BotB, TopB]]
 
 /**
   * Fides code type for Literals
@@ -118,7 +118,7 @@ type ExvrG[+D <: TopD] = PolarG[D, OffBotD, false]
   * It differs from [[NtrlG]] in that it allows for covariance, which is what we want when a constant is needed.
   */
 type CnstG[+D <: TopD] = PolarG[D, OffBotD, true]
-type Cnst2G[D <: TopD] = Polar2G[D, Polarity[BotB, TopB, BotB]]
+type Cnst2G[D <: TopD] = Polar2G[D, GenP[BotB, TopB, BotB]]
 
 /**
   * [[XctrG]] that is not a literal
