@@ -2,6 +2,7 @@ package fides.syntax.types
 
 import typelevelnumbers.binary.Bits
 
+import scala.annotation.unchecked.uncheckedVariance
 import scala.language.experimental.pureFunctions
 
 /**
@@ -66,7 +67,7 @@ type TopPoG = PolrG[OffTopD, OffBotD]
   * If an expression of a given data type evaluates, it always evaluates to a value of that data type.
   */
 type ExprG[+D <: TopD] = PolrG[D, OffBotD]
-type Expr2G[D <: TopD] = Polar2G[D, GenP[BotB, TopB, TopB]]
+type Expr2G[+D <: TopD] = Polar2G[D @uncheckedVariance, GenP[BotB, TopB, TopB]]
 
 /**
   * Fides code type for extractors (aka patterns). While extractors are really just a special type of
@@ -85,7 +86,7 @@ type Expr2G[D <: TopD] = Polar2G[D, GenP[BotB, TopB, TopB]]
   * it never chokes on it (like a refutable pattern could).
   */
 type XctrG[-D <: TopD] = PolrG[OffTopD, D]
-type Xctr2G[D <: TopD] = Polar2G[D, GenP[TopB, BotB, TopB]]
+type Xctr2G[-D <: TopD] = Polar2G[D @uncheckedVariance, GenP[TopB, BotB, TopB]]
 
 /**
   * Fides code type for Literals
