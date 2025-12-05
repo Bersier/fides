@@ -1,5 +1,7 @@
 package fides.syntax.types
 
+import typelevelnumbers.binary.Bits
+
 import scala.language.experimental.pureFunctions
 
 /**
@@ -131,10 +133,26 @@ final abstract class DisjoinS[+G <: Expr2G[CollectedUD[BoolD]]] extends Expr2G[B
 final abstract class NegateS[
   D <: BoolD, P <: TopP,
   +G <: Polar2G[D, P],
-] extends Polar2G[BoolD.Not[D], P]
+] extends Polar2G[BoolD.Not[D], P | GenP[BotB, BotB, TopB]]
 
 final abstract class EqualS[+G <: Expr2G[CollectedUD[AtomD]]] extends Expr2G[BoolD]
 final abstract class RandomBitS extends Expr2G[BoolD]
+
+final abstract class CollectedS[
+  D <: TopD, P <: TopP,
+  E <: TopE, EG <: Polar2G[D, P],
+  +G <: ArgsG[E, EG],
+] extends Polar2G[CollectedD[E, D], P]
+
+final abstract class AddElementS[
+  D <: TopD, P <: TopP,
+  +EG <: Polar2G[D, P], +G <: Polar2G[CollectedUD[D], P],
+] extends Polar2G[CollectedD[TopE.F, D], P]
+
+final abstract class CollectS[
+  D <: TopD, P <: TopP, B <: Bits,
+  +SG <: Ntrl2G[ChanD[?, ?]], +NG <: Ntrl2G[NatD[B]], // todo
+] extends Polar2G[CollectedUD[D], P]
 
 final abstract class AddG[+G <: Expr2G[CollectedUD[NatUD]]] extends Expr2G[NatUD]
 final abstract class MultiplyG[+G <: Expr2G[CollectedUD[NatUD]]] extends Expr2G[NatUD]
