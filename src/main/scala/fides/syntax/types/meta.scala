@@ -26,6 +26,32 @@ object EscapeM:
   ] extends EscapeM[G, ConsQ[BotP, Q]]
 end EscapeM
 
+final abstract class ConjoinM[
+  G <: Expr2G[CollectedUD[BoolD]], Q <: TopQ,
+  +M <: ConsM[G, Q],
+] extends ConsM[ConjoinS[G], Q]
+
+final abstract class DisjoinM[
+  G <: Expr2G[CollectedUD[BoolD]], Q <: TopQ,
+  +M <: ConsM[G, Q],
+] extends ConsM[DisjoinS[G], Q]
+
+final abstract class NegateM[
+  D <: BoolD, P <: TopP,
+  G <: Polar2G[D, P], Q <: TopQ,
+  +M <: ConsM[G, Q],
+] extends ConsM[NegateS[D, P, G], Q]
+
+final abstract class EqualM[
+  G <: Expr2G[CollectedUD[AtomD]], Q <: TopQ,
+  +M <: ConsM[G, Q],
+] extends ConsM[EqualS[G], Q]
+
+final abstract class RandomBitM[
+  Q <: TopQ,
+  +M <: ConsM[RandomBitS, Q],
+] extends ConsM[RandomBitS, Q]
+
 final abstract class AddM[
   G <: Expr2G[CollectedUD[NatUD]], Q <: TopQ,
   +M <: ConsM[G, Q],

@@ -90,8 +90,14 @@ final abstract class StartD extends OrderD
 final abstract class ErrorD[+D <: TopD] extends TopD
 
 sealed trait BoolD extends AtomD
-final abstract class TrueD extends BoolD
+object BoolD:
+  type Not[B <: BoolD] <: BoolD = B match
+    case TrueD  => FalseD
+    case FalseD => TrueD
+    case BoolD  => BoolD
+end BoolD
 final abstract class FalseD extends BoolD
+final abstract class TrueD extends BoolD
 
 final abstract class StrD extends TopD
 

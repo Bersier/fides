@@ -125,6 +125,17 @@ type Cnst2G[D <: TopD] = Polar2G[D, GenP[BotB, TopB, BotB]]
   */
 type XcvrG[-D <: TopD] = PolarG[OffTopD, D, false]
 
+final abstract class ConjoinS[+G <: Expr2G[CollectedUD[BoolD]]] extends Expr2G[BoolD]
+final abstract class DisjoinS[+G <: Expr2G[CollectedUD[BoolD]]] extends Expr2G[BoolD]
+
+final abstract class NegateS[
+  D <: BoolD, P <: TopP,
+  +G <: Polar2G[D, P],
+] extends Polar2G[BoolD.Not[D], P]
+
+final abstract class EqualS[+G <: Expr2G[CollectedUD[AtomD]]] extends Expr2G[BoolD]
+final abstract class RandomBitS extends Expr2G[BoolD]
+
 final abstract class AddG[+G <: Expr2G[CollectedUD[NatUD]]] extends Expr2G[NatUD]
 final abstract class MultiplyG[+G <: Expr2G[CollectedUD[NatUD]]] extends Expr2G[NatUD]
 final abstract class CompareG[+G1 <: Expr2G[NatUD], +G2 <: Expr2G[NatUD]] extends Expr2G[NatUD]
