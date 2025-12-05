@@ -27,8 +27,8 @@ final abstract class BotB extends TopB
 
 sealed trait TopN
 object TopN:
-  final abstract class S[+N <: TopN] extends TopN
+  final abstract class G[+N <: TopN] extends TopN
   final abstract class Z extends TopN
   type `0` = Z
-  type `1` = S[Z]
+  type `1` = G[Z]
 end TopN

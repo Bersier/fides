@@ -17,9 +17,9 @@ import fides.syntax.types.*
   * @param recipient address of the recipient
   */
 final case class Send[D <: TopD](
-  contents: OldCode[ExprS[D]],
-  recipient: OldCode[ExprS[ChanD[OffTopD, D]]],
-) extends OldCode[AplrS]
+  contents: OldCode[ExprG[D]],
+  recipient: OldCode[ExprG[ChanD[OffTopD, D]]],
+) extends OldCode[AplrG]
 
 /**
   * A name scope
@@ -27,16 +27,16 @@ final case class Send[D <: TopD](
   * @param declarations valid within this scope
   * @param body the body of the scope, in which the names are valid
   */
-final case class Scope(declarations: OldCode[ArgsUS[DeclS[?]]], body: OldCode[AplrS]) extends OldCode[AplrS]
+final case class Scope(declarations: OldCode[ArgsUG[DeclG[?]]], body: OldCode[AplrG]) extends OldCode[AplrG]
 
 /**
   * Behaviorally equivalent to an infinite number of copies of the given body
   *
   * @param body the process to be repeated
   */
-final case class Repeated(body: OldCode[AplrS]) extends OldCode[AplrS]
+final case class Repeated(body: OldCode[AplrG]) extends OldCode[AplrG]
 
 /**
   * Composes the given processes concurrently.
   */
-final case class Concurrent(processes: OldCode[ArgsUS[AplrS]]) extends OldCode[AplrS]
+final case class Concurrent(processes: OldCode[ArgsUG[AplrG]]) extends OldCode[AplrG]

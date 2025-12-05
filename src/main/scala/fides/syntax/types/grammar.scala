@@ -4,50 +4,50 @@ import scala.language.experimental.pureFunctions
 
 /**
   * Parent type of all the Scala types that represent
-  * the different types (aka syntactic categories) of possible Fides code
+  * the different types (aka syntactic categories) of possible Fides code, excluding metaprogramming
   */
-sealed trait TopS private[types]()
+sealed trait TopG private[types]()
 
 /**
   * A type smaller than the intersection of all code types.
   *
   * Indicates an unreachable code type (in covariant position).
   */
-type OffBotS = Nothing
+type OffBotG = Nothing
 
 /**
   * Fides code type for multisets of syntactic elements
   *
   * @tparam E keeps track of whether the collection is empty
   */
-final abstract class ArgsS[+E <: Empty, +S <: TopS] extends TopS
-type ArgsUS[+S <: TopS] = ArgsS[Empty, S]
+final abstract class ArgsG[+E <: Empty, +G <: TopG] extends TopG
+type ArgsUG[+G <: TopG] = ArgsG[Empty, G]
 
-final abstract class CaseS[D <: TopD, A <: AtomD] extends TopS
+final abstract class CaseG[D <: TopD, A <: AtomD] extends TopG
 
-final abstract class TypeS[D <: TopD] extends TopS
+final abstract class TypeG[D <: TopD] extends TopG
 
-final abstract class DeclS[D <: TopD] extends TopS
+final abstract class DeclG[D <: TopD] extends TopG
 
-sealed trait NameS[+D <: TopD] extends TopS
+sealed trait NameG[+D <: TopD] extends TopG
 
-final abstract class MNameS[D <: TopD] extends NameS[D]
+final abstract class MNameG[D <: TopD] extends NameG[D]
 
 /**
   * Fides code type for non-polar process code
   */
-final abstract class AplrS extends TopS
+final abstract class AplrG extends TopG
 
-sealed trait Polar2S[D <: TopD, +P <: TopP] extends TopS
+sealed trait Polar2G[D <: TopD, +P <: TopP] extends TopG
 // todo use
 
 /**
-  * [[PolrS]] is a generalization of expressions and patterns.
+  * [[PolrG]] is a generalization of expressions and patterns.
   */
-sealed trait PolarS[+P >: BotD, -N <: TopD, +IsLiteral <: Boolean] extends TopS
-type PolrS[+P >: BotD, -N <: TopD] = PolarS[P, N, Boolean]
+sealed trait PolarG[+P >: BotD, -N <: TopD, +IsLiteral <: Boolean] extends TopG
+type PolrG[+P >: BotD, -N <: TopD] = PolarG[P, N, Boolean]
 
-type TopPoS = PolrS[OffTopD, OffBotD]
+type TopPoG = PolrG[OffTopD, OffBotD]
 
 /**
   * Fides code type for expressions. While expressions are really just a special type of process with a single output,
@@ -63,8 +63,8 @@ type TopPoS = PolrS[OffTopD, OffBotD]
   * Fides is strongly typed in the sense that no expression can get stuck due to a type mismatch.
   * If an expression of a given data type evaluates, it always evaluates to a value of that data type.
   */
-type ExprS[+D <: TopD] = PolrS[D, OffBotD]
-type Expr2S[D <: TopD] = Polar2S[D, Polarity[BotB, TopB, TopB]]
+type ExprG[+D <: TopD] = PolrG[D, OffBotD]
+type Expr2G[D <: TopD] = Polar2G[D, Polarity[BotB, TopB, TopB]]
 
 /**
   * Fides code type for extractors (aka patterns). While extractors are really just a special type of
@@ -82,16 +82,16 @@ type Expr2S[D <: TopD] = Polar2S[D, Polarity[BotB, TopB, TopB]]
   * If an extractor of a given data type is given a value of that type,
   * it never chokes on it (like a refutable pattern could).
   */
-type XctrS[-D <: TopD] = PolrS[OffTopD, D]
-type Xctr2S[D <: TopD] = Polar2S[D, Polarity[TopB, BotB, TopB]]
+type XctrG[-D <: TopD] = PolrG[OffTopD, D]
+type Xctr2G[D <: TopD] = Polar2G[D, Polarity[TopB, BotB, TopB]]
 
 /**
   * Fides code type for Literals
   *
-  * Can be used as either an [[ExprS]] or as an [[XctrS]]. Is naturally a [[CnstS]].
+  * Can be used as either an [[ExprG]] or as an [[XctrG]]. Is naturally a [[CnstG]].
   */
-type NtrlS[D <: TopD] = PolarS[D, D, true]
-type Ntrl2S[D <: TopD] = Polar2S[D, BotP]
+type NtrlG[D <: TopD] = PolarG[D, D, true]
+type Ntrl2G[D <: TopD] = Polar2G[D, BotP]
 
 /**
   * Fides code type for bi-polar process code
@@ -99,50 +99,50 @@ type Ntrl2S[D <: TopD] = Polar2S[D, BotP]
   * Bi-polar process code should probably not be allowed to have any side effects
   * (i.e. no connections with external code).
   */
-final abstract class BipoS[I <: TopPoS, O <: TopPoS] extends TopS
+final abstract class BipoG[I <: TopPoG, O <: TopPoG] extends TopG
 // todo make more stuff Bipo? Stuff in generic.scala?
 
 /**
-  * [[PolrS]] that is not a literal
+  * [[PolrG]] that is not a literal
   */
-type PovrS[+P >: BotD, -N <: TopD] = PolarS[P, N, false]
+type PovrG[+P >: BotD, -N <: TopD] = PolarG[P, N, false]
 
 /**
-  * [[ExprS]] that is not a literal
+  * [[ExprG]] that is not a literal
   */
-type ExvrS[+D <: TopD] = PolarS[D, OffBotD, false]
+type ExvrG[+D <: TopD] = PolarG[D, OffBotD, false]
 
 /**
   * Fides code type for constants
   *
-  * It differs from [[NtrlS]] in that it allows for covariance, which is what we want when a constant is needed.
+  * It differs from [[NtrlG]] in that it allows for covariance, which is what we want when a constant is needed.
   */
-type CnstS[+D <: TopD] = PolarS[D, OffBotD, true]
-type Cnst2S[D <: TopD] = Polar2S[D, Polarity[BotB, TopB, BotB]]
+type CnstG[+D <: TopD] = PolarG[D, OffBotD, true]
+type Cnst2G[D <: TopD] = Polar2G[D, Polarity[BotB, TopB, BotB]]
 
 /**
-  * [[XctrS]] that is not a literal
+  * [[XctrG]] that is not a literal
   */
-type XcvrS[-D <: TopD] = PolarS[OffTopD, D, false]
+type XcvrG[-D <: TopD] = PolarG[OffTopD, D, false]
 
-final abstract class AddS[+S <: Expr2S[CollectedUD[NatUD]]] extends Expr2S[NatUD]
-final abstract class MultiplyS[+S <: Expr2S[CollectedUD[NatUD]]] extends Expr2S[NatUD]
-final abstract class CompareS[+S1 <: Expr2S[NatUD], +S2 <: Expr2S[NatUD]] extends Expr2S[NatUD]
+final abstract class AddG[+G <: Expr2G[CollectedUD[NatUD]]] extends Expr2G[NatUD]
+final abstract class MultiplyG[+G <: Expr2G[CollectedUD[NatUD]]] extends Expr2G[NatUD]
+final abstract class CompareG[+G1 <: Expr2G[NatUD], +G2 <: Expr2G[NatUD]] extends Expr2G[NatUD]
 
-final abstract class PairS[
+final abstract class PairG[
   D1 <: TopD, D2 <: TopD, +P <: TopP,
-  +S1 <: Polar2S[D1, P], +S2 <: Polar2S[D2, P],
-] extends Polar2S[PairD[D1, D2], P]
+  +G1 <: Polar2G[D1, P], +G2 <: Polar2G[D2, P],
+] extends Polar2G[PairD[D1, D2], P]
 
-final abstract class QuoteS[
-  S <: TopS, P <: TopP,
-  +RM <: ConsM[S, ConsQ[P, BotQ]],
-] extends Polar2S[QuoteD[S], P]
+final abstract class QuoteG[
+  G <: TopG, P <: TopP,
+  +RM <: ConsM[G, ConsQ[P, BotQ]],
+] extends Polar2G[QuoteD[G], P]
 
-// todo summon[QuoteD[QuoteS[QuoteS[?, ?, RM], ?, ?]]] is invariant in RM!
+// todo summon[QuoteD[QuoteG[QuoteG[?, ?, RM], ?, ?]]] is invariant in RM!
 //  This might be the key to matching escape matchers at nauseam.
 
-final abstract class WrapS[
+final abstract class WrapG[
   D <: TopD,
-  +S <: Expr2S[D],
-] extends Expr2S[QuoteD[Ntrl2S[D]]]
+  +G <: Expr2G[D],
+] extends Expr2G[QuoteD[Ntrl2G[D]]]

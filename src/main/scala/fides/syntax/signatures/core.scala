@@ -12,22 +12,22 @@ import fides.syntax.types.*
   * @tparam D the type of the signed value
   */
 final case class Signed[D <: TopD] private[fides] (
-  document: OldCode[CnstS[D]],
-  signature: OldCode[CnstS[IdentifierUD]],
-) extends OldCode[CnstS[SignedD[D]]]
+  document: OldCode[CnstG[D]],
+  signature: OldCode[CnstG[IdentifierUD]],
+) extends OldCode[CnstG[SignedD[D]]]
 
 /**
   * Primitive to sign values
   */
 final case class Sign[D <: TopD](
-  document: OldCode[ExprS[D]],
-  signatory: OldCode[ExprS[IdentifierKeyUD]],
-) extends OldCode[ExvrS[SignedD[D]]]
+  document: OldCode[ExprG[D]],
+  signatory: OldCode[ExprG[IdentifierKeyUD]],
+) extends OldCode[ExvrG[SignedD[D]]]
 
 /**
   * Primitive to match signed values
   */
 final case class UnSign[D <: TopD](
-  document: OldCode[XctrS[D]],
-  signature: OldCode[XctrS[IdentifierUD]],
-) extends OldCode[XcvrS[SignedD[D]]]
+  document: OldCode[XctrG[D]],
+  signature: OldCode[XctrG[IdentifierUD]],
+) extends OldCode[XcvrG[SignedD[D]]]

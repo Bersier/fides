@@ -1,36 +1,36 @@
 package fides.syntax.meta
 
 import fides.syntax.types.*
-import util.Multisets.Multiset
 import util.MultisetOps
+import util.Multisets.Multiset
 
 /**
   * Used for multisets of pieces of code, at the syntax level.
   */
-transparent sealed trait Args[E <: Empty, S <: TopS, Q <: TopQ] extends ConsM[ArgsS[E, S], Q]:
-  def arguments: Multiset[ConsM[S, Q]]
+transparent sealed trait Args[E <: Empty, G <: TopG, Q <: TopQ] extends ConsM[ArgsG[E, G], Q]:
+  def arguments: Multiset[ConsM[G, Q]]
   override def toString: String = s"Args{${arguments.asInstanceOf[Vector[?]].mkString(", ")}}"
 object Args:
-  def apply[S <: TopS](): None = NoneImpl
-  def apply[S <: TopS, Q <: TopQ](first: ConsM[S, Q], others: ConsM[S, Q]*): Some[S, Q] = new SomeImpl(first, others*)
-  def unapply[S <: TopS, Q <: TopQ](arguments: Args[?, S, Q]): scala.Some[Multiset[ConsM[S, Q]]] =
+  def apply[G <: TopG](): None = NoneImpl
+  def apply[G <: TopG, Q <: TopQ](first: ConsM[G, Q], others: ConsM[G, Q]*): Some[G, Q] = new SomeImpl(first, others*)
+  def unapply[G <: TopG, Q <: TopQ](arguments: Args[?, G, Q]): scala.Some[Multiset[ConsM[G, Q]]] =
     Some(arguments.arguments)
 
-  type None = ConsM[ArgsS[Empty.T, OffBotS], BotQ]
-  type Some[S <: TopS, Q <: TopQ] = ConsM[ArgsS[Empty.F, S], Q]
+  type None = ConsM[ArgsG[Empty.T, OffBotG], BotQ]
+  type Some[G <: TopG, Q <: TopQ] = ConsM[ArgsG[Empty.F, G], Q]
 
-  final case class Matcher[S <: TopS, Q <: TopQ](
-    typeRepr: ConsM[S, Q],
-  ) extends ConsM[ArgsS[Empty, S], Q | ConsQ[Polarity[TopB, BotB, BotB], BotQ]]
+  final case class Matcher[G <: TopG, Q <: TopQ](
+    typeRepr: ConsM[G, Q],
+  ) extends ConsM[ArgsG[Empty, G], Q | ConsQ[Polarity[TopB, BotB, BotB], BotQ]]
   // todo add another type parameter I?
 
-  private case object NoneImpl extends Args[Empty.T, OffBotS, BotQ], None:
-    def arguments: Multiset[ConsM[OffBotS, BotQ]] = summon[MultisetOps[Multiset]].empty
-  private final class SomeImpl[S <: TopS, Q <: TopQ](
-    first: ConsM[S, Q],
-    others: ConsM[S, Q]*,
-  ) extends Args[Empty.F, S, Q], Some[S, Q]:
-    val arguments: Multiset[ConsM[S, Q]] = summon[MultisetOps[Multiset]].multiset(elements = first +: others*)
+  private case object NoneImpl extends Args[Empty.T, OffBotG, BotQ], None:
+    def arguments: Multiset[ConsM[OffBotG, BotQ]] = summon[MultisetOps[Multiset]].empty
+  private final class SomeImpl[G <: TopG, Q <: TopQ](
+    first: ConsM[G, Q],
+    others: ConsM[G, Q]*,
+  ) extends Args[Empty.F, G, Q], Some[G, Q]:
+    val arguments: Multiset[ConsM[G, Q]] = summon[MultisetOps[Multiset]].multiset(elements = first +: others*)
 end Args
 
 /**
@@ -38,6 +38,6 @@ end Args
   *
   * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Args]].
   */
-final case class Zip[E <: Empty, S <: TopS, P <: TopP, Q <: TopQ](
-  pieces: ConsM[Polar2S[CollectedD[E, QuoteD[S]], P], Q],
-) extends ConsM[Polar2S[QuoteD[ArgsS[E, S]], P], Q]
+final case class Zip[E <: Empty, G <: TopG, P <: TopP, Q <: TopQ](
+  pieces: ConsM[Polar2G[CollectedD[E, QuoteD[G]], P], Q],
+) extends ConsM[Polar2G[QuoteD[ArgsG[E, G]], P], Q]
