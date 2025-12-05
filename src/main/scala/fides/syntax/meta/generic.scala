@@ -7,7 +7,7 @@ import fides.syntax.types.*
   */
 final case class Update[S <: TopS](
   code: OldCode[ExprS[QuoteD[S]]],
-  f: [C <: TopS] => QuoteD[C] => QuoteD[C], // todo f should be a Fides function, not a Scala function
+  f: [M <: TopS] => QuoteD[M] => QuoteD[M], // todo f should be a Fides function, not a Scala function
   // todo for general transformations, a quotation of the exact same type cannot always be returned.
   //  In general, f should return a value compatible with the hole at that position...
   //  Examples: Increment constants, remove annotations, rename variables (i.e. change location IDs)

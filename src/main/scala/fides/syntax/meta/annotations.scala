@@ -9,12 +9,12 @@ import typelevelnumbers.binary.Bits
   * It acts as a structured comment.
   */
 final case class Annotated[S <: TopS, D <: TopD, Q <: TopQ](
-  code: ConsC[S, Q],
-  annotation: ConsC[Cnst2S[D], Q],
-) extends ConsC[S, Q]
+  code: ConsM[S, Q],
+  annotation: ConsM[Cnst2S[D], Q],
+) extends ConsM[S, Q]
 
 final case class AnnotatedMatcher[S <: TopS, B <: Bits, D <: TopD, Q <: TopQ](
-  code: ConsC[S, Q],
-  annotation: ConsC[Cnst2S[D], Q],
-  level: ConsC[Ntrl2S[NatD[B]], Q] = Nat(Bits.None),
-) extends ConsC[S, Q]
+  code: ConsM[S, Q],
+  annotation: ConsM[Cnst2S[D], Q],
+  level: ConsM[Ntrl2S[NatD[B]], Q] = Nat(Bits.None),
+) extends ConsM[S, Q]

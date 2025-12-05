@@ -8,7 +8,7 @@ import scala.annotation.publicInBinary
 /**
   * Natural number values
   */
-final case class Nat[B <: Bits] @publicInBinary private(bits: B) extends ConsC[Ntrl2S[NatD[B]], BotQ]:
+final case class Nat[B <: Bits] @publicInBinary private(bits: B) extends ConsM[Ntrl2S[NatD[B]], BotQ]:
   assert(bits.withoutTrailingZeros == bits)
   override def toString: String = bits.toBigInt.toString
 object Nat:
@@ -19,18 +19,18 @@ end Nat
 /**
   * Outputs the sum of the inputs.
   */
-final case class Add[Q <: TopQ](terms: ConsC[Expr2S[CollectedUD[NatUD]], Q]) extends ConsC[Expr2S[NatUD], Q]
+final case class Add[Q <: TopQ](terms: ConsM[Expr2S[CollectedUD[NatUD]], Q]) extends ConsM[Expr2S[NatUD], Q]
 
 /**
   * Outputs the product of the inputs.
   */
-final case class Multiply[Q <: TopQ](factors: ConsC[ExprS[CollectedUD[NatUD]], Q]) extends ConsC[Expr2S[NatUD], Q]
+final case class Multiply[Q <: TopQ](factors: ConsM[ExprS[CollectedUD[NatUD]], Q]) extends ConsM[Expr2S[NatUD], Q]
 
 /**
   * Outputs -1 if the lhs is larger, 0 if they are equal, 1 if the rhs is larger.
   */
 final case class Compare[Q <: TopQ](
-  lhs: ConsC[Expr2S[NatUD], Q],
-  rhs: ConsC[Expr2S[NatUD], Q],
-) extends ConsC[Expr2S[NatUD], Q]
+  lhs: ConsM[Expr2S[NatUD], Q],
+  rhs: ConsM[Expr2S[NatUD], Q],
+) extends ConsM[Expr2S[NatUD], Q]
 // todo return a trit instead?

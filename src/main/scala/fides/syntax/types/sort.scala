@@ -132,10 +132,10 @@ final abstract class PairS[
 
 final abstract class QuoteS[
   S <: TopS, P <: TopP,
-  +RC <: ConsC[S, ConsQ[P, BotQ]],
+  +RM <: ConsM[S, ConsQ[P, BotQ]],
 ] extends Polar2S[QuoteD[S], P]
 
-// todo summon[QuoteD[QuoteS[QuoteS[?, ?, RC], ?, ?]]] is invariant in RC!
+// todo summon[QuoteD[QuoteS[QuoteS[?, ?, RM], ?, ?]]] is invariant in RM!
 //  This might be the key to matching escape matchers at nauseam.
 
 final abstract class WrapS[

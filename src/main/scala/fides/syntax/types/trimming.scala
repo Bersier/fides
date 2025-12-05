@@ -3,19 +3,19 @@ package fides.syntax.types
 import fides.syntax.values.Pair
 import util.TopN
 
-type TrimmedR[S <: TopS, C <: ConsC[S, TopQ], RC <: ConsC[S, ConsQ[TopP, BotQ]]] = TrimmedGR[S, TopN.`1`, C, RC]
+type TrimmedR[S <: TopS, M <: ConsM[S, TopQ], RM <: ConsM[S, ConsQ[TopP, BotQ]]] = TrimmedGR[S, TopN.`1`, M, RM]
 
-sealed trait TrimmedGR[S <: TopS, Height <: TopN, C <: ConsC[S, TopQ], RC <: ConsC[S, ConsQ[TopP, BotQ]]]
+sealed trait TrimmedGR[S <: TopS, Height <: TopN, M <: ConsM[S, TopQ], RM <: ConsM[S, ConsQ[TopP, BotQ]]]
 // todo not sure if we should keep the type parameter S
 object TrimmedGR:
   given [
     D1 <: TopD, D2 <: TopD, P <: TopP,
     S1 <: Polar2S[D1, P], S2 <: Polar2S[D2, P], H <: TopP, Q <: TopQ,
-    Height <: TopN, C1 <: ConsC[S1, ConsQ[H, Q]], C2 <: ConsC[S2, ConsQ[H, Q]],
-    RC1 <: ConsC[S1, ConsQ[H, BotQ]], RC2 <: ConsC[S2, ConsQ[H, BotQ]],
-  ] => (TrimmedGR[S1, Height, C1, RC1], TrimmedGR[S2, Height, C2, RC2]) => TrimmedGR[
+    Height <: TopN, M1 <: ConsM[S1, ConsQ[H, Q]], M2 <: ConsM[S2, ConsQ[H, Q]],
+    RM1 <: ConsM[S1, ConsQ[H, BotQ]], RM2 <: ConsM[S2, ConsQ[H, BotQ]],
+  ] => (TrimmedGR[S1, Height, M1, RM1], TrimmedGR[S2, Height, M2, RM2]) => TrimmedGR[
     PairS[D1, D2, P, S1, S2], Height,
-    Pair[D1, D2, P, S1, S2, ConsQ[H, Q], C1, C2],
-    Pair[D1, D2, P, S1, S2, ConsQ[H, BotQ], RC1, RC2],
+    Pair[D1, D2, P, S1, S2, ConsQ[H, Q], M1, M2],
+    Pair[D1, D2, P, S1, S2, ConsQ[H, BotQ], RM1, RM2],
   ]
 end TrimmedGR

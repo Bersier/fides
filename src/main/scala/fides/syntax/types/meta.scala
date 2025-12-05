@@ -1,13 +1,12 @@
 package fides.syntax.types
 
-// todo use
-trait Code[C <: TopC] private[syntax]()
 
 /**
-  * General type to represent Fides code
+  * Parent type of all the Scala types that represent
+  * the different types of possible Fides code, including the full metaprogramming landscape
   */
-trait ConsC[+S <: TopS, +Q <: TopQ] private[syntax]() // todo seal
-type TopC = ConsC[TopS, TopQ]
+trait ConsM[+S <: TopS, +Q <: TopQ] private[syntax]() // todo seal
+type TopM = ConsM[TopS, TopQ]
 
 sealed trait ConsQ[+H <: TopP, +D <: TopQ]
 type TopQ = ConsQ[TopP, ?]
