@@ -1,6 +1,6 @@
 package fides.syntax.types
 
-import util.TopB
+import util.{BotB, TopB}
 
 import scala.language.experimental.pureFunctions
 
@@ -64,7 +64,7 @@ type TopPoS = Polr[OffTopT, OffBotT]
   * If an expression of a given data type evaluates, it always evaluates to a value of that data type.
   */
 type Expr[+T <: TopT] = Polr[T, OffBotT]
-type Expr2[T <: TopT] = Polar2[T, Polarity[TopB.T, TopB, TopB]]
+type Expr2[T <: TopT] = Polar2[T, Polarity[BotB, TopB, TopB]]
 
 /**
   * Fides code type for extractors (aka patterns). While extractors are really just a special type of
@@ -83,7 +83,7 @@ type Expr2[T <: TopT] = Polar2[T, Polarity[TopB.T, TopB, TopB]]
   * it never chokes on it (like a refutable pattern could).
   */
 type Xctr[-T <: TopT] = Polr[OffTopT, T]
-type Xctr2[T <: TopT] = Polar2[T, Polarity[TopB, TopB.T, TopB]]
+type Xctr2[T <: TopT] = Polar2[T, Polarity[TopB, BotB, TopB]]
 
 /**
   * Fides code type for Literals
@@ -118,7 +118,7 @@ type Exvr[+T <: TopT] = Polar[T, OffBotT, false]
   * It differs from [[Ntrl]] in that it allows for covariance, which is what we want when a constant is needed.
   */
 type Cnst[+T <: TopT] = Polar[T, OffBotT, true]
-type Cnst2[T <: TopT] = Polar2[T, Polarity[TopB.T, TopB, TopB.T]]
+type Cnst2[T <: TopT] = Polar2[T, Polarity[BotB, TopB, BotB]]
 
 /**
   * [[Xctr]] that is not a literal

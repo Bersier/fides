@@ -1,7 +1,7 @@
 package fides.syntax.meta
 
 import fides.syntax.types.*
-import util.TopB
+import util.{BotB, TopB}
 
 /**
   * Analogous to s-Strings in Scala, but for code-as-value, for metaprogramming
@@ -22,7 +22,7 @@ object Escape:
   final case class Top[
     S <: TopS, P <: TopP, Q <: TopQ,
     +C <: ConsC[Polar2[QuoteT[S], P], Q],
-  ](code: C) extends Escape[S, ConsQ[P | Polarity[TopB.T, TopB.T, TopB.F], Q]]
+  ](code: C) extends Escape[S, ConsQ[P | Polarity[BotB, BotB, TopB], Q]]
 
   /**
     * Allows its parameter to escape one more quotation level.
@@ -37,12 +37,12 @@ object Escape:
     typeRepr: ConsC[S, Q],
     // todo M should be tunable as well (?), independently of typeRepr's native M
     //  have a wrapper primitive that tunes M?
-  ) extends Escape[S, Q | ConsQ[Polarity[TopB.F, TopB.T, TopB.T], BotQ]]
+  ) extends Escape[S, Q | ConsQ[Polarity[TopB, BotB, BotB], BotQ]]
   object Matcher:
     // todo this seems like a hacky way to make Matcher behave like a supertype of Step and Top
     //  (which I believe is what we want for matching purposes)
     def apply[S <: TopS, Q <: TopQ](
       typeRepr: ConsC[S, Q],
-    ): Escape[S, Q | ConsQ[Polarity[TopB.F, TopB.T, TopB.T], BotQ]] = new Matcher(typeRepr)
+    ): Escape[S, Q | ConsQ[Polarity[TopB, BotB, BotB], BotQ]] = new Matcher(typeRepr)
   end Matcher
 end Escape

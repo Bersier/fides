@@ -1,7 +1,7 @@
 package fides.syntax.meta
 
 import fides.syntax.types.*
-import util.{TopB, MultisetOps}
+import util.{BotB, TopB, MultisetOps}
 import util.Multisets.Multiset
 
 /**
@@ -17,20 +17,20 @@ object Args:
   def unapply[S <: TopS, Q <: TopQ](arguments: Args[S, ?, Q]): scala.Some[Multiset[ConsC[S, Q]]] =
     Some(arguments.arguments)
 
-  type None = ConsC[ArgsS[TopB.F, OffBotS], BotQ]
-  type Some[S <: TopS, Q <: TopQ] = ConsC[ArgsS[TopB.T, S], Q]
+  type None = ConsC[ArgsS[TopB, OffBotS], BotQ]
+  type Some[S <: TopS, Q <: TopQ] = ConsC[ArgsS[BotB, S], Q]
 
   final case class Matcher[S <: TopS, Q <: TopQ](
     typeRepr: ConsC[S, Q],
-  ) extends ConsC[ArgsS[TopB, S], Q | ConsQ[Polarity[TopB.F, TopB.T, TopB.T], BotQ]]
+  ) extends ConsC[ArgsS[TopB, S], Q | ConsQ[Polarity[TopB, BotB, BotB], BotQ]]
   // todo add another type parameter I?
 
-  private case object Empty extends Args[OffBotS, TopB.F, BotQ], None:
+  private case object Empty extends Args[OffBotS, TopB, BotQ], None:
     def arguments: Multiset[ConsC[OffBotS, BotQ]] = summon[MultisetOps[Multiset]].empty
   private final class NonEmpty[S <: TopS, Q <: TopQ](
     first: ConsC[S, Q],
     others: ConsC[S, Q]*,
-  ) extends Args[S, TopB.T, Q], Some[S, Q]:
+  ) extends Args[S, BotB, Q], Some[S, Q]:
     val arguments: Multiset[ConsC[S, Q]] = summon[MultisetOps[Multiset]].multiset(elements = first +: others*)
 end Args
 

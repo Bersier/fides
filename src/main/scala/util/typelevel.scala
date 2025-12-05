@@ -3,10 +3,7 @@ package util
 import typelevelnumbers.binary.{Bit, Bits}
 
 sealed trait TopB
-object TopB:
-  type F = TopB
-  final abstract class T extends TopB
-end TopB
+final abstract class BotB extends TopB
 
 sealed trait TopN
 object TopN:

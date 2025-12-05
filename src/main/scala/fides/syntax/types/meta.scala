@@ -1,5 +1,6 @@
 package fides.syntax.types
 
+// todo use
 trait Code[C <: TopC] private[syntax]()
 
 /**

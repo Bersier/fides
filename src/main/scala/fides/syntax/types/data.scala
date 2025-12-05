@@ -1,7 +1,7 @@
 package fides.syntax.types
 
 import typelevelnumbers.binary.Bits
-import util.TopB
+import util.{BotB, TopB}
 
 /**
   * Parent type of all the Scala types that represent Fides data/value types
