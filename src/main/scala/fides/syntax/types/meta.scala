@@ -54,6 +54,25 @@ final abstract class RandomBitM[
   +M <: ConsM[RandomBitG, Q],
 ] extends ConsM[RandomBitG, Q]
 
+final abstract class CollectedM[
+  D <: TopD, P <: TopP,
+  E <: TopE, EG <: Polar2G[D, P],
+  G <: ArgsG[E, EG], Q <: TopQ,
+  +M <: ConsM[G, Q],
+] extends ConsM[CollectedG[D, P, E, EG, G], Q]
+
+final abstract class AddElementM[
+  D <: TopD, P <: TopP,
+  EG <: Polar2G[D, P], G <: Polar2G[CollectedUD[D], P], Q <: TopQ,
+  +EM <: ConsM[EG, Q], +M <: ConsM[G, Q],
+] extends ConsM[AddElementG[D, P, EG, G], Q]
+
+final abstract class CollectM[
+  D <: TopD, P <: TopP, B <: Bits,
+  SG <: Ntrl2G[ChanD[?, ?]], NG <: Ntrl2G[NatD[B]], Q <: TopQ, // todo
+  +SM <: ConsM[SG, Q], +NM <: ConsM[NG, Q],
+] extends ConsM[CollectG[D, P, B, SG, NG], Q]
+
 final abstract class AddM[
   G <: Expr2G[CollectedUD[NatUD]], Q <: TopQ,
   +M <: ConsM[G, Q],

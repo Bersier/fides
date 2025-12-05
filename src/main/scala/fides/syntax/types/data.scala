@@ -80,6 +80,7 @@ type OutChanD[-OutD <: TopD] = ChanD[OffTopD, OutD]
   * @tparam E keeps track of whether the collection is empty
   */
 final abstract class CollectedD[+E <: TopE, +D <: TopD] extends TopD
+// todo should we have a typeful version of this?
 type CollectedUD[+D <: TopD] = CollectedD[TopE, D]
 
 sealed trait OrderD extends AtomD

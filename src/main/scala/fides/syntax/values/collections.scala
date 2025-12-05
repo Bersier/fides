@@ -1,32 +1,37 @@
 package fides.syntax.values
 
 import fides.syntax.types.*
+import typelevelnumbers.binary.Bits
 
 /**
   * General [[PolarG]] for static-size collecting.
   */
-final case class Collected[I <: TopE, P <: TopD, N <: TopD, L <: Boolean](
-  elements: OldCode[ArgsG[I, PolarG[P, N, L]]],
-) extends OldCode[PolarG[CollectedD[I, P], CollectedD[I, N], L]]
-// todo should we have a typeful version of this?
+final case class Collected[
+  D <: TopD, P <: TopP,
+  E <: TopE, EG <: Polar2G[D, P],
+  G <: ArgsG[E, EG], Q <: TopQ,
+  M <: ConsM[G, Q],
+](elements: Code[M]) extends Code[CollectedM[D, P, E, EG, G, Q, M]]
 
 /**
-  * As an Expr, outputs a Collected with one element added to it.
+  * As an [[Expr2G]], outputs a Collected with one element added to it.
   *
-  * As an Xctr, (non-deterministically) extracts one element from a Collected.
+  * As an [[Xctr2G]], (non-deterministically) extracts one element from a Collected.
   */
-final case class AddElementP[P <: N, N <: TopD](
-  element: OldCode[PolrG[P, N]],
-  others: OldCode[PolrG[CollectedUD[P], CollectedUD[N]]],
-) extends OldCode[PovrG[CollectedD[TopE.T, P], CollectedD[TopE.T, N]]]
+final case class AddElement[
+  D <: TopD, P <: TopP,
+  EG <: Polar2G[D, P], G <: Polar2G[CollectedUD[D], P], Q <: TopQ,
+  EM <: ConsM[EG, Q], M <: ConsM[G, Q],
+](element: Code[EM], others: Code[M]) extends Code[AddElementM[D, P, EG, G, Q, EM, M]]
 
 /**
-  * As an Expr, waits for [[size]] elements from [[elementSource]], then outputs them as a Collected.
+  * As an [[Expr2G]], waits for [[size]] elements from [[elementSource]], then outputs them as a Collected.
   *
-  * As an Xctr, outputs the elements of a Collected to [[elementSource]], and its size to [[size]].
+  * As an [[Xctr2G]], outputs the elements of a Collected to [[elementSource]], and its size to [[size]].
   */
-final case class Collect[P <: TopD, N <: P & TopD](
-  elementSource: OldCode[CnstG[ChanD[P, N]]],
-  size: OldCode[PolrG[NatUD, NatUD]],
-) extends OldCode[PovrG[CollectedUD[P], CollectedUD[N]]]
+final case class Collect[
+  D <: TopD, P <: TopP, B <: Bits,
+  SG <: Ntrl2G[ChanD[?, ?]], NG <: Ntrl2G[NatD[B]], Q <: TopQ, // todo
+  SM <: ConsM[SG, Q], NM <: ConsM[NG, Q],
+](elementSource: Code[SM], size: Code[NM]) extends Code[CollectM[D, P, B, SG, NG, Q, SM, NM]]
 // todo does it only start collecting after having received [[size]]?
