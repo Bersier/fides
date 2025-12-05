@@ -1,7 +1,6 @@
 package fides.syntax.meta
 
 import fides.syntax.types.*
-import fides.syntax.values.Nat
 import typelevelnumbers.binary.Bits
 
 /**
@@ -16,5 +15,6 @@ final case class Annotated[S <: TopS, D <: TopD, Q <: TopQ](
 final case class AnnotatedMatcher[S <: TopS, B <: Bits, D <: TopD, Q <: TopQ](
   code: ConsM[S, Q],
   annotation: ConsM[Cnst2S[D], Q],
-  level: ConsM[Ntrl2S[NatD[B]], Q] = Nat(Bits.None),
+  level: ConsM[Ntrl2S[NatD[B]], Q]// = NatLit(Bits.None),
 ) extends ConsM[S, Q]
+// todo... delete?

@@ -26,6 +26,21 @@ object EscapeM:
   ] extends EscapeM[S, ConsQ[BotP, Q]]
 end EscapeM
 
+final abstract class AddM[
+  S <: Expr2S[CollectedUD[NatUD]], Q <: TopQ,
+  +M <: ConsM[S, Q],
+] extends ConsM[AddS[S], Q]
+
+final abstract class MultiplyM[
+  S <: Expr2S[CollectedUD[NatUD]], Q <: TopQ,
+  +M <: ConsM[S, Q],
+] extends ConsM[MultiplyS[S], Q]
+
+final abstract class CompareM[
+  S1 <: Expr2S[NatUD], S2 <: Expr2S[NatUD], Q <: TopQ,
+  +M1 <: ConsM[S1, Q], +M2 <: ConsM[S2, Q],
+] extends ConsM[CompareS[S1, S2], Q]
+
 final abstract class PairM[
   D1 <: TopD, D2 <: TopD, P <: TopP,
   S1 <: Polar2S[D1, P], S2 <: Polar2S[D2, P], Q <: TopQ,

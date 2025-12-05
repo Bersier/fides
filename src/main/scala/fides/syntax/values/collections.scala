@@ -8,6 +8,7 @@ import fides.syntax.types.*
 final case class Collected[I <: Empty, P <: TopD, N <: TopD, L <: Boolean](
   elements: OldCode[ArgsS[I, PolarS[P, N, L]]],
 ) extends OldCode[PolarS[CollectedD[I, P], CollectedD[I, N], L]]
+// todo should we have a typeful version of this?
 
 /**
   * As an Expr, outputs a Collected with one element added to it.

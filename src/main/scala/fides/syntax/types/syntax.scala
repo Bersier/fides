@@ -125,6 +125,10 @@ type Cnst2S[D <: TopD] = Polar2S[D, Polarity[BotB, TopB, BotB]]
   */
 type XcvrS[-D <: TopD] = PolarS[OffTopD, D, false]
 
+final abstract class AddS[+S <: Expr2S[CollectedUD[NatUD]]] extends Expr2S[NatUD]
+final abstract class MultiplyS[+S <: Expr2S[CollectedUD[NatUD]]] extends Expr2S[NatUD]
+final abstract class CompareS[+S1 <: Expr2S[NatUD], +S2 <: Expr2S[NatUD]] extends Expr2S[NatUD]
+
 final abstract class PairS[
   D1 <: TopD, D2 <: TopD, +P <: TopP,
   +S1 <: Polar2S[D1, P], +S2 <: Polar2S[D2, P],
