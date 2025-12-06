@@ -1,6 +1,6 @@
 package fides.syntax.control
 
-import fides.syntax.types.*
+import fides.syntax.machinery.*
 
 case object Kill extends OldCode[NtrlG[KillD]]
 case object Pause extends OldCode[NtrlG[PauseD]]

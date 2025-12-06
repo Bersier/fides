@@ -1,4 +1,4 @@
-package fides.syntax.types
+package fides.syntax.machinery
 
 /**
   * Parent type of all actual Fides code

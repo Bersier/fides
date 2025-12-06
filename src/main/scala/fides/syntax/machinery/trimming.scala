@@ -1,4 +1,4 @@
-package fides.syntax.types
+package fides.syntax.machinery
 
 type TrimmedR[G <: TopG, M <: ConsM[G, TopQ], RM <: ConsM[G, ConsQ[TopP, BotQ]]] = TrimmedGR[G, TopN.`1`, M, RM]
 

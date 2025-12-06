@@ -1,6 +1,6 @@
 package fides.syntax.identifiers
 
-import fides.syntax.types.*
+import fides.syntax.machinery.*
 
 /**
   * Channel identifier

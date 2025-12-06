@@ -1,6 +1,6 @@
 package fides.syntax.meta
 
-import fides.syntax.types.*
+import fides.syntax.machinery.*
 import util.MultisetOps
 import util.Multisets.Multiset
 

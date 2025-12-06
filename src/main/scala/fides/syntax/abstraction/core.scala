@@ -1,6 +1,6 @@
 package fides.syntax.abstraction
 
-import fides.syntax.types.*
+import fides.syntax.machinery.*
 
 // todo polymorphic abstractions?
 //  Variance? Type bounds ?!

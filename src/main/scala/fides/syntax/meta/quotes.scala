@@ -1,6 +1,6 @@
 package fides.syntax.meta
 
-import fides.syntax.types.*
+import fides.syntax.machinery.*
 
 /**
   * Analogous to s-Strings in Scala, but for code-as-value, for metaprogramming

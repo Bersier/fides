@@ -1,6 +1,6 @@
 package fides.syntax.identifiers
 
-import fides.syntax.types.*
+import fides.syntax.machinery.*
 
 /**
   * Identifiers are structureless. They can only be compared for equality. They cannot be inspected in any other way.

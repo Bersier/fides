@@ -1,6 +1,6 @@
 package fides.syntax.values
 
-import fides.syntax.types.*
+import fides.syntax.machinery.*
 
 /**
   * Added mainly for convenience, so annotations and error messages can be readily readable.

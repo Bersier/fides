@@ -1,6 +1,6 @@
 package fides.syntax.connectors
 
-import fides.syntax.types.*
+import fides.syntax.machinery.*
 
 /**
   * Absorbs from the location referred to by [[iD]]. Reduces to the received val after reception.

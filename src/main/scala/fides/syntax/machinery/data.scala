@@ -1,11 +1,11 @@
-package fides.syntax.types
+package fides.syntax.machinery
 
 import typelevelnumbers.binary.Bits
 
 /**
   * Parent type of all the Scala types that represent Fides data/value types
   */
-sealed trait TopD private[types]()
+sealed trait TopD private[machinery]()
 
 /**
   * Lower bound for all data types

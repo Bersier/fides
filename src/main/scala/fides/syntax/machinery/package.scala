@@ -11,4 +11,4 @@ package fides.syntax
   * <li> <b>Code types</b> represent actual code.
   * </ol>
   */
-package object types
+package object machinery

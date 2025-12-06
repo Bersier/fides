@@ -1,4 +1,4 @@
-package fides.syntax.types
+package fides.syntax.machinery
 
 sealed class ID
 case object LauncherID extends ID

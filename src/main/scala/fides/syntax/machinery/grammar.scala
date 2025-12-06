@@ -1,4 +1,4 @@
-package fides.syntax.types
+package fides.syntax.machinery
 
 import typelevelnumbers.binary.Bits
 
@@ -9,7 +9,7 @@ import scala.language.experimental.pureFunctions
   * Parent type of all the Scala types that represent
   * the different types (aka syntactic categories) of possible Fides code, excluding metaprogramming
   */
-sealed trait TopG private[types]()
+sealed trait TopG private[machinery]()
 
 /**
   * A type smaller than the intersection of all code types.

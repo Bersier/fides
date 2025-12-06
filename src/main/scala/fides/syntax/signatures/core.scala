@@ -1,6 +1,6 @@
 package fides.syntax.signatures
 
-import fides.syntax.types.*
+import fides.syntax.machinery.*
 
 /**
   * Signed values are guaranteed to have been created using a key corresponding to [[signature]].

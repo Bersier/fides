@@ -1,6 +1,6 @@
 package fides.syntax.values
 
-import fides.syntax.types.*
+import fides.syntax.machinery.*
 
 case object True extends Code[ConsM[Ntrl2G[TrueD], BotQ]]
 case object False extends Code[ConsM[Ntrl2G[FalseD], BotQ]]

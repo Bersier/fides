@@ -1,6 +1,6 @@
 package fides.syntax.values
 
-import fides.syntax.types.*
+import fides.syntax.machinery.*
 
 /**
   * General [[PolarG]] for pairing.

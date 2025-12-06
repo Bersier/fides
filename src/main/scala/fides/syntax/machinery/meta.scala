@@ -1,4 +1,4 @@
-package fides.syntax.types
+package fides.syntax.machinery
 
 import typelevelnumbers.binary.Bits
 

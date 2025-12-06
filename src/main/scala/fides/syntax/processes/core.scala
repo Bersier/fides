@@ -1,6 +1,6 @@
 package fides.syntax.processes
 
-import fides.syntax.types.*
+import fides.syntax.machinery.*
 
 /**
   * Sends a value to an address.

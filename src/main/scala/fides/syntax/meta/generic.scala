@@ -1,6 +1,6 @@
 package fides.syntax.meta
 
-import fides.syntax.types.*
+import fides.syntax.machinery.*
 
 /**
   * Outputs an equivariantly updated version of the inputted term.

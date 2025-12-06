@@ -1,6 +1,6 @@
 package fides.syntax.connectors
 
-import fides.syntax.types.*
+import fides.syntax.machinery.*
 import izumi.reflect.Tag
 
 /**
