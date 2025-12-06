@@ -24,6 +24,7 @@ type OffBotG = Nothing
   * @tparam E keeps track of whether the collection is empty
   */
 final abstract class ArgsG[+E <: TopE, +G <: TopG] extends TopG
+// todo this is losing information, which is problematic
 type ArgsUG[+G <: TopG] = ArgsG[TopE, G]
 
 final abstract class CaseG[D <: TopD, A <: AtomD] extends TopG
