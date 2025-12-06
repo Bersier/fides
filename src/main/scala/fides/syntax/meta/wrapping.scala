@@ -7,7 +7,7 @@ import fides.syntax.machinery.*
   */
 final case class Wrap[
   D <: TopD,
-  G <: Expr2G[D], Q <: TopQ,
+  G <: ExprG[D], Q <: TopQ,
   +M <: ConsM[G, Q],
 ](value: M) extends ConsM[WrapG[D, G], Q]
 
@@ -15,10 +15,10 @@ final case class Wrap[
   * Wraps a value into a Quoted, but raises all partial escapes by one,
   * so they don't sink, but rather stay at the same depth.
   */
-final case class WrapLight[D <: TopD, Q <: TopQ](value: ConsM[Expr2G[D], Q]) extends ConsM[Expr2G[QuoteD[Ntrl2G[D]]], Q]
+final case class WrapLight[D <: TopD, Q <: TopQ](value: ConsM[ExprG[D], Q]) extends ConsM[ExprG[QuoteD[NtrlG[D]]], Q]
 // todo. And do we really want this?
 
 /**
   * Evaluates a quoted expression.
   */
-final case class Eval[D <: TopD, Q <: TopQ](value: ConsM[Expr2G[QuoteD[Expr2G[D]]], Q]) extends ConsM[Expr2G[D], Q]
+final case class Eval[D <: TopD, Q <: TopQ](value: ConsM[ExprG[QuoteD[ExprG[D]]], Q]) extends ConsM[ExprG[D], Q]

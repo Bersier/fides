@@ -20,7 +20,7 @@ object Escape:
     */
   final case class Head[
     G <: TopG, P <: TopP, Q <: TopQ,
-    M <: ConsM[Polar2G[QuoteD[G], P], Q],
+    M <: ConsM[PolarG[QuoteD[G], P], Q],
   ](quote: Code[M]) extends Code[EscapeM.Head[G, P, Q, M]]
 
   /**

@@ -2,9 +2,9 @@ package fides.syntax.control
 
 import fides.syntax.machinery.*
 
-case object Kill extends OldCode[NtrlG[KillD]]
-case object Pause extends OldCode[NtrlG[PauseD]]
-case object Start extends OldCode[NtrlG[StartD]]
+case object Kill extends OldCode[OldNtrlG[KillD]]
+case object Pause extends OldCode[OldNtrlG[PauseD]]
+case object Start extends OldCode[OldNtrlG[StartD]]
 
 /**
   * A pausable process
@@ -21,7 +21,7 @@ final case class Pausable(awake: OldCode[NameG[BoolD]], body: OldCode[AplrG]) ex
    * Executes the body only if the received signal is [[True]].
    * If [[False]], the body is discarded without getting executed.
   */
-final case class Contingent(signal: OldCode[ExprG[BoolD]], body: OldCode[AplrG]) extends OldCode[AplrG]
+final case class Contingent(signal: OldCode[OldExprG[BoolD]], body: OldCode[AplrG]) extends OldCode[AplrG]
 
 /**
   * A killable process
@@ -33,8 +33,8 @@ final case class Contingent(signal: OldCode[ExprG[BoolD]], body: OldCode[AplrG])
   * @param body the process that can be stopped
   */
 final case class Mortal(
-  killSignal: OldCode[ExprG[PulseD]],
-  deathSignal: OldCode[XctrG[PulseD]],
+  killSignal: OldCode[OldExprG[PulseD]],
+  deathSignal: OldCode[OldXctrG[PulseD]],
   body: OldCode[AplrG],
 ) extends OldCode[AplrG]
 
@@ -45,9 +45,9 @@ final case class Mortal(
 final case class Sandboxed(monitor: OldCode[AplrG], sandboxed: OldCode[AplrG]) extends OldCode[AplrG]
 
 final case class Handled(
-  errorHandler: OldCode[CnstG[ChanD[OffTopD, ErrorD[TopD]]]],
+  errorHandler: OldCode[OldCnstG[ChanD[OffTopD, ErrorD[TopD]]]],
   body: OldCode[AplrG],
 ) extends OldCode[AplrG]
 
-final case class Error[D <: TopD](value: OldCode[CnstG[D]]) extends OldCode[CnstG[ErrorD[D]]]
+final case class Error[D <: TopD](value: OldCode[OldCnstG[D]]) extends OldCode[OldCnstG[ErrorD[D]]]
 // todo develop

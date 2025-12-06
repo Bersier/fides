@@ -39,5 +39,5 @@ end Args
   * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Args]].
   */
 final case class Zip[E <: TopE, G <: TopG, P <: TopP, Q <: TopQ](
-  pieces: ConsM[Polar2G[CollectedD[E, QuoteD[G]], P], Q],
-) extends ConsM[Polar2G[QuoteD[ArgsG[E, G]], P], Q]
+  pieces: ConsM[PolarG[CollectedD[E, QuoteD[G]], P], Q],
+) extends ConsM[PolarG[QuoteD[ArgsG[E, G]], P], Q]

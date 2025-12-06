@@ -13,13 +13,13 @@ object Declaration:
   final case class ImmutableVariable[D <: TopD](
     name: OldCode[NameG[D]],
     tipe: OldCode[TypeG[D]],
-    body: OldCode[ExprG[D]],
+    body: OldCode[OldExprG[D]],
   ) extends OldCode[DeclG[D]]
 
   final case class MutableVariable[D <: TopD](
     name: OldCode[NameG[D]],
     tipe: OldCode[TypeG[D]],
-    body: OldCode[ExprG[D]],
+    body: OldCode[OldExprG[D]],
   ) extends OldCode[DeclG[D]]
 
   // todo do we need a separate one for channels?

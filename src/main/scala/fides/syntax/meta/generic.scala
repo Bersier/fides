@@ -6,7 +6,7 @@ import fides.syntax.machinery.*
   * Outputs an equivariantly updated version of the inputted term.
   */
 final case class Update[G <: TopG](
-  code: OldCode[ExprG[QuoteD[G]]],
+  code: OldCode[OldExprG[QuoteD[G]]],
   f: [M <: TopG] => QuoteD[M] => QuoteD[M], // todo f should be a Fides function, not a Scala function
   // todo for general transformations, a quotation of the exact same type cannot always be returned.
   //  In general, f should return a value compatible with the hole at that position...
@@ -17,4 +17,4 @@ final case class Update[G <: TopG](
 /**
   * Outputs the children of the inputted term.
   */
-final case class Children(code: OldCode[ExprG[QuoteD[?]]]) extends OldCode[ExvrG[CollectedUD[QuoteD[?]]]]
+final case class Children(code: OldCode[OldExprG[QuoteD[?]]]) extends OldCode[ExvrG[CollectedUD[QuoteD[?]]]]

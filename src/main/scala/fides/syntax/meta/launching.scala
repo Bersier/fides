@@ -8,6 +8,6 @@ import fides.syntax.machinery.*
   * In the code, all the [[Channel]]s used in [[InpChan]]s undergo automatic renaming.
   * The new names are visible in the outputted code certificate.
   */
-final case class Launch(code: OldCode[ExprG[QuoteD[AplrG]]]) extends OldCode[ExvrG[SignedD[QuoteD[AplrG]]]]
+final case class Launch(code: OldCode[OldExprG[QuoteD[AplrG]]]) extends OldCode[ExvrG[SignedD[QuoteD[AplrG]]]]
 
 // todo Catchable and Catch

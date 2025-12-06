@@ -17,8 +17,8 @@ import fides.syntax.machinery.*
   * @param recipient address of the recipient
   */
 final case class Send[D <: TopD](
-  contents: OldCode[ExprG[D]],
-  recipient: OldCode[ExprG[ChanD[OffTopD, D]]],
+  contents: OldCode[OldExprG[D]],
+  recipient: OldCode[OldExprG[ChanD[OffTopD, D]]],
 ) extends OldCode[AplrG]
 
 /**

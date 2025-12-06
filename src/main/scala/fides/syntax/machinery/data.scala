@@ -10,6 +10,7 @@ sealed trait TopD private[machinery]()
 /**
   * Lower bound for all data types
   */
+@deprecated
 type BotD = Nothing
 // todo replace by true intersection, and use as bound everywhere appropriate
 
@@ -18,6 +19,7 @@ type BotD = Nothing
   *
   * Indicates an unreachable data type in contravariant position.
   */
+@deprecated
 type OffTopD = Any
 
 /**
@@ -25,6 +27,7 @@ type OffTopD = Any
   *
   * Indicates an unreachable data type (in covariant position).
   */
+@deprecated
 type OffBotD = Nothing
 
 /**
@@ -36,9 +39,6 @@ type OffBotD = Nothing
   */
 sealed trait AtomD extends TopD
 
-/**
-  * Data type for pairs
-  */
 final abstract class PairD[+D1 <: TopD, +D2 <: TopD] extends TopD
 
 /**
@@ -57,18 +57,12 @@ final abstract class QuoteD[+G <: TopG] extends TopD
 
 final abstract class SignedD[+D <: TopD] extends TopD
 
-/**
-  * Data type for identifiers
-  */
 sealed trait IdentifierD[+K <: ID] extends AtomD
 type IdentifierUD = IdentifierD[ID]
 
 final abstract class IdentifierKeyD[+K <: ID] extends AtomD
 type IdentifierKeyUD = IdentifierKeyD[ID]
 
-/**
-  * Data type for Channels
-  */
 final abstract class ChannelD[+K <: ID, +InpD >: BotD, -OutD <: InpD & TopD] extends IdentifierD[K]
 type ChanD[+InpD >: BotD, -OutD <: InpD & TopD] = ChannelD[ID, InpD, OutD]
 type InpChanD[+InpD >: BotD] = ChanD[InpD, OffBotD]

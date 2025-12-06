@@ -1,5 +1,6 @@
 package fides.syntax.machinery
 
+// todo
 sealed class ID
 case object LauncherID extends ID
 
@@ -33,9 +34,15 @@ object TopE:
   final abstract class F extends TopE
 end TopE
 
+/**
+  * Type-level representation of Booleans for which unknown is equivalent to false
+  */
 sealed trait TopB
 final abstract class BotB extends TopB
 
+/**
+  * Type-level representation of unary natural numbers
+  */
 sealed trait TopN
 object TopN:
   final abstract class G[+N <: TopN] extends TopN

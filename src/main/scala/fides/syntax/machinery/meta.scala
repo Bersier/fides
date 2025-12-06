@@ -19,7 +19,7 @@ sealed trait EscapeM[+G <: TopG, +Q <: TopQ] extends ConsM[G, Q]
 object EscapeM:
   final abstract class Head[
     G <: TopG, P <: TopP, Q <: TopQ,
-    +M <: ConsM[Polar2G[QuoteD[G], P], Q],
+    +M <: ConsM[PolarG[QuoteD[G], P], Q],
   ] extends EscapeM[G, ConsQ[P | GenP[BotB, BotB, TopB], Q]]
 
   final abstract class Step[
@@ -39,23 +39,23 @@ final abstract class ConcurrentM[
 ] extends ConsM[ConcurrentG[G], Q]
 
 final abstract class ConjoinM[
-  G <: Expr2G[CollectedUD[BoolD]], Q <: TopQ,
+  G <: ExprG[CollectedUD[BoolD]], Q <: TopQ,
   +M <: ConsM[G, Q],
 ] extends ConsM[ConjoinG[G], Q]
 
 final abstract class DisjoinM[
-  G <: Expr2G[CollectedUD[BoolD]], Q <: TopQ,
+  G <: ExprG[CollectedUD[BoolD]], Q <: TopQ,
   +M <: ConsM[G, Q],
 ] extends ConsM[DisjoinG[G], Q]
 
 final abstract class NegateM[
   D <: BoolD, P <: TopP,
-  G <: Polar2G[D, P], Q <: TopQ,
+  G <: PolarG[D, P], Q <: TopQ,
   +M <: ConsM[G, Q],
 ] extends ConsM[NegateG[D, P, G], Q]
 
 final abstract class EqualM[
-  G <: Expr2G[CollectedUD[AtomD]], Q <: TopQ,
+  G <: ExprG[CollectedUD[AtomD]], Q <: TopQ,
   +M <: ConsM[G, Q],
 ] extends ConsM[EqualG[G], Q]
 
@@ -66,40 +66,40 @@ final abstract class RandomBitM[
 
 final abstract class CollectedM[
   D <: TopD, P <: TopP,
-  E <: TopE, EG <: Polar2G[D, P],
+  E <: TopE, EG <: PolarG[D, P],
   G <: ArgsG[E, EG], Q <: TopQ,
   +M <: ConsM[G, Q],
 ] extends ConsM[CollectedG[D, P, E, EG, G], Q]
 
 final abstract class AddElementM[
   D <: TopD, P <: TopP,
-  EG <: Polar2G[D, P], G <: Polar2G[CollectedUD[D], P], Q <: TopQ,
+  EG <: PolarG[D, P], G <: PolarG[CollectedUD[D], P], Q <: TopQ,
   +EM <: ConsM[EG, Q], +M <: ConsM[G, Q],
 ] extends ConsM[AddElementG[D, P, EG, G], Q]
 
 final abstract class CollectM[
   D <: TopD, P <: TopP, B <: Bits,
-  SG <: Ntrl2G[ChanD[?, ?]], NG <: Ntrl2G[NatD[B]], Q <: TopQ, // todo
+  SG <: NtrlG[ChanD[?, ?]], NG <: NtrlG[NatD[B]], Q <: TopQ, // todo
   +SM <: ConsM[SG, Q], +NM <: ConsM[NG, Q],
 ] extends ConsM[CollectG[D, P, B, SG, NG], Q]
 
 final abstract class AddM[
-  G <: Expr2G[CollectedUD[NatUD]], Q <: TopQ,
+  G <: ExprG[CollectedUD[NatUD]], Q <: TopQ,
   +M <: ConsM[G, Q],
 ] extends ConsM[AddG[G], Q]
 
 final abstract class MultiplyM[
-  G <: Expr2G[CollectedUD[NatUD]], Q <: TopQ,
+  G <: ExprG[CollectedUD[NatUD]], Q <: TopQ,
   +M <: ConsM[G, Q],
 ] extends ConsM[MultiplyG[G], Q]
 
 final abstract class CompareM[
-  G1 <: Expr2G[NatUD], G2 <: Expr2G[NatUD], Q <: TopQ,
+  G1 <: ExprG[NatUD], G2 <: ExprG[NatUD], Q <: TopQ,
   +M1 <: ConsM[G1, Q], +M2 <: ConsM[G2, Q],
 ] extends ConsM[CompareG[G1, G2], Q]
 
 final abstract class PairM[
   D1 <: TopD, D2 <: TopD, P <: TopP,
-  G1 <: Polar2G[D1, P], G2 <: Polar2G[D2, P], Q <: TopQ,
+  G1 <: PolarG[D1, P], G2 <: PolarG[D2, P], Q <: TopQ,
   +M1 <: ConsM[G1, Q], +M2 <: ConsM[G2, Q],
 ] extends ConsM[PairG[D1, D2, P, G1, G2], Q]

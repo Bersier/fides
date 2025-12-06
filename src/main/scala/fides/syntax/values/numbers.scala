@@ -8,7 +8,7 @@ import scala.annotation.publicInBinary
 /**
   * Natural number values
   */
-final case class NatLit[B <: Bits] @publicInBinary private(bits: B) extends Code[ConsM[Ntrl2G[NatD[B]], BotQ]]:
+final case class NatLit[B <: Bits] @publicInBinary private(bits: B) extends Code[ConsM[NtrlG[NatD[B]], BotQ]]:
   assert(bits.withoutTrailingZeros == bits)
   override def toString: String = bits.toBigInt.toString
 object NatLit:
@@ -20,7 +20,7 @@ end NatLit
   * Outputs the sum of the inputs.
   */
 final case class Add[
-  G <: Expr2G[CollectedUD[NatUD]], Q <: TopQ,
+  G <: ExprG[CollectedUD[NatUD]], Q <: TopQ,
   M <: ConsM[G, Q],
 ](terms: Code[M]) extends Code[AddM[G, Q, M]]
 
@@ -28,7 +28,7 @@ final case class Add[
   * Outputs the product of the inputs.
   */
 final case class Multiply[
-  G <: Expr2G[CollectedUD[NatUD]], Q <: TopQ,
+  G <: ExprG[CollectedUD[NatUD]], Q <: TopQ,
   M <: ConsM[G, Q],
 ](factors: Code[M]) extends Code[MultiplyM[G, Q, M]]
 
@@ -36,6 +36,6 @@ final case class Multiply[
   * Outputs [[True]] iff [[lhs]] is strictly smaller than [[rhs]].
   */
 final case class Compare[
-  G1 <: Expr2G[NatUD], G2 <: Expr2G[NatUD], Q <: TopQ,
+  G1 <: ExprG[NatUD], G2 <: ExprG[NatUD], Q <: TopQ,
   M1 <: ConsM[G1, Q], M2 <: ConsM[G2, Q],
 ](lhs: Code[M1], rhs: Code[M2]) extends Code[CompareM[G1, G2, Q, M1, M2]]

@@ -3,18 +3,18 @@ package fides.syntax.values
 import fides.syntax.machinery.*
 
 /**
-  * General [[PolarG]] for pairing.
+  * General [[OldPolarG]] for pairing.
   */
 final case class Pair[
   D1 <: TopD, D2 <: TopD, P <: TopP,
-  G1 <: Polar2G[D1, P], G2 <: Polar2G[D2, P], Q <: TopQ,
+  G1 <: PolarG[D1, P], G2 <: PolarG[D2, P], Q <: TopQ,
   M1 <: ConsM[G1, Q], M2 <: ConsM[G2, Q],
 ](c1: Code[M1], c2: Code[M2]) extends Code[PairM[D1, D2, P, G1, G2, Q, M1, M2]]
 // todo replace by record?
 
 given [
   D1 <: TopD, D2 <: TopD, P <: TopP,
-  G1 <: Polar2G[D1, P], G2 <: Polar2G[D2, P], Q <: TopQ,
+  G1 <: PolarG[D1, P], G2 <: PolarG[D2, P], Q <: TopQ,
   M1 <: ConsM[G1, Q], M2 <: ConsM[G2, Q],
 ] => (c1: Code[M1], c2: Code[M2]) => Code[PairM[D1, D2, P, G1, G2, Q, M1, M2]] = Pair(c1, c2)
 

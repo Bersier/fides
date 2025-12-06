@@ -2,14 +2,14 @@ package fides.syntax.values
 
 import fides.syntax.machinery.*
 
-case object True extends Code[ConsM[Ntrl2G[TrueD], BotQ]]
-case object False extends Code[ConsM[Ntrl2G[FalseD], BotQ]]
+case object True extends Code[ConsM[NtrlG[TrueD], BotQ]]
+case object False extends Code[ConsM[NtrlG[FalseD], BotQ]]
 
 /**
   * Outputs the conjunction of the inputs.
   */
 final case class Conjoin[
-  G <: Expr2G[CollectedUD[BoolD]], Q <: TopQ,
+  G <: ExprG[CollectedUD[BoolD]], Q <: TopQ,
   M <: ConsM[G, Q],
 ](conjuncts: Code[M]) extends Code[ConjoinM[G, Q, M]]
 
@@ -17,7 +17,7 @@ final case class Conjoin[
   * Outputs the disjunction of the inputs.
   */
 final case class Disjoin[
-  G <: Expr2G[CollectedUD[BoolD]], Q <: TopQ,
+  G <: ExprG[CollectedUD[BoolD]], Q <: TopQ,
   M <: ConsM[G, Q],
 ](conjuncts: Code[M]) extends Code[DisjoinM[G, Q, M]]
 
@@ -26,7 +26,7 @@ final case class Disjoin[
   */
 final case class Negate[
   D <: BoolD, P <: TopP,
-  G <: Polar2G[D, P], Q <: TopQ,
+  G <: PolarG[D, P], Q <: TopQ,
   M <: ConsM[G, Q],
 ](value: Code[M]) extends Code[NegateM[D, P, G, Q, M]]
 
@@ -34,7 +34,7 @@ final case class Negate[
   * Outputs true iff the atoms are the same.
   */
 final case class Equal[
-  G <: Expr2G[CollectedUD[AtomD]], Q <: TopQ,
+  G <: ExprG[CollectedUD[AtomD]], Q <: TopQ,
   M <: ConsM[G, Q],
 ](args: Code[M]) extends Code[EqualM[G, Q, M]]
 // todo not sure any atoms should be comparable... or perhaps it should be EqualByID?
