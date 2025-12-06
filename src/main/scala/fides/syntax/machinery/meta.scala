@@ -9,6 +9,10 @@ import typelevelnumbers.binary.Bits
 trait ConsM[+G <: TopG, +Q <: TopQ] private[syntax]() // todo seal
 type TopM = ConsM[TopG, TopQ]
 
+/**
+  * @tparam RM is actually supposed to be derived from M
+  *            via the relation [[TrimmedR]]`[`[[G]], [[M]], [[RM]]`]` (See [[Quote]])
+  */
 final abstract class QuoteM[
   G <: TopG, P <: TopP, Q <: TopQ,
   RM <: ConsM[G, ConsQ[P, BotQ]],

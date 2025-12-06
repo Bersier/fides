@@ -11,6 +11,9 @@ package fides.syntax
   * <li> <b>Code types</b> represent actual code and can be instantiated (subtypes of [[Code]]).
   * </ol>
   * <br>
-  * In Fides there is a bijection between terms and types.
+  * By convention, in a type definition, the type parameters that matter are written
+  * on the last line of the type parameter list, while all the parameters above are for bookkeeping.
+  * <br><br>
+  * (Note: in Fides there is a bijection between terms and types.)
   */
 package object machinery

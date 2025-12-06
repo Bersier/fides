@@ -8,9 +8,9 @@ case object LauncherID extends ID
   * Polarity stack for all meta-levels
   *
   * @tparam H polarity at first code level
-  * @tparam D remaining/meta polarities
+  * @tparam Q remaining/meta polarities
   */
-sealed trait ConsQ[+H <: TopP, +D <: TopQ]
+sealed trait ConsQ[+H <: TopP, +Q <: TopQ]
 type TopQ = ConsQ[TopP, ?]
 final abstract class BotQ extends ConsQ[BotP, BotQ]
 

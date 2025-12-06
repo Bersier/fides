@@ -44,8 +44,10 @@ sealed trait AplrG extends TopG
 final abstract class RepeatedG[+G <: AplrG] extends AplrG
 final abstract class ConcurrentG[+G <: ArgsUG[AplrG]] extends AplrG
 
+sealed trait Location[+K <: ID] extends TopG
+
 /**
-  * [[Polr2G]] is a generalization of expressions and patterns.
+  * [[PolarG]] is a generalization of expressions and patterns.
   */
 sealed trait PolarG[D <: TopD, +P <: TopP] extends TopG
 type PosG[+D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[BotB, TopB, C]]
