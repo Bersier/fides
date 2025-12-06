@@ -76,16 +76,16 @@ final abstract class CollectedM[
 ] extends ConsM[CollectedG[D, P, E, EG, G], Q]
 
 final abstract class AddElementM[
-  D <: TopD, P <: TopP,
-  EG <: PolarG[D, P], G <: PolarG[CollectedUD[D], P], Q <: TopQ,
-  +EM <: ConsM[EG, Q], +M <: ConsM[G, Q],
-] extends ConsM[AddElementG[D, P, EG, G], Q]
+  D <: TopD, EP <: TopP, P <: TopP,
+  EG <: PolarG[D, EP], G <: PolarG[CollectedUD[D], P], EQ <: TopQ, Q <: TopQ,
+  +EM <: ConsM[EG, EQ], +M <: ConsM[G, Q],
+] extends ConsM[AddElementG[D, EP, P, EG, G], EQ | Q]
 
 final abstract class CollectM[
-  D <: TopD, P <: TopP, B <: Bits,
-  SG <: NtrlG[ChanD[?, ?]], NG <: NtrlG[NatD[B]], Q <: TopQ, // todo
-  +SM <: ConsM[SG, Q], +NM <: ConsM[NG, Q],
-] extends ConsM[CollectG[D, P, B, SG, NG], Q]
+  D <: TopD, B <: Bits,
+  SG <: NtrlG[ChanD[?, ?]], NG <: NtrlG[NatD[B]], SQ <: TopQ, NQ <: TopQ,
+  +SM <: ConsM[SG, SQ], +NM <: ConsM[NG, NQ],
+] extends ConsM[CollectG[D, B, SG, NG], SQ | NQ]
 
 final abstract class AddM[
   G <: ExprG[CollectedUD[NatUD]], Q <: TopQ,
@@ -98,12 +98,12 @@ final abstract class MultiplyM[
 ] extends ConsM[MultiplyG[G], Q]
 
 final abstract class CompareM[
-  G1 <: ExprG[NatUD], G2 <: ExprG[NatUD], Q <: TopQ,
-  +M1 <: ConsM[G1, Q], +M2 <: ConsM[G2, Q],
-] extends ConsM[CompareG[G1, G2], Q]
+  G1 <: ExprG[NatUD], G2 <: ExprG[NatUD], Q1 <: TopQ, Q2 <: TopQ,
+  +M1 <: ConsM[G1, Q1], +M2 <: ConsM[G2, Q2],
+] extends ConsM[CompareG[G1, G2], Q1 | Q2]
 
 final abstract class PairM[
-  D1 <: TopD, D2 <: TopD, P <: TopP,
-  G1 <: PolarG[D1, P], G2 <: PolarG[D2, P], Q <: TopQ,
-  +M1 <: ConsM[G1, Q], +M2 <: ConsM[G2, Q],
-] extends ConsM[PairG[D1, D2, P, G1, G2], Q]
+  D1 <: TopD, D2 <: TopD, P1 <: TopP, P2 <: TopP,
+  G1 <: PolarG[D1, P1], G2 <: PolarG[D2, P2], Q1 <: TopQ, Q2 <: TopQ,
+  +M1 <: ConsM[G1, Q1], +M2 <: ConsM[G2, Q2],
+] extends ConsM[PairG[D1, D2, P1, P2, G1, G2], Q1 | Q2]

@@ -165,23 +165,23 @@ final abstract class CollectedG[
 ] extends PolarG[CollectedD[E, D], P]
 
 final abstract class AddElementG[
-  D <: TopD, P <: TopP,
-  +EG <: PolarG[D, P], +G <: PolarG[CollectedUD[D], P],
-] extends PolarG[CollectedD[TopE.F, D], P]
+  D <: TopD, EP <: TopP, P <: TopP,
+  +EG <: PolarG[D, EP], +G <: PolarG[CollectedUD[D], P],
+] extends PolarG[CollectedD[TopE.F, D], EP | P]
 
 final abstract class CollectG[
-  D <: TopD, P <: TopP, B <: Bits,
+  D <: TopD, B <: Bits,
   +SG <: NtrlG[ChanD[?, ?]], +NG <: NtrlG[NatD[B]], // todo
-] extends PolarG[CollectedUD[D], P]
+] extends PolarG[CollectedUD[D], GenP[?, ?, TopB]]
 
 final abstract class AddG[+G <: ExprG[CollectedUD[NatUD]]] extends ExprG[NatUD]
 final abstract class MultiplyG[+G <: ExprG[CollectedUD[NatUD]]] extends ExprG[NatUD]
 final abstract class CompareG[+G1 <: ExprG[NatUD], +G2 <: ExprG[NatUD]] extends ExprG[BoolD]
 
 final abstract class PairG[
-  D1 <: TopD, D2 <: TopD, P <: TopP,
-  +G1 <: PolarG[D1, P], +G2 <: PolarG[D2, P],
-] extends PolarG[PairD[D1, D2], P]
+  D1 <: TopD, D2 <: TopD, P1 <: TopP, P2 <: TopP,
+  +G1 <: PolarG[D1, P1], +G2 <: PolarG[D2, P2],
+] extends PolarG[PairD[D1, D2], P1 | P2]
 
 final abstract class QuoteG[
   G <: TopG, P <: TopP,

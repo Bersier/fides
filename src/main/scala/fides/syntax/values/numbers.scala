@@ -36,6 +36,6 @@ final case class Multiply[
   * Outputs [[True]] iff [[lhs]] is strictly smaller than [[rhs]].
   */
 final case class Compare[
-  G1 <: ExprG[NatUD], G2 <: ExprG[NatUD], Q <: TopQ,
-  M1 <: ConsM[G1, Q], M2 <: ConsM[G2, Q],
-](lhs: Code[M1], rhs: Code[M2]) extends Code[CompareM[G1, G2, Q, M1, M2]]
+  G1 <: ExprG[NatUD], G2 <: ExprG[NatUD], Q1 <: TopQ, Q2 <: TopQ,
+  M1 <: ConsM[G1, Q1], M2 <: ConsM[G2, Q2],
+](lhs: Code[M1], rhs: Code[M2]) extends Code[CompareM[G1, G2, Q1, Q2, M1, M2]]

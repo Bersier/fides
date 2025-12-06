@@ -4,7 +4,7 @@ import fides.syntax.machinery.*
 import typelevelnumbers.binary.Bits
 
 /**
-  * General [[OldPolarG]] for static-size collecting.
+  * General polar for static-size collecting.
   */
 final case class Collected[
   D <: TopD, P <: TopP,
@@ -19,10 +19,10 @@ final case class Collected[
   * As an [[XctrG]], (non-deterministically) extracts one element from a Collected.
   */
 final case class AddElement[
-  D <: TopD, P <: TopP,
-  EG <: PolarG[D, P], G <: PolarG[CollectedUD[D], P], Q <: TopQ,
-  EM <: ConsM[EG, Q], M <: ConsM[G, Q],
-](element: Code[EM], others: Code[M]) extends Code[AddElementM[D, P, EG, G, Q, EM, M]]
+  D <: TopD, EP <: TopP, P <: TopP,
+  EG <: PolarG[D, EP], G <: PolarG[CollectedUD[D], P], EQ <: TopQ, Q <: TopQ,
+  EM <: ConsM[EG, EQ], M <: ConsM[G, Q],
+](element: Code[EM], others: Code[M]) extends Code[AddElementM[D, EP, P, EG, G, EQ, Q, EM, M]]
 
 /**
   * As an [[ExprG]], waits for [[size]] elements from [[elementSource]], then outputs them as a Collected.
@@ -30,8 +30,8 @@ final case class AddElement[
   * As an [[XctrG]], outputs the elements of a Collected to [[elementSource]], and its size to [[size]].
   */
 final case class Collect[
-  D <: TopD, P <: TopP, B <: Bits,
-  SG <: NtrlG[ChanD[?, ?]], NG <: NtrlG[NatD[B]], Q <: TopQ, // todo
-  SM <: ConsM[SG, Q], NM <: ConsM[NG, Q],
-](elementSource: Code[SM], size: Code[NM]) extends Code[CollectM[D, P, B, SG, NG, Q, SM, NM]]
+  D <: TopD, B <: Bits,
+  SG <: NtrlG[ChanD[?, ?]], NG <: NtrlG[NatD[B]], SQ <: TopQ, NQ <: TopQ, // todo
+  SM <: ConsM[SG, SQ], NM <: ConsM[NG, NQ],
+](elementSource: Code[SM], size: Code[NM]) extends Code[CollectM[D, B, SG, NG, SQ, NQ, SM, NM]]
 // todo does it only start collecting after having received [[size]]?
