@@ -43,7 +43,7 @@ object TrimmedMR:
     H <: TopN,
     M <: EscapeM[G, Q],
     TM <: EscapeM[G, TQ],
-  ] => (TrimmedQR[H, Q, TQ], TrimmedMR[H, M, TM]) => TrimmedMR[ // todo curry? Or keep requirements packaged as pair?
+  ] => (TrimmedQR[H, Q, TQ], TrimmedMR[H, M, TM]) => TrimmedMR[
     TopN.S[H],
     EscapeM.Step[G, Q, M],
     EscapeM.Step[G, TQ, TM],
@@ -55,7 +55,6 @@ object TrimmedMR:
     M <: ConsM[PolarG[QuoteD[G], P], Q],
     TM <: ConsM[PolarG[QuoteD[G], P], TQ],
   ] => (TrimmedQR[H, Q, TQ], TrimmedMR[H, M, TM]) => TrimmedMR[
-  // todo it's a little weird to use a separate proof for TQ; it feels like the job is being done twice
     TopN.S[H],
     EscapeM.Head[G, P, Q, M],
     EscapeM.Head[G, P, TQ, TM],
