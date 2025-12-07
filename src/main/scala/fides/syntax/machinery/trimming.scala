@@ -74,10 +74,13 @@ object TrimmedMR:
     PairM[D1, D2, P1, P2, G1, G2, ConsQ[H1, TQ1], ConsQ[H2, TQ2], TM1, TM2],
   ]
 
-  // The rule below is admissible (and probably unhelpful for actual inference).
-  // given [
-  //   G <: TopG, H <: TopN, M <: ConsM[G, TopQ], TM <: ConsM[G, TopQ], TTM <: ConsM[G, TopQ],
-  // ] => (TrimmedMR[G, TopN.S[H], M, TM], TrimmedMR[G, H, TM, TTM]) => TrimmedMR[G, H, M, TTM]
+  /**
+    * The rule below is admissible (and probably unhelpful for actual inference).
+    * It is here only for documentation purposes.
+    */
+  protected given [
+    H <: TopN, M <: ConsM[TopG, TopQ], TM <: ConsM[TopG, TopQ], TTM <: ConsM[TopG, TopQ],
+  ] => (TrimmedMR[TopN.S[H], M, TM], TrimmedMR[H, TM, TTM]) => TrimmedMR[H, M, TTM]
 end TrimmedMR
 
 sealed trait TrimmedQR[Height <: TopN, Q <: TopQ, TQ <: TopQ] // TQ <: Q
