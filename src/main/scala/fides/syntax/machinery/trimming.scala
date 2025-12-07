@@ -5,9 +5,11 @@ type TrimmedR[
   M <: ConsM[G, ConsQ[P, Q]], TM <: ConsM[G, ConsQ[P, BotQ]],
 ] = TrimmedMR[G, TopN.`1`, M, TM]
 
-sealed trait TrimmedMR[G, H <: TopN, M <: ConsM[TopG, TopQ], TM <: ConsM[TopG, TopQ]]
+// todo delete G parameter, or make use of it
+sealed trait TrimmedMR[G, -H <: TopN, M <: TopM, TM <: TopM]
 // G <: TopG, Q <: TopQ, TQ <: Q, H <: TopN, M <: ConsM[G, Q], TM <: ConsM[G, TQ]
 object TrimmedMR:
+
   given [
     G <: TopG, P <: TopP, Q <: TopQ, TQ <: TopQ, // HTQ <: Q
     ITM <: ConsM[G, ConsQ[P, BotQ]],
@@ -22,6 +24,44 @@ object TrimmedMR:
     QuoteM[G, P, ITM, Q, M],
     QuoteM[G, P, ITM, TQ, TM],
   ]
+
+  given [
+    G <: TopG,
+    M <: EscapeM[G, TopQ],
+  ] => TrimmedMR[G, TopN.Z, M, ConsM[G, BotQ]]
+
+  given [
+    G <: TopG, Q <: TopQ, TQ <: TopQ, // TQ <: Q,
+    H <: TopN,
+  ] => TrimmedQR[H, Q, TQ] => TrimmedMR[
+    G, H,
+    EscapeM[G, Q],
+    EscapeM[G, TQ],
+  ]
+
+  given [
+    G <: TopG, Q <: TopQ, TQ <: TopQ, // TQ <: Q,
+    H <: TopN,
+    M <: EscapeM[G, Q],
+    TM <: EscapeM[G, TQ],
+  ] => (TrimmedQR[H, Q, TQ], TrimmedMR[G, H, M, TM]) => TrimmedMR[ // todo curry? Or keep requirements packaged as pair?
+    G, TopN.S[H],
+    EscapeM.Step[G, Q, M],
+    EscapeM.Step[G, TQ, TM],
+  ]
+
+  given [
+    G <: TopG, P <: TopP, Q <: TopQ, TQ <: TopQ, // TQ <: Q,
+    H <: TopN,
+    M <: ConsM[PolarG[QuoteD[G], P], Q],
+    TM <: ConsM[PolarG[QuoteD[G], P], TQ],
+  ] => (TrimmedQR[H, Q, TQ], TrimmedMR[G, H, M, TM]) => TrimmedMR[
+  // todo it's a little weird to use a separate proof for TQ; it feels like the job is being done twice
+    G, TopN.S[H],
+    EscapeM.Head[G, P, Q, M],
+    EscapeM.Head[G, P, TQ, TM],
+  ]
+
   given [
     D1 <: TopD, D2 <: TopD, P1 <: TopP, P2 <: TopP,
     G1 <: PolarG[D1, P1], G2 <: PolarG[D2, P2],
@@ -34,13 +74,14 @@ object TrimmedMR:
     PairM[D1, D2, P1, P2, G1, G2, ConsQ[H1, Q1],  ConsQ[H2, Q2], M1, M2],
     PairM[D1, D2, P1, P2, G1, G2, ConsQ[H1, TQ1], ConsQ[H2, TQ2], TM1, TM2],
   ]
+
   // The rule below is admissible (and probably unhelpful for actual inference).
   // given [
   //   G <: TopG, H <: TopN, M <: ConsM[G, TopQ], TM <: ConsM[G, TopQ], TTM <: ConsM[G, TopQ],
   // ] => (TrimmedMR[G, TopN.S[H], M, TM], TrimmedMR[G, H, TM, TTM]) => TrimmedMR[G, H, M, TTM]
 end TrimmedMR
 
-sealed trait TrimmedQR[Height <: TopN, Q <: TopQ, TQ <: Q]
+sealed trait TrimmedQR[Height <: TopN, Q <: TopQ, TQ <: TopQ] // TQ <: Q
 object TrimmedQR:
   given [Q <: TopQ] => TrimmedQR[TopN.Z, Q, BotQ]
   given [
