@@ -1,24 +1,24 @@
 package fides.syntax.machinery
 
-type TrimmedR[G <: TopG, M <: ConsM[G, TopQ], RM <: ConsM[G, ConsQ[TopP, BotQ]]] = TrimmedMR[G, TopN.`1`, M, RM]
+type TrimmedR[G <: TopG, M <: ConsM[G, TopQ], TM <: ConsM[G, ConsQ[TopP, BotQ]]] = TrimmedMR[G, TopN.`1`, M, TM]
 
-sealed trait TrimmedMR[G <: TopG, Height <: TopN, M <: ConsM[G, TopQ], RM <: ConsM[G, TopQ]]
-// todo not sure if we should keep the type parameter G
+sealed trait TrimmedMR[G <: TopG, H <: TopN, M <: ConsM[G, TopQ], TM <: ConsM[G, TopQ]]
+// todo not sure if we should keep the type parameter G; we could also add Q and TQ <: Q
 object TrimmedMR:
   given [
     G <: TopG, P <: TopP, Q <: TopQ, HTQ <: Q,
+    ITM <: ConsM[G, ConsQ[P, BotQ]],
     H <: TopN,
     M <: ConsM[G, ConsQ[P, Q]],
-    HTM <: ConsM[G, ConsQ[P, HTQ]],
-    TM <: ConsM[G, ConsQ[P, BotQ]],
+    TM <: ConsM[G, ConsQ[P, HTQ]],
   ] => (
-    TrimmedR[G, M, TM],
-    TrimmedMR[G, TopN.S[H], M, HTM],
-    // Note that TrimmedR[G, HTM, TM] should also hold, as a consequence of the others.
+    TrimmedR[G, M, ITM],
+    TrimmedMR[G, TopN.S[H], M, TM],
+    // Note that TrimmedR[G, HTM, TM] should also hold, as a consequence of the two requirements above.
   ) => TrimmedMR[
-    QuoteG[G, P, TM], H,
-    QuoteM[G, P, TM, Q, M],
-    QuoteM[G, P, TM, HTQ, HTM],
+    QuoteG[G, P, ITM], H,
+    QuoteM[G, P, ITM, Q, M],
+    QuoteM[G, P, ITM, HTQ, TM],
   ]
   given [
     D1 <: TopD, D2 <: TopD, P1 <: TopP, P2 <: TopP,
@@ -32,7 +32,10 @@ object TrimmedMR:
     PairM[D1, D2, P1, P2, G1, G2, ConsQ[H1, Q1],  ConsQ[H2, Q2], M1, M2],
     PairM[D1, D2, P1, P2, G1, G2, ConsQ[H1, TQ1], ConsQ[H2, TQ2], TM1, TM2],
   ]
-  // todo given TrimmedMR transitivity...
+  // The rule below is admissible (and probably unhelpful for actual inference).
+  // given [
+  //   G <: TopG, H <: TopN, M <: ConsM[G, TopQ], TM <: ConsM[G, TopQ], TTM <: ConsM[G, TopQ],
+  // ] => (TrimmedMR[G, TopN.S[H], M, TM], TrimmedMR[G, H, TM, TTM]) => TrimmedMR[G, H, M, TTM]
 end TrimmedMR
 
 sealed trait TrimmedQR[Height <: TopN, Q <: TopQ, TQ <: Q]
