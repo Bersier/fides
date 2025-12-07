@@ -7,11 +7,19 @@ type TrimmedR[
 
 /**
   * `G <: `[[TopG]]`, TQ <: Q, M <: `[[ConsM]]`[G, Q], TM <: `[[ConsM]]`[G, TQ]`
+  *
+  * @tparam H unary encoding of the trim level
+  * @tparam Q polarity stack for [[M]]
+  * @tparam TQ polarity stack for [[TM]]
+  * @tparam M scape to be trimmed
+  * @tparam TM trimmed [[M]]
   */
 sealed trait TrimmedMR[-H <: TopN, Q <: TopQ, TQ <: TopQ, M <: ConsM[TopG, Q], TM <: ConsM[TopG, TQ]]
 object TrimmedMR:
 
   /**
+    * Inductive case to trim [[QuoteM]]
+    *
     * Note that in this case,
     * [[TrimmedR]]`[G, P, Q, M, ITM]` and [[TrimmedR]]`[G, P, TQ, TM, ITM]` should also hold.
     *
@@ -33,6 +41,10 @@ object TrimmedMR:
     QuoteM[G, P, ITM, TQ, TM],
   ]
 
+  /**
+    * Base case for trimming any subtype of [[EscapeM]] (i.e. escapes):
+    * they simply vanish from the scape when fully trimmed.
+    */
   given [
     G <: TopG,
     Q <: TopQ,
@@ -44,6 +56,8 @@ object TrimmedMR:
   ]
 
   /**
+    * Inductive case for [[EscapeM]] (i.e. escape matchers)
+    *
     * `TQ <: Q`
     */
   given [
@@ -56,6 +70,8 @@ object TrimmedMR:
   ]
 
   /**
+    * Inductive case for [[EscapeM.Step]]
+    *
     * `TQ <: Q`
     */
   given [
@@ -70,6 +86,8 @@ object TrimmedMR:
   ]
 
   /**
+    * Inductive case for [[EscapeM.Head]] (i.e. an actual escape)
+    *
     * `TQ <: Q`
     */
   given [
@@ -84,6 +102,8 @@ object TrimmedMR:
   ]
 
   /**
+    * Inductive case to trim [[PairM]]
+    *
     * `TQ1 <: Q1, TQ2 <: Q2`
     */
   given [
@@ -112,13 +132,22 @@ end TrimmedMR
 
 /**
   * `TQ <: Q`
+  *
+  * @tparam H unary encoding for the trim level
+  * @tparam Q polarity stack to be trimmed
+  * @tparam TQ trimmed [[Q]]
   */
-sealed trait TrimmedQR[Height <: TopN, Q <: TopQ, TQ <: TopQ]
+sealed trait TrimmedQR[H <: TopN, Q <: TopQ, TQ <: TopQ]
 object TrimmedQR:
 
+  /**
+    * Base case: when fully trimmed (to zero height), any polarity stack simply reduces to the trivial stack.
+    */
   given [Q <: TopQ] => TrimmedQR[TopN.Z, Q, BotQ]
 
   /**
+    * Straightforward inductive case.
+    *
     * `TQ <: Q`
     */
   given [
