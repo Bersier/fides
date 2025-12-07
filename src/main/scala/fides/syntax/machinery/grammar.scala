@@ -45,6 +45,23 @@ sealed trait AplrG extends TopG
 final abstract class RepeatedG[+G <: AplrG] extends AplrG
 final abstract class ConcurrentG[+G <: ArgsUG[AplrG]] extends AplrG
 
+/*
+ * todo
+ * 
+ * Channels
+ * Immutable variables
+ * Read-once variables
+ * Linear variables
+ * Cells
+ * Signatures
+ * 
+ * VariableProperties[+LinearityAtInp <: TopB, +LinearityAtOut <: TopB, +CAS <: TopB]
+ * 
+ * Name
+ * Identifier(name)
+ * Channel(name, type) <: InpChannel(name, type)
+ * Address(Channel(name, type))
+ */
 sealed trait Location[+K <: ID] extends TopG
 
 /**
