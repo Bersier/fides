@@ -9,7 +9,7 @@ final case class Quote[
   G <: TopG, P <: TopP,
   TM <: ConsM[G, ConsQ[P, BotQ]], Q <: TopQ,
   M <: ConsM[G, ConsQ[P, Q]],
-](code: Code[M])(using TrimmedR[G, M, TM]) extends Code[QuoteM[G, P, TM, Q, M]]
+](code: Code[M])(using TrimmedR[G, P, Q, M, TM]) extends Code[QuoteM[G, P, TM, Q, M]]
 
 /**
   * Allows escaping the body of a [[Quote]].

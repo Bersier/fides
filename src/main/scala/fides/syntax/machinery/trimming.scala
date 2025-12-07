@@ -1,29 +1,31 @@
 package fides.syntax.machinery
 
-type TrimmedR[G <: TopG, M <: ConsM[G, TopQ], TM <: ConsM[G, ConsQ[TopP, BotQ]]] = TrimmedMR[G, TopN.`1`, M, TM]
+type TrimmedR[
+  G <: TopG, P <: TopP, Q <: TopQ,
+  M <: ConsM[G, ConsQ[P, Q]], TM <: ConsM[G, ConsQ[P, BotQ]],
+] = TrimmedMR[G, TopN.`1`, M, TM]
 
-sealed trait TrimmedMR[G <: TopG, H <: TopN, M <: ConsM[G, TopQ], TM <: ConsM[G, TopQ]]
-// todo not sure if we should keep the type parameter G; we could also add Q and TQ <: Q
+sealed trait TrimmedMR[G, H <: TopN, M <: ConsM[TopG, TopQ], TM <: ConsM[TopG, TopQ]]
+// G <: TopG, Q <: TopQ, TQ <: Q, H <: TopN, M <: ConsM[G, Q], TM <: ConsM[G, TQ]
 object TrimmedMR:
   given [
-    G <: TopG, P <: TopP, Q <: TopQ, HTQ <: Q,
+    G <: TopG, P <: TopP, Q <: TopQ, TQ <: TopQ, // HTQ <: Q
     ITM <: ConsM[G, ConsQ[P, BotQ]],
     H <: TopN,
     M <: ConsM[G, ConsQ[P, Q]],
-    TM <: ConsM[G, ConsQ[P, HTQ]],
+    TM <: ConsM[G, ConsQ[P, TQ]],
   ] => (
-    TrimmedR[G, M, ITM],
     TrimmedMR[G, TopN.S[H], M, TM],
-    // Note that TrimmedR[G, HTM, TM] should also hold, as a consequence of the two requirements above.
+    // Note that TrimmedR[G, P, Q, M, ITM] and TrimmedR[G, HTM, TM] should also hold.
   ) => TrimmedMR[
     QuoteG[G, P, ITM], H,
     QuoteM[G, P, ITM, Q, M],
-    QuoteM[G, P, ITM, HTQ, TM],
+    QuoteM[G, P, ITM, TQ, TM],
   ]
   given [
     D1 <: TopD, D2 <: TopD, P1 <: TopP, P2 <: TopP,
     G1 <: PolarG[D1, P1], G2 <: PolarG[D2, P2],
-    H1 <: TopP, H2 <: TopP, Q1 <: TopQ, Q2 <: TopQ, TQ1 <: Q1, TQ2 <: Q2,
+    H1 <: TopP, H2 <: TopP, Q1 <: TopQ, Q2 <: TopQ, TQ1 <: TopQ, TQ2 <: TopQ, // TQ1 <: Q1, TQ2 <: Q2,
     H <: TopN,
     M1 <: ConsM[G1, ConsQ[H1, Q1]], M2 <: ConsM[G2, ConsQ[H2, Q2]],
     TM1 <: ConsM[G1, ConsQ[H1, TQ1]], TM2 <: ConsM[G2, ConsQ[H2, TQ2]],
