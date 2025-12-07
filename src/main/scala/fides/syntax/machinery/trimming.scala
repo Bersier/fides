@@ -1,18 +1,44 @@
 package fides.syntax.machinery
 
-type TrimmedR[G <: TopG, M <: ConsM[G, TopQ], RM <: ConsM[G, ConsQ[TopP, BotQ]]] = TrimmedGR[G, TopN.`1`, M, RM]
+type TrimmedR[G <: TopG, M <: ConsM[G, TopQ], RM <: ConsM[G, ConsQ[TopP, BotQ]]] = TrimmedMR[G, TopN.`1`, M, RM]
 
-sealed trait TrimmedGR[G <: TopG, Height <: TopN, M <: ConsM[G, TopQ], RM <: ConsM[G, ConsQ[TopP, BotQ]]]
+sealed trait TrimmedMR[G <: TopG, Height <: TopN, M <: ConsM[G, TopQ], RM <: ConsM[G, TopQ]]
 // todo not sure if we should keep the type parameter G
-object TrimmedGR:
+object TrimmedMR:
+  given [
+    G <: TopG, P <: TopP, Q <: TopQ, HTQ <: Q,
+    H <: TopN,
+    M <: ConsM[G, ConsQ[P, Q]],
+    HTM <: ConsM[G, ConsQ[P, HTQ]],
+    TM <: ConsM[G, ConsQ[P, BotQ]],
+  ] => (
+    TrimmedR[G, M, TM],
+    TrimmedMR[G, TopN.S[H], M, HTM],
+    // Note that TrimmedR[G, HTM, TM] should also hold, as a consequence of the others.
+  ) => TrimmedMR[
+    QuoteG[G, P, TM], H,
+    QuoteM[G, P, TM, Q, M],
+    QuoteM[G, P, TM, HTQ, HTM],
+  ]
   given [
     D1 <: TopD, D2 <: TopD, P1 <: TopP, P2 <: TopP,
-    G1 <: PolarG[D1, P1], G2 <: PolarG[D2, P2], H1 <: TopP, H2 <: TopP, Q1 <: TopQ, Q2 <: TopQ,
-    Height <: TopN, M1 <: ConsM[G1, ConsQ[H1, Q1]], M2 <: ConsM[G2, ConsQ[H2, Q2]],
-    RM1 <: ConsM[G1, ConsQ[H1, BotQ]], RM2 <: ConsM[G2, ConsQ[H2, BotQ]],
-  ] => (TrimmedGR[G1, Height, M1, RM1], TrimmedGR[G2, Height, M2, RM2]) => TrimmedGR[
-    PairG[D1, D2, P1, P2, G1, G2], Height,
+    G1 <: PolarG[D1, P1], G2 <: PolarG[D2, P2],
+    H1 <: TopP, H2 <: TopP, Q1 <: TopQ, Q2 <: TopQ, TQ1 <: Q1, TQ2 <: Q2,
+    H <: TopN,
+    M1 <: ConsM[G1, ConsQ[H1, Q1]], M2 <: ConsM[G2, ConsQ[H2, Q2]],
+    TM1 <: ConsM[G1, ConsQ[H1, TQ1]], TM2 <: ConsM[G2, ConsQ[H2, TQ2]],
+  ] => (TrimmedMR[G1, H, M1, TM1], TrimmedMR[G2, H, M2, TM2]) => TrimmedMR[
+    PairG[D1, D2, P1, P2, G1, G2], H,
     PairM[D1, D2, P1, P2, G1, G2, ConsQ[H1, Q1],  ConsQ[H2, Q2], M1, M2],
-    PairM[D1, D2, P1, P2, G1, G2, ConsQ[H1, BotQ], ConsQ[H2, BotQ], RM1, RM2],
+    PairM[D1, D2, P1, P2, G1, G2, ConsQ[H1, TQ1], ConsQ[H2, TQ2], TM1, TM2],
   ]
-end TrimmedGR
+  // todo given TrimmedMR transitivity...
+end TrimmedMR
+
+sealed trait TrimmedQR[Height <: TopN, Q <: TopQ, TQ <: Q]
+object TrimmedQR:
+  given [Q <: TopQ] => TrimmedQR[TopN.Z, Q, BotQ]
+  given [
+    H <: TopN, P <: TopP, Q <: TopQ, TQ <: Q,
+  ] => TrimmedQR[H, Q, TQ] => TrimmedQR[TopN.S[H], ConsQ[P, Q], ConsQ[P, TQ]]
+end TrimmedQR

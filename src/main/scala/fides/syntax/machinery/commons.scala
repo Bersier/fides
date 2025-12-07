@@ -12,7 +12,8 @@ case object LauncherID extends ID
   */
 sealed trait ConsQ[+H <: TopP, +Q <: TopQ]
 type TopQ = ConsQ[TopP, ?]
-final abstract class BotQ extends ConsQ[BotP, BotQ]
+type BotQ = Nothing
+// todo have a proper bottom? ConsQ[BotP, BotQ]? But then we have to add lower bounds everywhere.
 
 /**
   * Polarity
@@ -45,8 +46,8 @@ final abstract class BotB extends TopB
   */
 sealed trait TopN
 object TopN:
-  final abstract class G[+N <: TopN] extends TopN
+  final abstract class S[+N <: TopN] extends TopN
   final abstract class Z extends TopN
   type `0` = Z
-  type `1` = G[Z]
+  type `1` = S[Z]
 end TopN

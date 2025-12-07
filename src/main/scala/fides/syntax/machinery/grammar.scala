@@ -203,7 +203,7 @@ final abstract class PairG[
 
 final abstract class QuoteG[
   G <: TopG, P <: TopP,
-  +RM <: ConsM[G, ConsQ[P, BotQ]],
+  +TM <: ConsM[G, ConsQ[P, BotQ]],
 ] extends PolarG[QuoteD[G], P]
 
 // todo summon[QuoteD[QuoteG[QuoteG[?, ?, RM], ?, ?]]] is invariant in RM!

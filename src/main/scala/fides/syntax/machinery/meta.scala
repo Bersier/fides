@@ -10,14 +10,14 @@ trait ConsM[+G <: TopG, +Q <: TopQ] private[syntax]() // todo seal
 type TopM = ConsM[TopG, TopQ]
 
 /**
-  * @tparam RM is actually supposed to be derived from M
-  *            via the relation [[TrimmedR]]`[`[[G]], [[M]], [[RM]]`]` (See [[Quote]])
+  * @tparam TM is actually supposed to be derived from M
+  *            via the relation [[TrimmedR]]`[`[[G]], [[M]], [[TM]]`]` (See [[Quote]])
   */
 final abstract class QuoteM[
-  G <: TopG, P <: TopP, Q <: TopQ,
-  RM <: ConsM[G, ConsQ[P, BotQ]],
+  G <: TopG, P <: TopP,
+  TM <: ConsM[G, ConsQ[P, BotQ]], Q <: TopQ,
   +M <: ConsM[G, ConsQ[P, Q]],
-] extends ConsM[QuoteG[G, P, RM], Q]
+] extends ConsM[QuoteG[G, P, TM], Q]
 
 sealed trait EscapeM[+G <: TopG, +Q <: TopQ] extends ConsM[G, Q]
 object EscapeM:

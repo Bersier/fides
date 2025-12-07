@@ -6,10 +6,10 @@ import fides.syntax.machinery.*
   * Analogous to s-Strings in Scala, but for code-as-value, for metaprogramming
   */
 final case class Quote[
-  G <: TopG, P <: TopP, Q <: TopQ,
-  RM <: ConsM[G, ConsQ[P, BotQ]],
+  G <: TopG, P <: TopP,
+  TM <: ConsM[G, ConsQ[P, BotQ]], Q <: TopQ,
   M <: ConsM[G, ConsQ[P, Q]],
-](code: Code[M])(using TrimmedR[G, M, RM]) extends Code[QuoteM[G, P, Q, RM, M]]
+](code: Code[M])(using TrimmedR[G, M, TM]) extends Code[QuoteM[G, P, TM, Q, M]]
 
 /**
   * Allows escaping the body of a [[Quote]].
