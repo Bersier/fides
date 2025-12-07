@@ -3,10 +3,9 @@ package fides.syntax.machinery
 type TrimmedR[
   G <: TopG, P <: TopP, Q <: TopQ,
   M <: ConsM[G, ConsQ[P, Q]], TM <: ConsM[G, ConsQ[P, BotQ]],
-] = TrimmedMR[G, TopN.`1`, M, TM]
+] = TrimmedMR[TopN.`1`, M, TM]
 
-// todo delete G parameter, or make use of it
-sealed trait TrimmedMR[G, -H <: TopN, M <: TopM, TM <: TopM]
+sealed trait TrimmedMR[-H <: TopN, M <: TopM, TM <: TopM]
 // G <: TopG, Q <: TopQ, TQ <: Q, H <: TopN, M <: ConsM[G, Q], TM <: ConsM[G, TQ]
 object TrimmedMR:
 
@@ -17,10 +16,10 @@ object TrimmedMR:
     M <: ConsM[G, ConsQ[P, Q]],
     TM <: ConsM[G, ConsQ[P, TQ]],
   ] => (
-    TrimmedMR[G, TopN.S[H], M, TM],
+    TrimmedMR[TopN.S[H], M, TM],
     // Note that TrimmedR[G, P, Q, M, ITM] and TrimmedR[G, HTM, TM] should also hold.
   ) => TrimmedMR[
-    QuoteG[G, P, ITM], H,
+    H,
     QuoteM[G, P, ITM, Q, M],
     QuoteM[G, P, ITM, TQ, TM],
   ]
@@ -28,13 +27,13 @@ object TrimmedMR:
   given [
     G <: TopG,
     M <: EscapeM[G, TopQ],
-  ] => TrimmedMR[G, TopN.Z, M, ConsM[G, BotQ]]
+  ] => TrimmedMR[TopN.Z, M, ConsM[G, BotQ]]
 
   given [
     G <: TopG, Q <: TopQ, TQ <: TopQ, // TQ <: Q,
     H <: TopN,
   ] => TrimmedQR[H, Q, TQ] => TrimmedMR[
-    G, H,
+    H,
     EscapeM[G, Q],
     EscapeM[G, TQ],
   ]
@@ -44,8 +43,8 @@ object TrimmedMR:
     H <: TopN,
     M <: EscapeM[G, Q],
     TM <: EscapeM[G, TQ],
-  ] => (TrimmedQR[H, Q, TQ], TrimmedMR[G, H, M, TM]) => TrimmedMR[ // todo curry? Or keep requirements packaged as pair?
-    G, TopN.S[H],
+  ] => (TrimmedQR[H, Q, TQ], TrimmedMR[H, M, TM]) => TrimmedMR[ // todo curry? Or keep requirements packaged as pair?
+    TopN.S[H],
     EscapeM.Step[G, Q, M],
     EscapeM.Step[G, TQ, TM],
   ]
@@ -55,9 +54,9 @@ object TrimmedMR:
     H <: TopN,
     M <: ConsM[PolarG[QuoteD[G], P], Q],
     TM <: ConsM[PolarG[QuoteD[G], P], TQ],
-  ] => (TrimmedQR[H, Q, TQ], TrimmedMR[G, H, M, TM]) => TrimmedMR[
+  ] => (TrimmedQR[H, Q, TQ], TrimmedMR[H, M, TM]) => TrimmedMR[
   // todo it's a little weird to use a separate proof for TQ; it feels like the job is being done twice
-    G, TopN.S[H],
+    TopN.S[H],
     EscapeM.Head[G, P, Q, M],
     EscapeM.Head[G, P, TQ, TM],
   ]
@@ -69,8 +68,8 @@ object TrimmedMR:
     H <: TopN,
     M1 <: ConsM[G1, ConsQ[H1, Q1]], M2 <: ConsM[G2, ConsQ[H2, Q2]],
     TM1 <: ConsM[G1, ConsQ[H1, TQ1]], TM2 <: ConsM[G2, ConsQ[H2, TQ2]],
-  ] => (TrimmedMR[G1, H, M1, TM1], TrimmedMR[G2, H, M2, TM2]) => TrimmedMR[
-    PairG[D1, D2, P1, P2, G1, G2], H,
+  ] => (TrimmedMR[H, M1, TM1], TrimmedMR[H, M2, TM2]) => TrimmedMR[
+    H,
     PairM[D1, D2, P1, P2, G1, G2, ConsQ[H1, Q1],  ConsQ[H2, Q2], M1, M2],
     PairM[D1, D2, P1, P2, G1, G2, ConsQ[H1, TQ1], ConsQ[H2, TQ2], TM1, TM2],
   ]
