@@ -16,7 +16,7 @@ type TopM = ConsM[TopG, TopQ]
 /**
   * Helper type that is invariant in [[G]].
   */
-private sealed trait ConsHM[G <: TopG, +Q <: TopQ] extends ConsM[G, Q]
+private[syntax] sealed trait ConsHM[G <: TopG, +Q <: TopQ] extends ConsM[G, Q]
 
 /**
   * // todo so this doesn't get out of date, make a private documentation class inside QuoteM's companion object
@@ -35,7 +35,9 @@ sealed trait EscapeM[TG <: TopG, Q <: TopQ, TM <: ConsHM[TG, TopQ], +M <: TopM] 
 /**
   * Helper type that is invariant in M.
   */
-private sealed trait EscapeHM[TG <: TopG, Q <: TopQ, TM <: ConsHM[TG, TopQ], M <: TopM] extends EscapeM[TG, Q, TM, M]
+private[syntax] sealed trait EscapeHM[
+  TG <: TopG, Q <: TopQ, TM <: ConsHM[TG, TopQ], M <: TopM,
+] extends EscapeM[TG, Q, TM, M]
 
 object EscapeM:
   final abstract class Head[

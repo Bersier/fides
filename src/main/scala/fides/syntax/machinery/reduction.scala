@@ -19,23 +19,27 @@ object MReductionR:
   ]
 
   given [
-    TG <: TopG,
-    TM <: ConsHM[TG, TopQ], P <: TopP, Q <: TopQ, // todo P and Q are loose
+    TG <: TopG, TQ <: TopQ,
+    TM <: ConsHM[TG, TQ], P <: TopP, Q <: TopQ, // todo P and Q are loose
     M <: ConsM[PolarG[QuoteD[TM], P], Q],
   ] => MReductionR[
-    TopN.Z, ConsQ[P | BotVP, Q], BotQ,
+    TopN.Z, ConsQ[P | BotVP, Q], TQ,
     EscapeM.Head[TG, TM, P, Q, M],
     TM,
   ]
 
   // todo Q is very loose. But maybe that's okay? Maybe as long as the relation is a superset of the required one,
   //  and is tight for the Ms, it's okay?
-  given [Q <: TopQ, M <: EscapeM.Step[?, ?, ?, ?, ?]] => MReductionR[TopN.Z, Q, Q, M, M]
+  given [
+    Q <: TopQ,
+    M <: EscapeM.Step[? <: TopG, Q, ?, ?, ?],
+  ] => MReductionR[TopN.Z, ConsQ[BotP, Q], ConsQ[BotP, Q], M, M]
+  // todo remove ` <: TopG`?
 
   given [TG <: TopG, Q <: TopQ, TM <: ConsHM[TG, TopQ], M <: TopM] => MReductionR[
-    TopN.Z, Q, BotQ,
+    TopN.Z, Q, Q & ConsQ[BotP, TopQ],
     EscapeM[TG, Q, TM, M],
-    ConsM[TG, Q],
+    ConsM[TG, Q & ConsQ[BotP, TopQ]],
   ]
 
   given [
@@ -72,8 +76,8 @@ object MReductionR:
     D1 <: TopD, D2 <: TopD, P1 <: TopP, P2 <: TopP,
     G1 <: PolarG[D1, P1], G2 <: PolarG[D2, P2],
     H <: TopN, Q1 <: TopQ, Q2 <: TopQ, TQ1 <: TopQ, TQ2 <: TopQ,
-    M1 <: ConsM[G1, Q1], M2 <: ConsM[G2, Q2],
-    TM1 <: ConsM[G1, TQ1], TM2 <: ConsM[G2, TQ2],
+    M1 <: ConsHM[G1, Q1], M2 <: ConsHM[G2, Q2],
+    TM1 <: ConsHM[G1, TQ1], TM2 <: ConsHM[G2, TQ2],
   ] => (MReductionR[H, Q1, TQ1, M1, TM1], MReductionR[H, Q2, TQ2, M2, TM2]) => MReductionR[
     H, Q1 | Q2, TQ1 | TQ2,
     PairM[D1, D2, P1, P2, G1, G2, Q1, Q2, M1, M2],
@@ -81,12 +85,12 @@ object MReductionR:
   ]
 end MReductionR
 
-sealed trait QReductionR[H <: TopN, Q <: TopQ, TQ <: TopQ]
-object QReductionR:
+sealed trait QTrimmingR[H <: TopN, Q <: TopQ, TQ <: TopQ]
+object QTrimmingR:
 
-  given [Q <: TopQ] => QReductionR[TopN.Z, Q, BotQ]
+  given [Q <: TopQ] => QTrimmingR[TopN.Z, Q, BotQ]
 
   given [
     H <: TopN, P <: TopP, Q <: TopQ, TQ <: TopQ,
-  ] => QReductionR[H, Q, TQ] => QReductionR[TopN.S[H], ConsQ[P, Q], ConsQ[P, TQ]]
-end QReductionR
+  ] => QTrimmingR[H, Q, TQ] => QTrimmingR[TopN.S[H], ConsQ[P, Q], ConsQ[P, TQ]]
+end QTrimmingR

@@ -223,7 +223,7 @@ final abstract class PairG[
   */
 final abstract class QuoteG[
   P <: TopP, TM <: TopM,
-  +M <: ConsM[TopG, ConsQ[P, TopQ]],
+  +M <: ConsM[TopG, ConsQ[P, TopQ]], // todo is that the correct variance?
 ] extends PolarG[QuoteD[TM], P]
 
 // todo summon[QuoteD[QuoteG[QuoteG[?, ?, RM], ?, ?]]] is invariant in RM!
@@ -231,5 +231,5 @@ final abstract class QuoteG[
 
 final abstract class WrapG[
   D <: TopD,
-  +G <: ExprG[D],
-] extends ExprG[QuoteD[NtrlG[D]]]
+  +G <: PolarG[D, GenP[BotB, TopB, TopB]],
+] extends ExprG[QuoteD[ConsM[NtrlG[D], BotQ]]]
