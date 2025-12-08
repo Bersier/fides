@@ -19,13 +19,22 @@ object MReductionR:
   ]
 
   given [
-    G <: TopG,
-    Q <: TopQ,
-    M <: EscapeM[G, Q],
+    TG <: TopG,
+    TM <: ConsHM[TG, TopQ], P <: TopP, Q <: TopQ,
+    M <: ConsM[PolarG[QuoteD[TM], P], Q],
   ] => MReductionR[
+    TopN.Z, ConsQ[P | BotVP, Q], BotQ,
+    // todo do we need another marker to keep track of whether code can actually be launched? I don't think so.
+    EscapeM.Head[TG, TM, P, Q, M],
+    TM,
+  ]
+
+  given [Q <: TopQ, M <: EscapeM.Step[?, ?, ?, ?, ?]] => MReductionR[TopN.Z, Q, Q, M, M]
+
+  given [G <: TopG, Q <: TopQ, TM <: ConsHM[G, TopQ], M <: TopM] => MReductionR[
     TopN.Z, Q, BotQ,
-    M,
-    ConsM[G, BotQ],
+    EscapeM[G, Q, TM, M],
+    ConsM[G, Q],
   ]
 
   given [
@@ -34,7 +43,7 @@ object MReductionR:
   ] => TrimmedQR[H, Q, TQ] => MReductionR[
     H, Q, TQ,
     EscapeM[G, Q],
-    EscapeM[G, TQ],
+    EscapeM[G, TQ], // todo invariant!...
   ]
 
   given [

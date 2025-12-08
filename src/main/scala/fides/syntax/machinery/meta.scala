@@ -10,6 +10,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * including the full metaprogramming landscape (aka <i>scapes</i>)
   */
 trait ConsM[+G <: TopG, +Q <: TopQ] private[syntax]() // todo seal
+// todo maybe Q should not be in here at all, but rather in Code
 type TopM = ConsM[TopG, TopQ]
 
 /**
@@ -47,9 +48,9 @@ object EscapeM:
 
   final abstract class Step[
     G <: TopG,
-    P <: TopP, Q <: TopQ, ETM <: ConsHM[G, TopQ], EM <: TopM,
-    +M <: EscapeHM[G, ConsQ[P, Q], ETM, EM],
-  ] extends EscapeHM[G, ConsQ[P, ConsQ[BotP, Q]], ETM, EM]
+    Q <: TopQ, ETM <: ConsHM[G, TopQ], EM <: TopM,
+    +M <: EscapeHM[G, Q, ETM, EM],
+  ] extends EscapeHM[G, ConsQ[BotP, Q], ETM, EM]
 end EscapeM
 
 final abstract class RepeatedM[
