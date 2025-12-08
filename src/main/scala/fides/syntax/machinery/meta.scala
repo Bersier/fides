@@ -30,12 +30,12 @@ final abstract class QuoteM[
   M <: ConsM[TopG, ConsQ[P, Q]], // todo should M be covariant or invariant?
 ] extends ConsHM[QuoteG[P, TM, M], Q]
 
-sealed trait EscapeM[G <: TopG, Q <: TopQ, TM <: ConsHM[G, TopQ], +M <: TopM] extends ConsHM[G, Q]
+sealed trait EscapeM[TG <: TopG, Q <: TopQ, TM <: ConsHM[TG, TopQ], +M <: TopM] extends ConsHM[TG, Q]
 
 /**
   * Helper type that is invariant in M.
   */
-private sealed trait EscapeHM[G <: TopG, Q <: TopQ, TM <: ConsHM[G, TopQ], M <: TopM] extends EscapeM[G, Q, TM, M]
+private sealed trait EscapeHM[TG <: TopG, Q <: TopQ, TM <: ConsHM[TG, TopQ], M <: TopM] extends EscapeM[TG, Q, TM, M]
 
 object EscapeM:
   final abstract class Head[
@@ -47,10 +47,10 @@ object EscapeM:
   ] extends EscapeHM[TG, ConsQ[P | BotVP, Q], TM, M @uncheckedVariance]
 
   final abstract class Step[
-    G <: TopG,
-    Q <: TopQ, ETM <: ConsHM[G, TopQ], EM <: TopM,
-    +M <: EscapeHM[G, Q, ETM, EM],
-  ] extends EscapeHM[G, ConsQ[BotP, Q], ETM, EM]
+    TG <: TopG,
+    Q <: TopQ, ETM <: ConsHM[TG, TopQ], EM <: TopM,
+    +M <: EscapeHM[TG, Q, ETM, EM],
+  ] extends EscapeHM[TG, ConsQ[BotP, Q], ETM, EM]
 end EscapeM
 
 final abstract class RepeatedM[

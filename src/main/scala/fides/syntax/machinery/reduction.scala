@@ -20,52 +20,52 @@ object MReductionR:
 
   given [
     TG <: TopG,
-    TM <: ConsHM[TG, TopQ], P <: TopP, Q <: TopQ,
+    TM <: ConsHM[TG, TopQ], P <: TopP, Q <: TopQ, // todo P and Q are loose
     M <: ConsM[PolarG[QuoteD[TM], P], Q],
   ] => MReductionR[
     TopN.Z, ConsQ[P | BotVP, Q], BotQ,
-    // todo do we need another marker to keep track of whether code can actually be launched? I don't think so.
     EscapeM.Head[TG, TM, P, Q, M],
     TM,
   ]
 
+  // todo Q is very loose. But maybe that's okay? Maybe as long as the relation is a superset of the required one,
+  //  and is tight for the Ms, it's okay?
   given [Q <: TopQ, M <: EscapeM.Step[?, ?, ?, ?, ?]] => MReductionR[TopN.Z, Q, Q, M, M]
 
-  given [G <: TopG, Q <: TopQ, TM <: ConsHM[G, TopQ], M <: TopM] => MReductionR[
+  given [TG <: TopG, Q <: TopQ, TM <: ConsHM[TG, TopQ], M <: TopM] => MReductionR[
     TopN.Z, Q, BotQ,
-    EscapeM[G, Q, TM, M],
-    ConsM[G, Q],
+    EscapeM[TG, Q, TM, M],
+    ConsM[TG, Q],
   ]
 
   given [
-    G <: TopG,
-    H <: TopN, Q <: TopQ, TQ <: TopQ,
-  ] => TrimmedQR[H, Q, TQ] => MReductionR[
-    H, Q, TQ,
-    EscapeM[G, Q],
-    EscapeM[G, TQ], // todo invariant!...
+    ITG <: TopG, `ITG'` <: TopG,
+    ITM <: ConsHM[ITG, TopQ], `ITM'` <: ConsHM[`ITG'`, TopQ], P <: TopP, `P'` <: TopP,
+    H <: TopN, Q <: TopQ, TQ <: TopQ, // todo `P'` <: P is not enforced
+    M <: ConsM[PolarG[QuoteD[ITM], P], Q],
+    TM <: ConsM[PolarG[QuoteD[`ITM'`], `P'`], TQ],
+  ] => MReductionR[H, Q, TQ, M, TM] => MReductionR[
+    TopN.S[H], ConsQ[P | BotVP, Q], ConsQ[`P'` | BotVP, TQ],
+    EscapeM.Head[ITG, ITM, P, Q, M],
+    EscapeM.Head[`ITG'`, `ITM'`, `P'`, TQ, TM],
   ]
 
   given [
-    G <: TopG,
-    H <: TopN, Q <: TopQ, TQ <: TopQ,
-    M <: EscapeM[G, Q],
-    TM <: EscapeM[G, TQ],
+    H <: TopN,
+    ITG <: TopG, `ITG'` <: TopG,
+    Q <: TopQ, EITM <: ConsHM[ITG, TopQ], EM <: TopM, TQ <: TopQ, `EITM'` <: ConsHM[`ITG'`, TopQ], TEM <: TopM,
+    M <: EscapeHM[ITG, Q, EITM, EM],
+    TM <: EscapeHM[`ITG'`, TQ, `EITM'`, TEM],
   ] => MReductionR[H, Q, TQ, M, TM] => MReductionR[
     TopN.S[H], ConsQ[BotP, Q], ConsQ[BotP, TQ],
-    EscapeM.Step[G, Q, M],
-    EscapeM.Step[G, TQ, TM],
+    EscapeM.Step[ITG, Q, EITM, EM, M],
+    EscapeM.Step[`ITG'`, TQ, `EITM'`, TEM, TM],
   ]
 
-  given [
-    G <: TopG, P <: TopP,
-    H <: TopN, Q <: TopQ, TQ <: TopQ,
-    M <: ConsM[PolarG[QuoteD[G], P], Q],
-    TM <: ConsM[PolarG[QuoteD[G], P], TQ],
-  ] => MReductionR[H, Q, TQ, M, TM] => MReductionR[
-    TopN.S[H], ConsQ[P | GenP[BotB, BotB, TopB], Q], ConsQ[P | GenP[BotB, BotB, TopB], TQ],
-    EscapeM.Head[G, P, Q, M],
-    EscapeM.Head[G, P, TQ, TM],
+  given [H <: TopN, TG <: TopG, Q <: TopQ, TM <: ConsHM[TG, TopQ], M <: TopM] => MReductionR[
+    TopN.S[H], Q, Q,
+    EscapeM[TG, Q, TM, M],
+    EscapeM[TG, Q, TM, M],
   ]
 
   given [
