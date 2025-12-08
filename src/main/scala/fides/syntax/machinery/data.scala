@@ -78,18 +78,12 @@ type OutChanD[-OutD <: TopD] = ChanD[OffTopD, OutD]
 /**
   * Name as value
   */
-final abstract class IdentifierD[
-  K <: TopK,
-  +N <: NameG[K],
-] extends AtomD
+final abstract class IdentifierD[K <: TopK] extends AtomD
 
 /**
   * Channel address
   */
-final abstract class AddressD[
-  K <: TopK,
-  +N <: NameG[K], D <: TopD, +P >: GenP[BotB, BotB, TopB] <: TopP,
-] extends AtomD
+final abstract class AddressD[K <: TopK, D <: TopD, +P >: GenP[BotB, BotB, TopB] <: TopP] extends AtomD
 
 /**
   * Data type for unordered uniformly-typed collections of values.

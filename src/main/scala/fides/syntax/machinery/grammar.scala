@@ -66,35 +66,17 @@ type LauncherNameG = NameG[LauncherK.type]
  * Channel(name, type) <: InpChannel(name, type)
  * Address(Channel(name, type))
  */
-sealed trait VarG[
-  K <: TopK,
-  +N <: NameG[K],
-] extends TopG
+sealed trait VarG[K <: TopK] extends TopG
 
-sealed trait LocG[
-  K <: TopK,
-  +N <: NameG[K], D <: TopD, +P >: GenP[BotB, BotB, TopB] <: TopP
-] extends VarG[K, N]
+sealed trait LocG[K <: TopK, D <: TopD, +P >: GenP[BotB, BotB, TopB] <: TopP] extends VarG[K]
 
-final abstract class ChannelG[
-  K <: TopK,
-  +N <: NameG[K], D <: TopD, +P >: GenP[BotB, BotB, TopB] <: TopP,
-] extends LocG[K, N, D, P]
+final abstract class ChannelG[K <: TopK, D <: TopD, +P >: GenP[BotB, BotB, TopB] <: TopP] extends LocG[K, D, P]
 
-type ChanG[
-  K <: TopK,
-  +N <: NameG[K], D <: TopD,
-] = ChannelG[K, N, D, GenP[BotB, BotB, TopB]]
+type ChanG[K <: TopK, D <: TopD] = ChannelG[K, D, GenP[BotB, BotB, TopB]]
 
-type InpChanG[
-  K <: TopK,
-  +N <: NameG[K], +D <: TopD,
-] = ChannelG[K, N, D @uncheckedVariance, GenP[BotB, TopB, TopB]]
+type InpChanG[K <: TopK, +D <: TopD] = ChannelG[K, D @uncheckedVariance, GenP[BotB, TopB, TopB]]
 
-type OutChanG[
-  K <: TopK,
-  +N <: NameG[K], -D <: TopD,
-] = ChannelG[K, N, D @uncheckedVariance, GenP[TopB, BotB, TopB]]
+type OutChanG[K <: TopK, -D <: TopD] = ChannelG[K, D @uncheckedVariance, GenP[TopB, BotB, TopB]]
 
 /**
   * [[PolarG]] is a generalization of expressions and patterns.
