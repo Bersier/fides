@@ -68,11 +68,11 @@ type LauncherNameG = NameG[LauncherK.type]
  */
 sealed trait VarG[+K <: TopK] extends TopG
 
-sealed trait LocG[+K <: TopK, D <: TopD, +P >: GenP[BotB, BotB, TopB] <: TopP] extends VarG[K]
+sealed trait LocG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends VarG[K]
 
-final abstract class ChannelG[+K <: TopK, D <: TopD, +P >: GenP[BotB, BotB, TopB] <: TopP] extends LocG[K, D, P]
+final abstract class ChannelG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends LocG[K, D, P]
 
-type ChanG[+K <: TopK, D <: TopD] = ChannelG[K, D, GenP[BotB, BotB, TopB]]
+type ChanG[+K <: TopK, D <: TopD] = ChannelG[K, D, BotVP]
 
 type InpChanG[+K <: TopK, +D <: TopD] = ChannelG[K, D @uncheckedVariance, GenP[BotB, TopB, TopB]]
 
@@ -185,7 +185,7 @@ final abstract class DisjoinG[+G <: ExprG[CollectedUD[BoolD]]] extends ExprG[Boo
 final abstract class NegateG[
   D <: BoolD, P <: TopP,
   +G <: PolarG[D, P],
-] extends PolarG[BoolD.Not[D], P | GenP[BotB, BotB, TopB]]
+] extends PolarG[BoolD.Not[D], P | BotVP]
 
 final abstract class EqualG[+G <: ExprG[CollectedUD[AtomD]]] extends ExprG[BoolD]
 final abstract class RandomBitG extends ExprG[BoolD]
@@ -202,9 +202,9 @@ final abstract class AddElementG[
 ] extends PolarG[CollectedD[TopE.F, D], EP | P]
 
 final abstract class CollectG[
-  D <: TopD, B <: Bits,
-  +SG <: NtrlG[ChanD[?, ?]], +NG <: NtrlG[NatD[B]], // todo
-] extends PolarG[CollectedUD[D], GenP[?, ?, TopB]]
+  K <: TopK, D <: TopD, P >: BotVP <: TopP, B <: Bits,
+  +SG <: ChannelG[K, D, P], +NG <: NtrlG[NatD[B]],
+] extends PolarG[CollectedUD[D], P]
 
 final abstract class AddG[+G <: ExprG[CollectedUD[NatUD]]] extends ExprG[NatUD]
 final abstract class MultiplyG[+G <: ExprG[CollectedUD[NatUD]]] extends ExprG[NatUD]

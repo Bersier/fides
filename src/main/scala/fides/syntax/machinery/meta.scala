@@ -83,10 +83,10 @@ final abstract class AddElementM[
 ] extends ConsM[AddElementG[D, EP, P, EG, G], EQ | Q]
 
 final abstract class CollectM[
-  D <: TopD, B <: Bits,
-  SG <: NtrlG[ChanD[?, ?]], NG <: NtrlG[NatD[B]], SQ <: TopQ, NQ <: TopQ,
+  K <: TopK, D <: TopD, P >: BotVP <: TopP, B <: Bits,
+  SG <: ChannelG[K, D, P], NG <: NtrlG[NatD[B]], SQ <: TopQ, NQ <: TopQ,
   +SM <: ConsM[SG, SQ], +NM <: ConsM[NG, NQ],
-] extends ConsM[CollectG[D, B, SG, NG], SQ | NQ]
+] extends ConsM[CollectG[K, D, P, B, SG, NG], SQ | NQ]
 
 final abstract class AddM[
   G <: ExprG[CollectedUD[NatUD]], Q <: TopQ,

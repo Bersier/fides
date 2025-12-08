@@ -30,8 +30,8 @@ final case class AddElement[
   * As an [[XctrG]], outputs the elements of a Collected to [[elementSource]], and its size to [[size]].
   */
 final case class Collect[
-  D <: TopD, B <: Bits,
-  SG <: NtrlG[ChanD[?, ?]], NG <: NtrlG[NatD[B]], SQ <: TopQ, NQ <: TopQ, // todo
+  K <: TopK, D <: TopD, P >: BotVP <: TopP, B <: Bits,
+  SG <: ChannelG[K, D, P], NG <: NtrlG[NatD[B]], SQ <: TopQ, NQ <: TopQ,
   SM <: ConsM[SG, SQ], NM <: ConsM[NG, NQ],
-](elementSource: Code[SM], size: Code[NM]) extends Code[CollectM[D, B, SG, NG, SQ, NQ, SM, NM]]
+](elementSource: Code[SM], size: Code[NM]) extends Code[CollectM[K, D, P, B, SG, NG, SQ, NQ, SM, NM]]
 // todo does it only start collecting after having received [[size]]?
