@@ -1,5 +1,6 @@
 package fides.syntax.machinery
 
+// todo I believe we have the property that at height H, the P in TQ is BotP; double-check and document
 sealed trait MReductionR[-H <: TopN, Q <: TopQ, TQ <: TopQ, M <: ConsM[TopG, Q], TM <: ConsM[TopG, TQ]]
 object MReductionR:
 
