@@ -3,7 +3,6 @@ package fides.syntax.machinery
 import typelevelnumbers.binary.Bits
 
 import scala.annotation.unchecked.uncheckedVariance
-import scala.language.experimental.pureFunctions
 
 /**
   * Parent type of all the Scala types that represent
@@ -33,9 +32,11 @@ final abstract class TypeG[D <: TopD] extends TopG
 
 final abstract class DeclG[D <: TopD] extends TopG
 
-sealed trait NameG[+D <: TopD] extends TopG
+@deprecated
+sealed trait OldNameG[+D <: TopD] extends TopG
 
-final abstract class MNameG[D <: TopD] extends NameG[D]
+@deprecated
+final abstract class MNameG[D <: TopD] extends OldNameG[D]
 
 /**
   * Fides code type for non-polar process code
@@ -44,6 +45,9 @@ sealed trait AplrG extends TopG
 
 final abstract class RepeatedG[+G <: AplrG] extends AplrG
 final abstract class ConcurrentG[+G <: ArgsUG[AplrG]] extends AplrG
+
+final abstract class NameG[+K <: TopK] extends TopG
+type LauncherNameG = NameG[LauncherK.type]
 
 /*
  * todo
@@ -55,14 +59,42 @@ final abstract class ConcurrentG[+G <: ArgsUG[AplrG]] extends AplrG
  * Cells
  * Signatures
  *
- * VariableProperties[+LinearityAtInp <: TopB, +LinearityAtOut <: TopB, +CAS <: TopB]
+ * VariableProperties[+Mutability <: TopB, +Linearity <: TopB, +Synchronicity <: TopB]
  *
  * Name
  * Identifier(name)
  * Channel(name, type) <: InpChannel(name, type)
  * Address(Channel(name, type))
  */
-sealed trait Location[+K <: ID] extends TopG
+sealed trait VarG[
+  K <: TopK,
+  +N <: NameG[K],
+] extends TopG
+
+sealed trait LocG[
+  K <: TopK,
+  +N <: NameG[K], D <: TopD, +P >: GenP[BotB, BotB, TopB] <: TopP
+] extends VarG[K, N]
+
+final abstract class ChannelG[
+  K <: TopK,
+  +N <: NameG[K], D <: TopD, +P >: GenP[BotB, BotB, TopB] <: TopP,
+] extends LocG[K, N, D, P]
+
+type ChanG[
+  K <: TopK,
+  +N <: NameG[K], D <: TopD,
+] = ChannelG[K, N, D, GenP[BotB, BotB, TopB]]
+
+type InpChanG[
+  K <: TopK,
+  +N <: NameG[K], +D <: TopD,
+] = ChannelG[K, N, D @uncheckedVariance, GenP[BotB, TopB, TopB]]
+
+type OutChanG[
+  K <: TopK,
+  +N <: NameG[K], -D <: TopD,
+] = ChannelG[K, N, D @uncheckedVariance, GenP[TopB, BotB, TopB]]
 
 /**
   * [[PolarG]] is a generalization of expressions and patterns.

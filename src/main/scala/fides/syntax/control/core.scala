@@ -13,7 +13,7 @@ case object Start extends OldCode[OldNtrlG[StartD]]
   *              is like a mutable variable declaration // todo no scope; more like a loc, but with different semantics?
   * @param body the process that can be paused
   */
-final case class Pausable(awake: OldCode[NameG[BoolD]], body: OldCode[AplrG]) extends OldCode[AplrG]
+final case class Pausable(awake: OldCode[OldNameG[BoolD]], body: OldCode[AplrG]) extends OldCode[AplrG]
 
 /**
    * Delays [[body]] until [[signal]] is received.

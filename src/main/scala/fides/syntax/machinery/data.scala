@@ -48,7 +48,7 @@ final abstract class PairD[+D1 <: TopD, +D2 <: TopD] extends TopD
   */
 sealed trait RecordD extends TopD
 final abstract class EmptyRecordD extends RecordD
-final abstract class NonEmptyRecordD[+K <: ID, +V <: TopD, +D <: RecordD] extends RecordD
+final abstract class NonEmptyRecordD[+K <: TopK, +V <: TopD, +D <: RecordD] extends RecordD
 
 final abstract class NatD[+B <: Bits] extends AtomD
 type NatUD = NatD[Bits]
@@ -57,16 +57,39 @@ final abstract class QuoteD[+G <: TopG] extends TopD
 
 final abstract class SignedD[+D <: TopD] extends TopD
 
-sealed trait IdentifierD[+K <: ID] extends AtomD
-type IdentifierUD = IdentifierD[ID]
+@deprecated
+sealed trait OldIdentifierD[+K <: TopK] extends AtomD
+@deprecated
+type IdentifierUD = OldIdentifierD[TopK]
+@deprecated
+final abstract class IdentifierKeyD[+K <: TopK] extends AtomD
+@deprecated
+type IdentifierKeyUD = IdentifierKeyD[TopK]
 
-final abstract class IdentifierKeyD[+K <: ID] extends AtomD
-type IdentifierKeyUD = IdentifierKeyD[ID]
-
-final abstract class ChannelD[+K <: ID, +InpD >: BotD, -OutD <: InpD & TopD] extends IdentifierD[K]
-type ChanD[+InpD >: BotD, -OutD <: InpD & TopD] = ChannelD[ID, InpD, OutD]
+@deprecated
+final abstract class ChannelD[+K <: TopK, +InpD >: BotD, -OutD <: InpD & TopD] extends OldIdentifierD[K]
+@deprecated
+type ChanD[+InpD >: BotD, -OutD <: InpD & TopD] = ChannelD[TopK, InpD, OutD]
+@deprecated
 type InpChanD[+InpD >: BotD] = ChanD[InpD, OffBotD]
+@deprecated
 type OutChanD[-OutD <: TopD] = ChanD[OffTopD, OutD]
+
+/**
+  * Name as value
+  */
+final abstract class IdentifierD[
+  K <: TopK,
+  +N <: NameG[K],
+] extends AtomD
+
+/**
+  * Channel address
+  */
+final abstract class AddressD[
+  K <: TopK,
+  +N <: NameG[K], D <: TopD, +P >: GenP[BotB, BotB, TopB] <: TopP,
+] extends AtomD
 
 /**
   * Data type for unordered uniformly-typed collections of values.

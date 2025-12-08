@@ -7,24 +7,24 @@ import fides.syntax.machinery.*
   * New identifiers can be created. Identifiers are globally unique.
   *
   * Implementation note: Due to polarity in Fides, type widening is unsound.
-  * So every [[OldNtrlG]] should be singleton-typed. That is why [[Identifier]] takes an [[ID]].
+  * So every [[OldNtrlG]] should be singleton-typed. That is why [[Identifier]] takes an [[TopK]].
   * This way, its code type can be unique to that particular identifier.
   * Additional access restrictions are there to enforce type tightness.
   */
-final case class Identifier[K <: ID] private(private val k: K) extends OldCode[OldNtrlG[IdentifierD[K]]]
+final case class Identifier[K <: TopK] private(private val k: K) extends OldCode[OldNtrlG[OldIdentifierD[K]]]
 object Identifier:
-  def apply(): Identifier[?] = new Identifier(ID())
-  def apply[K <: ID & Singleton](k: K): Identifier[K] = new Identifier(k)
+  def apply(): Identifier[?] = new Identifier(TopK())
+  def apply[K <: TopK & Singleton](k: K): Identifier[K] = new Identifier(k)
 end Identifier
 
 /**
   * A key has a corresponding identifier. The identifier can be obtained from the key, but not vice versa
   * (there might not even exist a corresponding key for some identifiers).
   */
-final case class IdentifierKey[K <: ID] private(private val k: K) extends OldCode[OldNtrlG[IdentifierKeyD[K]]]
+final case class IdentifierKey[K <: TopK] private(private val k: K) extends OldCode[OldNtrlG[IdentifierKeyD[K]]]
 object IdentifierKey:
-  def apply(): IdentifierKey[?] = new IdentifierKey(ID())
-  def apply[K <: ID & Singleton](k: K): IdentifierKey[K] = new IdentifierKey(k)
+  def apply(): IdentifierKey[?] = new IdentifierKey(TopK())
+  def apply[K <: TopK & Singleton](k: K): IdentifierKey[K] = new IdentifierKey(k)
 end IdentifierKey
 
 /**
@@ -42,6 +42,6 @@ final case class NewIdentifierKey() extends OldCode[ExvrG[IdentifierKeyUD]]
   *
   * Equivalent to signing a dummy message, and then extracting the signature from it via pattern matching.
   */
-final case class ExtractIdentifier[K <: ID](
+final case class ExtractIdentifier[K <: TopK](
   key: OldCode[OldExprG[IdentifierKeyD[K]]],
-) extends OldCode[ExvrG[IdentifierD[K]]]
+) extends OldCode[ExvrG[OldIdentifierD[K]]]
