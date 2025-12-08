@@ -55,6 +55,12 @@ type NatUD = NatD[Bits]
 
 final abstract class QuoteD[+TM <: TopM] extends TopD
 
+/*
+ * todo
+ * To find what the subtyping relation for Ms should be, we should look at quotes, and how they can be used.
+ * They can be used in Eval, and in Escape.
+ */
+
 final abstract class SignedD[+D <: TopD] extends TopD
 
 @deprecated

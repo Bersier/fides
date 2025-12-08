@@ -7,7 +7,7 @@ import typelevelnumbers.binary.Bits
   * the different types of possible Fides code,
   * including the full metaprogramming landscape (aka <i>scapes</i>)
   */
-trait ConsM[G <: TopG, +Q <: TopQ] private[syntax]() // todo seal
+trait ConsM[+G <: TopG, +Q <: TopQ] private[syntax]() // todo seal
 // todo is G really needed? I think so? Covariant or invariant?
 type TopM = ConsM[TopG, TopQ]
 
@@ -19,24 +19,25 @@ type TopM = ConsM[TopG, TopQ]
   *            via the relation [[TrimmedR]]`[`...`, `[[M]]`, `[[TM]]`]` (See [[Quote]])
   */
 final abstract class QuoteM[
-  P <: TopP, TM <: ConsM[TopG, TopQ], Q <: TopQ,
+  P <: TopP, Q <: TopQ, TM <: TopM,
   M <: ConsM[TopG, ConsQ[P, Q]], // todo should M be covariant or invariant?
 ] extends ConsM[QuoteG[P, TM, M], Q]
 
-sealed trait EscapeM[G <: TopG, +Q <: TopQ] extends ConsM[G, Q]
+sealed trait EscapeM[G <: TopG, Q <: TopQ, TM <: ConsM[G, TopQ], +M <: TopM] extends ConsM[G, Q]
 object EscapeM:
   final abstract class Head[
-    TG <: TopG,
-    // todo get G from QuoteD (which would then have an additional invariant G parameter)?
+    TG <: TopG, // todo TG is loose
+    // todo get TG from QuoteD (which would then have an additional invariant TG parameter)?
     TM <: ConsM[TG, TopQ], P <: TopP,
-    G <: PolarG[QuoteD[TM], P], Q <: TopQ,
+    G <: PolarG[QuoteD[TM], P], Q <: TopQ, // todo G is loose
     +M <: ConsM[G, Q],
-  ] extends EscapeM[TG, ConsQ[P | BotVP, Q]]
+  ] extends EscapeM[TG, ConsQ[P | BotVP, Q], TM, M]
 
   final abstract class Step[
-    G <: TopG, Q <: TopQ,
-    +M <: EscapeM[G, Q],
-  ] extends EscapeM[G, ConsQ[BotP, Q]]
+    G <: TopG, P <: TopP, Q <: TopQ,
+    ETM <: ConsM[G, TopQ], EM <: TopM,
+    +M <: EscapeM[G, ConsQ[P, Q], ETM, EM], // todo EM is loose
+  ] extends EscapeM[G, ConsQ[P, ConsQ[BotP, Q]], ETM, EM]
 end EscapeM
 
 final abstract class RepeatedM[
