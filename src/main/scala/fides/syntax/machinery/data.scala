@@ -53,7 +53,7 @@ final abstract class NonEmptyRecordD[+K <: TopK, +V <: TopD, +D <: RecordD] exte
 final abstract class NatD[+B <: Bits] extends AtomD
 type NatUD = NatD[Bits]
 
-final abstract class QuoteD[+G <: TopG] extends TopD
+final abstract class QuoteD[+TM <: TopM] extends TopD
 
 final abstract class SignedD[+D <: TopD] extends TopD
 

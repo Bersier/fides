@@ -1,5 +1,10 @@
 package fides.syntax.machinery
 
+/*
+ * Trimming is wrong. We want to do scape replacement instead.
+ * The escapes whose heads are at the level where the replacement occurs get replaced by their bottom landscape.
+ */
+
 type TrimmedR[
   G <: TopG, P <: TopP, Q <: TopQ,
   M <: ConsM[G, ConsQ[P, Q]], TM <: ConsM[G, ConsQ[P, BotQ]],

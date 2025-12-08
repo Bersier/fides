@@ -7,25 +7,31 @@ import typelevelnumbers.binary.Bits
   * the different types of possible Fides code,
   * including the full metaprogramming landscape (aka <i>scapes</i>)
   */
-trait ConsM[+G <: TopG, +Q <: TopQ] private[syntax]() // todo seal
+trait ConsM[G <: TopG, +Q <: TopQ] private[syntax]() // todo seal
+// todo is G really needed? I think so? Covariant or invariant?
 type TopM = ConsM[TopG, TopQ]
 
 /**
+  * // todo so this doesn't get out of date, make a private documentation class inside QuoteM's companion object
+  * `TM <: ConsM[G, ConsQ[P, BotQ]], +M <: ConsM[G, ConsQ[P, TopQ]]`
+  *
   * @tparam TM is actually supposed to be derived from M
-  *            via the relation [[TrimmedR]]`[`[[G]], [[M]], [[TM]]`]` (See [[Quote]])
+  *            via the relation [[TrimmedR]]`[`...`, `[[M]]`, `[[TM]]`]` (See [[Quote]])
   */
 final abstract class QuoteM[
-  G <: TopG, P <: TopP,
-  TM <: ConsM[G, ConsQ[P, BotQ]], Q <: TopQ,
-  +M <: ConsM[G, ConsQ[P, Q]],
-] extends ConsM[QuoteG[G, P, TM], Q]
+  P <: TopP, TM <: ConsM[TopG, TopQ], Q <: TopQ,
+  M <: ConsM[TopG, ConsQ[P, Q]], // todo should M be covariant or invariant?
+] extends ConsM[QuoteG[P, TM, M], Q]
 
-sealed trait EscapeM[+G <: TopG, +Q <: TopQ] extends ConsM[G, Q]
+sealed trait EscapeM[G <: TopG, +Q <: TopQ] extends ConsM[G, Q]
 object EscapeM:
   final abstract class Head[
-    G <: TopG, P <: TopP, Q <: TopQ,
-    +M <: ConsM[PolarG[QuoteD[G], P], Q],
-  ] extends EscapeM[G, ConsQ[P | GenP[BotB, BotB, TopB], Q]]
+    TG <: TopG,
+    // todo get G from QuoteD (which would then have an additional invariant G parameter)?
+    TM <: ConsM[TG, TopQ], P <: TopP,
+    G <: PolarG[QuoteD[TM], P], Q <: TopQ,
+    +M <: ConsM[G, Q],
+  ] extends EscapeM[TG, ConsQ[P | BotVP, Q]]
 
   final abstract class Step[
     G <: TopG, Q <: TopQ,

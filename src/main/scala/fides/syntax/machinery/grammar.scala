@@ -215,10 +215,16 @@ final abstract class PairG[
   +G1 <: PolarG[D1, P1], +G2 <: PolarG[D2, P2],
 ] extends PolarG[PairD[D1, D2], P1 | P2]
 
+/**
+  * `TM <: ConsM[G, ConsQ[P, BotQ]], +M <: ConsM[G, ConsQ[P, TopQ]]`
+  *
+  * @tparam TM is actually supposed to be derived from M
+  *            via the relation [[TrimmedR]]`[`...`, `[[M]]`, `[[TM]]`]` (See [[Quote]])
+  */
 final abstract class QuoteG[
-  G <: TopG, P <: TopP,
-  +TM <: ConsM[G, ConsQ[P, BotQ]],
-] extends PolarG[QuoteD[G], P]
+  P <: TopP, TM <: TopM,
+  +M <: ConsM[TopG, ConsQ[P, TopQ]],
+] extends PolarG[QuoteD[TM], P]
 
 // todo summon[QuoteD[QuoteG[QuoteG[?, ?, RM], ?, ?]]] is invariant in RM!
 //  This might be the key to matching escape matchers at nauseam.
