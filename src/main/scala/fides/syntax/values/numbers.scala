@@ -21,7 +21,7 @@ end NatLit
   */
 final case class Add[
   G <: ExprG[CollectedUD[NatUD]], Q <: TopQ,
-  M <: ConsM[G, Q],
+  M <: ConsHM[G, Q],
 ](terms: Code[M]) extends Code[AddM[G, Q, M]]
 
 /**
@@ -29,7 +29,7 @@ final case class Add[
   */
 final case class Multiply[
   G <: ExprG[CollectedUD[NatUD]], Q <: TopQ,
-  M <: ConsM[G, Q],
+  M <: ConsHM[G, Q],
 ](factors: Code[M]) extends Code[MultiplyM[G, Q, M]]
 
 /**
@@ -37,5 +37,5 @@ final case class Multiply[
   */
 final case class Compare[
   G1 <: ExprG[NatUD], G2 <: ExprG[NatUD], Q1 <: TopQ, Q2 <: TopQ,
-  M1 <: ConsM[G1, Q1], M2 <: ConsM[G2, Q2],
+  M1 <: ConsHM[G1, Q1], M2 <: ConsHM[G2, Q2],
 ](lhs: Code[M1], rhs: Code[M2]) extends Code[CompareM[G1, G2, Q1, Q2, M1, M2]]

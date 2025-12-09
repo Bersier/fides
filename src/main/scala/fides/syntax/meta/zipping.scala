@@ -37,7 +37,7 @@ object Args:
   // todo add another type parameter I?
 
   private case object NoneImpl extends Args[TopE.T, OffBotG, BotQ, Nothing], None:
-    def arguments: Multiset[ConsM[OffBotG, BotQ]] = summon[MultisetOps[Multiset]].empty
+    def arguments: Multiset[Code[Nothing]] = summon[MultisetOps[Multiset]].empty
   private final class SomeImpl[
     G <: TopG, Q <: TopQ,
     M <: ConsHM[G, Q],

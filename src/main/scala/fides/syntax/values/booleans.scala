@@ -10,7 +10,7 @@ case object False extends Code[ConsM[NtrlG[FalseD], BotQ]]
   */
 final case class Conjoin[
   G <: ExprG[CollectedUD[BoolD]], Q <: TopQ,
-  M <: ConsM[G, Q],
+  M <: ConsHM[G, Q],
 ](conjuncts: Code[M]) extends Code[ConjoinM[G, Q, M]]
 
 /**
@@ -18,7 +18,7 @@ final case class Conjoin[
   */
 final case class Disjoin[
   G <: ExprG[CollectedUD[BoolD]], Q <: TopQ,
-  M <: ConsM[G, Q],
+  M <: ConsHM[G, Q],
 ](conjuncts: Code[M]) extends Code[DisjoinM[G, Q, M]]
 
 /**
@@ -27,7 +27,7 @@ final case class Disjoin[
 final case class Negate[
   D <: BoolD, P <: TopP,
   G <: PolarG[D, P], Q <: TopQ,
-  M <: ConsM[G, Q],
+  M <: ConsHM[G, Q],
 ](value: Code[M]) extends Code[NegateM[D, P, G, Q, M]]
 
 /**
@@ -35,7 +35,7 @@ final case class Negate[
   */
 final case class Equal[
   G <: ExprG[CollectedUD[AtomD]], Q <: TopQ,
-  M <: ConsM[G, Q],
+  M <: ConsHM[G, Q],
 ](args: Code[M]) extends Code[EqualM[G, Q, M]]
 // todo not sure any atoms should be comparable... or perhaps it should be EqualByID?
 
