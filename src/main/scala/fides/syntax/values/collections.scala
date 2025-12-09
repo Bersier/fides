@@ -31,7 +31,7 @@ final case class AddElement[
   */
 final case class Collect[
   K <: TopK, D <: TopD, P >: BotVP <: TopP, B <: Bits,
-  SG <: ChannelRefG[K, D, P], NG <: NtrlG[NatD[B]], SQ <: TopQ, NQ <: TopQ,
+  SG <: ChanRefG[K, D, P], NG <: NtrlG[NatD[B]], SQ <: TopQ, NQ <: TopQ,
   SM <: ConsHM[SG, SQ], NM <: ConsHM[NG, NQ],
 ](elementSource: Code[SM], size: Code[NM]) extends Code[CollectM[K, D, P, B, SG, NG, SQ, NQ, SM, NM]]
 // todo does it only start collecting after having received [[size]]?

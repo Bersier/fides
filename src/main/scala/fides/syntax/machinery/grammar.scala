@@ -82,9 +82,12 @@ final abstract class CellG[+K <: TopK, D <: TopD] extends LocG[K, D, BotVP]
 
 sealed trait RefG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends TopG
 
-final abstract class ChanRefG[+K <: TopK, D <: TopD] extends RefG[K, D, BotVP]
+final abstract class ChanRefG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends RefG[K, D, P]
+// todo the new polarity system prevents us from having generic variance as needed.
+//  It forces us to specialize a polar to get any variance.
+//  Can we get the best of the old and the new system? Study EscapeM
 
-final abstract class CellRefG[+K <: TopK, D <: TopD] extends RefG[K, D, BotVP]
+final abstract class CellRefG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends RefG[K, D, P]
 
 /**
   * [[PolarG]] is a generalization of expressions and patterns.
@@ -216,7 +219,7 @@ final abstract class AddElementG[
 
 final abstract class CollectG[
   K <: TopK, D <: TopD, P >: BotVP <: TopP, B <: Bits,
-  +SG <: ChannelRefG[K, D, P], +NG <: NtrlG[NatD[B]],
+  +SG <: ChanRefG[K, D, P], +NG <: NtrlG[NatD[B]],
 ] extends PolarG[CollectedUD[D], P]
 
 final abstract class AddG[+G <: ExprG[CollectedUD[NatUD]]] extends ExprG[NatUD]

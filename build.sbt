@@ -15,7 +15,6 @@ lazy val root = (project in file("."))
     libraryDependencies ++= Seq(
       "org.scala-lang" %% "scala3-staging" % scalaVersion.value,
       // See https://docs.scala-lang.org/api/all.html
-      scalaOrganization.value % "scala-library" % "2.13.17",
       "dev.zio" %% "zio" % "2.1.14",
 //      "dev.zio" %% "zio-streams" % "2.1.14",
 //      "org.typelevel" %% "cats-core" % "2.12.0",
