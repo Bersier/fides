@@ -74,6 +74,7 @@ type LauncherNameG = NameG[LauncherK.type]
  * Address(Channel(name, type))
  */
 sealed trait VarG[+K <: TopK] extends TopG
+// todo make VarG and NameG the same, in the sense that vars would simply be names? Then LocG would not extend VarG.
 
 sealed trait LocG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends VarG[K]
 
