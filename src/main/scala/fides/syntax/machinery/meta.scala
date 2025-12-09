@@ -2,8 +2,6 @@ package fides.syntax.machinery
 
 import typelevelnumbers.binary.Bits
 
-import scala.annotation.unchecked.uncheckedVariance
-
 /**
   * Parent type of all the Scala types that represent
   * the different types of possible Fides code,
@@ -26,34 +24,17 @@ private[syntax] sealed trait ConsHM[G <: TopG, +Q <: TopQ] extends ConsM[G, Q]
   *            via the relation [[TrimmedR]]`[`...`, `[[M]]`, `[[TM]]`]` (See [[Quote]])
   */
 final abstract class QuoteM[
-  P <: TopP, Q <: TopQ, TM <: TopM,
-  M <: ConsM[TopG, ConsQ[P, Q]], // todo should M be covariant or invariant?
-] extends ConsHM[QuoteG[P, TM, M], Q]
+  K <: TopK, KQ <: TopQ, P <: TopP, Q <: TopQ, TM <: TopM,
+  +KM <: ConsM[NameG[K], KQ], M <: ConsM[TopG, ConsQ[P, Q]], // todo should M be covariant or invariant?
+] extends ConsHM[QuoteG[P, TM, K, M], Q | KQ]
 
-sealed trait EscapeM[TG <: TopG, Q <: TopQ, TM <: ConsHM[TG, TopQ], +M <: TopM] extends ConsHM[TG, Q]
-
-/**
-  * Helper type that is invariant in M.
-  */
-private[syntax] sealed trait EscapeHM[
-  TG <: TopG, Q <: TopQ, TM <: ConsHM[TG, TopQ], M <: TopM,
-] extends EscapeM[TG, Q, TM, M]
-
-object EscapeM:
-  final abstract class Head[
-    TG <: TopG,
-    TM <: ConsHM[TG, TopQ], P <: TopP, Q <: TopQ,
-    // todo P and Q are loose, as I suspect they are in many places.
-    //  Is that an issue? We could tighten them with helper types.
-    +M <: ConsM[PolarG[QuoteD[TM], P], Q],
-  ] extends EscapeHM[TG, ConsQ[P | BotVP, Q], TM, M @uncheckedVariance]
-
-  final abstract class Step[
-    TG <: TopG,
-    Q <: TopQ, ETM <: ConsHM[TG, TopQ], EM <: TopM,
-    +M <: EscapeHM[TG, Q, ETM, EM],
-  ] extends EscapeHM[TG, ConsQ[BotP, Q], ETM, EM]
-end EscapeM
+final abstract class EscapeM[
+  TG <: TopG,
+  K <: TopK, KQ <: TopQ, TM <: ConsHM[TG, TopQ], P <: TopP, Q <: TopQ,
+  // todo P and Q are loose, as I suspect they are in many places.
+  //  Is that an issue? We could tighten them with helper types.
+  +KM <: ConsM[NameG[K], KQ], +M <: ConsM[PolarG[QuoteD[TM], P], Q],
+] extends ConsHM[TG, ConsQ[P | BotVP, Q]]
 
 final abstract class ArgsM[
   E <: TopE, G <: TopG, Q <: TopQ,

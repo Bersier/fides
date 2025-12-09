@@ -6,36 +6,18 @@ import fides.syntax.machinery.*
   * Analogous to s-Strings in Scala, but for code-as-value, for metaprogramming
   */
 final case class Quote[
-  P <: TopP, Q <: TopQ, TQ <: TopQ,
-  TM <: ConsM[TopG, TQ],
-  M <: ConsM[TopG, ConsQ[P, Q]],
-](code: Code[M])(using MReductionR[TopN.Z, ConsQ[P, Q], TQ, M, TM]) extends Code[QuoteM[P, Q, TM, M]]
+  TQ <: TopQ,
+  K <: TopK, KQ <: TopQ, P <: TopP, Q <: TopQ, TM <: ConsM[TopG, TQ],
+  KM <: ConsM[NameG[K], KQ], M <: ConsM[TopG, ConsQ[P, Q]],
+](name: Code[KM], code: Code[M])(
+  using Any, // todo MReductionR[TopN.Z, ConsQ[P, Q], TQ, M, TM],
+) extends Code[QuoteM[K, KQ, P, Q, TM, KM, M]]
 
 /**
   * Allows escaping the body of a [[Quote]].
   */
-object Escape:
-  /**
-    * Escapes one quotation level.
-    */
-  final case class Head[
-    TG <: TopG,
-    TM <: ConsHM[TG, TopQ], P <: TopP, Q <: TopQ,
-    M <: ConsM[PolarG[QuoteD[TM], P], Q],
-  ](quote: Code[M]) extends Code[EscapeM.Head[TG, TM, P, Q, M]]
-
-  /**
-    * Allows its parameter to escape one more quotation level.
-    */
-  final case class Step[
-    TG <: TopG,
-    Q <: TopQ, ETM <: ConsHM[TG, TopQ], EM <: TopM,
-    M <: EscapeHM[TG, Q, ETM, EM],
-  ](escape: Code[M]) extends Code[EscapeM.Step[TG, Q, ETM, EM, M]]
-
-  final case class Matcher[TG <: TopG, Q <: TopQ, TM <: ConsHM[TG, TopQ], M <: TopM](
-    typeRepr: Code[ConsM[TG, Q]],
-    // todo M should be tunable as well (?), independently of typeRepr's native M
-    //  have a wrapper primitive that tunes M?
-  ) extends Code[EscapeM[TG, Q | ConsQ[GenP[TopB, BotB, BotB], BotQ], TM, M]]
-end Escape
+final case class Escape[
+  TG <: TopG,
+  K <: TopK, KQ <: TopQ, TM <: ConsHM[TG, TopQ], P <: TopP, Q <: TopQ,
+  KM <: ConsM[NameG[K], KQ], M <: ConsM[PolarG[QuoteD[TM], P], Q],
+](name: Code[KM], quote: Code[M]) extends Code[EscapeM[TG, K, KQ, TM, P, Q, KM, M]]
