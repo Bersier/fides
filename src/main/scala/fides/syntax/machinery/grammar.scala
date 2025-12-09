@@ -56,6 +56,8 @@ final abstract class ConcurrentG[+G <: ArgsUG[AplrG]] extends AplrG
 final abstract class NameG[+K <: TopK] extends TopG
 type LauncherNameG = NameG[LauncherK.type]
 
+final abstract class OwnedG[+K <: TopK] extends TopG
+
 /*
  * todo
  *
@@ -73,18 +75,16 @@ type LauncherNameG = NameG[LauncherK.type]
  * Channel(name, type) <: InpChannel(name, type)
  * Address(Channel(name, type))
  */
-sealed trait VarG[+K <: TopK] extends TopG
-// todo make VarG and NameG the same, in the sense that vars would simply be names? Then LocG would not extend VarG.
 
-sealed trait LocG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends VarG[K]
+sealed trait LocG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends TopG
 
-final abstract class ChannelG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends LocG[K, D, P]
+final abstract class CellG[+K <: TopK, D <: TopD] extends LocG[K, D, BotVP]
 
-type ChanG[+K <: TopK, D <: TopD] = ChannelG[K, D, BotVP]
+sealed trait RefG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends TopG
 
-type InpChanG[+K <: TopK, +D <: TopD] = ChannelG[K, D @uncheckedVariance, GenP[BotB, TopB, TopB]]
+final abstract class ChanRefG[+K <: TopK, D <: TopD] extends RefG[K, D, BotVP]
 
-type OutChanG[+K <: TopK, -D <: TopD] = ChannelG[K, D @uncheckedVariance, GenP[TopB, BotB, TopB]]
+final abstract class CellRefG[+K <: TopK, D <: TopD] extends RefG[K, D, BotVP]
 
 /**
   * [[PolarG]] is a generalization of expressions and patterns.
@@ -216,7 +216,7 @@ final abstract class AddElementG[
 
 final abstract class CollectG[
   K <: TopK, D <: TopD, P >: BotVP <: TopP, B <: Bits,
-  +SG <: ChannelG[K, D, P], +NG <: NtrlG[NatD[B]],
+  +SG <: ChannelRefG[K, D, P], +NG <: NtrlG[NatD[B]],
 ] extends PolarG[CollectedUD[D], P]
 
 final abstract class AddG[+G <: ExprG[CollectedUD[NatUD]]] extends ExprG[NatUD]
@@ -246,7 +246,7 @@ final abstract class WrapG[
   D <: TopD,
   +G <: ExprHG[D],
 ] extends ExprG[QuoteD[ConsM[NtrlG[D], BotQ]]]
-// todo I believe BotQ is incorrect here 
+// todo I believe BotQ is incorrect here
 
 final abstract class EvalG[
   D <: TopD, Q <: TopQ,
