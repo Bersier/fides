@@ -7,11 +7,15 @@ import fides.syntax.machinery.*
   */
 final case class Wrap[
   D <: TopD,
-  G <: ExprG[D], Q <: TopQ,
-  +M <: ConsM[G, Q],
-](value: M) extends ConsM[WrapG[D, G], Q]
+  G <: ExprHG[D], Q <: TopQ,
+  M <: ConsHM[G, Q],
+](value: Code[M]) extends Code[WrapM[D, G, Q, M]]
 
 /**
   * Evaluates a quoted expression.
   */
-final case class Eval[D <: TopD, Q <: TopQ](value: ConsM[ExprG[QuoteD[ExprG[D]]], Q]) extends ConsM[ExprG[D], Q]
+final case class Eval[
+  D <: TopD, QQ <: TopQ,
+  G <: ExprG[QuoteD[ConsM[ExprHG[D], QQ]]], Q <: TopQ,
+  M <: ConsHM[G, Q],
+](value: Code[M]) extends Code[EvalM[D, QQ, G, Q, M]]

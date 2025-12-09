@@ -55,6 +55,31 @@ object EscapeM:
   ] extends EscapeHM[TG, ConsQ[BotP, Q], ETM, EM]
 end EscapeM
 
+final abstract class ArgsM[
+  E <: TopE, G <: TopG, Q <: TopQ,
+  +M <: ConsHM[G, Q],
+] extends ConsHM[ArgsG[E, G], Q]
+
+final abstract class ZipM[
+  EG <: TopG, EQ <: TopQ,
+  E <: TopE, EM <: ConsHM[EG, EQ], P <: TopP,
+  G <: PolarG[CollectedD[E, QuoteD[EM]], P], Q <: TopQ,
+  +M <: ConsHM[G, Q],
+] extends ConsHM[ZipG[EG, EQ, E, EM, P, G], EQ | Q]
+
+final abstract class WrapM[
+  D <: TopD,
+  G <: ExprHG[D], Q <: TopQ,
+  +M <: ConsHM[G, Q],
+] extends ConsHM[WrapG[D, G], Q]
+
+final abstract class EvalM[
+  D <: TopD, QQ <: TopQ,
+  G <: ExprG[QuoteD[ConsM[ExprHG[D], QQ]]], Q <: TopQ,
+  +M <: ConsHM[G, Q],
+] extends ConsHM[EvalG[D, QQ, G], Q | QQ]
+// todo Qs
+
 final abstract class RepeatedM[
   G <: AplrG, Q <: TopQ,
   +M <: ConsHM[G, Q],

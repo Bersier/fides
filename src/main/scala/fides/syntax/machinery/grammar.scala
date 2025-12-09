@@ -26,6 +26,13 @@ final abstract class ArgsG[+E <: TopE, +G <: TopG] extends TopG
 // todo this is losing information, which is problematic
 type ArgsUG[+G <: TopG] = ArgsG[TopE, G]
 
+final abstract class ZipG[
+  EG <: TopG, EQ <: TopQ,
+  E <: TopE, EM <: ConsHM[EG, EQ], P <: TopP,
+  +G <: PolarG[CollectedD[E, QuoteD[EM]], P],
+] extends PolarG[QuoteD[ArgsM[E, EG, EQ, EM]], P]
+// todo Qs...
+
 final abstract class CaseG[D <: TopD, A <: AtomD] extends TopG
 
 final abstract class TypeG[D <: TopD] extends TopG
@@ -107,6 +114,11 @@ type TopPoG = PolrG[OffTopD, OffBotD]
   * If an expression of a given data type evaluates, it always evaluates to a value of that data type.
   */
 type ExprG[+D <: TopD] = PosG[D, TopB]
+
+/**
+  * Invariant helper version of [[ExprG]]
+  */
+private[syntax] type ExprHG[D <: TopD] = PolarG[D, GenP[BotB, TopB, TopB]]
 
 @deprecated
 type OldExprG[+D <: TopD] = PolrG[D, OffBotD]
@@ -231,5 +243,11 @@ final abstract class QuoteG[
 
 final abstract class WrapG[
   D <: TopD,
-  +G <: PolarG[D, GenP[BotB, TopB, TopB]],
+  +G <: ExprHG[D],
 ] extends ExprG[QuoteD[ConsM[NtrlG[D], BotQ]]]
+// todo I believe BotQ is incorrect here 
+
+final abstract class EvalG[
+  D <: TopD, Q <: TopQ,
+  +G <: ExprG[QuoteD[ConsM[ExprHG[D], Q]]],
+] extends ExprG[D]
