@@ -7,11 +7,11 @@ import fides.syntax.machinery.*
   */
 final case class Quote[
   TQ <: TopQ,
-  K <: TopK, KQ <: TopQ, P <: TopP, Q <: TopQ, TM <: ConsM[TopG, TQ],
+  K <: TopK, KQ <: TopQ, P <: TopP, Q <: TopQ, T2M <: ConsM[TopG, TQ], T1M <: ConsM[TopG, ConsQ[P, TopQ]],
   KM <: ConsM[NameG[K], KQ], M <: ConsM[TopG, ConsQ[P, Q]],
 ](name: Code[KM], code: Code[M])(
-  using Any, // todo MReductionR[TopN.Z, ConsQ[P, Q], TQ, M, TM],
-) extends Code[QuoteM[K, KQ, P, Q, TM, KM, M]]
+  using Any, // todo should fix T1M and T2M
+) extends Code[QuoteM[K, KQ, P, Q, T2M, T1M, KM, M]]
 
 /**
   * Allows escaping the body of a [[Quote]].

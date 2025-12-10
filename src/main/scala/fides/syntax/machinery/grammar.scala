@@ -86,6 +86,7 @@ final abstract class ChanRefG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extend
 // todo the new polarity system prevents us from having generic variance as needed.
 //  It forces us to specialize a polar to get any variance.
 //  Can we get the best of the old and the new system? Study EscapeM
+//  => switch to Polar2G
 
 final abstract class CellRefG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends RefG[K, D, P]
 
@@ -95,6 +96,15 @@ final abstract class CellRefG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extend
 sealed trait PolarG[D <: TopD, +P <: TopP] extends TopG
 type PosG[+D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[BotB, TopB, C]]
 type NegG[-D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[TopB, BotB, C]]
+
+sealed trait Polar2G[+`+D` <: TopD, D <: `+D`, -`-D` <: D, +P <: TopP] extends TopG
+
+// for use for parameter types; this way, the invariant D can be threaded/[kept track of] freely as a separate param
+type Pos2G[+`+D` <: TopD, D <: `+D`, +C <: TopB] = Polar2G[`+D`, D, BotD, GenP[BotB, TopB, C]]
+type Neg2G[D <: TopD, -`-D` <: D, +C <: TopB] = Polar2G[TopD, D, `-D`, GenP[BotB, TopB, C]]
+
+// for use after `extends`; the D sets all the Ds
+type Gen2G[D <: TopD, +P <: TopP] = Polar2G[D, D, D, P]
 
 @deprecated
 sealed trait OldPolarG[+P >: BotD, -N <: TopD, +IsLiteral <: Boolean] extends TopG
@@ -240,7 +250,10 @@ final abstract class PairG[
 final abstract class QuoteG[
   P <: TopP, TM <: TopM,
   +K <: TopK, +M <: ConsM[TopG, ConsQ[P, TopQ]],
-] extends PolarG[QuoteD[TM], P]
+  // todo perhaps M should itself already be reduced.
+  //  I think it might have to be reduced based on the quote names available from the context/outside.
+  //  Yes
+] extends Gen2G[QuoteD[TM], P]
 
 // todo summon[QuoteD[QuoteG[QuoteG[?, ?, RM], ?, ?]]] is invariant in RM!
 //  This might be the key to matching escape matchers at nauseam.

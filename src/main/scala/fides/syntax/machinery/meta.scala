@@ -16,17 +16,10 @@ type TopM = ConsM[TopG, TopQ]
   */
 private[syntax] sealed trait ConsHM[G <: TopG, +Q <: TopQ] extends ConsM[G, Q]
 
-/**
-  * // todo so this doesn't get out of date, make a private documentation class inside QuoteM's companion object
-  * `TM <: ConsM[G, ConsQ[P, BotQ]], +M <: ConsM[G, ConsQ[P, TopQ]]`
-  *
-  * @tparam TM is actually supposed to be derived from M
-  *            via the relation [[TrimmedR]]`[`...`, `[[M]]`, `[[TM]]`]` (See [[Quote]])
-  */
 final abstract class QuoteM[
-  K <: TopK, KQ <: TopQ, P <: TopP, Q <: TopQ, TM <: TopM,
-  +KM <: ConsM[NameG[K], KQ], M <: ConsM[TopG, ConsQ[P, Q]], // todo should M be covariant or invariant?
-] extends ConsHM[QuoteG[P, TM, K, M], Q | KQ]
+  K <: TopK, KQ <: TopQ, P <: TopP, Q <: TopQ, T2M <: TopM, T1M <: ConsM[TopG, ConsQ[P, TopQ]],
+  +KM <: ConsM[NameG[K], KQ], +M <: ConsM[TopG, ConsQ[P, Q]],
+] extends ConsHM[QuoteG[P, T2M, K, T1M], Q | KQ]
 
 final abstract class EscapeM[
   TG <: TopG,

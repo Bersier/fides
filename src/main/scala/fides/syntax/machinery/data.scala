@@ -10,7 +10,6 @@ sealed trait TopD private[machinery]()
 /**
   * Lower bound for all data types
   */
-@deprecated
 type BotD = Nothing
 // todo replace by true intersection, and use as bound everywhere appropriate
 
