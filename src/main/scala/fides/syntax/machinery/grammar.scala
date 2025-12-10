@@ -27,10 +27,10 @@ final abstract class ArgsG[+E <: TopE, +G <: TopG] extends TopG
 type ArgsUG[+G <: TopG] = ArgsG[TopE, G]
 
 final abstract class ZipG[
-  EG <: TopG, EQ <: TopQ,
+  EG <: TopG,
   E <: TopE, EM <: ConsHM[EG], P <: TopP,
   +G <: PolarG[CollectedD[E, QuoteD[EM]], P],
-] extends PolarG[QuoteD[ArgsM[E, EG, EQ, EM]], P]
+] extends PolarG[QuoteD[ArgsM[E, EG, EM]], P]
 // todo Qs...
 
 final abstract class CaseG[D <: TopD, A <: AtomD] extends TopG
@@ -241,12 +241,6 @@ final abstract class PairG[
   +G1 <: PolarG[D1, P1], +G2 <: PolarG[D2, P2],
 ] extends PolarG[PairD[D1, D2], P1 | P2]
 
-/**
-  * `TM <: ConsM[G, ConsQ[P, BotQ]], +M <: ConsM[G, ConsQ[P, TopQ]]`
-  *
-  * @tparam TM is actually supposed to be derived from M
-  *            via the relation [[TrimmedR]]`[`...`, `[[M]]`, `[[TM]]`]` (See [[Quote]])
-  */
 final abstract class QuoteG[
   P <: TopP, TM <: TopM,
   +K <: TopK, +M <: ConsM[TopG],
@@ -265,6 +259,6 @@ final abstract class WrapG[
 // todo I believe BotQ is incorrect here
 
 final abstract class EvalG[
-  D <: TopD, Q <: TopQ,
+  D <: TopD,
   +G <: ExprG[QuoteD[ConsM[ExprHG[D]]]],
 ] extends ExprG[D]

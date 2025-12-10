@@ -20,22 +20,22 @@ end NatLit
   * Outputs the sum of the inputs.
   */
 final case class Add[
-  G <: ExprG[CollectedUD[NatUD]], Q <: TopQ,
+  G <: ExprG[CollectedUD[NatUD]],
   M <: ConsHM[G],
-](terms: Code[M]) extends Code[AddM[G, Q, M]]
+](terms: Code[M]) extends Code[AddM[G, M]]
 
 /**
   * Outputs the product of the inputs.
   */
 final case class Multiply[
-  G <: ExprG[CollectedUD[NatUD]], Q <: TopQ,
+  G <: ExprG[CollectedUD[NatUD]],
   M <: ConsHM[G],
-](factors: Code[M]) extends Code[MultiplyM[G, Q, M]]
+](factors: Code[M]) extends Code[MultiplyM[G, M]]
 
 /**
   * Outputs [[True]] iff [[lhs]] is strictly smaller than [[rhs]].
   */
 final case class Compare[
-  G1 <: ExprG[NatUD], G2 <: ExprG[NatUD], Q1 <: TopQ, Q2 <: TopQ,
+  G1 <: ExprG[NatUD], G2 <: ExprG[NatUD],
   M1 <: ConsHM[G1], M2 <: ConsHM[G2],
-](lhs: Code[M1], rhs: Code[M2]) extends Code[CompareM[G1, G2, Q1, Q2, M1, M2]]
+](lhs: Code[M1], rhs: Code[M2]) extends Code[CompareM[G1, G2, M1, M2]]

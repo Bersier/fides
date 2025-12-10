@@ -9,40 +9,39 @@ case object False extends Code[ConsM[NtrlG[FalseD]]]
   * Outputs the conjunction of the inputs.
   */
 final case class Conjoin[
-  G <: ExprG[CollectedUD[BoolD]], Q <: TopQ,
+  G <: ExprG[CollectedUD[BoolD]],
   M <: ConsHM[G],
-](conjuncts: Code[M]) extends Code[ConjoinM[G, Q, M]]
+](conjuncts: Code[M]) extends Code[ConjoinM[G, M]]
 
 /**
   * Outputs the disjunction of the inputs.
   */
 final case class Disjoin[
-  G <: ExprG[CollectedUD[BoolD]], Q <: TopQ,
+  G <: ExprG[CollectedUD[BoolD]],
   M <: ConsHM[G],
-](conjuncts: Code[M]) extends Code[DisjoinM[G, Q, M]]
+](conjuncts: Code[M]) extends Code[DisjoinM[G, M]]
 
 /**
   * Outputs the negation of the input.
   */
 final case class Negate[
   D <: BoolD, P <: TopP,
-  G <: PolarG[D, P], Q <: TopQ,
+  G <: PolarG[D, P],
   M <: ConsHM[G],
-](value: Code[M]) extends Code[NegateM[D, P, G, Q, M]]
+](value: Code[M]) extends Code[NegateM[D, P, G, M]]
 
 /**
   * Outputs true iff the atoms are the same.
   */
 final case class Equal[
-  G <: ExprG[CollectedUD[AtomD]], Q <: TopQ,
+  G <: ExprG[CollectedUD[AtomD]],
   M <: ConsHM[G],
-](args: Code[M]) extends Code[EqualM[G, Q, M]]
+](args: Code[M]) extends Code[EqualM[G, M]]
 // todo not sure any atoms should be comparable... or perhaps it should be EqualByID?
 
 /**
   * Outputs True with probability 1/2, False with probability 1/2.
   */
 final case class RandomBit[
-  Q <: TopQ,
   M <: ConsM[RandomBitG],
-]() extends Code[RandomBitM[Q, M]]
+]() extends Code[RandomBitM[M]]

@@ -9,9 +9,9 @@ import typelevelnumbers.binary.Bits
 final case class Collected[
   D <: TopD, P <: TopP,
   E <: TopE, EG <: PolarG[D, P],
-  G <: ArgsG[E, EG], Q <: TopQ,
+  G <: ArgsG[E, EG],
   M <: ConsHM[G],
-](elements: Code[M]) extends Code[CollectedM[D, P, E, EG, G, Q, M]]
+](elements: Code[M]) extends Code[CollectedM[D, P, E, EG, G, M]]
 
 /**
   * As an [[ExprG]], outputs a Collected with one element added to it.
@@ -20,9 +20,9 @@ final case class Collected[
   */
 final case class AddElement[
   D <: TopD, EP <: TopP, P <: TopP,
-  EG <: PolarG[D, EP], G <: PolarG[CollectedUD[D], P], EQ <: TopQ, Q <: TopQ,
+  EG <: PolarG[D, EP], G <: PolarG[CollectedUD[D], P],
   EM <: ConsHM[EG], M <: ConsHM[G],
-](element: Code[EM], others: Code[M]) extends Code[AddElementM[D, EP, P, EG, G, EQ, Q, EM, M]]
+](element: Code[EM], others: Code[M]) extends Code[AddElementM[D, EP, P, EG, G, EM, M]]
 
 /**
   * As an [[ExprG]], waits for [[size]] elements from [[elementSource]], then outputs them as a Collected.
@@ -31,7 +31,7 @@ final case class AddElement[
   */
 final case class Collect[
   K <: TopK, D <: TopD, P >: BotVP <: TopP, B <: Bits,
-  SG <: ChanRefG[K, D, P], NG <: NtrlG[NatD[B]], SQ <: TopQ, NQ <: TopQ,
+  SG <: ChanRefG[K, D, P], NG <: NtrlG[NatD[B]],
   SM <: ConsHM[SG], NM <: ConsHM[NG],
-](elementSource: Code[SM], size: Code[NM]) extends Code[CollectM[K, D, P, B, SG, NG, SQ, NQ, SM, NM]]
+](elementSource: Code[SM], size: Code[NM]) extends Code[CollectM[K, D, P, B, SG, NG, SM, NM]]
 // todo does it only start collecting after having received [[size]]?
