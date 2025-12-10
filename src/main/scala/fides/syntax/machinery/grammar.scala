@@ -97,6 +97,11 @@ sealed trait PolarG[D <: TopD, +P <: TopP] extends TopG
 type PosG[+D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[BotB, TopB, C]]
 type NegG[-D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[TopB, BotB, C]]
 
+// todo I think the invariant D is to be inferred from the outside in (type analysis / checking)
+//  No, I don't think so. It should keep track invariantly of the "true" type.
+//  Yes, I think so.
+//  I think we should get rid of it. And we probably need to do the same spiel for everything: for Ms and for Gs
+//  So each would come in covariant-contravariant pairs. Or rather just for ConsM. So it will have two Gs.
 sealed trait Polar2G[+`D+` <: TopD, D <: `D+`, -`D-` <: D, +P <: TopP] extends TopG
 
 // for use for parameter types; this way, the invariant D can be threaded/[kept track of] freely as a separate param
@@ -250,13 +255,12 @@ final abstract class PairG[
 final abstract class QuoteG[
   P <: TopP, T2M <: TopM,
   +K <: TopK, +T1M <: TopM,
-] extends Plr2G[QuoteD[T2M], P]
+] extends Plr2G[QuoteD[T2M], P] // todo is this correct?
 
 final abstract class WrapG[
   D <: TopD,
   +G <: ExprHG[D],
 ] extends ExprG[QuoteD[ConsM[NtrlG[D]]]]
-// todo I believe BotQ is incorrect here
 
 final abstract class EvalG[
   D <: TopD,

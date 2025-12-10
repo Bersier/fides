@@ -19,6 +19,6 @@ final case class Quote[
   */
 final case class Escape[
   TG <: TopG,
-  K <: TopK, TM <: ConsHM[TG],
-  KM <: ConsM[NameG[K]], M <: ConsM[PolarG[QuoteD[TM], TopP]],
-](name: Code[KM], quote: Code[M]) extends Code[EscapeM[TG, K, TM, KM, M]]
+  TM <: ConsHM[TG],
+  KM <: ConsHM[NameG[TopK]], M <: ConsM[PolarG[QuoteD[TM], TopP]],
+](name: Code[KM], quote: Code[M]) extends Code[EscapeM[TG, TM, KM, M]]

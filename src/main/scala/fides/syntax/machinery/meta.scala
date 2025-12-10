@@ -8,7 +8,7 @@ import typelevelnumbers.binary.Bits
   * including the full metaprogramming landscape (aka <i>scapes</i>)
   */
 trait ConsM[+G <: TopG] private[syntax]() // todo seal
-// todo maybe Q should not be in here at all, but rather in Code
+// todo rename ConsM to something else. GenM?
 type TopM = ConsM[TopG]
 
 /**
@@ -23,10 +23,8 @@ final abstract class QuoteM[
 
 final abstract class EscapeM[
   TG <: TopG,
-  K <: TopK, TM <: ConsHM[TG],
-  // todo P and Q are loose, as I suspect they are in many places.
-  //  Is that an issue? We could tighten them with helper types.
-  +KM <: ConsM[NameG[K]], +M <: ConsM[PolarG[QuoteD[TM], TopP]],
+  TM <: ConsHM[TG],
+  +KM <: ConsHM[NameG[TopK]], +M <: ConsM[PolarG[QuoteD[TM], TopP]],
 ] extends ConsHM[TG]
 
 final abstract class ArgsM[
@@ -52,7 +50,6 @@ final abstract class EvalM[
   G <: ExprG[QuoteD[ConsM[ExprHG[D]]]],
   +M <: ConsHM[G],
 ] extends ConsHM[EvalG[D, G]]
-// todo Qs
 
 final abstract class RepeatedM[
   G <: AplrG,
