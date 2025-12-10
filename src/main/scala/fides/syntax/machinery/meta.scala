@@ -17,8 +17,8 @@ type TopM = ConsM[TopG]
 private[syntax] sealed trait ConsHM[G <: TopG] extends ConsM[G]
 
 final abstract class QuoteM[
-  K <: TopK, P <: TopP, T2M <: TopM, T1M <: ConsM[TopG],
-  +KM <: ConsM[NameG[K]], +M <: ConsM[TopG],
+  K <: TopK, P <: TopP, T2M <: TopM, T1M <: TopM,
+  +KM <: ConsHM[NameG[K]], +M <: TopM,
 ] extends ConsHM[QuoteG[P, T2M, K, T1M]]
 
 final abstract class EscapeM[

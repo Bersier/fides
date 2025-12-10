@@ -104,7 +104,7 @@ type Pos2G[+`D+` <: TopD, D <: `D+`, +C <: TopB] = Polar2G[`D+`, D, BotD, GenP[B
 type Neg2G[D <: TopD, -`D-` <: D, +C <: TopB] = Polar2G[TopD, D, `D-`, GenP[BotB, TopB, C]]
 
 // for use after `extends`; the D sets all the Ds
-type Gen2G[D <: TopD, +P <: TopP] = Polar2G[D, D, D, P]
+type Plr2G[D <: TopD, +P <: TopP] = Polar2G[D, D, D, P]
 
 @deprecated
 sealed trait OldPolarG[+P >: BotD, -N <: TopD, +IsLiteral <: Boolean] extends TopG
@@ -241,16 +241,16 @@ final abstract class PairG[
   +G1 <: Polar2G[`D1+`, D1, `D1-`, P1], +G2 <: Polar2G[`D2+`, D2, `D2-`, P2],
 ] extends Polar2G[PairD[`D1+`, `D2+`], PairD[D1, D2], PairD[`D1-`, `D2-`], P1 | P2]
 
+/**
+  * @tparam P is the meta-polarity of T1M
+  * @tparam T2M is T1M after further reducing at this quote (so at this [[K]])
+  * @tparam K tracks the name of this quote.
+  * @tparam T1M is the reduced landscape that has no more escapes that are bound to quotes outside of this one.
+  */
 final abstract class QuoteG[
-  P <: TopP, TM <: TopM,
-  +K <: TopK, +M <: ConsM[TopG],
-  // todo perhaps M should itself already be reduced.
-  //  I think it might have to be reduced based on the quote names available from the context/outside.
-  //  Yes
-] extends Gen2G[QuoteD[TM], P]
-
-// todo summon[QuoteD[QuoteG[QuoteG[?, ?, RM], ?, ?]]] is invariant in RM!
-//  This might be the key to matching escape matchers at nauseam.
+  P <: TopP, T2M <: TopM,
+  +K <: TopK, +T1M <: TopM,
+] extends Plr2G[QuoteD[T2M], P]
 
 final abstract class WrapG[
   D <: TopD,
