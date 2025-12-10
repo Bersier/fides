@@ -99,7 +99,10 @@ sealed trait PolarG[D <: TopD, +P <: TopP] extends TopG
 type PosG[+D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[BotB, TopB, C]]
 type NegG[-D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[TopB, BotB, C]]
 
-sealed trait Polar2G[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: `D+` & TopD, +P <: TopP] extends TopG
+sealed trait Polar2G[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP] extends TopG
+type Polar2ExtG[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: `D+` & TopD, +P <: TopP] = Polar2G[`D+`, `D-`, P]
+
+type Polr2BotG[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP] = Nothing // todo
 
 type Pos2G[+`D+` <: TopD, +C <: TopB] = Polar2G[`D+`, BotD, GenP[BotB, TopB, C]]
 type Neg2G[-`D-` <: TopD, +C <: TopB] = Polar2G[TopD, `D-`, GenP[BotB, TopB, C]]
@@ -240,11 +243,19 @@ final abstract class MultiplyG[+G <: ExprG[CollectedUD[NatUD]]] extends ExprG[Na
 final abstract class CompareG[+G1 <: ExprG[NatUD], +G2 <: ExprG[NatUD]] extends ExprG[BoolD]
 
 final abstract class PairG[
-  +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: `D1+` & TopD,
-  +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: `D2+` & TopD,
-  +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
+  +`D+` >: PairD[BotD, BotD] <: OffTopD, -`D-` >: OffBotD <: PairD[TopD, TopD], +P >: BotP <: TopP,
   +G1, +G2,
-] extends Polar2G[PairD[`D1+`, `D2+`], PairD[`D1-`, `D2-`], P1 | P2]
+] extends Polar2G[`D+`, `D-`, P]
+
+// todo it does feel like we need two different things: one to carry the Gs, and one to define the grammar
+//  the version above does not define the grammar as far as I can tell.
+
+//final abstract class PairG[
+//  +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: `D1+` & TopD,
+//  +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: `D2+` & TopD,
+//  +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
+//  +G1, +G2,
+//] extends Polar2G[PairD[`D1+`, `D2+`], PairD[`D1-`, `D2-`], P1 | P2]
 // todo I think we might need variance annotations on helper types, lest they mess up the hierarchy
 
 /**

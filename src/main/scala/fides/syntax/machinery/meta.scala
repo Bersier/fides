@@ -11,7 +11,7 @@ trait ConsM[+G <: TopG] private[syntax]() // todo seal
 // todo rename ConsM to something else. GenM?
 type TopM = ConsM[TopG]
 
-sealed trait GenM2[+`G+` >: BotG, -`G-` <: `G+` & TopG] private[syntax]()
+sealed trait GenM2[+`G+` >: BotG, -`G-` <: TopG] private[syntax]()
 type TopM2 = GenM2[Any, BotG]
 
 /**
@@ -124,17 +124,26 @@ final abstract class CompareM[
 ] extends ConsHM[CompareG[G1, G2]]
 
 final abstract class PairM[
-  `D1++` >: BotD <: OffTopD, `D1-+` >: OffBotD <: `D1++` & TopD,
-  `D2++` >: BotD <: OffTopD, `D2-+` >: OffBotD <: `D2++` & TopD,
-  `P1+` >: BotP <: TopP, `P2+` >: BotP <: TopP,
-  `D1+-` >: BotD <: `D1++`, `D1--` >: `D1-+` <: `D1+-` & TopD,
-  `D2+-` >: BotD <: `D2++`, `D2--` >: `D2-+` <: `D2+-` & TopD,
-  `P1-` >: BotP <: `P1+`, `P2-` >: BotP <: `P2+`,
-  `G1+` >: Polar2G[`D1++`, `D1-+`, `P1+`], `G2+` >: Polar2G[`D2++`, `D2-+`, `P2+`],
-  `G1-` <: Polar2G[`D1+-`, `D1--`, `P1-`], `G2-` <: Polar2G[`D2+-`, `D2--`, `P2-`],
+  +`G1+` >: Polr2BotG[BotD, TopD, BotP], +`G2+` >: Polr2BotG[BotD, TopD, BotP],
+  -`G1-` <: Polar2G[OffTopD, OffBotD, BotP], -`G2-` <: Polar2G[OffTopD, OffBotD, BotP],
+  +`G+` >: PairG[PairD[BotD, BotD], PairD[TopD, TopD], BotP, `G1+`, `G2+`],
+  -`G-` <: PairG[OffTopD, OffBotD, TopP, `G1-`, `G2-`],
   +M1 <: GenM2[`G1+`, `G1-`], +M2 <: GenM2[`G2+`, `G2-`],
-] extends GenM2[
-  PairG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`],
-  PairG[`D1+-`, `D1--`, `D2+-`, `D2--`, `P1-`, `P2-`, `G1-`, `G2-`],
-]
+] extends GenM2[`G+`, `G-`]
+// todo this does not secure the grammar
+
+//final abstract class PairM[
+//  `D1++` >: BotD <: OffTopD, `D1-+` >: OffBotD <: `D1++` & TopD,
+//  `D2++` >: BotD <: OffTopD, `D2-+` >: OffBotD <: `D2++` & TopD,
+//  `P1+` >: BotP <: TopP, `P2+` >: BotP <: TopP,
+//  `D1+-` >: BotD <: `D1++`, `D1--` >: `D1-+` <: `D1+-` & TopD,
+//  `D2+-` >: BotD <: `D2++`, `D2--` >: `D2-+` <: `D2+-` & TopD,
+//  `P1-` >: BotP <: `P1+`, `P2-` >: BotP <: `P2+`,
+//  +`G1+` >: Polar2G[`D1++`, `D1-+`, `P1+`], +`G2+` >: Polar2G[`D2++`, `D2-+`, `P2+`],
+//  -`G1-` <: Polar2G[`D1+-`, `D1--`, `P1-`], -`G2-` <: Polar2G[`D2+-`, `D2--`, `P2-`],
+//  +M1 <: GenM2[`G1+`, `G1-`], +M2 <: GenM2[`G2+`, `G2-`],
+//] extends GenM2[
+//  PairG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`],
+//  PairG[`D1+-`, `D1--`, `D2+-`, `D2--`, `P1-`, `P2-`, `G1-`, `G2-`],
+//]
 // todo add variance
