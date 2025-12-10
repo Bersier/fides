@@ -8,7 +8,7 @@ import fides.syntax.machinery.*
 final case class Wrap[
   D <: TopD,
   G <: ExprHG[D], Q <: TopQ,
-  M <: ConsHM[G, Q],
+  M <: ConsHM[G],
 ](value: Code[M]) extends Code[WrapM[D, G, Q, M]]
 
 /**
@@ -16,8 +16,8 @@ final case class Wrap[
   */
 final case class Eval[
   D <: TopD, QQ <: TopQ,
-  G <: ExprG[QuoteD[ConsM[ExprHG[D], QQ]]], Q <: TopQ,
-  M <: ConsHM[G, Q],
+  G <: ExprG[QuoteD[ConsM[ExprHG[D]]]], Q <: TopQ,
+  M <: ConsHM[G],
 ](value: Code[M]) extends Code[EvalM[D, QQ, G, Q, M]]
 
 /* todo

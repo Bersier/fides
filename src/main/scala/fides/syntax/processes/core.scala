@@ -36,7 +36,7 @@ final case class Scope(declarations: OldCode[ArgsUG[DeclG[?]]], body: OldCode[Ap
   */
 final case class Repeated[
   G <: AplrG, Q <: TopQ,
-  M <: ConsHM[G, Q],
+  M <: ConsHM[G],
 ](body: Code[M]) extends Code[RepeatedM[G, Q, M]]
 
 /**
@@ -44,5 +44,5 @@ final case class Repeated[
   */
 final case class Concurrent[
   G <: ArgsUG[AplrG], Q <: TopQ,
-  M <: ConsHM[G, Q],
+  M <: ConsHM[G],
 ](processes: Code[M]) extends Code[ConcurrentM[G, Q, M]]

@@ -28,7 +28,7 @@ type ArgsUG[+G <: TopG] = ArgsG[TopE, G]
 
 final abstract class ZipG[
   EG <: TopG, EQ <: TopQ,
-  E <: TopE, EM <: ConsHM[EG, EQ], P <: TopP,
+  E <: TopE, EM <: ConsHM[EG], P <: TopP,
   +G <: PolarG[CollectedD[E, QuoteD[EM]], P],
 ] extends PolarG[QuoteD[ArgsM[E, EG, EQ, EM]], P]
 // todo Qs...
@@ -249,7 +249,7 @@ final abstract class PairG[
   */
 final abstract class QuoteG[
   P <: TopP, TM <: TopM,
-  +K <: TopK, +M <: ConsM[TopG, ConsQ[P, TopQ]],
+  +K <: TopK, +M <: ConsM[TopG],
   // todo perhaps M should itself already be reduced.
   //  I think it might have to be reduced based on the quote names available from the context/outside.
   //  Yes
@@ -261,10 +261,10 @@ final abstract class QuoteG[
 final abstract class WrapG[
   D <: TopD,
   +G <: ExprHG[D],
-] extends ExprG[QuoteD[ConsM[NtrlG[D], BotQ]]]
+] extends ExprG[QuoteD[ConsM[NtrlG[D]]]]
 // todo I believe BotQ is incorrect here
 
 final abstract class EvalG[
   D <: TopD, Q <: TopQ,
-  +G <: ExprG[QuoteD[ConsM[ExprHG[D], Q]]],
+  +G <: ExprG[QuoteD[ConsM[ExprHG[D]]]],
 ] extends ExprG[D]

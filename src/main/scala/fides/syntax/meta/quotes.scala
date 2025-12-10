@@ -7,8 +7,8 @@ import fides.syntax.machinery.*
   */
 final case class Quote[
   TQ <: TopQ,
-  K <: TopK, KQ <: TopQ, P <: TopP, Q <: TopQ, T2M <: ConsM[TopG, TQ], T1M <: ConsM[TopG, ConsQ[P, TopQ]],
-  KM <: ConsM[NameG[K], KQ], M <: ConsM[TopG, ConsQ[P, Q]],
+  K <: TopK, KQ <: TopQ, P <: TopP, Q <: TopQ, T2M <: ConsM[TopG], T1M <: ConsM[TopG],
+  KM <: ConsM[NameG[K]], M <: ConsM[TopG],
 ](name: Code[KM], code: Code[M])(
   using Any, // todo should fix T1M and T2M
 ) extends Code[QuoteM[K, KQ, P, Q, T2M, T1M, KM, M]]
@@ -18,6 +18,6 @@ final case class Quote[
   */
 final case class Escape[
   TG <: TopG,
-  K <: TopK, KQ <: TopQ, TM <: ConsHM[TG, TopQ], P <: TopP, Q <: TopQ,
-  KM <: ConsM[NameG[K], KQ], M <: ConsM[PolarG[QuoteD[TM], P], Q],
+  K <: TopK, KQ <: TopQ, TM <: ConsHM[TG], P <: TopP, Q <: TopQ,
+  KM <: ConsM[NameG[K]], M <: ConsM[PolarG[QuoteD[TM], P]],
 ](name: Code[KM], quote: Code[M]) extends Code[EscapeM[TG, K, KQ, TM, P, Q, KM, M]]

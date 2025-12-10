@@ -2,15 +2,15 @@ package fides.syntax.values
 
 import fides.syntax.machinery.*
 
-case object True extends Code[ConsM[NtrlG[TrueD], BotQ]]
-case object False extends Code[ConsM[NtrlG[FalseD], BotQ]]
+case object True extends Code[ConsM[NtrlG[TrueD]]]
+case object False extends Code[ConsM[NtrlG[FalseD]]]
 
 /**
   * Outputs the conjunction of the inputs.
   */
 final case class Conjoin[
   G <: ExprG[CollectedUD[BoolD]], Q <: TopQ,
-  M <: ConsHM[G, Q],
+  M <: ConsHM[G],
 ](conjuncts: Code[M]) extends Code[ConjoinM[G, Q, M]]
 
 /**
@@ -18,7 +18,7 @@ final case class Conjoin[
   */
 final case class Disjoin[
   G <: ExprG[CollectedUD[BoolD]], Q <: TopQ,
-  M <: ConsHM[G, Q],
+  M <: ConsHM[G],
 ](conjuncts: Code[M]) extends Code[DisjoinM[G, Q, M]]
 
 /**
@@ -27,7 +27,7 @@ final case class Disjoin[
 final case class Negate[
   D <: BoolD, P <: TopP,
   G <: PolarG[D, P], Q <: TopQ,
-  M <: ConsHM[G, Q],
+  M <: ConsHM[G],
 ](value: Code[M]) extends Code[NegateM[D, P, G, Q, M]]
 
 /**
@@ -35,7 +35,7 @@ final case class Negate[
   */
 final case class Equal[
   G <: ExprG[CollectedUD[AtomD]], Q <: TopQ,
-  M <: ConsHM[G, Q],
+  M <: ConsHM[G],
 ](args: Code[M]) extends Code[EqualM[G, Q, M]]
 // todo not sure any atoms should be comparable... or perhaps it should be EqualByID?
 
@@ -44,5 +44,5 @@ final case class Equal[
   */
 final case class RandomBit[
   Q <: TopQ,
-  M <: ConsM[RandomBitG, Q],
+  M <: ConsM[RandomBitG],
 ]() extends Code[RandomBitM[Q, M]]

@@ -10,7 +10,7 @@ final case class Collected[
   D <: TopD, P <: TopP,
   E <: TopE, EG <: PolarG[D, P],
   G <: ArgsG[E, EG], Q <: TopQ,
-  M <: ConsHM[G, Q],
+  M <: ConsHM[G],
 ](elements: Code[M]) extends Code[CollectedM[D, P, E, EG, G, Q, M]]
 
 /**
@@ -21,7 +21,7 @@ final case class Collected[
 final case class AddElement[
   D <: TopD, EP <: TopP, P <: TopP,
   EG <: PolarG[D, EP], G <: PolarG[CollectedUD[D], P], EQ <: TopQ, Q <: TopQ,
-  EM <: ConsHM[EG, EQ], M <: ConsHM[G, Q],
+  EM <: ConsHM[EG], M <: ConsHM[G],
 ](element: Code[EM], others: Code[M]) extends Code[AddElementM[D, EP, P, EG, G, EQ, Q, EM, M]]
 
 /**
@@ -32,6 +32,6 @@ final case class AddElement[
 final case class Collect[
   K <: TopK, D <: TopD, P >: BotVP <: TopP, B <: Bits,
   SG <: ChanRefG[K, D, P], NG <: NtrlG[NatD[B]], SQ <: TopQ, NQ <: TopQ,
-  SM <: ConsHM[SG, SQ], NM <: ConsHM[NG, NQ],
+  SM <: ConsHM[SG], NM <: ConsHM[NG],
 ](elementSource: Code[SM], size: Code[NM]) extends Code[CollectM[K, D, P, B, SG, NG, SQ, NQ, SM, NM]]
 // todo does it only start collecting after having received [[size]]?
