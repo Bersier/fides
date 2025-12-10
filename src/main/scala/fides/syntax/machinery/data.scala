@@ -2,12 +2,15 @@ package fides.syntax.machinery
 
 import typelevelnumbers.binary.Bits
 
+sealed trait PairOffTopD[+D1 >: OffBotD <: OffTopD, +D2 >: OffBotD <: OffTopD] private[machinery]()
+type PairOffBotD[+D1 >: OffBotD <: OffTopD, +D2 >: OffBotD <: OffTopD] = Nothing // todo
+
 /**
   * A type greater than [[TopD]]
   *
   * Indicates an unreachable data type in contravariant position.
   */
-sealed trait OffTopD private[machinery]()
+type OffTopD = PairOffTopD[?, ?]
 
 /**
   * Parent type of all the Scala types that represent Fides data/value types
@@ -36,7 +39,7 @@ type OffBotD = Nothing
   */
 sealed trait AtomD extends TopD
 
-final abstract class PairD[+D1 >: OffBotD <: OffTopD, +D2 >: OffBotD <: OffTopD] extends TopD
+final abstract class PairD[+D1 >: OffBotD <: OffTopD, +D2 >: OffBotD <: OffTopD] extends PairOffTopD[D1, D2], TopD
 
 /**
   * The type of a record is a set of key-value pairs. But we cannot represent unordered types in Scala,

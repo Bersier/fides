@@ -4,11 +4,13 @@ import typelevelnumbers.binary.Bits
 
 import scala.annotation.unchecked.uncheckedVariance
 
+sealed trait PolarOffTopG[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP] private[machinery]()
+
 /**
   * Parent type of all the Scala types that represent
   * the different types (aka syntactic categories) of possible Fides code, excluding metaprogramming
   */
-sealed trait TopG private[machinery]()
+type TopG = PolarOffTopG[OffTopD, OffBotD, TopP]
 
 type BotG = Nothing // todo
 
@@ -99,7 +101,7 @@ sealed trait PolarG[D <: TopD, +P <: TopP] extends TopG
 type PosG[+D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[BotB, TopB, C]]
 type NegG[-D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[TopB, BotB, C]]
 
-sealed trait Polar2G[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP] extends TopG
+sealed trait Polar2G[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP] extends PolarOffTopG[`D+`, `D-`, P]
 type Polar2ExtG[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: `D+` & TopD, +P <: TopP] = Polar2G[`D+`, `D-`, P]
 
 type Polr2BotG[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP] = Nothing // todo
@@ -248,7 +250,6 @@ final abstract class PairG[
 ] extends Polar2G[`D+`, `D-`, P]
 
 // todo it does feel like we need two different things: one to carry the Gs, and one to define the grammar
-//  the version above does not define the grammar as far as I can tell.
 
 //final abstract class PairG[
 //  +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: `D1+` & TopD,
