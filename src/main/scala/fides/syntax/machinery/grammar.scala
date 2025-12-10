@@ -97,11 +97,11 @@ sealed trait PolarG[D <: TopD, +P <: TopP] extends TopG
 type PosG[+D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[BotB, TopB, C]]
 type NegG[-D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[TopB, BotB, C]]
 
-sealed trait Polar2G[+`+D` <: TopD, D <: `+D`, -`-D` <: D, +P <: TopP] extends TopG
+sealed trait Polar2G[+`D+` <: TopD, D <: `D+`, -`D-` <: D, +P <: TopP] extends TopG
 
 // for use for parameter types; this way, the invariant D can be threaded/[kept track of] freely as a separate param
-type Pos2G[+`+D` <: TopD, D <: `+D`, +C <: TopB] = Polar2G[`+D`, D, BotD, GenP[BotB, TopB, C]]
-type Neg2G[D <: TopD, -`-D` <: D, +C <: TopB] = Polar2G[TopD, D, `-D`, GenP[BotB, TopB, C]]
+type Pos2G[+`D+` <: TopD, D <: `D+`, +C <: TopB] = Polar2G[`D+`, D, BotD, GenP[BotB, TopB, C]]
+type Neg2G[D <: TopD, -`D-` <: D, +C <: TopB] = Polar2G[TopD, D, `D-`, GenP[BotB, TopB, C]]
 
 // for use after `extends`; the D sets all the Ds
 type Gen2G[D <: TopD, +P <: TopP] = Polar2G[D, D, D, P]
@@ -237,9 +237,9 @@ final abstract class MultiplyG[+G <: ExprG[CollectedUD[NatUD]]] extends ExprG[Na
 final abstract class CompareG[+G1 <: ExprG[NatUD], +G2 <: ExprG[NatUD]] extends ExprG[BoolD]
 
 final abstract class PairG[
-  D1 <: TopD, D2 <: TopD, P1 <: TopP, P2 <: TopP,
-  +G1 <: PolarG[D1, P1], +G2 <: PolarG[D2, P2],
-] extends PolarG[PairD[D1, D2], P1 | P2]
+  `D1+` <: TopD, D1 <: `D1+`, `D1-` <: D1, `D2+` <: TopD, D2 <: `D2+`, `D2-` <: D2, P1 <: TopP, P2 <: TopP,
+  +G1 <: Polar2G[`D1+`, D1, `D1-`, P1], +G2 <: Polar2G[`D2+`, D2, `D2-`, P2],
+] extends Polar2G[PairD[`D1+`, `D2+`], PairD[D1, D2], PairD[`D1-`, `D2-`], P1 | P2]
 
 final abstract class QuoteG[
   P <: TopP, TM <: TopM,

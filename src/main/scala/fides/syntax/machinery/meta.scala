@@ -124,7 +124,7 @@ final abstract class CompareM[
 ] extends ConsHM[CompareG[G1, G2]]
 
 final abstract class PairM[
-  D1 <: TopD, D2 <: TopD, P1 <: TopP, P2 <: TopP,
-  G1 <: PolarG[D1, P1], G2 <: PolarG[D2, P2],
+  `D1+` <: TopD, D1 <: `D1+`, `D1-` <: D1, `D2+` <: TopD, D2 <: `D2+`, `D2-` <: D2, P1 <: TopP, P2 <: TopP,
+  G1 <: Polar2G[`D1+`, D1, `D1-`, P1], G2 <: Polar2G[`D2+`, D2, `D2-`, P2],
   +M1 <: ConsHM[G1], +M2 <: ConsHM[G2],
-] extends ConsHM[PairG[D1, D2, P1, P2, G1, G2]]
+] extends ConsHM[PairG[`D1+`, D1, `D1-`, `D2+`, D2, `D2-`, P1, P2, G1, G2]]
