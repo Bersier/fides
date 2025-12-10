@@ -10,14 +10,24 @@ import fides.syntax.values.*
   * type that is a supertype of that of actual escapes.
   */
 trait Code[M <: TopM] private[syntax]()
-object Code:
+
+trait Code2[M <: TopM2] private[syntax]()
+object Code2:
   given [
-    `D1+` <: TopD, D1 <: `D1+`, `D1-` <: D1, `D2+` <: TopD, D2 <: `D2+`, `D2-` <: D2, P1 <: TopP, P2 <: TopP,
-    G1 <: Polar2G[`D1+`, D1, `D1-`, P1], G2 <: Polar2G[`D2+`, D2, `D2-`, P2],
-    M1 <: ConsHM[G1], M2 <: ConsHM[G2],
-  ] => (c1: Code[M1], c2: Code[M2]) => Code[PairM[`D1+`, D1, `D1-`, `D2+`, D2, `D2-`, P1, P2, G1, G2, M1, M2]] =
-    Pair(c1, c2)
-end Code
+  `D1++` >: BotD <: OffTopD, `D1-+` >: OffBotD <: `D1+-` & TopD,
+  `D2++` >: BotD <: OffTopD, `D2-+` >: OffBotD <: `D2+-` & TopD,
+  `P1+` >: BotP <: TopP, `P2+` >: BotP <: TopP,
+  `D1+-` >: BotD <: `D1++`, `D1--` >: `D1-+` <: `D1+-` & TopD,
+  `D2+-` >: BotD <: `D2++`, `D2--` >: `D2-+` <: `D2+-` & TopD,
+  `P1-` >: BotP <: `P1+`, `P2-` >: BotP <: `P2+`,
+  `G1+` >: Polar2G[`D1++`, `D1-+`, `P1+`], `G2+` >: Polar2G[`D2++`, `D2-+`, `P2+`],
+  `G1-` <: Polar2G[`D1+-`, `D1--`, `P1-`], `G2-` <: Polar2G[`D2+-`, `D2--`, `P2-`],
+  M1 <: GenM2[`G1+`, `G1-`], M2 <: GenM2[`G2+`, `G2-`],
+] => (c1: Code2[M1], c2: Code2[M2]) => Code2[PairM[
+  `D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `D1+-`, `D1--`, `D2+-`, `D2--`, `P1-`, `P2-`,
+  `G1+`, `G2+`, `G1-`, `G2-`, M1, M2,
+]] = Pair(c1, c2)
+end Code2
 
 @deprecated
 trait OldCode[+G <: TopG] private[syntax]()

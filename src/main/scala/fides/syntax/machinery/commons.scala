@@ -25,7 +25,7 @@ type BotQ = Nothing
 final abstract class GenP[+Positive <: TopB, +Negative <: TopB, +Constant <: TopB]
 type TopP = GenP[TopB, TopB, TopB]
 type BotVP = GenP[BotB, BotB, TopB]
-type BotP = GenP[BotB, BotB, BotB]
+type BotP = Nothing // todo GenP[BotB, BotB, BotB]
 
 /**
   * Type-level Boolean used to keep track of whether a collection is empty
