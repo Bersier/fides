@@ -132,10 +132,13 @@ final abstract class PairM[
   +`G2+` <: TopG,
   -`G1-` >: Nothing, // todo
   -`G2-` >: Nothing, // todo
-  +`G+` >: PairG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`], // todo this lower bound is too loose
+  +`G+` >: PairG[
+    `D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`,
+    `G1+` & Polar2G[`D1++`, `D1-+`, `P1+`], `G2+` & Polar2G[`D2++`, `D2-+`, `P2+`], // todo wrong; G components are lost
+  ],
   -`G-` <: Any, // todo
-  +M1 <: GenM2[`G1+`, `G1-`], +M2 <: GenM2[`G2+`, `G2-`],
+  +M1 <: GenM2[`G1+`, /*`G1-`*/Nothing], +M2 <: GenM2[`G2+`, /*`G2-`*/Nothing],
 ](using
-  `G1+` & Polar2G[TopD, BotD, TopP] <:< Polar2G[`D1++`, `D1-+`, `P1+`],
-  `G2+` & Polar2G[TopD, BotD, TopP] <:< Polar2G[`D2++`, `D2-+`, `P2+`],
-) extends GenM2[`G+`, `G-`]
+  `G1+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D1++`, `D1-+`, `P1+`],
+  `G2+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D2++`, `D2-+`, `P2+`],
+) extends GenM2[`G+`, /*`G-`*/Nothing]
