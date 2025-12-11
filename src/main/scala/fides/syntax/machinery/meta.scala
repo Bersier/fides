@@ -128,10 +128,8 @@ final abstract class CompareM[
 //  +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
 //  +`D1+-` >: BotD <: OffTopD, -`D1--` >: OffBotD <: TopD, +`P1-` >: BotP <: TopP,
 //  +`D2+-` >: BotD <: OffTopD, -`D2--` >: OffBotD <: TopD, +`P2-` >: BotP <: TopP,
-//  +`G1+` <: Polar2G[`D1++`, `D1-+`, `P1+`],
-  // todo actually, G1+ doesn't have to be a subtype of polar, right?
-  //  Let's look at the L trick with implicits we used in the past
-//  +`G2+` <: Polar2G[`D2++`, `D2-+`, `P2+`],
+//  +`G1+` | Polar2G[BotD, TopD, BotP] >: Polar2G[`D1++`, `D1-+`, `P1+`], // todo not Scala code
+//  +`G2+` | Polar2G[BotD, TopD, BotP] >: Polar2G[`D2++`, `D2-+`, `P2+`],
 //  -`G1-` >: Nothing, // todo
 //  -`G2-` >: Nothing, // todo
 //  +`G+` >: PairG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`],
