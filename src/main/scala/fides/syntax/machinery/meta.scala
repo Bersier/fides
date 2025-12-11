@@ -123,16 +123,19 @@ final abstract class CompareM[
   +M1 <: ConsHM[G1], +M2 <: ConsHM[G2],
 ] extends ConsHM[CompareG[G1, G2]]
 
-//final abstract class PairM[
-//  +`D1++` >: BotD <: OffTopD, -`D1-+` >: OffBotD <: TopD, +`P1+` >: BotP <: TopP,
-//  +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
-//  +`D1+-` >: BotD <: OffTopD, -`D1--` >: OffBotD <: TopD, +`P1-` >: BotP <: TopP,
-//  +`D2+-` >: BotD <: OffTopD, -`D2--` >: OffBotD <: TopD, +`P2-` >: BotP <: TopP,
-//  +`G1+` | Polar2G[BotD, TopD, BotP] >: Polar2G[`D1++`, `D1-+`, `P1+`], // todo not Scala code
-//  +`G2+` | Polar2G[BotD, TopD, BotP] >: Polar2G[`D2++`, `D2-+`, `P2+`],
-//  -`G1-` >: Nothing, // todo
-//  -`G2-` >: Nothing, // todo
-//  +`G+` >: PairG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`],
-//  -`G-` <: Any, // todo
-//  +M1 <: GenM2[`G1+`, `G1-`], +M2 <: GenM2[`G2+`, `G2-`],
-//] extends GenM2[`G+`, `G-`]
+final abstract class PairM[
+  +`D1++` >: BotD <: OffTopD, -`D1-+` >: OffBotD <: TopD, +`P1+` >: BotP <: TopP,
+  +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
+  +`D1+-` >: BotD <: OffTopD, -`D1--` >: OffBotD <: TopD, +`P1-` >: BotP <: TopP,
+  +`D2+-` >: BotD <: OffTopD, -`D2--` >: OffBotD <: TopD, +`P2-` >: BotP <: TopP,
+  +`G1+` <: TopG,
+  +`G2+` <: TopG,
+  -`G1-` >: Nothing, // todo
+  -`G2-` >: Nothing, // todo
+  +`G+` >: PairG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`],
+  -`G-` <: Any, // todo
+  +M1 <: GenM2[`G1+`, `G1-`], +M2 <: GenM2[`G2+`, `G2-`],
+](using
+  `G1+` & Polar2G[TopD, BotD, TopP] <:< Polar2G[`D1++`, `D1-+`, `P1+`],
+  `G2+` & Polar2G[TopD, BotD, TopP] <:< Polar2G[`D2++`, `D2-+`, `P2+`],
+) extends GenM2[`G+`, `G-`]
