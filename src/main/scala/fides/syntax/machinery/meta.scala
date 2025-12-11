@@ -123,32 +123,18 @@ final abstract class CompareM[
   +M1 <: ConsHM[G1], +M2 <: ConsHM[G2],
 ] extends ConsHM[CompareG[G1, G2]]
 
-final abstract class PairM[
-  +`D1++` >: BotD <: OffTopD, -`D1-+` >: OffBotD <: TopD, +`P1+` >: BotP <: TopP,
-  +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
-  +`D1+-` >: BotD <: OffTopD, -`D1--` >: OffBotD <: TopD, +`P1-` >: BotP <: TopP,
-  +`D2+-` >: BotD <: OffTopD, -`D2--` >: OffBotD <: TopD, +`P2-` >: BotP <: TopP,
-  +`G1+` >: Polr2BotG[BotD, TopD, BotP] <: PolarOffTopG[`D1++`, `D1-+`, `P1+`],
-  +`G2+` >: Polr2BotG[BotD, TopD, BotP] <: PolarOffTopG[`D2++`, `D2-+`, `P2+`],
-  -`G1-` <: Polar2G[`D1+-`, `D1--`, BotP],
-  -`G2-` <: Polar2G[`D2+-`, `D2--`, BotP],
-  +`G+` >: PairG[PairD[`D1++`, `D2++`], PairD[`D1-+`, `D2-+`], `P1+` | `P2+`, `G1+`, `G2+`],
-  -`G-` <: PairG[PairOffTopD[`D1+-`, `D2+-`], PairOffBotD[`D1--`, `D2--`], TopP, `G1-`, `G2-`],
-  +M1 <: GenM2[`G1+`, `G1-`], +M2 <: GenM2[`G2+`, `G2-`],
-] extends GenM2[`G+`, `G-`]
-// todo this does not seem sustainable
-
-final abstract class Pair2M[
-  +`D1++` >: BotD <: OffTopD, -`D1-+` >: OffBotD <: TopD, +`P1+` >: BotP <: TopP,
-  +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
-  +`D1+-` >: BotD <: OffTopD, -`D1--` >: OffBotD <: TopD, +`P1-` >: BotP <: TopP,
-  +`D2+-` >: BotD <: OffTopD, -`D2--` >: OffBotD <: TopD, +`P2-` >: BotP <: TopP,
-  +`G1+` <: Polar2G[`D1++`, `D1-+`, `P1+`],
-  +`G2+` <: Polar2G[`D2++`, `D2-+`, `P2+`],
-  -`G1-` <: Polar2G[`D1+-`, `D1--`, BotP],
-  -`G2-` <: Polar2G[`D2+-`, `D2--`, BotP],
-  +`G+` >: Pair2G[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`],
-  -`G-` <: PairG[PairOffTopD[`D1+-`, `D2+-`], PairOffBotD[`D1--`, `D2--`], TopP, `G1-`, `G2-`],
-// todo left here; need to replace `G-` upper bound with a new upper bound based on PairR
-  +M1 <: GenM2[`G1+`, `G1-`], +M2 <: GenM2[`G2+`, `G2-`],
-] extends GenM2[`G+`, `G-`]
+//final abstract class PairM[
+//  +`D1++` >: BotD <: OffTopD, -`D1-+` >: OffBotD <: TopD, +`P1+` >: BotP <: TopP,
+//  +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
+//  +`D1+-` >: BotD <: OffTopD, -`D1--` >: OffBotD <: TopD, +`P1-` >: BotP <: TopP,
+//  +`D2+-` >: BotD <: OffTopD, -`D2--` >: OffBotD <: TopD, +`P2-` >: BotP <: TopP,
+//  +`G1+` <: Polar2G[`D1++`, `D1-+`, `P1+`],
+  // todo actually, G1+ doesn't have to be a subtype of polar, right?
+  //  Let's look at the L trick with implicits we used in the past
+//  +`G2+` <: Polar2G[`D2++`, `D2-+`, `P2+`],
+//  -`G1-` >: Nothing, // todo
+//  -`G2-` >: Nothing, // todo
+//  +`G+` >: PairG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`],
+//  -`G-` <: Any, // todo
+//  +M1 <: GenM2[`G1+`, `G1-`], +M2 <: GenM2[`G2+`, `G2-`],
+//] extends GenM2[`G+`, `G-`]

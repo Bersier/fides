@@ -4,13 +4,13 @@ import typelevelnumbers.binary.Bits
 
 import scala.annotation.unchecked.uncheckedVariance
 
-sealed trait PolarOffTopG[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP] private[machinery]()
+sealed trait OffTopG private[machinery]()
 
 /**
   * Parent type of all the Scala types that represent
   * the different types (aka syntactic categories) of possible Fides code, excluding metaprogramming
   */
-type TopG = PolarOffTopG[OffTopD, OffBotD, TopP]
+sealed trait TopG extends OffTopG
 
 type BotG = Nothing // todo
 
@@ -101,10 +101,8 @@ sealed trait PolarG[D <: TopD, +P <: TopP] extends TopG
 type PosG[+D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[BotB, TopB, C]]
 type NegG[-D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[TopB, BotB, C]]
 
-sealed trait Polar2G[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP] extends PolarOffTopG[`D+`, `D-`, P]
+sealed trait Polar2G[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP] extends TopG
 type Polar2ExtG[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: `D+` & TopD, +P <: TopP] = Polar2G[`D+`, `D-`, P]
-
-type Polr2BotG[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP] = Nothing // todo
 
 type Pos2G[+`D+` <: TopD, +C <: TopB] = Polar2G[`D+`, BotD, GenP[BotB, TopB, C]]
 type Neg2G[-`D-` <: TopD, +C <: TopB] = Polar2G[TopD, `D-`, GenP[BotB, TopB, C]]
@@ -245,33 +243,13 @@ final abstract class MultiplyG[+G <: ExprG[CollectedUD[NatUD]]] extends ExprG[Na
 final abstract class CompareG[+G1 <: ExprG[NatUD], +G2 <: ExprG[NatUD]] extends ExprG[BoolD]
 
 final abstract class PairG[
-  +`D+` >: PairD[BotD, BotD] <: OffTopD, -`D-` >: OffBotD <: PairD[TopD, TopD], +P >: BotP <: TopP,
-  +G1, +G2,
-] extends Polar2G[`D+`, `D-`, P]
-
-// todo it does feel like we need two different things: one to carry the Gs, and one to define the grammar
-
-final abstract class Pair2G[
   +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: TopD,
   +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
   +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
   +G1 <: Polar2G[`D1+`, `D1-`, P1], +G2 <: Polar2G[`D2+`, `D2-`, P2],
 ] extends Polar2G[PairD[`D1+`, `D2+`], PairD[`D1-`, `D2-`], P1 | P2]
 
-final abstract class PairR[
-  +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: TopD,
-  +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
-  +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
-  +G1 >: Polar2G[`D1+`, `D1-`, P1], +G2 >: Polar2G[`D2+`, `D2-`, P2],
-] extends PolarR[PairD[`D1+`, `D2+`], PairD[`D1-`, `D2-`], P1 | P2]
-
-sealed trait PolarR[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP]
-
-// todo there are two possible encodings for the reverse grammar hierarchy.
-//  Either it's fully reversed, or it's itself encoded in reverse, which means it should look something like
-//  PairR above.
-
-// todo I think we might need variance annotations on helper types, lest they mess up the hierarchy
+// todo I think we might need variance annotations on helper types everywhere, lest they mess up the hierarchy
 
 /**
   * @tparam P is the meta-polarity of T1M
