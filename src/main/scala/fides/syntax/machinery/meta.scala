@@ -132,7 +132,7 @@ final abstract class PairM[
   +`G2+` <: TopG,
   -`G1-` >: Nothing, // todo
   -`G2-` >: Nothing, // todo
-  +`G+` >: PairG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`],
+  +`G+` >: PairG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`], // todo this lower bound is too loose
   -`G-` <: Any, // todo
   +M1 <: GenM2[`G1+`, `G1-`], +M2 <: GenM2[`G2+`, `G2-`],
 ](using
