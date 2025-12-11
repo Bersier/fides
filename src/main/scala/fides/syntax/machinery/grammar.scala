@@ -251,12 +251,26 @@ final abstract class PairG[
 
 // todo it does feel like we need two different things: one to carry the Gs, and one to define the grammar
 
-//final abstract class PairG[
-//  +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: `D1+` & TopD,
-//  +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: `D2+` & TopD,
-//  +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
-//  +G1, +G2,
-//] extends Polar2G[PairD[`D1+`, `D2+`], PairD[`D1-`, `D2-`], P1 | P2]
+final abstract class Pair2G[
+  +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: TopD,
+  +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
+  +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
+  +G1 <: Polar2G[`D1+`, `D1-`, P1], +G2 <: Polar2G[`D2+`, `D2-`, P2],
+] extends Polar2G[PairD[`D1+`, `D2+`], PairD[`D1-`, `D2-`], P1 | P2]
+
+final abstract class PairR[
+  +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: TopD,
+  +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
+  +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
+  +G1 >: Polar2G[`D1+`, `D1-`, P1], +G2 >: Polar2G[`D2+`, `D2-`, P2],
+] extends PolarR[PairD[`D1+`, `D2+`], PairD[`D1-`, `D2-`], P1 | P2]
+
+sealed trait PolarR[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP]
+
+// todo there are two possible encodings for the reverse grammar hierarchy.
+//  Either it's fully reversed, or it's itself encoded in reverse, which means it should look something like
+//  PairR above.
+
 // todo I think we might need variance annotations on helper types, lest they mess up the hierarchy
 
 /**
