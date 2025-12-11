@@ -123,22 +123,45 @@ final abstract class CompareM[
   +M1 <: ConsHM[G1], +M2 <: ConsHM[G2],
 ] extends ConsHM[CompareG[G1, G2]]
 
-final abstract class PairM[
-  +`D1++` >: BotD <: OffTopD, -`D1-+` >: OffBotD <: TopD, +`P1+` >: BotP <: TopP,
-  +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
-  +`D1+-` >: BotD <: OffTopD, -`D1--` >: OffBotD <: TopD, +`P1-` >: BotP <: TopP,
-  +`D2+-` >: BotD <: OffTopD, -`D2--` >: OffBotD <: TopD, +`P2-` >: BotP <: TopP,
-  +`G1+` <: TopG,
-  +`G2+` <: TopG,
-  -`G1-` >: Nothing, // todo
-  -`G2-` >: Nothing, // todo
-  +`G+` >: PairG[
-    `D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`,
-    `G1+` & Polar2G[`D1++`, `D1-+`, `P1+`], `G2+` & Polar2G[`D2++`, `D2-+`, `P2+`], // todo wrong; G components are lost
-  ],
-  -`G-` <: Any, // todo
-  +M1 <: GenM2[`G1+`, /*`G1-`*/Nothing], +M2 <: GenM2[`G2+`, /*`G2-`*/Nothing],
-](using
-  `G1+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D1++`, `D1-+`, `P1+`],
-  `G2+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D2++`, `D2-+`, `P2+`],
-) extends GenM2[`G+`, /*`G-`*/Nothing]
+//final abstract class Pair0M[
+//  +`D1++` >: BotD <: OffTopD, -`D1-+` >: OffBotD <: TopD, +`P1+` >: BotP <: TopP,
+//  +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
+//  +`D1+-` >: BotD <: OffTopD, -`D1--` >: OffBotD <: TopD, +`P1-` >: BotP <: TopP,
+//  +`D2+-` >: BotD <: OffTopD, -`D2--` >: OffBotD <: TopD, +`P2-` >: BotP <: TopP,
+//  +`G1+` >: Polr2BotG[`D1++`, `D1-+`, `P1+`] <: PolarOffTopG[`D1++`, `D1-+`, `P1+`],
+//  +`G2+` >: Polr2BotG[`D2++`, `D2-+`, `P2+`] <: PolarOffTopG[`D2++`, `D2-+`, `P2+`],
+//  -`G1-` >: PolarOffBotG[`D1+-`, `D1--`, `P1-`] <: Polar2G[`D1+-`, `D1--`, `P1-`],
+//  -`G2-` >: PolarOffBotG[`D2+-`, `D2--`, `P2-`] <: Polar2G[`D2+-`, `D2--`, `P2-`],
+//  +M1 <: GenM2[`G1+`, `G1-`], +M2 <: GenM2[`G2+`, `G2-`],
+//] extends GenM2[
+//  PairG[PairD[`D1++`, `D2++`], PairD[`D1-+`, `D2-+`], `P1+` | `P2+`, `G1+`, `G2+`],
+//  PairG[PairD[`D1+-`, `D2+-`], PairD[`D1--`, `D2--`], `P1-` & `P2-`, `G1-`, `G2-`], // todo not sure about this
+////  PairG[PairOffTopD[`D1+-`, `D2+-`], PairOffBotD[`D1--`, `D2--`], TopP, `G1-`, `G2-`],
+//]
+//// todo might as well construct PairD inside PairG...
+//// todo see if this can be made to type-check
+//
+//final abstract class PairM[
+//  +`D1++` >: BotD <: OffTopD, -`D1-+` >: OffBotD <: TopD, +`P1+` >: BotP <: TopP,
+//  +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
+//  +`D1+-` >: BotD <: OffTopD, -`D1--` >: OffBotD <: TopD, +`P1-` >: BotP <: TopP,
+//  +`D2+-` >: BotD <: OffTopD, -`D2--` >: OffBotD <: TopD, +`P2-` >: BotP <: TopP,
+//  +`G1+` <: TopG,
+//  +`G2+` <: TopG,
+//  -`G1-` >: Nothing, // todo
+//  -`G2-` >: Nothing, // todo
+//  +`G+` >: PrePairG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`],
+//  -`G-` <: Any, // todo
+//  +M1 <: GenM2[`G1+`, /*`G1-`*/Nothing], +M2 <: GenM2[`G2+`, /*`G2-`*/Nothing],
+//](using
+//  `G1+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D1++`, `D1-+`, `P1+`],
+//  `G2+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D2++`, `D2-+`, `P2+`],
+//) extends GenM2[`G+`, /*`G-`*/Nothing]
+// todo delete?
+
+// todo the grammar defined in G is unused one way or another; M has to define the grammar itself.
+//  And it has to build pregrammar Gs.
+//  So then, there is no point in defining a reversed grammar.
+//  What we need then is a pregrammar, augmented with stuff like Polr2BotG and PolarOffTopG.
+//  (The alternative would be using implicits, but that seems less robust.)
+//
