@@ -11,7 +11,9 @@ import fides.syntax.values.*
   */
 trait Code[M <: TopM] private[syntax]()
 
-trait Code2[M <: TopM2] private[syntax]()
+trait Code2[M <: TopM2] private[syntax]() // todo add `TM+` and `TM-`. Alternatively, add a quote name list for context
+// todo perhaps reduction could even be applied just-in-time, so not in advance as soon as a quote is encountered,
+//  but lazily inside as we go... does that make any sense?
 object Code2:
 //  given [
 //  `D1++` >: BotD <: OffTopD, `D1-+` >: OffBotD <: `D1+-` & TopD,

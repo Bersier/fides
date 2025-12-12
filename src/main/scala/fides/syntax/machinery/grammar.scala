@@ -7,6 +7,7 @@ import scala.annotation.unchecked.uncheckedVariance
 type OffTopG = GenOffTopG[
   OffTopD, OffBotD, OffTopD, OffBotD, TopP, TopP, ?, ?,
   OffTopD, OffBotD, TopP,
+  TopK,
 ]
 
 type PairOffTopG[
@@ -17,6 +18,7 @@ type PairOffTopG[
 ] = GenOffTopG[
   `D1+`, `D1-`, `D2+`, `D2-`, P1, P2, G1, G2,
   OffTopD, OffBotD, TopP,
+  TopK,
 ]
 
 type PolarOffTopG[
@@ -24,6 +26,13 @@ type PolarOffTopG[
 ] = GenOffTopG[
   OffTopD, OffBotD, OffTopD, OffBotD, TopP, TopP, ?, ?,
   `D+`, `D-`, P,
+  TopK,
+]
+
+type NameOffTopG[+K <: TopK] = GenOffTopG[
+  OffTopD, OffBotD, OffTopD, OffBotD, TopP, TopP, ?, ?,
+  OffTopD, OffBotD, TopP,
+  K,
 ]
 
 sealed trait GenOffTopG[
@@ -34,6 +43,8 @@ sealed trait GenOffTopG[
   +G1 <: OffTopG, +G2 <: OffTopG,
   // for PolarG
   +`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP,
+  // for NameG
+  +K <: TopK,
 ] private[machinery]()
 
 /**
@@ -87,7 +98,7 @@ sealed trait AplrG extends TopG
 final abstract class RepeatedG[+G <: AplrG] extends AplrG
 final abstract class ConcurrentG[+G <: ArgsUG[AplrG]] extends AplrG
 
-final abstract class NameG[+K <: TopK] extends TopG
+final abstract class NameG[+K <: TopK] extends TopG, NameOffTopG[K] // todo Singleton?
 type LauncherNameG = NameG[LauncherK.type]
 
 final abstract class OwnedG[+K <: TopK] extends TopG
@@ -297,6 +308,11 @@ final abstract class QuoteG[
   P <: TopP, T2M <: TopM,
   +K <: TopK, +T1M <: TopM,
 ] extends Plr2G[QuoteD[T2M], P] // todo is this correct?
+
+final abstract class Quote2G[
+  +P <: TopP, +`T2M+` <: TopM, -`T2M-` <: TopM,
+  +K <: TopK, +T1M <: TopM,
+] extends Polar2G[QuoteD[`T2M+`], QuoteD[`T2M-`], P]
 
 final abstract class WrapG[
   D <: TopD,

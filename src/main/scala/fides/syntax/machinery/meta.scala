@@ -24,6 +24,13 @@ final abstract class QuoteM[
   +KM <: ConsHM[NameG[K]], +M <: TopM,
 ] extends ConsHM[QuoteG[P, T2M, K, T1M]]
 
+final abstract class Quote2M[
+  +K <: TopK, +P <: TopP, +`T2M+` <: TopM, -`T2M-` <: TopM, +T1M <: TopM,
+  +KG >: NameG[K] <: NameOffTopG[K],
+  +G >: Quote2G[P, `T2M+`, `T2M-`, K, T1M] <: OffTopG,
+  +KM <: GenM2[KG, TopR], +M <: TopM,
+] extends GenM2[G, TopR] // todo negative half
+
 final abstract class EscapeM[
   TG <: TopG,
   TM <: ConsHM[TG],
