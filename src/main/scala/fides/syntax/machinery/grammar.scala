@@ -6,13 +6,34 @@ import scala.annotation.unchecked.uncheckedVariance
 
 type OffTopG = GenOffTopG[
   OffTopD, OffBotD, OffTopD, OffBotD, TopP, TopP, ?, ?,
+  OffTopD, OffBotD, TopP,
 ]
 
-sealed trait GenOffTopG[
+type PairOffTopG[
   +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: TopD,
   +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
   +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
   +G1 <: OffTopG, +G2 <: OffTopG,
+] = GenOffTopG[
+  `D1+`, `D1-`, `D2+`, `D2-`, P1, P2, G1, G2,
+  OffTopD, OffBotD, TopP,
+]
+
+type PolarOffTopG[
+  +`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP,
+] = GenOffTopG[
+  OffTopD, OffBotD, OffTopD, OffBotD, TopP, TopP, ?, ?,
+  `D+`, `D-`, P,
+]
+
+sealed trait GenOffTopG[
+  // for PairG
+  +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: TopD,
+  +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
+  +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
+  +G1 <: OffTopG, +G2 <: OffTopG,
+  // for PolarG
+  +`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP,
 ] private[machinery]()
 
 /**
@@ -110,7 +131,9 @@ sealed trait PolarG[D <: TopD, +P <: TopP] extends TopG
 type PosG[+D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[BotB, TopB, C]]
 type NegG[-D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[TopB, BotB, C]]
 
-sealed trait Polar2G[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP] extends TopG
+sealed trait Polar2G[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP] extends TopG, PolarOffTopG[
+  `D+`, `D-`, P,
+]
 type Polar2ExtG[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: `D+` & TopD, +P <: TopP] = Polar2G[`D+`, `D-`, P]
 
 type Pos2G[+`D+` <: TopD, +C <: TopB] = Polar2G[`D+`, BotD, GenP[BotB, TopB, C]]
@@ -256,7 +279,7 @@ sealed trait PairG[
   +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
   +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
   +G1 <: Polar2G[`D1+`, `D1-`, P1], +G2 <: Polar2G[`D2+`, `D2-`, P2],
-] extends Polar2G[PairD[`D1+`, `D2+`], PairD[`D1-`, `D2-`], P1 | P2], GenOffTopG[
+] extends Polar2G[PairD[`D1+`, `D2+`], PairD[`D1-`, `D2-`], P1 | P2], PairOffTopG[
   `D1+`, `D1-`, `D2+`, `D2-`, P1, P2, G1, G2,
 ]
 

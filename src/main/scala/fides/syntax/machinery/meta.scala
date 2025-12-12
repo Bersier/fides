@@ -128,8 +128,8 @@ final abstract class PairM[
   +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
   -`D1+-` >: BotD <: OffTopD, +`D1--` >: OffBotD <: TopD, -`P1-` >: BotP <: TopP,
   -`D2+-` >: BotD <: OffTopD, +`D2--` >: OffBotD <: TopD, -`P2-` >: BotP <: TopP,
-  +`G1+` >: PolarBotG <: OffTopG,
-  +`G2+` >: PolarBotG <: OffTopG,
+  +`G1+` >: PolarBotG <: PolarOffTopG[`D1++`, `D1-+`, `P1+`],
+  +`G2+` >: PolarBotG <: PolarOffTopG[`D2++`, `D2-+`, `P2+`],
   -`G1-` >: OffBotG <: PolarR[`D1+-`, `D1--`, `P1-`],
   -`G2-` >: OffBotG <: PolarR[`D2+-`, `D2--`, `P2-`],
   +`G+` >: PairG[
@@ -145,10 +145,11 @@ final abstract class PairM[
   +M1 <: GenM2[`G1+`, `G1-`], +M2 <: GenM2[`G2+`, `G2-`],
 ](using
   `G1+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D1++`, `D1-+`, `P1+`],
+  // todo these two conditions are now redundant (but I'm still not sure that using direct bounds is really better)
   `G2+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D2++`, `D2-+`, `P2+`],
   PolarR[`D1+-`, `D1--`, `P1-`] <:< `G1-` | PolarR[BotD, TopD, BotP],
   PolarR[`D2+-`, `D2--`, `P2-`] <:< `G2-` | PolarR[BotD, TopD, BotP],
-  GenOffTopG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`] <:< `G+` | GenOffTopG[
+  PairOffTopG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`] <:< `G+` | PairOffTopG[
     `D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`,
     `G1+` & Polar2G[`D1++`, `D1-+`, `P1+`],
     `G2+` & Polar2G[`D2++`, `D2-+`, `P2+`],
