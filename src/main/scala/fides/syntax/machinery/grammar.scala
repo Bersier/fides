@@ -4,23 +4,22 @@ import typelevelnumbers.binary.Bits
 
 import scala.annotation.unchecked.uncheckedVariance
 
-sealed trait OffTopG private[machinery]()
+type OffTopG = GenOffTopG[
+  OffTopD, OffBotD, OffTopD, OffBotD, TopP, TopP, ?, ?,
+]
 
-transparent sealed trait PairOffTopG[
+sealed trait GenOffTopG[
   +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: TopD,
   +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
   +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
   +G1 <: OffTopG, +G2 <: OffTopG,
-] extends OffTopG
-// todo instead of having many such types, we could have one to rule them all, with lots of parameters.
-//  OffTopG would then simply be an alias.
-//  And then, we could again define the upper bound condition for `G1+` in PairM explicitly, rather than via an implicit
+] private[machinery]()
 
 /**
   * Parent type of all the Scala types that represent
   * the different types (aka syntactic categories) of possible Fides code, excluding metaprogramming
   */
-sealed trait TopG extends PairOffTopG[OffTopD, OffBotD, OffTopD, OffBotD, TopP, TopP, TopG, TopG]
+sealed trait TopG extends OffTopG
 
 type BotG = Nothing // todo
 
@@ -257,7 +256,7 @@ sealed trait PairG[
   +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
   +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
   +G1 <: Polar2G[`D1+`, `D1-`, P1], +G2 <: Polar2G[`D2+`, `D2-`, P2],
-] extends Polar2G[PairD[`D1+`, `D2+`], PairD[`D1-`, `D2-`], P1 | P2], PairOffTopG[
+] extends Polar2G[PairD[`D1+`, `D2+`], PairD[`D1-`, `D2-`], P1 | P2], GenOffTopG[
   `D1+`, `D1-`, `D2+`, `D2-`, P1, P2, G1, G2,
 ]
 

@@ -148,15 +148,15 @@ final abstract class PairM[
   `G2+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D2++`, `D2-+`, `P2+`],
   PolarR[`D1+-`, `D1--`, `P1-`] <:< `G1-` | PolarR[BotD, TopD, BotP],
   PolarR[`D2+-`, `D2--`, `P2-`] <:< `G2-` | PolarR[BotD, TopD, BotP],
-  PairOffTopG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`] <:< `G+` | PairOffTopG[
+  GenOffTopG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`] <:< `G+` | GenOffTopG[
     `D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`,
     `G1+` & Polar2G[`D1++`, `D1-+`, `P1+`],
     `G2+` & Polar2G[`D2++`, `D2-+`, `P2+`],
   ],
-  `G-` | PairOffTopR[
+  `G-` | GenOffTopR[
     `D1+-`, `D1--`, `D2+-`, `D2--`, `P1-`, `P2-`,
     `G1-` | PolarR[`D1+-`, `D1--`, `P1-`],
     `G2-` | PolarR[`D2+-`, `D2--`, `P2-`],
-  ] <:< PairOffTopR[`D1+-`, `D1--`, `D2+-`, `D2--`, `P1-`, `P2-`, `G1-`, `G2-`],
-) extends GenM2[`G+`, /*`G-`*/Nothing]
+  ] <:< GenOffTopR[`D1+-`, `D1--`, `D2+-`, `D2--`, `P1-`, `P2-`, `G1-`, `G2-`],
+) extends GenM2[`G+`, `G-`]
 // todo this seems to correctly specify the types, although probably not in a way that Scala can infer.
