@@ -5,17 +5,21 @@ import typelevelnumbers.binary.Bits
 /**
   * A type greater than [[TopD]]
   *
-  * Indicates an unreachable data type in contravariant position.
+  * Indicates an illegal data type in covariant position (and it's unreachable in contravariant position).
   */
 sealed trait OffTopD private[machinery]()
 
 /**
   * Parent type of all the Scala types that represent Fides data/value types
+  *
+  * Fides' version of [[Any]]
   */
 sealed trait TopD extends OffTopD
 
 /**
   * Lower bound for all data types
+  *
+  * Fides' version of [[Nothing]]
   */
 type BotD = Nothing
 // todo replace by true intersection, and use as bound everywhere appropriate
@@ -23,7 +27,7 @@ type BotD = Nothing
 /**
   * A type smaller than [[BotD]]
   *
-  * Indicates an unreachable data type (in covariant position).
+  * Indicates an illegal data type in contravariant position (and it's unreachable in covariant position).
   */
 type OffBotD = Nothing
 
