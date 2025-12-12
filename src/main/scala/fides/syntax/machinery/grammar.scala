@@ -4,14 +4,17 @@ import typelevelnumbers.binary.Bits
 
 import scala.annotation.unchecked.uncheckedVariance
 
-sealed trait OffTopG private[machinery]() // todo perhaps OffTop and OffBot is not needed?
+sealed trait OffTopG private[machinery]()
 
-sealed trait PairOffTopG[
+transparent sealed trait PairOffTopG[
   +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: TopD,
   +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
   +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
   +G1 <: TopG, +G2 <: TopG,
 ] extends OffTopG
+// todo instead of having many such types, we could have one to rule them all, with lots of parameters.
+//  OffTopG would then simply be an alias.
+//  And then, we could again define the upper bound condition for `G1+` in PairM explicitly, rather than via an implicit
 
 /**
   * Parent type of all the Scala types that represent
