@@ -10,7 +10,7 @@ transparent sealed trait PairOffTopG[
   +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: TopD,
   +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
   +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
-  +G1 <: TopG, +G2 <: TopG,
+  +G1 <: OffTopG, +G2 <: OffTopG,
 ] extends OffTopG
 // todo instead of having many such types, we could have one to rule them all, with lots of parameters.
 //  OffTopG would then simply be an alias.
@@ -252,7 +252,7 @@ final abstract class AddG[+G <: ExprG[CollectedUD[NatUD]]] extends ExprG[NatUD]
 final abstract class MultiplyG[+G <: ExprG[CollectedUD[NatUD]]] extends ExprG[NatUD]
 final abstract class CompareG[+G1 <: ExprG[NatUD], +G2 <: ExprG[NatUD]] extends ExprG[BoolD]
 
-final abstract class PairG[
+sealed trait PairG[
   +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: TopD,
   +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
   +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
@@ -260,6 +260,8 @@ final abstract class PairG[
 ] extends Polar2G[PairD[`D1+`, `D2+`], PairD[`D1-`, `D2-`], P1 | P2], PairOffTopG[
   `D1+`, `D1-`, `D2+`, `D2-`, P1, P2, G1, G2,
 ]
+
+sealed trait PolarBotG extends PairG[BotD, TopD, BotD, TopD, BotP, BotP, BotG, BotG]
 
 // todo I think we might need variance annotations on helper types everywhere, lest they mess up the hierarchy
 

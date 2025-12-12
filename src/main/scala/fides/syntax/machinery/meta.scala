@@ -11,8 +11,8 @@ trait ConsM[+G <: TopG] private[syntax]() // todo seal
 // todo rename ConsM to something else. GenM?
 type TopM = ConsM[TopG]
 
-sealed trait GenM2[+`G+` >: BotG, -`G-` <: TopG] private[syntax]()
-type TopM2 = GenM2[Any, BotG]
+sealed trait GenM2[+`G+` >: BotG <: OffTopG, -`G-` <: TopR] private[syntax]()
+type TopM2 = GenM2[OffTopG, BotG]
 
 /**
   * Helper type that is invariant in [[G]].
@@ -126,26 +126,37 @@ final abstract class CompareM[
 final abstract class PairM[
   +`D1++` >: BotD <: OffTopD, -`D1-+` >: OffBotD <: TopD, +`P1+` >: BotP <: TopP,
   +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
-  +`D1+-` >: BotD <: OffTopD, -`D1--` >: OffBotD <: TopD, +`P1-` >: BotP <: TopP,
-  +`D2+-` >: BotD <: OffTopD, -`D2--` >: OffBotD <: TopD, +`P2-` >: BotP <: TopP,
-  +`G1+` >: PolarBotG[`D1++`, `D1-+`, `P1+`],
-  +`G2+` >: Polr2BotG[`D2++`, `D2-+`, `P2+`],
-  -`G1-` >: Nothing, // todo
-  -`G2-` >: Nothing, // todo
+  -`D1+-` >: BotD <: OffTopD, +`D1--` >: OffBotD <: TopD, -`P1-` >: BotP <: TopP,
+  -`D2+-` >: BotD <: OffTopD, +`D2--` >: OffBotD <: TopD, -`P2-` >: BotP <: TopP,
+  +`G1+` >: PolarBotG <: OffTopG,
+  +`G2+` >: PolarBotG <: OffTopG,
+  -`G1-` >: OffBotG <: PolarR[`D1+-`, `D1--`, `P1-`],
+  -`G2-` >: OffBotG <: PolarR[`D2+-`, `D2--`, `P2-`],
   +`G+` >: PairG[
     `D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`,
     `G1+` & Polar2G[`D1++`, `D1-+`, `P1+`],
     `G2+` & Polar2G[`D2++`, `D2-+`, `P2+`],
-  ] <: TopG,
-  -`G-` <: Any, // todo
-  +M1 <: GenM2[`G1+`, /*`G1-`*/Nothing], +M2 <: GenM2[`G2+`, /*`G2-`*/Nothing],
+  ] <: OffTopG,
+  -`G-` >: BotR <: PairR[
+    `D1+-`, `D1--`, `D2+-`, `D2--`, `P1-`, `P2-`,
+    `G1-` | PolarR[`D1+-`, `D1--`, `P1-`],
+    `G2-` | PolarR[`D2+-`, `D2--`, `P2-`],
+  ],
+  +M1 <: GenM2[`G1+`, `G1-`], +M2 <: GenM2[`G2+`, `G2-`],
 ](using
   `G1+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D1++`, `D1-+`, `P1+`],
   `G2+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D2++`, `D2-+`, `P2+`],
+  PolarR[`D1+-`, `D1--`, `P1-`] <:< `G1-` | PolarR[BotD, TopD, BotP],
+  PolarR[`D2+-`, `D2--`, `P2-`] <:< `G2-` | PolarR[BotD, TopD, BotP],
   PairOffTopG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`] <:< `G+` | PairOffTopG[
     `D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`,
     `G1+` & Polar2G[`D1++`, `D1-+`, `P1+`],
     `G2+` & Polar2G[`D2++`, `D2-+`, `P2+`],
   ],
+  `G-` | PairOffTopR[
+    `D1+-`, `D1--`, `D2+-`, `D2--`, `P1-`, `P2-`,
+    `G1-` | PolarR[`D1+-`, `D1--`, `P1-`],
+    `G2-` | PolarR[`D2+-`, `D2--`, `P2-`],
+  ] <:< PairOffTopR[`D1+-`, `D1--`, `D2+-`, `D2--`, `P1-`, `P2-`, `G1-`, `G2-`],
 ) extends GenM2[`G+`, /*`G-`*/Nothing]
 // todo this seems to correctly specify the types, although probably not in a way that Scala can infer.
