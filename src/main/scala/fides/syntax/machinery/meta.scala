@@ -138,30 +138,32 @@ final abstract class CompareM[
 //  PairG[PairD[`D1+-`, `D2+-`], PairD[`D1--`, `D2--`], `P1-` & `P2-`, `G1-`, `G2-`], // todo not sure about this
 ////  PairG[PairOffTopD[`D1+-`, `D2+-`], PairOffBotD[`D1--`, `D2--`], TopP, `G1-`, `G2-`],
 //]
-//// todo might as well construct PairD inside PairG...
-//// todo see if this can be made to type-check
-//
-//final abstract class PairM[
-//  +`D1++` >: BotD <: OffTopD, -`D1-+` >: OffBotD <: TopD, +`P1+` >: BotP <: TopP,
-//  +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
-//  +`D1+-` >: BotD <: OffTopD, -`D1--` >: OffBotD <: TopD, +`P1-` >: BotP <: TopP,
-//  +`D2+-` >: BotD <: OffTopD, -`D2--` >: OffBotD <: TopD, +`P2-` >: BotP <: TopP,
-//  +`G1+` <: TopG,
-//  +`G2+` <: TopG,
-//  -`G1-` >: Nothing, // todo
-//  -`G2-` >: Nothing, // todo
-//  +`G+` >: PrePairG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`],
-//  -`G-` <: Any, // todo
-//  +M1 <: GenM2[`G1+`, /*`G1-`*/Nothing], +M2 <: GenM2[`G2+`, /*`G2-`*/Nothing],
-//](using
-//  `G1+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D1++`, `D1-+`, `P1+`],
-//  `G2+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D2++`, `D2-+`, `P2+`],
-//) extends GenM2[`G+`, /*`G-`*/Nothing]
-// todo delete?
+// todo this fakery doesn't scale: at some point, fake Gs become indistinguishable from true Gs,
+//  and then the grammar is not respected anymore. Consider Forward(<fake polar>, ...); it looks legitimate.
 
-// todo the grammar defined in G is unused one way or another; M has to define the grammar itself.
-//  And it has to build pregrammar Gs.
-//  So then, there is no point in defining a reversed grammar.
-//  What we need then is a pregrammar, augmented with stuff like Polr2BotG and PolarOffTopG.
-//  (The alternative would be using implicits, but that seems less robust.)
-//
+final abstract class PairM[
+  +`D1++` >: BotD <: OffTopD, -`D1-+` >: OffBotD <: TopD, +`P1+` >: BotP <: TopP,
+  +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
+  +`D1+-` >: BotD <: OffTopD, -`D1--` >: OffBotD <: TopD, +`P1-` >: BotP <: TopP,
+  +`D2+-` >: BotD <: OffTopD, -`D2--` >: OffBotD <: TopD, +`P2-` >: BotP <: TopP,
+  +`G1+` >: PolarBotG[`D1++`, `D1-+`, `P1+`] <: PolarOffTopG[`D1++`, `D1-+`, `P1+`],
+  +`G2+` >: Polr2BotG[`D2++`, `D2-+`, `P2+`] <: PolarOffTopG[`D2++`, `D2-+`, `P2+`],
+  -`G1-` >: Nothing, // todo
+  -`G2-` >: Nothing, // todo
+  +`G+` >: PairG[
+    `D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`,
+    `G1+` & Polar2G[`D1++`, `D1-+`, `P1+`],
+    `G2+` & Polar2G[`D2++`, `D2-+`, `P2+`],
+  ] <: TopG,
+  -`G-` <: Any, // todo
+  +M1 <: GenM2[`G1+`, /*`G1-`*/Nothing], +M2 <: GenM2[`G2+`, /*`G2-`*/Nothing],
+](using
+//  `G1+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D1++`, `D1-+`, `P1+`], // todo alternative to `G1+`s current UB
+//  `G2+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D2++`, `D2-+`, `P2+`],
+  PairOffTopG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`] <:< `G+` | PairOffTopG[
+    `D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`,
+    `G1+` & Polar2G[`D1++`, `D1-+`, `P1+`],
+    `G2+` & Polar2G[`D2++`, `D2-+`, `P2+`],
+  ],
+) extends GenM2[`G+`, /*`G-`*/Nothing]
+// todo this seems to correctly specify the types, although probably not in a way that Scala can infer.

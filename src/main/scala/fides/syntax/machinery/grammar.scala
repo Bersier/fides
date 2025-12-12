@@ -4,13 +4,20 @@ import typelevelnumbers.binary.Bits
 
 import scala.annotation.unchecked.uncheckedVariance
 
-sealed trait OffTopG private[machinery]()
+sealed trait OffTopG private[machinery]() // todo perhaps OffTop and OffBot is not needed?
+
+sealed trait PairOffTopG[
+  +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: TopD,
+  +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
+  +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
+  +G1 <: TopG, +G2 <: TopG,
+] extends OffTopG
 
 /**
   * Parent type of all the Scala types that represent
   * the different types (aka syntactic categories) of possible Fides code, excluding metaprogramming
   */
-sealed trait TopG extends OffTopG
+sealed trait TopG extends PairOffTopG[OffTopD, OffBotD, OffTopD, OffBotD, TopP, TopP, TopG, TopG]
 
 type BotG = Nothing // todo
 
@@ -247,7 +254,9 @@ final abstract class PairG[
   +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
   +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
   +G1 <: Polar2G[`D1+`, `D1-`, P1], +G2 <: Polar2G[`D2+`, `D2-`, P2],
-] extends Polar2G[PairD[`D1+`, `D2+`], PairD[`D1-`, `D2-`], P1 | P2]
+] extends Polar2G[PairD[`D1+`, `D2+`], PairD[`D1-`, `D2-`], P1 | P2], PairOffTopG[
+  `D1+`, `D1-`, `D2+`, `D2-`, P1, P2, G1, G2,
+]
 
 // todo I think we might need variance annotations on helper types everywhere, lest they mess up the hierarchy
 
