@@ -31,6 +31,8 @@ sealed trait PairR[
   `D1+`, `D1-`, `D2+`, `D2-`, P1, P2, G1, G2,
 ]
 
+// todo should be above OffBotR, and not below BotG; a piece of code of this type doesn't fit anywhere,
+//  so it behaves just like another BotG
 sealed trait PolarBotR extends PairR[
   BotD, TopD, BotD, TopD, BotP, BotP, PolarR[BotD, TopD, BotD], PolarR[BotD, TopD, BotD],
 ]

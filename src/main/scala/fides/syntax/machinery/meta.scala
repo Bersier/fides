@@ -137,8 +137,8 @@ final abstract class PairM[
   -`D2+-` >: BotD <: OffTopD, +`D2--` >: OffBotD <: TopD, -`P2-` >: BotP <: TopP,
   +`G1+` >: PolarBotG <: PolarOffTopG[`D1++`, `D1-+`, `P1+`],
   +`G2+` >: PolarBotG <: PolarOffTopG[`D2++`, `D2-+`, `P2+`],
-  -`G1-` >: OffBotG <: PolarR[`D1+-`, `D1--`, `P1-`],
-  -`G2-` >: OffBotG <: PolarR[`D2+-`, `D2--`, `P2-`],
+  -`G1-` >: PolarBotR <: TopR,
+  -`G2-` >: PolarBotR <: TopR,
   +`G+` >: PairG[
     `D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`,
     `G1+` & Polar2G[`D1++`, `D1-+`, `P1+`],

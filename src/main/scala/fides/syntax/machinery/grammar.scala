@@ -294,6 +294,7 @@ sealed trait PairG[
   `D1+`, `D1-`, `D2+`, `D2-`, P1, P2, G1, G2,
 ]
 
+// todo should be above OffBotG, and not below BotG
 sealed trait PolarBotG extends PairG[BotD, TopD, BotD, TopD, BotP, BotP, BotG, BotG]
 
 // todo I think we might need variance annotations on helper types everywhere, lest they mess up the hierarchy
