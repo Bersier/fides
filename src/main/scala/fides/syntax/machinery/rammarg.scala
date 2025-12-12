@@ -27,6 +27,10 @@ sealed trait PairR[
   +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
   +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
   +G1 >: PolarR[`D1+`, `D1-`, P1] <: OffTopR, +G2 >: PolarR[`D2+`, `D2-`, P2] <: OffTopR,
+  // todo lower bounds are wrong; should be like in PairM for G1- and G2-
+  //  But then, if all the grammar rules are already specified in PairM, why do we need them here (and in G) again?
+  //  Now PairM also takes care never to get out of the bounds of the grammar.
+  //  So I think we can use a pregrammar after all
 ] extends PolarR[PairD[`D1+`, `D2+`], PairD[`D1-`, `D2-`], P1 | P2], GenOffTopR[
   `D1+`, `D1-`, `D2+`, `D2-`, P1, P2, G1, G2,
 ]
