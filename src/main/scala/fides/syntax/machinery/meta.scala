@@ -137,6 +137,10 @@ final abstract class PairM[
   -`D2+-` >: BotD <: OffTopD, +`D2--` >: OffBotD <: TopD, -`P2-` >: BotP <: TopP,
   +`G1+` >: PolarBotG <: PolarOffTopG[`D1++`, `D1-+`, `P1+`],
   +`G2+` >: PolarBotG <: PolarOffTopG[`D2++`, `D2-+`, `P2+`],
+  // todo these guys above and below should be either sub or supertypes of Polar;
+  //  the current PolarBotG used to specify this constraint has issues in that it cannot be below BotG,
+  //  and thus excludes it. Same for R.
+  //  Perhaps using <:< could allow us to express this properly?
   -`G1-` >: PolarBotR <: TopR,
   -`G2-` >: PolarBotR <: TopR,
   +`G+` >: PairG[
