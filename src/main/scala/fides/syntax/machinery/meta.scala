@@ -123,36 +123,13 @@ final abstract class CompareM[
   +M1 <: ConsHM[G1], +M2 <: ConsHM[G2],
 ] extends ConsHM[CompareG[G1, G2]]
 
-//final abstract class Pair0M[
-//  +`D1++` >: BotD <: OffTopD, -`D1-+` >: OffBotD <: TopD, +`P1+` >: BotP <: TopP,
-//  +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
-//  +`D1+-` >: BotD <: OffTopD, -`D1--` >: OffBotD <: TopD, +`P1-` >: BotP <: TopP,
-//  +`D2+-` >: BotD <: OffTopD, -`D2--` >: OffBotD <: TopD, +`P2-` >: BotP <: TopP,
-//  +`G1+` >: Polr2BotG[`D1++`, `D1-+`, `P1+`] <: PolarOffTopG[`D1++`, `D1-+`, `P1+`],
-//  +`G2+` >: Polr2BotG[`D2++`, `D2-+`, `P2+`] <: PolarOffTopG[`D2++`, `D2-+`, `P2+`],
-//  -`G1-` >: PolarOffBotG[`D1+-`, `D1--`, `P1-`] <: Polar2G[`D1+-`, `D1--`, `P1-`],
-//  -`G2-` >: PolarOffBotG[`D2+-`, `D2--`, `P2-`] <: Polar2G[`D2+-`, `D2--`, `P2-`],
-//  +M1 <: GenM2[`G1+`, `G1-`], +M2 <: GenM2[`G2+`, `G2-`],
-//] extends GenM2[
-//  PairG[PairD[`D1++`, `D2++`], PairD[`D1-+`, `D2-+`], `P1+` | `P2+`, `G1+`, `G2+`],
-//  PairG[PairD[`D1+-`, `D2+-`], PairD[`D1--`, `D2--`], `P1-` & `P2-`, `G1-`, `G2-`], // todo not sure about this
-////  PairG[PairOffTopD[`D1+-`, `D2+-`], PairOffBotD[`D1--`, `D2--`], TopP, `G1-`, `G2-`],
-//]
-// todo this fakery doesn't scale: at some point, fake Gs become indistinguishable from true Gs,
-//  and then the grammar is not respected anymore. Consider Forward(<fake polar>, ...); it looks legitimate.
-
 final abstract class PairM[
   +`D1++` >: BotD <: OffTopD, -`D1-+` >: OffBotD <: TopD, +`P1+` >: BotP <: TopP,
   +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
   +`D1+-` >: BotD <: OffTopD, -`D1--` >: OffBotD <: TopD, +`P1-` >: BotP <: TopP,
   +`D2+-` >: BotD <: OffTopD, -`D2--` >: OffBotD <: TopD, +`P2-` >: BotP <: TopP,
-  +`G1+` >: PolarBotG[`D1++`, `D1-+`, `P1+`] <: PolarOffTopG[`D1++`, `D1-+`, `P1+`],
-  +`G2+` >: Polr2BotG[`D2++`, `D2-+`, `P2+`] <: PolarOffTopG[`D2++`, `D2-+`, `P2+`],
-  // todo with such upper bounds, we need to ensure that e.g. G1+ really always is smaller than them, which
-  //  could be an issue if we have a cycle. As we see below, G+ can be pushed to be a PairOffTopG which is above TopG.
-  //  So if something similar happens to G1+ that pushes it so it's not smaller than PolarOffTopG, we are in trouble.
-  //  If we somehow have a hierarchy of ...OffTopGs, then we could be fine. But that constrains the grammar, no?
-  //  The alternative is to use implicits instead. That might be more robust and/or principled.
+  +`G1+` >: PolarBotG[`D1++`, `D1-+`, `P1+`],
+  +`G2+` >: Polr2BotG[`D2++`, `D2-+`, `P2+`],
   -`G1-` >: Nothing, // todo
   -`G2-` >: Nothing, // todo
   +`G+` >: PairG[
@@ -163,8 +140,8 @@ final abstract class PairM[
   -`G-` <: Any, // todo
   +M1 <: GenM2[`G1+`, /*`G1-`*/Nothing], +M2 <: GenM2[`G2+`, /*`G2-`*/Nothing],
 ](using
-//  `G1+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D1++`, `D1-+`, `P1+`], // todo alternative to `G1+`s current UB
-//  `G2+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D2++`, `D2-+`, `P2+`],
+  `G1+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D1++`, `D1-+`, `P1+`],
+  `G2+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D2++`, `D2-+`, `P2+`],
   PairOffTopG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`] <:< `G+` | PairOffTopG[
     `D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`,
     `G1+` & Polar2G[`D1++`, `D1-+`, `P1+`],
