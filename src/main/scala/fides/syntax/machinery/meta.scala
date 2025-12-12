@@ -148,6 +148,11 @@ final abstract class PairM[
   +`D2+-` >: BotD <: OffTopD, -`D2--` >: OffBotD <: TopD, +`P2-` >: BotP <: TopP,
   +`G1+` >: PolarBotG[`D1++`, `D1-+`, `P1+`] <: PolarOffTopG[`D1++`, `D1-+`, `P1+`],
   +`G2+` >: Polr2BotG[`D2++`, `D2-+`, `P2+`] <: PolarOffTopG[`D2++`, `D2-+`, `P2+`],
+  // todo with such upper bounds, we need to ensure that e.g. G1+ really always is smaller than them, which
+  //  could be an issue if we have a cycle. As we see below, G+ can be pushed to be a PairOffTopG which is above TopG.
+  //  So if something similar happens to G1+ that pushes it so it's not smaller than PolarOffTopG, we are in trouble.
+  //  If we somehow have a hierarchy of ...OffTopGs, then we could be fine. But that constrains the grammar, no?
+  //  The alternative is to use implicits instead. That might be more robust and/or principled.
   -`G1-` >: Nothing, // todo
   -`G2-` >: Nothing, // todo
   +`G+` >: PairG[
