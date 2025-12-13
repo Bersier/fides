@@ -285,7 +285,12 @@ final abstract class AddG[+G <: ExprG[CollectedUD[NatUD]]] extends ExprG[NatUD]
 final abstract class MultiplyG[+G <: ExprG[CollectedUD[NatUD]]] extends ExprG[NatUD]
 final abstract class CompareG[+G1 <: ExprG[NatUD], +G2 <: ExprG[NatUD]] extends ExprG[BoolD]
 
-sealed trait PairG[
+final abstract class PairG[
+  D1 <: TopD, D2 <: TopD, P1 <: TopP, P2 <: TopP,
+  +G1 <: PolarG[D1, P1], +G2 <: PolarG[D2, P2],
+] extends PolarG[PairD[D1, D2], P1 | P2]
+
+sealed trait Pair2G[
   +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: TopD,
   +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
   +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
@@ -295,7 +300,7 @@ sealed trait PairG[
 ]
 
 // todo should be above OffBotG, and not below BotG
-sealed trait PolarBotG extends PairG[BotD, TopD, BotD, TopD, BotP, BotP, BotG, BotG]
+sealed trait PolarBotG extends Pair2G[BotD, TopD, BotD, TopD, BotP, BotP, BotG, BotG]
 
 // todo I think we might need variance annotations on helper types everywhere, lest they mess up the hierarchy
 

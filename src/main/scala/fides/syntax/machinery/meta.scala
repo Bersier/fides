@@ -32,10 +32,10 @@ final abstract class Quote2M[
 ] extends GenM2[G, TopR] // todo negative half
 
 final abstract class EscapeM[
-  TG <: TopG,
-  TM <: ConsHM[TG],
-  +KM <: ConsHM[NameG[TopK]], +M <: ConsM[PolarG[QuoteD[TM], TopP]],
-] extends ConsHM[TG]
+  SG <: TopG,
+  SM <: ConsHM[SG],
+  +KM <: ConsHM[NameG[TopK]], +M <: ConsM[PolarG[QuoteD[SM], TopP]],
+] extends ConsHM[SG]
 
 final abstract class ArgsM[
   E <: TopE, G <: TopG,
@@ -131,6 +131,12 @@ final abstract class CompareM[
 ] extends ConsHM[CompareG[G1, G2]]
 
 final abstract class PairM[
+  D1 <: TopD, D2 <: TopD, P1 <: TopP, P2 <: TopP,
+  G1 <: PolarG[D1, P1], G2 <: PolarG[D2, P2],
+  +M1 <: ConsHM[G1], +M2 <: ConsHM[G2],
+] extends ConsHM[PairG[D1, D2, P1, P2, G1, G2]]
+
+final abstract class Pair2M[
   +`D1++` >: BotD <: OffTopD, -`D1-+` >: OffBotD <: TopD, +`P1+` >: BotP <: TopP,
   +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
   -`D1+-` >: BotD <: OffTopD, +`D1--` >: OffBotD <: TopD, -`P1-` >: BotP <: TopP,
@@ -143,7 +149,7 @@ final abstract class PairM[
   //  Perhaps using <:< could allow us to express this properly?
   -`G1-` >: PolarBotR <: TopR,
   -`G2-` >: PolarBotR <: TopR,
-  +`G+` >: PairG[
+  +`G+` >: Pair2G[
     `D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`,
     `G1+` & Polar2G[`D1++`, `D1-+`, `P1+`],
     `G2+` & Polar2G[`D2++`, `D2-+`, `P2+`],
