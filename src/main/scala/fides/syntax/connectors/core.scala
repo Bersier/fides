@@ -34,6 +34,7 @@ final case class Loc[P >: BotD, N <: P & TopD](iD: OldCode[OldCnstG[ChanD[P, N]]
   * A hard-coded connection between one input and one output
   */
 final case class Forward[D <: TopD](inp: OldCode[OldExprG[D]], out: OldCode[OldXctrG[D]]) extends OldCode[AplrG]
+// todo both could actually be matching polars, no? The polarities would have to be complementary.
 
 /**
   * Dual of Forward. The connection between [[inp]] and [[out]] is instead achieved via variables.
