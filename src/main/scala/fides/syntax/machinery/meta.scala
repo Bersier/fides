@@ -24,13 +24,6 @@ final abstract class QuoteM[
   +KM <: ConsHM[NameG[K]], +M <: TopM,
 ] extends ConsHM[QuoteG[P, T2M, K, T1M]]
 
-final abstract class Quote2M[
-  +K <: TopK, +P <: TopP, +`T2M+` <: TopM, -`T2M-` <: TopM, +T1M <: TopM,
-  +KG >: NameG[K] <: NameOffTopG[K],
-  +G >: Quote2G[P, `T2M+`, `T2M-`, K, T1M] <: OffTopG,
-  +KM <: GenM2[KG, TopR], +M <: TopM,
-] extends GenM2[G, TopR] // todo negative half
-
 final abstract class EscapeM[
   SG <: TopG,
   SM <: ConsHM[SG],
@@ -135,46 +128,3 @@ final abstract class PairM[
   G1 <: PolarG[D1, P1], G2 <: PolarG[D2, P2],
   +M1 <: ConsHM[G1], +M2 <: ConsHM[G2],
 ] extends ConsHM[PairG[D1, D2, P1, P2, G1, G2]]
-
-final abstract class Pair2M[
-  +`D1++` >: BotD <: OffTopD, -`D1-+` >: OffBotD <: TopD, +`P1+` >: BotP <: TopP,
-  +`D2++` >: BotD <: OffTopD, -`D2-+` >: OffBotD <: TopD, +`P2+` >: BotP <: TopP,
-  -`D1+-` >: BotD <: OffTopD, +`D1--` >: OffBotD <: TopD, -`P1-` >: BotP <: TopP,
-  -`D2+-` >: BotD <: OffTopD, +`D2--` >: OffBotD <: TopD, -`P2-` >: BotP <: TopP,
-  +`G1+` >: PolarBotG <: PolarOffTopG[`D1++`, `D1-+`, `P1+`],
-  +`G2+` >: PolarBotG <: PolarOffTopG[`D2++`, `D2-+`, `P2+`],
-  // todo these guys above and below should be either sub or supertypes of Polar;
-  //  the current PolarBotG used to specify this constraint has issues in that it cannot be below BotG,
-  //  and thus excludes it. Same for R.
-  //  Perhaps using <:< could allow us to express this properly?
-  -`G1-` >: PolarBotR <: TopR,
-  -`G2-` >: PolarBotR <: TopR,
-  +`G+` >: Pair2G[
-    `D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`,
-    `G1+` & Polar2G[`D1++`, `D1-+`, `P1+`],
-    `G2+` & Polar2G[`D2++`, `D2-+`, `P2+`],
-  ] <: OffTopG,
-  -`G-` >: BotR <: PairR[
-    `D1+-`, `D1--`, `D2+-`, `D2--`, `P1-`, `P2-`,
-    `G1-` | PolarR[`D1+-`, `D1--`, `P1-`],
-    `G2-` | PolarR[`D2+-`, `D2--`, `P2-`],
-  ],
-  +M1 <: GenM2[`G1+`, `G1-`], +M2 <: GenM2[`G2+`, `G2-`],
-](using
-  `G1+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D1++`, `D1-+`, `P1+`],
-  // todo these two conditions are now redundant (but I'm still not sure that using direct bounds is really better)
-  `G2+` & Polar2G[OffTopD, OffBotD, TopP] <:< Polar2G[`D2++`, `D2-+`, `P2+`],
-  PolarR[`D1+-`, `D1--`, `P1-`] <:< `G1-` | PolarR[BotD, TopD, BotP],
-  PolarR[`D2+-`, `D2--`, `P2-`] <:< `G2-` | PolarR[BotD, TopD, BotP],
-  PairOffTopG[`D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`, `G1+`, `G2+`] <:< `G+` | PairOffTopG[
-    `D1++`, `D1-+`, `D2++`, `D2-+`, `P1+`, `P2+`,
-    `G1+` & Polar2G[`D1++`, `D1-+`, `P1+`],
-    `G2+` & Polar2G[`D2++`, `D2-+`, `P2+`],
-  ],
-  `G-` | GenOffTopR[
-    `D1+-`, `D1--`, `D2+-`, `D2--`, `P1-`, `P2-`,
-    `G1-` | PolarR[`D1+-`, `D1--`, `P1-`],
-    `G2-` | PolarR[`D2+-`, `D2--`, `P2-`],
-  ] <:< GenOffTopR[`D1+-`, `D1--`, `D2+-`, `D2--`, `P1-`, `P2-`, `G1-`, `G2-`],
-) extends GenM2[`G+`, `G-`]
-// todo this seems to correctly specify the types, although probably not in a way that Scala can infer.
