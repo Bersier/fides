@@ -10,8 +10,6 @@ import fides.syntax.machinery.*
 object Inp:
   def apply[D <: TopD](iD: OldCode[OldCnstG[ChanD[D, OffBotD]]]): OldCode[ExvrG[D]] = Loc(iD)
 end Inp
-// todo add variance, like here, to all primitives, for the sake of metaprogramming?
-// todo  | Code[Name[? <: D]]
 
 /**
   * Emits to the location referred to by [[iD]], once it has a value.
@@ -23,7 +21,6 @@ end Inp
 object Out:
   def apply[D <: TopD](iD: OldCode[OldCnstG[ChanD[OffTopD, D]]]): OldCode[XcvrG[D]] = Loc(iD)
 end Out
-// todo  | Code[Name[? >: D]]
 
 /**
   * General [[PolrG]] for input and output. Note that it can only be an [[OldExprG]] or a [[OldXctrG]].

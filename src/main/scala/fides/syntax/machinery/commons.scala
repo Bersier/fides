@@ -1,7 +1,8 @@
 package fides.syntax.machinery
 
 sealed class TopK
-private[machinery] case object LauncherK extends TopK
+private[machinery] final abstract class LauncherK extends TopK
+private[machinery] final abstract class NullK extends TopK
 
 /**
   * Polarity stack for all meta-levels
@@ -11,9 +12,8 @@ private[machinery] case object LauncherK extends TopK
   */
 sealed trait ConsQ[+H <: TopP, +Q <: TopQ]
 type TopQ = ConsQ[TopP, ?]
-type BotQ = Nothing
-// todo have a proper bottom? ConsQ[BotP, BotQ]? But then we have to add lower bounds everywhere.
-//  Yes, I think we should do it.
+final abstract class BotQ extends ConsQ[BotP, BotQ]
+// todo unused; delete?
 
 /**
   * Polarity

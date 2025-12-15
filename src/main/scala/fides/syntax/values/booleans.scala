@@ -37,7 +37,7 @@ final case class Equal[
   G <: ExprG[CollectedUD[AtomD]],
   M <: GenHM[G],
 ](args: Code[M]) extends Code[EqualM[G, M]]
-// todo not sure any atoms should be comparable... or perhaps it should be EqualByID?
+// todo not sure any atoms should be comparable... or perhaps it should be EqualByName (wouldn't work for numbers)?
 
 /**
   * Outputs True with probability 1/2, False with probability 1/2.

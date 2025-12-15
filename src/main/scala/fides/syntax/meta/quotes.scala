@@ -2,8 +2,6 @@ package fides.syntax.meta
 
 import fides.syntax.machinery.*
 
-// todo add quote value primitive (that won't have a name)
-
 /**
   * Analogous to s-Strings in Scala, but for code-as-value, for metaprogramming
   */
@@ -11,7 +9,7 @@ final case class Quote[
   K <: TopK, P <: TopP, T2M <: TopM, T1M <: TopM,
   KM <: GenHM[NameG[K]], M <: TopM,
 ](name: Code[KM], code: Code[M])(
-  using Any, // todo should fix T1M and T2M
+  using Any, // todo should derive T1M and T2M
 ) extends Code[QuoteM[K, P, T2M, T1M, KM, M]]
 
 /**

@@ -18,6 +18,5 @@ final case class Pair[
   * As an Xctr, the inputted bundle is unbundled along the wires,
   * which are sources that feed values to the executing body.
   */
-//final case class Bundle(wires: Any, body: ConsM[AplrG]) extends ConsM[PovrG[?, ?]]
-// todo
-// todo double-bundle extends Code[Bipo...
+//final case class Bundle(wires: Any, body: GenM[AplrG]) extends GenM[PovrG[?, ?]]
+// todo should be a Polar, and take a Polar

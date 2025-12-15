@@ -49,5 +49,3 @@ package fides.syntax.identifiers
 //  newValue: Code[Expr[D]],
 //  iD: Code[Lit[Cell[D]]],
 //) extends Expr[D]
-
-// TODO mutable variables

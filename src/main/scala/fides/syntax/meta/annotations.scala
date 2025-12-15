@@ -6,15 +6,11 @@ import typelevelnumbers.binary.Bits
 /**
   * An annotated piece of code. The annotation does not change the semantics of the code.
   * It acts as a structured comment.
+  *
+  * If the annotation is bound to a quote, then it belongs to that quote.
   */
-final case class Annotated[G <: TopG, D <: TopD](
+final case class Annotated[K <: TopK, G <: TopG, D <: TopD](
+  quoteName: GenM[NameG[K]],
   code: GenM[G],
   annotation: GenM[CnstG[D]],
 ) extends GenM[G]
-
-final case class AnnotatedMatcher[G <: TopG, B <: Bits, D <: TopD](
-  code: GenM[G],
-  annotation: GenM[CnstG[D]],
-  level: GenM[NtrlG[NatD[B]]]// = NatLit(Bits.None),
-) extends GenM[G]
-// todo... delete?

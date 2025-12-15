@@ -76,7 +76,6 @@ final abstract class ZipG[
   E <: TopE, EM <: GenHM[EG], P <: TopP,
   +G <: PolarG[CollectedD[E, QuoteD[EM]], P],
 ] extends PolarG[QuoteD[ArgsM[E, EG, EM]], P]
-// todo Qs...
 
 final abstract class CaseG[D <: TopD, A <: AtomD] extends TopG
 
@@ -98,42 +97,27 @@ sealed trait AplrG extends TopG
 final abstract class RepeatedG[+G <: AplrG] extends AplrG
 final abstract class ConcurrentG[+G <: ArgsUG[AplrG]] extends AplrG
 
-final abstract class NameG[+K <: TopK] extends TopG, NameOffTopG[K] // todo Singleton?
-type LauncherNameG = NameG[LauncherK.type]
+// todo make capability requirements for every place where names are used explicit
+final abstract class NameG[+K <: TopK] extends TopG, NameOffTopG[K]
+type LauncherNameG = NameG[LauncherK]
 
-final abstract class OwnedG[+K <: TopK] extends TopG
-
-/*
- * todo
- *
- * Channels
- * Immutable variables
- * Read-once variables
- * Linear variables
- * Cells
- * Signatures
- *
- * VariableProperties[+Mutability <: TopB, +Linearity <: TopB, +Synchronicity <: TopB]
- *
- * Name
- * Identifier(name)
- * Channel(name, type) <: InpChannel(name, type)
- * Address(Channel(name, type))
- */
+/**
+  * A distinguished name that is unbound and unbindable; used for quote values, for example
+  */
+type NullNameG = NameG[NullK]
 
 sealed trait LocG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends TopG
+// todo LocProperties[+Mutability <: TopB, +Linearity <: TopB, +Synchronicity <: TopB]
 
 final abstract class CellG[+K <: TopK, D <: TopD] extends LocG[K, D, BotVP]
 
 sealed trait RefG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends TopG
 
 final abstract class ChanRefG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends RefG[K, D, P]
-// todo the new polarity system prevents us from having generic variance as needed.
-//  It forces us to specialize a polar to get any variance.
-//  Can we get the best of the old and the new system? Study EscapeM
-//  => switch to Polar2G
 
 final abstract class CellRefG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends RefG[K, D, P]
+
+final abstract class XputG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP, +RG <: RefG[K, D, P]] extends PolarG[D, P]
 
 /**
   * [[PolarG]] is a generalization of expressions and patterns.
@@ -284,7 +268,7 @@ final abstract class PairG[
   +G1 <: PolarG[D1, P1], +G2 <: PolarG[D2, P2],
 ] extends PolarG[PairD[D1, D2], P1 | P2]
 
-// todo I think we might need variance annotations on helper types everywhere, lest they mess up the hierarchy
+// todo I think we need variance annotations on helper types everywhere, lest they mess up the hierarchy
 
 /**
   * @tparam P is the meta-polarity of T1M

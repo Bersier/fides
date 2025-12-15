@@ -34,4 +34,3 @@ final case class Collect[
   SG <: ChanRefG[K, D, P], NG <: NtrlG[NatD[B]],
   SM <: GenHM[SG], NM <: GenHM[NG],
 ](elementSource: Code[SM], size: Code[NM]) extends Code[CollectM[K, D, P, B, SG, NG, SM, NM]]
-// todo does it only start collecting after having received [[size]]?

@@ -9,6 +9,8 @@ import typelevelnumbers.binary.Bits
   */
 trait GenM[+G <: TopG] private[syntax]() // todo seal
 type TopM = GenM[TopG]
+// todo make sure we have the correct subtyping relation for Ds, Gs, and Ms.
+//  Looking at Quote and Escape can help find it.
 
 /**
   * Helper type that is invariant in [[G]].
