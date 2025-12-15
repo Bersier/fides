@@ -11,9 +11,6 @@ trait ConsM[+G <: TopG] private[syntax]() // todo seal
 // todo rename ConsM to something else. GenM?
 type TopM = ConsM[TopG]
 
-sealed trait GenM2[+`G+` >: BotG <: OffTopG, -`G-` <: TopR] private[syntax]()
-type TopM2 = GenM2[OffTopG, BotG]
-
 /**
   * Helper type that is invariant in [[G]].
   */

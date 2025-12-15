@@ -18,9 +18,5 @@ object Code:
   ] => (c1: Code[M1], c2: Code[M2]) => Code[PairM[D1, D2, P1, P2, G1, G2, M1, M2]] = Pair(c1, c2)
 end Code
 
-trait Code2[M <: TopM2] private[syntax]() // todo add `TM+` and `TM-`. Alternatively, add a quote name list for context
-// todo perhaps reduction could even be applied just-in-time, so not in advance as soon as a quote is encountered,
-//  but lazily inside as we go... does that make any sense?
-
 @deprecated
 trait OldCode[+G <: TopG] private[syntax]()
