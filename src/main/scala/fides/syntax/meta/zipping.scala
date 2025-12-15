@@ -9,7 +9,7 @@ import util.Multisets.Multiset
   */
 transparent sealed trait Args[
   E <: TopE, G <: TopG,
-  M <: ConsHM[G],
+  M <: GenHM[G],
 ] extends Code[ArgsM[E, G, M]]:
   def arguments: Multiset[Code[M]]
   override def toString: String = s"Args{${arguments.asInstanceOf[Vector[?]].mkString(", ")}}"
@@ -17,30 +17,30 @@ object Args:
   def apply[G <: TopG](): None = NoneImpl
   def apply[
   G <: TopG,
-  M <: ConsHM[G],
+  M <: GenHM[G],
 ](first: Code[M], others: Code[M]*): Some[G, M] = new SomeImpl(first, others*)
   def unapply[
     G <: TopG,
-    M <: ConsHM[G],
+    M <: GenHM[G],
   ](args: Args[?, G, M]): scala.Some[Multiset[Code[M]]] = Some(args.arguments)
 
   // todo shouldn't it be BotG instead of OffBotG?
   type None = Code[ArgsM[TopE.T, OffBotG, Nothing /*todo BotM*/]]
   type Some[
   G <: TopG,
-  M <: ConsHM[G],
+  M <: GenHM[G],
 ] = Code[ArgsM[TopE.F, G, M]]
 
   final case class Matcher[G <: TopG](
-    typeRepr: ConsM[G],
-  ) extends ConsM[ArgsG[TopE, G]]
+    typeRepr: GenM[G],
+  ) extends GenM[ArgsG[TopE, G]]
   // todo add another type parameter I?
 
   private case object NoneImpl extends Args[TopE.T, OffBotG, Nothing], None:
     def arguments: Multiset[Code[Nothing]] = summon[MultisetOps[Multiset]].empty
   private final class SomeImpl[
     G <: TopG,
-    M <: ConsHM[G],
+    M <: GenHM[G],
   ](first: Code[M], others: Code[M]*) extends Args[TopE.F, G, M], Some[G, M]:
     val arguments: Multiset[Code[M]] = summon[MultisetOps[Multiset]].multiset(elements = first +: others*)
 end Args
@@ -52,7 +52,7 @@ end Args
   */
 final case class Zip[
   EG <: TopG,
-  E <: TopE, EM <: ConsHM[EG], P <: TopP,
+  E <: TopE, EM <: GenHM[EG], P <: TopP,
   G <: PolarG[CollectedD[E, QuoteD[EM]], P],
-  M <: ConsHM[G],
+  M <: GenHM[G],
 ](pieces: Code[M]) extends Code[ZipM[EG, E, EM, P, G, M]]

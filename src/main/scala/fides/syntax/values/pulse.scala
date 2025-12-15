@@ -8,4 +8,4 @@ import fides.syntax.machinery.*
   *
   * The corresponding type is akin to the Unit type.
   */
-case object Pulse extends Code[ConsM[NtrlG[PulseD]]]
+case object Pulse extends Code[GenM[NtrlG[PulseD]]]

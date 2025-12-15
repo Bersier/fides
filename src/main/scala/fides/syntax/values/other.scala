@@ -7,4 +7,4 @@ import fides.syntax.machinery.*
   *
   * Unmanipulable on purpose, because it's not really part of the language.
   */
-final case class Str(value: String) extends Code[ConsM[NtrlG[StrD]]]
+final case class Str(value: String) extends Code[GenM[NtrlG[StrD]]]

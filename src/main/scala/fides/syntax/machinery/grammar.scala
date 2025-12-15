@@ -73,7 +73,7 @@ type ArgsUG[+G <: TopG] = ArgsG[TopE, G]
 
 final abstract class ZipG[
   EG <: TopG,
-  E <: TopE, EM <: ConsHM[EG], P <: TopP,
+  E <: TopE, EM <: GenHM[EG], P <: TopP,
   +G <: PolarG[CollectedD[E, QuoteD[EM]], P],
 ] extends PolarG[QuoteD[ArgsM[E, EG, EM]], P]
 // todo Qs...
@@ -300,9 +300,9 @@ final abstract class QuoteG[
 final abstract class WrapG[
   D <: TopD,
   +G <: ExprHG[D],
-] extends ExprG[QuoteD[ConsM[NtrlG[D]]]]
+] extends ExprG[QuoteD[GenM[NtrlG[D]]]]
 
 final abstract class EvalG[
   D <: TopD,
-  +G <: ExprG[QuoteD[ConsM[ExprHG[D]]]],
+  +G <: ExprG[QuoteD[GenM[ExprHG[D]]]],
 ] extends ExprG[D]

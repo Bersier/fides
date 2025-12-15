@@ -8,7 +8,7 @@ import scala.annotation.publicInBinary
 /**
   * Natural number values
   */
-final case class NatLit[B <: Bits] @publicInBinary private(bits: B) extends Code[ConsM[NtrlG[NatD[B]]]]:
+final case class NatLit[B <: Bits] @publicInBinary private(bits: B) extends Code[GenM[NtrlG[NatD[B]]]]:
   assert(bits.withoutTrailingZeros == bits)
   override def toString: String = bits.toBigInt.toString
 object NatLit:
@@ -21,7 +21,7 @@ end NatLit
   */
 final case class Add[
   G <: ExprG[CollectedUD[NatUD]],
-  M <: ConsHM[G],
+  M <: GenHM[G],
 ](terms: Code[M]) extends Code[AddM[G, M]]
 
 /**
@@ -29,7 +29,7 @@ final case class Add[
   */
 final case class Multiply[
   G <: ExprG[CollectedUD[NatUD]],
-  M <: ConsHM[G],
+  M <: GenHM[G],
 ](factors: Code[M]) extends Code[MultiplyM[G, M]]
 
 /**
@@ -37,5 +37,5 @@ final case class Multiply[
   */
 final case class Compare[
   G1 <: ExprG[NatUD], G2 <: ExprG[NatUD],
-  M1 <: ConsHM[G1], M2 <: ConsHM[G2],
+  M1 <: GenHM[G1], M2 <: GenHM[G2],
 ](lhs: Code[M1], rhs: Code[M2]) extends Code[CompareM[G1, G2, M1, M2]]

@@ -8,13 +8,13 @@ import typelevelnumbers.binary.Bits
   * It acts as a structured comment.
   */
 final case class Annotated[G <: TopG, D <: TopD](
-  code: ConsM[G],
-  annotation: ConsM[CnstG[D]],
-) extends ConsM[G]
+  code: GenM[G],
+  annotation: GenM[CnstG[D]],
+) extends GenM[G]
 
 final case class AnnotatedMatcher[G <: TopG, B <: Bits, D <: TopD](
-  code: ConsM[G],
-  annotation: ConsM[CnstG[D]],
-  level: ConsM[NtrlG[NatD[B]]]// = NatLit(Bits.None),
-) extends ConsM[G]
+  code: GenM[G],
+  annotation: GenM[CnstG[D]],
+  level: GenM[NtrlG[NatD[B]]]// = NatLit(Bits.None),
+) extends GenM[G]
 // todo... delete?

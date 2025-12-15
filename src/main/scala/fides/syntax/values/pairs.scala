@@ -8,7 +8,7 @@ import fides.syntax.machinery.*
 final case class Pair[
   D1 <: TopD, D2 <: TopD, P1 <: TopP, P2 <: TopP,
   G1 <: PolarG[D1, P1], G2 <: PolarG[D2, P2],
-  M1 <: ConsHM[G1], M2 <: ConsHM[G2],
+  M1 <: GenHM[G1], M2 <: GenHM[G2],
 ](c1: Code[M1], c2: Code[M2]) extends Code[PairM[D1, D2, P1, P2, G1, G2, M1, M2]]
 // todo replace by record?
 
