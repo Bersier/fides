@@ -55,6 +55,7 @@ final abstract class NatD[+B <: Bits] extends AtomD
 type NatUD = NatD[Bits]
 
 final abstract class QuoteD[+TM <: TopM] extends TopD
+final abstract class Quote2D[+TM <: Top2M] extends TopD
 
 final abstract class SignedD[+D <: TopD] extends TopD
 

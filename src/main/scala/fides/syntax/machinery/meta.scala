@@ -12,8 +12,6 @@ type TopM = GenM[TopG]
 // todo make sure we have the correct subtyping relation for Ds, Gs, and Ms.
 //  Looking at Quote and Escape can help find it.
 
-sealed abstract class Gen2M[+G <: TopG] private[machinery](g: G)
-
 /**
   * Helper type that is invariant in [[G]].
   */
