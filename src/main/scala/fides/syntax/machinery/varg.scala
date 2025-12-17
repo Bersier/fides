@@ -35,3 +35,5 @@ end SignedQuoteW
 //  Use two-pronged approach! First allow the building of terms without checking the exact syntax. Resolves M.
 //  Then, add a method typecheck to Code. It requires an implicit proof that the code is properly constructed.
 //  Syntax-checking happens in those givens, calling each other.
+
+// Xctr[TopD] <: Xctr[QuoteD[TopM]] <: Xctr[QuoteD[GenM[AnyF]]] => Any W0[F] is possible...

@@ -104,7 +104,7 @@ type LauncherNameG = NameG[LauncherK]
 /**
   * A distinguished name that is unbound and unbindable; used for quote values, for example
   */
-type NullNameG = NameG[NullK]
+type NullNameG = NameG[NullK] // todo I think we should get rid of this, and use fresh names instead when needed.
 
 sealed trait LocG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends TopG
 // todo LocProperties[+Mutability <: TopB, +Linearity <: TopB, +Synchronicity <: TopB]
