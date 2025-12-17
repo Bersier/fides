@@ -126,13 +126,6 @@ sealed trait PolarG[D <: TopD, +P <: TopP] extends TopG
 type PosG[+D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[BotB, TopB, C]]
 type NegG[-D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[TopB, BotB, C]]
 
-// todo try switching to this system once Scala has bivariance
-sealed trait Polar2G[+D <: TopV[?]] extends TopG
-sealed trait TopV[D >: BotD <: TopD] private[machinery]()
-sealed trait `V+`[+D >: BotD <: TopD] extends TopV[D @uncheckedVariance]
-sealed trait `V-`[-D >: BotD <: TopD] extends TopV[D @uncheckedVariance]
-final abstract class`V0`[D >: BotD <: TopD] extends `V+`[D], `V-`[D]
-
 @deprecated
 sealed trait OldPolarG[+P >: BotD, -N <: TopD, +IsLiteral <: Boolean] extends TopG
 @deprecated
@@ -267,6 +260,11 @@ final abstract class PairG[
   D1 <: TopD, D2 <: TopD, P1 <: TopP, P2 <: TopP,
   +G1 <: PolarG[D1, P1], +G2 <: PolarG[D2, P2],
 ] extends PolarG[PairD[D1, D2], P1 | P2]
+
+//final case class Pair2G[
+//  +V1 <: TopV, +V2 <: TopV,
+//  +G1 <: Polar2G[V1], +G2 <: Polar2G[V2], +V <: TopV,
+//](g1: G1, g2: G2)(using PairV[V1, V2, V]) extends Polar2G[V]
 
 // todo I think we need variance annotations on helper types everywhere, lest they mess up the hierarchy
 
