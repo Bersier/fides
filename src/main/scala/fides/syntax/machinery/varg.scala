@@ -1,6 +1,6 @@
 package fides.syntax.machinery
 
-sealed trait TopW
+sealed trait TopW private[machinery]()
 sealed trait `W+`[+F <: TopF] extends TopW
 sealed trait `W-`[-F <: TopF] extends TopW
 sealed trait `W0`[F <: TopF] extends `W+`[F], `W-`[F]

@@ -261,11 +261,6 @@ final abstract class PairG[
   +G1 <: PolarG[D1, P1], +G2 <: PolarG[D2, P2],
 ] extends PolarG[PairD[D1, D2], P1 | P2]
 
-//final case class Pair2G[
-//  +V1 <: TopV, +V2 <: TopV,
-//  +G1 <: Polar2G[V1], +G2 <: Polar2G[V2], +V <: TopV,
-//](g1: G1, g2: G2)(using PairV[V1, V2, V]) extends Polar2G[V]
-
 // todo I think we need variance annotations on helper types everywhere, lest they mess up the hierarchy
 
 /**
