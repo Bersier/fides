@@ -20,3 +20,17 @@ final case class Quote2M[
 //  SM <: Gen2M[SG],
 //  +KM <: Gen2M[NameG[TopK]], +M <: GenM[PolarG[QuoteD[SM], TopP]],
 //] extends Gen2M[SG]
+
+/*
+todo
+Reducing escapes
+
+C1 | G1 <: Expr(QuoteD(M')), M' tight
+Escape(a, C1) = C | M
+Quote(a, ... C ...)  =>  ReducedM = M'
+
+C1 | G1 <: Xctr(? >: QuoteD(M')), M' tight
+Escape(a, C1) = C | M G X H
+Quote(a, ... C ...)  =>  ReducedM = M', G = m2g(M') & H, provided m2g(M') is in closure(H)
+todo do we need something analogous to H, but for M? O? And then have ReducedM = M' & O? Maybe not.
+ */
