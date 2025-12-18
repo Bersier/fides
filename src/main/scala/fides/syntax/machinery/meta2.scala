@@ -25,12 +25,13 @@ final case class Quote2M[
 todo
 Reducing escapes
 
-C1 | G1 <: Expr(QuoteD(M')), M' tight
-Escape(a, C1) = C | M
-Quote(a, ... C ...)  =>  ReducedM = M'
+C1 || G1 <: Expr(QuoteD(M')), M' tight
+Escape(a, C1) = C || M G H
+Quote(a, ... C ...)  =>  ReducedM = M', G = m2g(M') | inverted(H); requiring G <: H
 
-C1 | G1 <: Xctr(? >: QuoteD(M')), M' tight
-Escape(a, C1) = C | M G X H
-Quote(a, ... C ...)  =>  ReducedM = M', G = m2g(M') & H, provided m2g(M') is in closure(H)
-todo do we need something analogous to H, but for M? O? And then have ReducedM = M' & O? Maybe not.
+C1 || G1 <: Xctr(? >: QuoteD(M')), M' tight
+Escape(a, C1) = C || M G H
+Quote(a, ... C ...)  =>  ReducedM = M', G = m2g(M') & H; requiring G >: inverted(H)
+
+
  */
