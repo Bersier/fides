@@ -25,13 +25,23 @@ final case class Quote2M[
 todo
 Reducing escapes
 
-C1 || G1 <: Expr(QuoteD(M')), M' tight
+C1 || G1 <: Expr(? <: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
-Quote(a, ... C ...)  =>  ReducedM = M', G = m2g(M') | inverted(H); requiring G <: H
+Quote(a, ... C ...)  =>
+  ReducedM = M', G = m2g(M') | inverted(H); requiring m2g(M') <: H
 
 C1 || G1 <: Xctr(? >: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
-Quote(a, ... C ...)  =>  ReducedM = M', G = m2g(M') & H; requiring G >: inverted(H)
+Quote(a, ... C ...)  =>
+  ReducedM = M', G = m2g(M') & H; requiring m2g(M') >: inverted(H)
 
+C1 || G1 <: Expr(? <: QuoteD(M')), M' tight
+Escape(a, C1) = C || M G H
+Quote(a, ... QuoteExpr(b, ... C ...) ...)  =>
+  ReducedM = M', G = m2g(M') | inverted(H); requiring m2g(M') <: H
 
+C1 || G1 <: Expr(? <: QuoteD(M')), M' tight
+Escape(a, C1) = C || M G H
+Quote(a, ... QuoteXctr(b, ... C ...) ...)  =>
+  ReducedM = M', G = inverted(m2g(M')) & H; requiring m2g(M') <: H
  */
