@@ -59,6 +59,16 @@ Escape(a, C1) = C || M G H
 QuoteExpr(a, ... QuoteXctr(b, ... C ...) ...)  =>
   ReducedM = M', G = -m2g(M') & +H; requiring +m2g(M') <: +H
 
+C1 || G1 <: Expr(? <: QuoteD(M')), M' tight
+Escape(a, C1) = C || M G H
+QuoteExpr(a, ... QuoteNtrl(b, ... C ...) ...)  =>
+  ReducedM = M', G = |span(m2g(M') | -H); requiring m2g(M') <: +H
+todo what if the inner QuoteNtrl doesn't have to be neutral from the context?
+ For example, maybe it's only used as an Expr. In that case, the rule for
+ QuoteExpr(a, ... QuoteExpr(b, ... C ...) ...) should be considered as well, right? Or not?
+ Perhaps the polarity of the quote should only be determined from its contents,
+ plus possibly from some explicit annotation.
+
 C1 || G1 <: Xctr(? >: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
 QuoteXctr(a, ... QuoteExpr(b, ... C ...) ...)  =>
@@ -69,6 +79,12 @@ Escape(a, C1) = C || M G H
 QuoteXctr(a, ... QuoteXctr(b, ... C ...) ...)  =>
   ReducedM = M', G = -m2g(M') | -H; requiring +m2g(M') >: -H
 
+C1 || G1 <: Xctr(? >: QuoteD(M')), M' tight
+Escape(a, C1) = C || M G H
+QuoteXctr(a, ... QuoteNtrl(b, ... C ...) ...)  =>
+  ReducedM = M', G = &span(m2g(M') & +H); requiring m2g(M') >: -H
+todo a quote neutral can have unbound escapes that could themselves have a non-neutral polarity.
+
 C1 || G1 <: Ntrl(? =: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
 QuoteNtrl(a, ... QuoteExpr(b, ... C ...) ...)  =>
@@ -78,6 +94,13 @@ C1 || G1 <: Ntrl(? =: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
 QuoteNtrl(a, ... QuoteXctr(b, ... C ...) ...)  =>
   ReducedM = M', G = -m2g(M'); requiring -H <: m2g(M') <: +H
+
+C1 || G1 <: Ntrl(? =: QuoteD(M')), M' tight
+Escape(a, C1) = C || M G H
+QuoteNtrl(a, ... QuoteNtrl(b, ... C ...) ...)  =>
+  ReducedM = M', G = +m2g(M'); requiring +m2g(M') in span(H)
+
+todo this was written simply by following the patterns. We need theoretical justification.
 
 ----
 
