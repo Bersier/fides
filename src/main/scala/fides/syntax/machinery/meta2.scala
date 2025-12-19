@@ -64,6 +64,7 @@ C1 || G1 <: Expr(? <: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
 QuoteExpr(a, ... QuoteNtrl(b, ... C ...) ...)  =>
   ReducedM = M', G = |span(m2g(M') | -H); requiring m2g(M') <: +H
+todo +G = +m2g(M') | -H, -G = -m2g(M') & +H
 
 C1 || G1 <: Xctr(? >: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
@@ -79,6 +80,7 @@ C1 || G1 <: Xctr(? >: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
 QuoteXctr(a, ... QuoteNtrl(b, ... C ...) ...)  =>
   ReducedM = M', G = &span(m2g(M') & +H); requiring m2g(M') >: -H
+todo +G = -m2g(M') | -H, -G = +m2g(M') & +H
 
 C1 || G1 <: Ntrl(? =: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
