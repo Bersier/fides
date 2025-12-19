@@ -1,0 +1,285 @@
+package fides.syntax2025.machinery
+
+import typelevelnumbers.binary.Bits
+
+import scala.annotation.unchecked.uncheckedVariance
+
+type OffTopG = GenOffTopG[
+  OffTopD, OffBotD, OffTopD, OffBotD, TopP, TopP, ?, ?,
+  OffTopD, OffBotD, TopP,
+  TopK,
+]
+
+type PairOffTopG[
+  +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: TopD,
+  +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
+  +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
+  +G1 <: OffTopG, +G2 <: OffTopG,
+] = GenOffTopG[
+  `D1+`, `D1-`, `D2+`, `D2-`, P1, P2, G1, G2,
+  OffTopD, OffBotD, TopP,
+  TopK,
+]
+
+type PolarOffTopG[
+  +`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP,
+] = GenOffTopG[
+  OffTopD, OffBotD, OffTopD, OffBotD, TopP, TopP, ?, ?,
+  `D+`, `D-`, P,
+  TopK,
+]
+
+type NameOffTopG[+K <: TopK] = GenOffTopG[
+  OffTopD, OffBotD, OffTopD, OffBotD, TopP, TopP, ?, ?,
+  OffTopD, OffBotD, TopP,
+  K,
+]
+
+sealed trait GenOffTopG[
+  // for PairG
+  +`D1+` >: BotD <: OffTopD, -`D1-` >: OffBotD <: TopD,
+  +`D2+` >: BotD <: OffTopD, -`D2-` >: OffBotD <: TopD,
+  +P1 >: BotP <: TopP, +P2 >: BotP <: TopP,
+  +G1 <: OffTopG, +G2 <: OffTopG,
+  // for PolarG
+  +`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD, +P <: TopP,
+  // for NameG
+  +K <: TopK,
+] private[machinery]()
+
+/**
+  * Parent type of all the Scala types that represent
+  * the different types (aka syntactic categories) of possible Fides code, excluding metaprogramming
+  */
+sealed trait TopG extends OffTopG
+
+type BotG = Nothing // todo
+
+/**
+  * A type smaller than the intersection of all code types.
+  *
+  * Indicates an unreachable code type (in covariant position).
+  */
+type OffBotG = Nothing
+
+/**
+  * Fides code type for multisets of syntactic elements
+  *
+  * @tparam E keeps track of whether the collection is empty
+  */
+final abstract class ArgsG[+E <: TopE, +G <: TopG] extends TopG
+// todo this is losing information, which is problematic
+type ArgsUG[+G <: TopG] = ArgsG[TopE, G]
+
+final abstract class ZipG[
+  EG <: TopG,
+  E <: TopE, EM <: GenHM[EG], P <: TopP,
+  +G <: PolarG[CollectedD[E, QuoteD[EM]], P],
+] extends PolarG[QuoteD[ArgsM[E, EG, EM]], P]
+
+final abstract class CaseG[D <: TopD, A <: AtomD] extends TopG
+
+final abstract class TypeG[D <: TopD] extends TopG
+
+final abstract class DeclG[D <: TopD] extends TopG
+
+@deprecated
+sealed trait OldNameG[+D <: TopD] extends TopG
+
+@deprecated
+final abstract class MNameG[D <: TopD] extends OldNameG[D]
+
+/**
+  * Fides code type for non-polar process code
+  */
+sealed trait AplrG extends TopG
+
+final abstract class RepeatedG[+G <: AplrG] extends AplrG
+final abstract class ConcurrentG[+G <: ArgsUG[AplrG]] extends AplrG
+
+// todo make capability requirements for every place where names are used explicit
+final abstract class NameG[+K <: TopK] extends TopG, NameOffTopG[K]
+type LauncherNameG = NameG[LauncherK]
+
+/**
+  * A distinguished name that is unbound and unbindable; used for quote values, for example
+  */
+type NullNameG = NameG[NullK] // todo I think we should get rid of this, and use fresh names instead when needed.
+
+sealed trait LocG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends TopG
+// todo LocProperties[+Mutability <: TopB, +Linearity <: TopB, +Synchronicity <: TopB]
+
+final abstract class CellG[+K <: TopK, D <: TopD] extends LocG[K, D, BotVP]
+
+sealed trait RefG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends TopG
+
+final abstract class ChanRefG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends RefG[K, D, P]
+
+final abstract class CellRefG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP] extends RefG[K, D, P]
+
+final abstract class XputG[+K <: TopK, D <: TopD, +P >: BotVP <: TopP, +RG <: RefG[K, D, P]] extends PolarG[D, P]
+
+/**
+  * [[PolarG]] is a generalization of expressions and patterns.
+  */
+sealed trait PolarG[D <: TopD, +P <: TopP] extends TopG
+type PosG[+D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[BotB, TopB, C]]
+type NegG[-D <: TopD, +C <: TopB] = PolarG[D @uncheckedVariance, GenP[TopB, BotB, C]]
+
+@deprecated
+sealed trait OldPolarG[+P >: BotD, -N <: TopD, +IsLiteral <: Boolean] extends TopG
+@deprecated
+type PolrG[+P >: BotD, -N <: TopD] = OldPolarG[P, N, Boolean]
+
+type TopPoG = PolrG[OffTopD, OffBotD]
+
+/**
+  * Fides code type for expressions. While expressions are really just a special type of process with a single output,
+  * they behave differently from a syntactic point of view, as [where their only output goes] is not represented
+  * explicitly by a name, but implicitly by where they are written, as is usual with expressions in other languages.
+  * This syntactic behavior can be viewed as some kind of mandatory syntactic sugar.
+  *
+  * Dual of Xctr
+  *
+  * Expressions should probably not be allowed to have any output effects
+  * (i.e. no outgoing connections with external code).
+  *
+  * Fides is strongly typed in the sense that no expression can get stuck due to a type mismatch.
+  * If an expression of a given data type evaluates, it always evaluates to a value of that data type.
+  */
+type ExprG[+D <: TopD] = PosG[D, TopB]
+
+/**
+  * Invariant helper version of [[ExprG]]
+  */
+private[syntax2025] type ExprHG[D <: TopD] = PolarG[D, GenP[BotB, TopB, TopB]]
+
+@deprecated
+type OldExprG[+D <: TopD] = PolrG[D, OffBotD]
+
+/**
+  * Fides code type for extractors (aka patterns). While extractors are really just a special type of
+  * process with a single input, they behave differently from a syntactic point of view, as [where their only input
+  * comes from] is not represented explicitly by a name, but implicitly by where they are written, dually to
+  * expressions. They can be thought of as expressions that are being evaluated backwards, with the syntax for input and
+  * output being flipped.
+  *
+  * Dual of Expr
+  *
+  * Extractors should probably not be allowed to have any input effects
+  * (i.e. no incoming connections with external code).
+  *
+  * Fides is strongly typed in the sense that no extractor can get stuck due to a type mismatch.
+  * If an extractor of a given data type is given a value of that type,
+  * it never chokes on it (like a refutable pattern could).
+  */
+type XctrG[-D <: TopD] = NegG[D, TopB]
+
+@deprecated
+type OldXctrG[-D <: TopD] = PolrG[OffTopD, D]
+
+/**
+  * Fides code type for Literals
+  *
+  * Can be used as either an [[OldExprG]] or as an [[OldXctrG]]. Is naturally a [[OldCnstG]].
+  */
+type NtrlG[D <: TopD] = PolarG[D, BotP]
+
+@deprecated
+type OldNtrlG[D <: TopD] = OldPolarG[D, D, true]
+
+/**
+  * Fides code type for bi-polar process code
+  *
+  * Bi-polar process code should probably not be allowed to have any side effects
+  * (i.e. no connections with external code).
+  */
+final abstract class BipoG[I <: TopPoG, O <: TopPoG] extends TopG
+// todo make more stuff Bipo? Stuff in generic.scala?
+
+/**
+  * [[PolrG]] that is not a literal
+  */
+@deprecated
+type PovrG[+P >: BotD, -N <: TopD] = OldPolarG[P, N, false]
+
+/**
+  * [[OldExprG]] that is not a literal
+  */
+@deprecated
+type ExvrG[+D <: TopD] = OldPolarG[D, OffBotD, false]
+
+/**
+  * Fides code type for constants
+  *
+  * It differs from [[OldNtrlG]] in that it allows for covariance, which is what we want when a constant is needed.
+  */
+type CnstG[+D <: TopD] = PosG[D, BotB]
+
+@deprecated
+type OldCnstG[+D <: TopD] = OldPolarG[D, OffBotD, true]
+
+/**
+  * [[OldXctrG]] that is not a literal
+  */
+@deprecated
+type XcvrG[-D <: TopD] = OldPolarG[OffTopD, D, false]
+
+final abstract class ConjoinG[+G <: ExprG[CollectedUD[BoolD]]] extends ExprG[BoolD]
+final abstract class DisjoinG[+G <: ExprG[CollectedUD[BoolD]]] extends ExprG[BoolD]
+
+final abstract class NegateG[
+  D <: BoolD, P <: TopP,
+  +G <: PolarG[D, P],
+] extends PolarG[BoolD.Not[D], P | BotVP]
+
+final abstract class EqualG[+G <: ExprG[CollectedUD[AtomD]]] extends ExprG[BoolD]
+final abstract class RandomBitG extends ExprG[BoolD]
+
+final abstract class CollectedG[
+  D <: TopD, P <: TopP,
+  E <: TopE, EG <: PolarG[D, P],
+  +G <: ArgsG[E, EG],
+] extends PolarG[CollectedD[E, D], P]
+
+final abstract class AddElementG[
+  D <: TopD, EP <: TopP, P <: TopP,
+  +EG <: PolarG[D, EP], +G <: PolarG[CollectedUD[D], P],
+] extends PolarG[CollectedD[TopE.F, D], EP | P]
+
+final abstract class CollectG[
+  K <: TopK, D <: TopD, P >: BotVP <: TopP, B <: Bits,
+  +SG <: ChanRefG[K, D, P], +NG <: NtrlG[NatD[B]],
+] extends PolarG[CollectedUD[D], P]
+
+final abstract class AddG[+G <: ExprG[CollectedUD[NatUD]]] extends ExprG[NatUD]
+final abstract class MultiplyG[+G <: ExprG[CollectedUD[NatUD]]] extends ExprG[NatUD]
+final abstract class CompareG[+G1 <: ExprG[NatUD], +G2 <: ExprG[NatUD]] extends ExprG[BoolD]
+
+final abstract class PairG[
+  D1 <: TopD, D2 <: TopD, P1 <: TopP, P2 <: TopP,
+  +G1 <: PolarG[D1, P1], +G2 <: PolarG[D2, P2],
+] extends PolarG[PairD[D1, D2], P1 | P2]
+
+// todo I think we need variance annotations on helper types everywhere, lest they mess up the hierarchy
+
+/**
+  * @tparam P is the meta-polarity of T1M
+  * @tparam T2M is T1M after further reducing at this quote (so at this [[K]])
+  * @tparam K tracks the name of this quote.
+  * @tparam T1M is the reduced landscape that has no more escapes that are bound to quotes outside of this one.
+  */
+final abstract class QuoteG[
+  P <: TopP, T2M <: TopM,
+  +K <: TopK, +T1M <: TopM,
+] extends PolarG[QuoteD[T2M], P]
+
+final abstract class WrapG[
+  D <: TopD,
+  +G <: ExprHG[D],
+] extends ExprG[QuoteD[GenM[NtrlG[D]]]]
+
+final abstract class EvalG[
+  D <: TopD,
+  +G <: ExprG[QuoteD[GenM[ExprHG[D]]]],
+] extends ExprG[D]
