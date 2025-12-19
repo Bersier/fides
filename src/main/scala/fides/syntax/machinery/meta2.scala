@@ -63,11 +63,6 @@ C1 || G1 <: Expr(? <: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
 QuoteExpr(a, ... QuoteNtrl(b, ... C ...) ...)  =>
   ReducedM = M', G = |span(m2g(M') | -H); requiring m2g(M') <: +H
-todo what if the inner QuoteNtrl doesn't have to be neutral from the context?
- For example, maybe it's only used as an Expr. In that case, the rule for
- QuoteExpr(a, ... QuoteExpr(b, ... C ...) ...) should be considered as well, right? Or not?
- Perhaps the polarity of the quote should only be determined from its contents,
- plus possibly from some explicit annotation.
 
 C1 || G1 <: Xctr(? >: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
@@ -83,8 +78,6 @@ C1 || G1 <: Xctr(? >: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
 QuoteXctr(a, ... QuoteNtrl(b, ... C ...) ...)  =>
   ReducedM = M', G = &span(m2g(M') & +H); requiring m2g(M') >: -H
-todo a quote neutral can have unbound escapes that could themselves have a non-neutral polarity.
- But wait, we are working on Gs, so no unbound escapes there, so it seems fine.
 
 C1 || G1 <: Ntrl(? =: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
@@ -106,3 +99,15 @@ todo this was written simply by following the patterns. We need theoretical just
 ----
 
  */
+
+// todo For QuoteExpr(a, ... QuoteNtrl(b, ... C ...) ...),
+//  what if the inner QuoteNtrl doesn't have to be neutral from the context?
+//  For example, maybe it's only used as an Expr. In that case, the rule for
+//  QuoteExpr(a, ... QuoteExpr(b, ... C ...) ...) should be considered as well, right? Or not?
+//  Perhaps the polarity of the quote should only be determined from its contents,
+//  plus possibly from some explicit annotation.
+//  Yes, I don't think the polarity of the nested quote should be restricted
+//  because of some external escape that cannot accommodate it. Quote polarity determination should be local.
+//  So we should probably add some primitives to restrict the polarity of a polar,
+//  that otherwise behaves like the identity? It could even be a single bipolar that,
+//  depending on whether it's applied or deplied, restricts the polar to an expression or an extractor.
