@@ -69,7 +69,7 @@ sealed trait QuoteD[+Body >: BotM <: TopM] extends TopD
 /**
   * Signed value
   */
-sealed trait CertificateD[+K >: BotK <: TopK, +D >: BotD <: TopD] extends TopD
+sealed trait CertificateD[+K >: BotK <: TopK, +Payload >: BotD <: TopD] extends TopD
 
 /**
   * Name as value
@@ -79,12 +79,12 @@ sealed trait IdentifierD[+K >: BotK <: TopK] extends TopD
 /**
   * Channel address
   */
-sealed trait AddressD[+K >: BotK <: TopK, -D >: BotD <: TopD] extends TopD
+sealed trait AddressD[+K >: BotK <: TopK, -Data >: BotD <: TopD] extends TopD
 
 /**
   * Unordered uniformly-typed collection of values
   */
-sealed trait BagD[+D >: BotD <: TopD] extends TopD
+sealed trait BagD[+Element >: BotD <: TopD] extends TopD
 
 /**
   * Process control order

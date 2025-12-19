@@ -6,13 +6,10 @@ final abstract class OffBotG extends BotG
 sealed trait TopG extends OffTopG
 sealed trait BotG extends `-XpolarG`, `-ArgsG`
 
-sealed trait ArgsG[+Bound >: BotG <: TopG] extends TopG
-sealed trait EmptyArgsG extends ArgsG[BotG]
-sealed trait NonEmptyArgsG[
-  +Bound >: BotG <: TopG,
-  +Head >: BotG <: Bound, +Tail >: `-ArgsG` <: ArgsG[Bound],
-] extends ArgsG[Bound]
-sealed trait `-ArgsG` extends EmptyArgsG, NonEmptyArgsG[BotG, BotG, `-ArgsG`]
+sealed trait ArgsG extends TopG
+sealed trait EmptyArgsG extends ArgsG
+sealed trait NonEmptyArgsG[+Head >: BotG <: TopG, +Tail >: `-ArgsG` <: ArgsG] extends ArgsG
+sealed trait `-ArgsG` extends EmptyArgsG, NonEmptyArgsG[BotG, `-ArgsG`]
 
 sealed trait XpolarG extends TopG
 sealed trait `-XpolarG` extends `-PolarG`
@@ -21,7 +18,7 @@ sealed trait PolarG[+D >: `BotD:` <: `TopD:`] extends XpolarG
 sealed trait `-PolarG` extends
   `-RecordG`, VariantG[`BotD:`, BotK, `-PolarG`], `-MultisetG`, QuoteG[`BotD:`, BotK, BotM],
   CertificateG[`BotD:`, BotK, `-PolarG`], IdentifierG[`BotD:`, `BotK:`], AddressG[`BotD:`, `-PolarG`, `TopD:`],
-  BagG[`BotD:`, `BotD:`, `-ArgsG`], `-OrderG`, `-BoolG`, PulseG
+  BagG[`BotD:`, `-ArgsG`], `-OrderG`, `-BoolG`, PulseG
 
 // ==== Constructors/Destructors ====
 
@@ -53,7 +50,7 @@ sealed trait QuoteG[
 
 sealed trait CertificateG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +K >: BotK <: TopK, +Value  >: `-PolarG` <: PolarG[`TopD:`],
+  +K >: BotK <: TopK, +Payload  >: `-PolarG` <: PolarG[`TopD:`],
 ] extends PolarG[SelfD]
 
 sealed trait IdentifierG[
@@ -64,13 +61,12 @@ sealed trait IdentifierG[
 sealed trait AddressG[
   +SelfD >: `BotD:` <: `TopD:`,
   +Name >: `-PolarG` <: PolarG[`D:`[IdentifierD[TopK], OffBotD] | `D:`[OffTopD, IdentifierD[BotK]]],
-  -D >: `BotD:` <: `TopD:`,
+  -Datatype >: `BotD:` <: `TopD:`,
 ] extends PolarG[SelfD]
 
 sealed trait BagG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +`D+` >: `BotD:` <: `TopD:`,
-  +Elements >: `-ArgsG` <: ArgsG[PolarG[`D+`]],
+  +Elements >: `-ArgsG` <: ArgsG,
 ] extends PolarG[SelfD]
 
 sealed trait OrderG[+SelfD >: `BotD:` <: `D:`[OrderD, OffBotD] | `D:`[OffTopD, OrderD]] extends PolarG[SelfD]
