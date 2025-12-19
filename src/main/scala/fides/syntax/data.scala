@@ -28,7 +28,7 @@ sealed trait TopD extends OffTopD
   */
 sealed trait BotD extends
   `-RecordD`, VariantD[BotK, BotD], `-MultisetD`, QuoteD[BotM], CertificateD[BotK, BotD], IdentifierD[BotK],
-  AddressD[BotK, TopD], BagD[BotD], `-OrderD`, `-BoolD`, PulseD
+  AddressD[BotK, TopD], BagD[BotD], NatD[BotN], `-OrderD`, `-BoolD`, PulseD
 
 /**
   * Labeled product type
@@ -85,6 +85,11 @@ sealed trait AddressD[+K >: BotK <: TopK, -Data >: BotD <: TopD] extends TopD
   * Unordered uniformly-typed collection of values
   */
 sealed trait BagD[+Element >: BotD <: TopD] extends TopD
+
+/**
+  * Natural number
+  */
+sealed trait NatD[+N >: BotN <: TopN] extends TopD
 
 /**
   * Process control order

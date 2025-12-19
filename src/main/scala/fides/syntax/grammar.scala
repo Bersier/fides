@@ -14,11 +14,20 @@ sealed trait `-ArgsG` extends EmptyArgsG, NonEmptyArgsG[BotG, `-ArgsG`]
 sealed trait XpolarG extends TopG
 sealed trait `-XpolarG` extends `-PolarG`
 
+// ==== Locations ====
+
+sealed trait LocG[+K <: TopK, +Datatype >: `BotD:` <: `TopD:`] extends TopG
+
+// ==== Polars ====
+
 sealed trait PolarG[+D >: `BotD:` <: `TopD:`] extends XpolarG
 sealed trait `-PolarG` extends
   `-RecordG`, VariantG[`BotD:`, BotK, `-PolarG`], `-MultisetG`, QuoteG[`BotD:`, BotK, BotM],
   CertificateG[`BotD:`, BotK, `-PolarG`], IdentifierG[`BotD:`, `BotK:`], AddressG[`BotD:`, `-PolarG`, `TopD:`],
-  BagG[`BotD:`, `-ArgsG`], `-OrderG`, `-BoolG`, PulseG
+  BagG[`BotD:`, `-ArgsG`], `-OrderG`, `-BoolG`, PulseG, CollectG[`BotD:`, BotK, `BotD:`, `-PolarG`],
+  MergeBagsG[BotD, `-PolarG`, `-PolarG`], ConjoinG[`-ArgsG`], DisjoinG[`-ArgsG`]
+type ExprG[+D >: BotD <: TopD] = PolarG[`D+`[D]]
+type XctrG[-D >: BotD <: TopD] = PolarG[`D-`[D]]
 
 // ==== Constructors/Destructors ====
 
@@ -81,3 +90,21 @@ sealed trait TrueG extends BoolG[`D0`[TrueD]]
 sealed trait `-BoolG` extends FalseG, TrueG
 
 sealed trait PulseG extends PolarG[`D0`[PulseD]]
+
+// ==== Other Polars ====
+
+sealed trait CollectG[
+  +SelfD >: `BotD:` <: `TopD:`,
+  +K >: BotK <: TopK, +ElementType >: `BotD:` <: `TopD:`,
+  +Size >: `-PolarG` <: PolarG[`D:`[NatD[TopN], OffBotD] | `D:`[OffTopD, NatD[BotN]]],
+] extends PolarG[SelfD]
+
+sealed trait MergeBagsG[
+  +ElementType >: BotD <: TopD,
+  +Bag1 >: `-PolarG` <: ExprG[BagD[ElementType]],
+  +Bag2 >: `-PolarG` <: ExprG[BagD[ElementType]],
+] extends ExprG[BagD[ElementType]]
+
+sealed trait ConjoinG[+Conjuncts >: `-ArgsG` <: ArgsG] extends ExprG[BoolD]
+
+sealed trait DisjoinG[+Disjuncts >: `-ArgsG` <: ArgsG] extends ExprG[BoolD]
