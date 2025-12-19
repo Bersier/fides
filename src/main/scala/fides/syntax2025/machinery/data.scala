@@ -86,6 +86,11 @@ final abstract class IdentifierD[+K <: TopK] extends AtomD
   * Channel address
   */
 final abstract class AddressD[+K <: TopK, D <: TopD, +P >: GenP[BotB, BotB, TopB] <: TopP] extends AtomD
+// todo we need a primitive to go from a quote of a name to an identifier (similar to zip)
+// todo do we need something to extract the name from an address, as an identifier?
+//  Or is the hypothetical quote-to-identifier primitive enough?
+//  Or perhaps there should be an Address xstructor polar that takes an identifier polar? That sounds good.
+
 
 /**
   * Data type for unordered uniformly-typed collections of values.

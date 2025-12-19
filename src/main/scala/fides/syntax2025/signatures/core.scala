@@ -15,6 +15,8 @@ final case class Signed[D <: TopD] private[fides] (
   document: OldCode[OldCnstG[D]],
   signature: OldCode[OldCnstG[IdentifierUD]],
 ) extends OldCode[OldCnstG[SignedD[D]]]
+// todo if we make the signing primitive a constructor/destructor that takes a name,
+//  then the name cannot be extracted dynamically.
 
 /**
   * Primitive to sign values
