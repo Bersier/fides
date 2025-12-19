@@ -84,6 +84,7 @@ Escape(a, C1) = C || M G H
 QuoteXctr(a, ... QuoteNtrl(b, ... C ...) ...)  =>
   ReducedM = M', G = &span(m2g(M') & +H); requiring m2g(M') >: -H
 todo a quote neutral can have unbound escapes that could themselves have a non-neutral polarity.
+ But wait, we are working on Gs, so no unbound escapes there, so it seems fine.
 
 C1 || G1 <: Ntrl(? =: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
