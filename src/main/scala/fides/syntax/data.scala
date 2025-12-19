@@ -39,13 +39,15 @@ sealed trait BotD extends
   */
 sealed trait RecordD extends TopD
 sealed trait EmptyRecordD extends RecordD
-sealed trait NonEmptyRecordD[+K >: BotK <: TopK, +V >: BotD <: TopD, +Tail >: `-RecordD` <: RecordD] extends RecordD
+sealed trait NonEmptyRecordD[
+  +Key >: BotK <: TopK, +Value >: BotD <: TopD, +Tail >: `-RecordD` <: RecordD,
+] extends RecordD
 sealed trait `-RecordD` extends EmptyRecordD, NonEmptyRecordD[BotK, BotD, `-RecordD`]
 
 /**
   * Labeled value
   */
-sealed trait VariantD[+K >: BotK <: TopK, +V >: BotD <: TopD] extends TopD
+sealed trait VariantD[+Key >: BotK <: TopK, +Value >: BotD <: TopD] extends TopD
 
 /**
   * Heterogeneous unordered collection
@@ -62,7 +64,7 @@ sealed trait `-MultisetD` extends EmptyMultisetD, NonEmptyMultisetD[BotD, `-Mult
 /**
   * Code value
   */
-sealed trait QuoteD[+M >: BotM <: TopM] extends TopD
+sealed trait QuoteD[+Body >: BotM <: TopM] extends TopD
 
 /**
   * Signed value
