@@ -25,12 +25,13 @@ final case class Quote2M[
 todo
 Reducing escapes
 
+todo this was written simply by following the patterns. We need theoretical justification.
 todo isn't ReducedG = G? In that case, shouldn't it be directly derivable from ReducedM via m2g,
  without requiring additional transformation?
  If so, the additional transformation would have to be lifted to be applied to M' somehow.
-todo shouldn't W be involved somehow? So the G can adjust based on required variance as needed?
- Well, isn't that's why the given for the neutrals would have higher priority,
- but the others can also apply to a Ntrl? So no W, but polarity is taken into account.
+ Perhaps we should simply annotate the reduced M? E.g. ReducedM = FromEscape(M', <context-description>)
+
+Below, by Ntrl, I just mean something that is both an expression and an extractor; it doesn't have to be constant.
 
 C1 || G1 <: Expr(? <: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
@@ -94,9 +95,9 @@ Escape(a, C1) = C || M G H
 QuoteNtrl(a, ... QuoteNtrl(b, ... C ...) ...)  =>
   ReducedM = M', G = +m2g(M'); requiring +m2g(M') in span(H)
 
-todo this was written simply by following the patterns. We need theoretical justification.
-
 ----
+
+todo Quote(a, ... Quote(b, ... Quote(d, ... C ...) ...) ...)
 
  */
 
