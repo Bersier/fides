@@ -65,6 +65,9 @@ Escape(a, C1) = C || M G H
 QuoteExpr(a, ... QuoteNtrl(b, ... C ...) ...)  =>
   ReducedM = M', G = |span(m2g(M') | -H); requiring m2g(M') <: +H
 todo G+ = +m2g(M') | -H, G- = -m2g(M') & +H
+ So the QuoteNtrl Polar has two possible Ds: D+ and D- (presumably with D+ >: D-).
+ But in that case, isn't one of the Ds always guaranteed to be useless, unless they are equal?
+ So can we weaken the QuoteNtrl to a QuoteExpr? That might be unsound.
 
 C1 || G1 <: Xctr(? >: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
@@ -81,6 +84,9 @@ Escape(a, C1) = C || M G H
 QuoteXctr(a, ... QuoteNtrl(b, ... C ...) ...)  =>
   ReducedM = M', G = &span(m2g(M') & +H); requiring m2g(M') >: -H
 todo G+ = -m2g(M') | -H, G- = +m2g(M') & +H
+ Here, on the other hand, both could be useful, and D+ can (and typically will) be smaller than D-
+ Still, note that G+ and G- are not arbitrary, but mirror images of each other.
+ However, when multiple escapes are polars, and some are mirrored, then the symmetry is broken, I think.
 
 C1 || G1 <: Ntrl(? =: QuoteD(M')), M' tight
 Escape(a, C1) = C || M G H
