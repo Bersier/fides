@@ -1,5 +1,10 @@
 package fides.syntax
 
+// -------------------------------------------------------------------------------------------------
+// This file contains inductive rules for building more complex `TopD:` types from
+// simpler ones. If Scala had bivariance, this would not be needed.
+// -------------------------------------------------------------------------------------------------
+
 sealed trait NonEmptyRecordDR[
   -Key >: BotK <: TopK, -Value >: `BotD:` <: `TopD:`,
   -Tail >: `BotD:` <: `D:`[RecordD, OffBotD] | `D:`[OffTopD, `-RecordD`],

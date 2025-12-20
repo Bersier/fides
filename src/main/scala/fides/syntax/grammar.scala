@@ -1,5 +1,12 @@
 package fides.syntax
 
+// -------------------------------------------------------------------------------------------------
+// This file contains the constructors to build a full characterization of any piece of Fides code,
+// except for top-level escapes.
+//
+// Additional grammar rules to fix the `SelfD` type parameters are in `grules.scala`.
+// -------------------------------------------------------------------------------------------------
+
 sealed trait OffTopG private[syntax]()
 final abstract class OffBotG extends BotG
 

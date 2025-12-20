@@ -1,5 +1,11 @@
 package fides.syntax
 
+// -------------------------------------------------------------------------------------------------
+// This file contains additional grammar rules that are not directly expressible in terms of type
+// parameter bounds. More specifically, the rules defined here can be used to fix the loose `SelfD`
+// type parameters present in `grammar.scala`.
+// -------------------------------------------------------------------------------------------------
+
 sealed trait NonEmptyRecordGR[
   -Key >: BotK <: TopK, -Value >: `-PolarG` <: PolarG[`TopD:`], -Tail >: `-RecordG` <: RecordG[`TopD:`],
   SelfD >: `BotD:` <: `TopD:`,

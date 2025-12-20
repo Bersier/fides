@@ -1,5 +1,9 @@
 package fides.syntax
 
+// -------------------------------------------------------------------------------------------------
+// This file contains boilerplate for polymorphic variance for various type hierarchies.
+// -------------------------------------------------------------------------------------------------
+
 sealed trait `OffTopD:` private[syntax]()
 sealed trait `D:`[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD] extends `OffTopD:`
 type `TopD:` = `D:`[OffTopD, OffBotD]
