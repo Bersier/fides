@@ -52,6 +52,7 @@ lazy val root = (project in file("."))
       "-explain",
       "-feature",
 //      "-language:experimental.captureChecking",
+//      "-language:experimental.erasedDefinitions",
 //      "-language:experimental.genericNumberLiterals",
 //      "-language:experimental.into",
 //      "-language:experimental.modularity",
