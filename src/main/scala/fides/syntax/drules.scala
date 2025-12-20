@@ -33,11 +33,3 @@ sealed trait VariantLDR:
 object VariantDR extends VariantLDR:
   given [Key >: BotK <: TopK, Value >: BotD <: TopD] => VariantDR[Key, `D0`[Value], `D0`[VariantD[Key, Value]]]
 end VariantDR
-
-sealed trait IdentifierDR[
-  -K >: `BotK:` <: `TopK:`,
-  SelfD >: `BotD:` <: `TopD:`,
-]
-object IdentifierDR:
-  given [K >: BotK <: TopK] => IdentifierDR[`K0`[K], `D0`[IdentifierD[K]]]
-end IdentifierDR

@@ -4,7 +4,7 @@ package fides.syntax
 // This file contains the constructors to build a full characterization of any piece of Fides code,
 // except for top-level escapes.
 //
-// Additional grammar rules to fix the `SelfD` type parameters are in `grules.scala`.
+// Additional grammar rules are in `grules.scala`.
 // -------------------------------------------------------------------------------------------------
 
 sealed trait OffTopG private[syntax]()
@@ -33,9 +33,10 @@ sealed trait LocG[+K <: TopK, +Datatype >: `BotD:` <: `TopD:`] extends TopG
 //region ==== Xpolar Categories ====
 
 sealed trait XpolarG extends TopG
-sealed trait `-XpolarG` extends Apolar, `-PolarG`, BipolarG[`BotD::`, `BotD::`]
+sealed trait `-XpolarG` extends `-ApolarG`, `-PolarG`, BipolarG[`BotD::`, `BotD::`]
 
-sealed trait Apolar extends XpolarG
+sealed trait ApolarG extends XpolarG
+sealed trait `-ApolarG` extends ConcurrentG[`-ArgsG`], RepeatedG[`-ApolarG`], SendG[`-PolarG`, `-PolarG`]
 
 sealed trait PolarG[+D >: `BotD:` <: `TopD:`] extends XpolarG
 type ExprG[+D >: BotD <: TopD] = PolarG[`D+`[D]]
@@ -66,6 +67,18 @@ sealed trait `-PolarG` extends
 sealed trait BipolarG[+I >: `BotD::` <: `TopD::`, +O >: `BotD::` <: `TopD::`] extends XpolarG
 
 //endregion - Xpolar Categories
+
+//region ==== Apolars ====
+
+sealed trait ConcurrentG[+Processes >: `-ArgsG` <: ArgsG] extends ApolarG
+
+sealed trait RepeatedG[+Process >: `-ApolarG` <: ApolarG] extends ApolarG
+
+sealed trait SendG[
+  +Contents >: `-PolarG` <: ExprG[TopD], +Recipient >: `-PolarG` <: ExprG[AddressD[TopK, BotD]],
+] extends ApolarG
+
+//endregion - Apolars
 
 //region ==== Constructor/Destructor Polars ====
 

@@ -2,9 +2,16 @@ package fides.syntax
 
 // -------------------------------------------------------------------------------------------------
 // This file contains additional grammar rules that are not directly expressible in terms of type
-// parameter bounds. More specifically, the rules defined here can be used to fix the loose `SelfD`
-// type parameters present in `grammar.scala`.
+// parameter bounds, mostly because Scala doesn't have bivariance (so bivariant auxiliary types
+// cannot be used).
+//
+// The corresponding Gs have to satisfy these rules to be valid.
+// 
+// Some rules defined here can be used to fix the loose `SelfD` type parameters present in
+// `grammar.scala`.
 // -------------------------------------------------------------------------------------------------
+
+//region ==== `SelfD` Rules ====
 
 sealed trait NonEmptyRecordGR[
   -Key >: BotK <: TopK, -Value >: `-PolarG` <: PolarG[`TopD:`], -Tail >: `-RecordG` <: RecordG[`TopD:`],
@@ -35,8 +42,27 @@ sealed trait IdentifierGR[
   SelfD >: `BotD:` <: `TopD:`,
 ]
 object IdentifierGR:
-  given [
-    K >: `BotK:` <: `TopK:`,
-    SelfD >: `BotD:` <: `TopD:`,
-  ] => IdentifierDR[K, SelfD] => IdentifierGR[K, SelfD]
+  given [K >: BotK <: TopK] => IdentifierGR[`K0`[K], `D0`[IdentifierD[K]]]
 end IdentifierGR
+
+//endregion - `SelfD` Rules
+
+//region ==== Other Rules ====
+
+sealed trait ConcurrentGR[Processes >: `-ArgsG` <: ArgsG]
+object ConcurrentGR:
+  given ConcurrentGR[EmptyArgsG]
+  given [
+    Head >: `-ApolarG` <: ApolarG, Tail >: `-ArgsG` <: ArgsG,
+  ] => ConcurrentGR[Tail] => ConcurrentGR[NonEmptyArgsG[Head, Tail]]
+end ConcurrentGR
+
+sealed trait SendGR[Contents >: `-PolarG` <: ExprG[TopD], Recipient >: `-PolarG` <: ExprG[AddressD[TopK, BotD]]]
+object SendGR:
+  given [
+    Datatype >: BotD <: TopD,
+    Contents >: `-PolarG` <: ExprG[Datatype], Recipient >: `-PolarG` <: ExprG[AddressD[TopK, Datatype]],
+  ] => SendGR[Contents, Recipient]
+end SendGR
+
+//endregion - Other Rules
