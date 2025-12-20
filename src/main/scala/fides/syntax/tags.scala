@@ -1,7 +1,7 @@
 package fides.syntax
 
 // -------------------------------------------------------------------------------------------------
-// This file contains some helper types to track the exact identity of a Fides value at the type
+// This file contains some helper types to track the exact identity of Fides values at the type
 // level.
 // -------------------------------------------------------------------------------------------------
 

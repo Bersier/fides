@@ -24,6 +24,12 @@ sealed trait EmptyArgsG extends ArgsG
 sealed trait NonEmptyArgsG[+Head >: BotG <: TopG, +Tail >: `-ArgsG` <: ArgsG] extends ArgsG
 sealed trait `-ArgsG` extends EmptyArgsG, NonEmptyArgsG[BotG, `-ArgsG`]
 
+//region ==== Locations ====
+
+sealed trait LocG[+K <: TopK, +Datatype >: `BotD:` <: `TopD:`] extends TopG
+
+//endregion
+
 //region ==== Xpolar Categories ====
 
 sealed trait XpolarG extends TopG
@@ -58,12 +64,6 @@ sealed trait `-PolarG` extends
   `-RecordG`
 
 sealed trait BipolarG[+I >: `BotD::` <: `TopD::`, +O >: `BotD::` <: `TopD::`] extends XpolarG
-
-//endregion
-
-//region ==== Locations ====
-
-sealed trait LocG[+K <: TopK, +Datatype >: `BotD:` <: `TopD:`] extends TopG
 
 //endregion
 
