@@ -1,5 +1,26 @@
 package fides.syntax
 
+sealed trait NonEmptyRecordDR[
+  -Key >: BotK <: TopK, -Value >: `BotD:` <: `TopD:`,
+  -Tail >: `BotD:` <: `D:`[RecordD, OffBotD] | `D:`[OffTopD, `-RecordD`],
+  SelfD >: `BotD:` <: `TopD:`,
+]
+sealed trait NonEmptyRecordLDR:
+  given [
+    Key >: BotK <: TopK, Value >: BotD <: TopD,
+    Tail >: `-RecordD` <: RecordD,
+  ] => NonEmptyRecordDR[Key, `D+`[Value], `D+`[Tail], `D+`[NonEmptyRecordD[Key, Value, Tail]]]
+  given [
+    Key >: BotK <: TopK, Value >: BotD <: TopD,
+    Tail >: `-RecordD` <: RecordD,
+  ] => NonEmptyRecordDR[Key, `D-`[Value], `D-`[Tail], `D-`[NonEmptyRecordD[Key, Value, Tail]]]
+object NonEmptyRecordDR:
+  given [
+    Key >: BotK <: TopK, Value >: BotD <: TopD,
+    Tail >: `-RecordD` <: RecordD,
+  ] => NonEmptyRecordDR[Key, `D0`[Value], `D0`[Tail], `D0`[NonEmptyRecordD[Key, Value, Tail]]]
+end NonEmptyRecordDR
+
 sealed trait VariantDR[
   -Key >: BotK <: TopK, -Value >: `BotD:` <: `TopD:`,
   SelfD >: `BotD:` <: `TopD:`,
