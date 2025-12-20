@@ -28,7 +28,7 @@ sealed trait `-ArgsG` extends EmptyArgsG, NonEmptyArgsG[BotG, `-ArgsG`]
 
 sealed trait LocG[+K <: TopK, +Datatype >: `BotD:` <: `TopD:`] extends TopG
 
-//endregion
+//endregion - Locations
 
 //region ==== Xpolar Categories ====
 
@@ -65,7 +65,7 @@ sealed trait `-PolarG` extends
 
 sealed trait BipolarG[+I >: `BotD::` <: `TopD::`, +O >: `BotD::` <: `TopD::`] extends XpolarG
 
-//endregion
+//endregion - Xpolar Categories
 
 //region ==== Constructor/Destructor Polars ====
 
@@ -134,7 +134,7 @@ sealed trait `-BoolG` extends FalseG, TrueG
 
 sealed trait PulseG extends PolarG[`D0`[PulseD]]
 
-//endregion
+//endregion - Constructor/Destructor Polars
 
 //region ==== Other Reversible Polars ====
 
@@ -149,7 +149,7 @@ sealed trait NegateG[
   +B >: `-PolarG` <: PolarG[`D:`[BoolD, OffBotD] | `D:`[OffTopD, `-BoolD`]],
 ] extends PolarG[SelfD]
 
-//endregion
+//endregion - Other Reversible Polars
 
 //region ==== Other Expression Polars ====
 
@@ -171,7 +171,7 @@ sealed trait ConjoinG[+Conjuncts >: `-ArgsG` <: ArgsG] extends ExprG[BoolD]
 
 sealed trait DisjoinG[+Disjuncts >: `-ArgsG` <: ArgsG] extends ExprG[BoolD]
 
-//endregion
+//endregion - Other Expression Polars
 
 //region ==== Other Extractor Polars ====
 
@@ -180,4 +180,4 @@ sealed trait InspectG[
   +Signature >: `-PolarG` <: XctrG[IdentifierD[TopK]], +Payload >: `-PolarG` <: XctrG[PayloadType],
 ] extends XctrG[CertificateD[TopK, PayloadType]]
 
-//endregion
+//endregion - Other Extractor Polars
