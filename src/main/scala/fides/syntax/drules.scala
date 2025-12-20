@@ -12,7 +12,7 @@ sealed trait NonEmptyRecordLDR:
   given [
     Key >: BotK <: TopK, Value >: BotD <: TopD, Tail >: `-RecordD` <: RecordD,
   ] => NonEmptyRecordDR[Key, `D-`[Value], `D-`[Tail], `D-`[NonEmptyRecordD[Key, Value, Tail]]]
-object NonEmptyRecordDR:
+object NonEmptyRecordDR extends NonEmptyRecordLDR:
   given [
     Key >: BotK <: TopK, Value >: BotD <: TopD, Tail >: `-RecordD` <: RecordD,
   ] => NonEmptyRecordDR[Key, `D0`[Value], `D0`[Tail], `D0`[NonEmptyRecordD[Key, Value, Tail]]]
@@ -28,3 +28,11 @@ sealed trait VariantLDR:
 object VariantDR extends VariantLDR:
   given [Key >: BotK <: TopK, Value >: BotD <: TopD] => VariantDR[Key, `D0`[Value], `D0`[VariantD[Key, Value]]]
 end VariantDR
+
+sealed trait IdentifierDR[
+  -K >: `BotK:` <: `TopK:`,
+  SelfD >: `BotD:` <: `TopD:`,
+]
+object IdentifierDR:
+  given [K >: BotK <: TopK] => IdentifierDR[`K0`[K], `D0`[IdentifierD[K]]]
+end IdentifierDR

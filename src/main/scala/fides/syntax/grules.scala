@@ -23,3 +23,14 @@ object VariantGR:
     SelfD >: `BotD:` <: `TopD:`,
   ] => VariantDR[Key, ValueType, SelfD] => VariantGR[Key, Value, SelfD]
 end VariantGR
+
+sealed trait IdentifierGR[
+  -K >: `BotK:` <: `TopK:`,
+  SelfD >: `BotD:` <: `TopD:`,
+]
+object IdentifierGR:
+  given [
+    K >: `BotK:` <: `TopK:`,
+    SelfD >: `BotD:` <: `TopD:`,
+  ] => IdentifierDR[K, SelfD] => IdentifierGR[K, SelfD]
+end IdentifierGR

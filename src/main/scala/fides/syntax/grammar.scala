@@ -24,8 +24,9 @@ sealed trait PolarG[+D >: `BotD:` <: `TopD:`] extends XpolarG
 sealed trait `-PolarG` extends
   `-RecordG`, VariantG[`BotD:`, BotK, `-PolarG`], `-MultisetG`, BagG[`BotD:`, `-ArgsG`], QuoteG[`BotD:`, BotK, BotM],
   CertificateG[`BotD:`, BotK, `-PolarG`], IdentifierG[`BotD:`, `BotK:`], AddressG[`BotD:`, `-PolarG`, `TopD:`],
-  `-OrderG`, `-BoolG`, PulseG, CollectG[`BotD:`, BotK, `BotD:`, `-PolarG`],
-  MergeBagsG[BotD, `-PolarG`, `-PolarG`], NegateG[`BotD:`, `-PolarG`], ConjoinG[`-ArgsG`], DisjoinG[`-ArgsG`]
+  NatG[`BotD:`, `BotN:`], `-OrderG`, `-BoolG`, PulseG, CollectG[`BotD:`, BotK, `BotD:`, `-PolarG`],
+  MergeBagsG[BotD, `-PolarG`, `-PolarG`], AddG[`-ArgsG`], MultiplyG[`-ArgsG`], CompareG[`-PolarG`, `-PolarG`],
+  NegateG[`BotD:`, `-PolarG`], ConjoinG[`-ArgsG`], DisjoinG[`-ArgsG`]
 type ExprG[+D >: BotD <: TopD] = PolarG[`D+`[D]]
 type XctrG[-D >: BotD <: TopD] = PolarG[`D-`[D]]
 
@@ -78,6 +79,11 @@ sealed trait AddressG[
   -Datatype >: `BotD:` <: `TopD:`,
 ] extends PolarG[SelfD]
 
+sealed trait NatG[
+  +SelfD >: `BotD:` <: `TopD:`,
+  +N >: `BotN:` <: `TopN:`,
+] extends PolarG[SelfD]
+
 sealed trait OrderG[+SelfD >: `BotD:` <: `D:`[OrderD, OffBotD] | `D:`[OffTopD, `-OrderD`]] extends PolarG[SelfD]
 sealed trait KillG extends OrderG[`D0`[KillD]]
 sealed trait PauseG extends OrderG[`D0`[PauseD]]
@@ -104,6 +110,14 @@ sealed trait MergeBagsG[
   +Bag1 >: `-PolarG` <: ExprG[BagD[ElementType]],
   +Bag2 >: `-PolarG` <: ExprG[BagD[ElementType]],
 ] extends ExprG[BagD[ElementType]]
+
+sealed trait AddG[+Terms >: `-ArgsG` <: ArgsG] extends ExprG[NatD[TopN]]
+
+sealed trait MultiplyG[+Factors >: `-ArgsG` <: ArgsG] extends ExprG[NatD[TopN]]
+
+sealed trait CompareG[
+  +Left >: `-PolarG` <: ExprG[NatD[TopN]], +Right >: `-PolarG` <: ExprG[NatD[TopN]],
+] extends ExprG[BoolD]
 
 sealed trait NegateG[
   +SelfD >: `BotD:` <: `TopD:`,
