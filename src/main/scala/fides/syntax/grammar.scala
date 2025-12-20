@@ -13,6 +13,12 @@ final abstract class OffBotG extends BotG
 sealed trait TopG extends OffTopG
 sealed trait BotG extends `-XpolarG`, `-ArgsG`
 
+/**
+  * An unordered list of Gs
+  *
+  * Because we cannot represent unordered types in Scala, we instead use a list of G types.
+  * It is assumed that it is sorted by G type, so it's a canonical representation of the G multiset.
+  */
 sealed trait ArgsG extends TopG
 sealed trait EmptyArgsG extends ArgsG
 sealed trait NonEmptyArgsG[+Head >: BotG <: TopG, +Tail >: `-ArgsG` <: ArgsG] extends ArgsG

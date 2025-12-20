@@ -6,4 +6,12 @@ package fides.syntax
 // -------------------------------------------------------------------------------------------------
 
 sealed trait TopM private[syntax]()
-final abstract class BotM extends TopM
+final abstract class BotM extends ReducedEscapeM[BotM, BotC]
+
+/**
+  * Special M type used to represent the "shadow" of an escape that has been reduced.
+  */
+sealed trait ReducedEscapeM[+DataM <: TopM, +Context <: TopC] extends TopM
+
+sealed trait TopC
+final abstract class BotC extends TopC
