@@ -1,11 +1,20 @@
 package fides.syntax
 
-final abstract class `D:`[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD]
+sealed trait `OffTopD:` private[syntax]()
+sealed trait `D:`[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD] extends `OffTopD:`
 type `TopD:` = `D:`[OffTopD, OffBotD]
 type `D+`[+D >: BotD <: TopD] = `D:`[D, OffBotD]
 type `D-`[-D >: BotD <: TopD] = `D:`[OffTopD, D]
 type `D0`[D >: BotD <: TopD] = `D:`[D, D]
 type `BotD:` = `D:`[BotD, TopD]
+final abstract class `OffBotD:` extends `BotD:`
+
+final abstract class `D::`[+`D:+` >:`BotD:` <: `OffTopD:`, -`D:-` >: `OffBotD:` <:`TopD:`]
+type `TopD::` = `D::`[`OffTopD:`, `OffBotD:`]
+type `D:+`[+`D:` >:`BotD:` <:`TopD:`] = `D::`[`D:`, `OffBotD:`]
+type `D:-`[-`D:` >:`BotD:` <:`TopD:`] = `D::`[`OffTopD:`, `D:`]
+type `D:0`[`D:` >:`BotD:` <:`TopD:`] = `D::`[`D:`, `D:`]
+type `BotD::` = `D::`[`BotD:`,`TopD:`]
 
 final abstract class `K:`[+`K+` >: BotK <: TopK, -`K-` >: BotK <: TopK]
 type `TopK:` = `K:`[TopK, BotK]

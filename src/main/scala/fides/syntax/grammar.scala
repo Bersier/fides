@@ -11,16 +11,12 @@ sealed trait EmptyArgsG extends ArgsG
 sealed trait NonEmptyArgsG[+Head >: BotG <: TopG, +Tail >: `-ArgsG` <: ArgsG] extends ArgsG
 sealed trait `-ArgsG` extends EmptyArgsG, NonEmptyArgsG[BotG, `-ArgsG`]
 
+//region ==== Xpolar Categories ====
+
 sealed trait XpolarG extends TopG
-sealed trait `-XpolarG` extends `-PolarG`
+sealed trait `-XpolarG` extends Apolar, `-PolarG`, BipolarG[`BotD::`, `BotD::`]
 
-//region ==== Locations ====
-
-sealed trait LocG[+K <: TopK, +Datatype >: `BotD:` <: `TopD:`] extends TopG
-
-//endregion
-
-//region ==== Polars ====
+sealed trait Apolar extends XpolarG
 
 sealed trait PolarG[+D >: `BotD:` <: `TopD:`] extends XpolarG
 type ExprG[+D >: BotD <: TopD] = PolarG[`D+`[D]]
@@ -48,9 +44,17 @@ sealed trait `-PolarG` extends
   `-OrderG`,
   `-RecordG`
 
+sealed trait BipolarG[+I >: `BotD::` <: `TopD::`, +O >: `BotD::` <: `TopD::`] extends XpolarG
+
 //endregion
 
-//region ==== Constructors/Destructors ====
+//region ==== Locations ====
+
+sealed trait LocG[+K <: TopK, +Datatype >: `BotD:` <: `TopD:`] extends TopG
+
+//endregion
+
+//region ==== Constructor/Destructor Polars ====
 
 sealed trait RecordG[+SelfD >: `BotD:` <: `TopD:`] extends PolarG[SelfD]
 sealed trait EmptyRecordG extends RecordG[`D0`[EmptyRecordD]]
