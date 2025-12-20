@@ -7,17 +7,14 @@ sealed trait NonEmptyRecordDR[
 ]
 sealed trait NonEmptyRecordLDR:
   given [
-    Key >: BotK <: TopK, Value >: BotD <: TopD,
-    Tail >: `-RecordD` <: RecordD,
+    Key >: BotK <: TopK, Value >: BotD <: TopD, Tail >: `-RecordD` <: RecordD,
   ] => NonEmptyRecordDR[Key, `D+`[Value], `D+`[Tail], `D+`[NonEmptyRecordD[Key, Value, Tail]]]
   given [
-    Key >: BotK <: TopK, Value >: BotD <: TopD,
-    Tail >: `-RecordD` <: RecordD,
+    Key >: BotK <: TopK, Value >: BotD <: TopD, Tail >: `-RecordD` <: RecordD,
   ] => NonEmptyRecordDR[Key, `D-`[Value], `D-`[Tail], `D-`[NonEmptyRecordD[Key, Value, Tail]]]
 object NonEmptyRecordDR:
   given [
-    Key >: BotK <: TopK, Value >: BotD <: TopD,
-    Tail >: `-RecordD` <: RecordD,
+    Key >: BotK <: TopK, Value >: BotD <: TopD, Tail >: `-RecordD` <: RecordD,
   ] => NonEmptyRecordDR[Key, `D0`[Value], `D0`[Tail], `D0`[NonEmptyRecordD[Key, Value, Tail]]]
 end NonEmptyRecordDR
 

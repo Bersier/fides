@@ -27,8 +27,8 @@ sealed trait TopD extends OffTopD
   * Fides' version of [[Nothing]]
   */
 sealed trait BotD extends
-  `-RecordD`, VariantD[BotK, BotD], `-MultisetD`, QuoteD[BotM], CertificateD[BotK, BotD], IdentifierD[BotK],
-  AddressD[BotK, TopD], BagD[BotD], NatD[BotN], `-OrderD`, `-BoolD`, PulseD
+  `-RecordD`, VariantD[BotK, BotD], `-MultisetD`, BagD[BotD], QuoteD[BotM], CertificateD[BotK, BotD], IdentifierD[BotK],
+  AddressD[BotK, TopD], NatD[BotN], `-OrderD`, `-BoolD`, PulseD
 
 /**
   * Labeled product type
@@ -62,6 +62,11 @@ sealed trait NonEmptyMultisetD[+Head >: BotD <: TopD, +Tail >: `-MultisetD` <: M
 sealed trait `-MultisetD` extends EmptyMultisetD, NonEmptyMultisetD[BotD, `-MultisetD`]
 
 /**
+  * Unordered uniformly-typed collection of values
+  */
+sealed trait BagD[+Element >: BotD <: TopD] extends TopD
+
+/**
   * Code value
   */
 sealed trait QuoteD[+Body >: BotM <: TopM] extends TopD
@@ -80,11 +85,6 @@ sealed trait IdentifierD[+K >: BotK <: TopK] extends TopD
   * Channel address
   */
 sealed trait AddressD[+K >: BotK <: TopK, -Data >: BotD <: TopD] extends TopD
-
-/**
-  * Unordered uniformly-typed collection of values
-  */
-sealed trait BagD[+Element >: BotD <: TopD] extends TopD
 
 /**
   * Natural number

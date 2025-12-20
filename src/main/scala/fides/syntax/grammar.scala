@@ -22,9 +22,9 @@ sealed trait LocG[+K <: TopK, +Datatype >: `BotD:` <: `TopD:`] extends TopG
 
 sealed trait PolarG[+D >: `BotD:` <: `TopD:`] extends XpolarG
 sealed trait `-PolarG` extends
-  `-RecordG`, VariantG[`BotD:`, BotK, `-PolarG`], `-MultisetG`, QuoteG[`BotD:`, BotK, BotM],
+  `-RecordG`, VariantG[`BotD:`, BotK, `-PolarG`], `-MultisetG`, BagG[`BotD:`, `-ArgsG`], QuoteG[`BotD:`, BotK, BotM],
   CertificateG[`BotD:`, BotK, `-PolarG`], IdentifierG[`BotD:`, `BotK:`], AddressG[`BotD:`, `-PolarG`, `TopD:`],
-  BagG[`BotD:`, `-ArgsG`], `-OrderG`, `-BoolG`, PulseG, CollectG[`BotD:`, BotK, `BotD:`, `-PolarG`],
+  `-OrderG`, `-BoolG`, PulseG, CollectG[`BotD:`, BotK, `BotD:`, `-PolarG`],
   MergeBagsG[BotD, `-PolarG`, `-PolarG`], ConjoinG[`-ArgsG`], DisjoinG[`-ArgsG`]
 type ExprG[+D >: BotD <: TopD] = PolarG[`D+`[D]]
 type XctrG[-D >: BotD <: TopD] = PolarG[`D-`[D]]
@@ -52,6 +52,11 @@ sealed trait NonEmptyMultisetG[
 ] extends MultisetG[SelfD]
 sealed trait `-MultisetG` extends EmptyMultisetG, NonEmptyMultisetG[`BotD:`, `-PolarG`, `-MultisetG`]
 
+sealed trait BagG[
+  +SelfD >: `BotD:` <: `TopD:`,
+  +Elements >: `-ArgsG` <: ArgsG,
+] extends PolarG[SelfD]
+
 sealed trait QuoteG[
   +SelfD >: `BotD:` <: `TopD:`,
   +K >: BotK <: TopK, +Body >: BotM <: TopM,
@@ -71,11 +76,6 @@ sealed trait AddressG[
   +SelfD >: `BotD:` <: `TopD:`,
   +Name >: `-PolarG` <: PolarG[`D:`[IdentifierD[TopK], OffBotD] | `D:`[OffTopD, IdentifierD[BotK]]],
   -Datatype >: `BotD:` <: `TopD:`,
-] extends PolarG[SelfD]
-
-sealed trait BagG[
-  +SelfD >: `BotD:` <: `TopD:`,
-  +Elements >: `-ArgsG` <: ArgsG,
 ] extends PolarG[SelfD]
 
 sealed trait OrderG[+SelfD >: `BotD:` <: `D:`[OrderD, OffBotD] | `D:`[OffTopD, OrderD]] extends PolarG[SelfD]
