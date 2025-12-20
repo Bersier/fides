@@ -15,20 +15,30 @@ sealed trait OffTopD private[syntax]()
 final abstract class OffBotD extends BotD
 
 /**
-  * Parent type of all the Scala types that represent Fides data/value types
+  * Anything; Fides' version of [[Any]]
   *
-  * Fides' version of [[Any]]
+  * Upper bound for all data types
   */
 sealed trait TopD extends OffTopD
 
 /**
-  * Lower bound for all data types
+  * Nothing; Fides' version of [[Nothing]]
   *
-  * Fides' version of [[Nothing]]
+  * Lower bound for all data types
   */
 sealed trait BotD extends
-  `-RecordD`, VariantD[BotK, BotD], `-MultisetD`, BagD[BotD], QuoteD[BotM], CertificateD[BotK, BotD], IdentifierD[BotK],
-  AddressD[BotK, TopD], NatD[BotN], `-OrderD`, `-BoolD`, PulseD
+  AddressD[BotK, TopD],
+  BagD[BotD],
+  CertificateD[BotK, BotD],
+  IdentifierD[BotK],
+  NatD[BotN],
+  PulseD,
+  QuoteD[BotM],
+  VariantD[BotK, BotD],
+  `-BoolD`,
+  `-MultisetD`,
+  `-OrderD`,
+  `-RecordD`
 
 /**
   * Labeled product type
