@@ -2,8 +2,7 @@ package fides.syntax
 
 // -------------------------------------------------------------------------------------------------
 // This file contains additional grammar rules that are not directly expressible in terms of type
-// parameter bounds, mostly because Scala doesn't have bivariance (so bivariant auxiliary types
-// cannot be used).
+// parameter bounds.
 //
 // The corresponding Gs have to satisfy these rules to be valid.
 // 
@@ -14,7 +13,7 @@ package fides.syntax
 //region ==== `SelfD` Rules ====
 
 sealed trait NonEmptyRecordGR[
-  -Key >: BotK <: TopK, -Value >: `-PolarG` <: PolarG[`TopD:`], -Tail >: `-RecordG` <: RecordG[`TopD:`],
+  Key >: BotK <: TopK, -Value >: `-PolarG` <: PolarG[`TopD:`], -Tail >: `-RecordG` <: RecordG[`TopD:`],
   SelfD >: `BotD:` <: `TopD:`,
 ]
 object NonEmptyRecordGR:
@@ -26,7 +25,7 @@ object NonEmptyRecordGR:
 end NonEmptyRecordGR
 
 sealed trait VariantGR[
-  -Key >: BotK <: TopK, -Value >: `-PolarG` <: PolarG[`TopD:`],
+  Key >: BotK <: TopK, -Value >: `-PolarG` <: PolarG[`TopD:`],
   SelfD >: `BotD:` <: `TopD:`,
 ]
 object VariantGR:
@@ -36,14 +35,6 @@ object VariantGR:
     SelfD >: `BotD:` <: `TopD:`,
   ] => VariantDR[Key, ValueType, SelfD] => VariantGR[Key, Value, SelfD]
 end VariantGR
-
-sealed trait IdentifierGR[
-  -K >: `BotK:` <: `TopK:`,
-  SelfD >: `BotD:` <: `TopD:`,
-]
-object IdentifierGR:
-  given [K >: BotK <: TopK] => IdentifierGR[`K0`[K], `D0`[IdentifierD[K]]]
-end IdentifierGR
 
 //endregion - `SelfD` Rules
 

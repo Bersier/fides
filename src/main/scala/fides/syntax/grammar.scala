@@ -45,20 +45,20 @@ sealed trait `-PolarG` extends
   AddG[`-ArgsG`],
   AddressG[`BotD:`, `-PolarG`, `TopD:`],
   BagG[`BotD:`, `-ArgsG`],
-  CertificateG[`BotD:`, BotK, `-PolarG`],
-  CollectG[`BotD:`, BotK, `BotD:`, `-PolarG`],
+  CertificateHG[`BotD:`, `BotK:`, `-PolarG`],
+  CollectHG[`BotD:`, `BotK:`, `BotD:`, `-PolarG`],
   CompareG[`-PolarG`, `-PolarG`],
   ConjoinG[`-ArgsG`],
   DisjoinG[`-ArgsG`],
-  IdentifierG[`BotD:`, `BotK:`],
+  IdentifierHG[`BotD:`, `BotK:`],
   InspectG[BotD, `-PolarG`, `-PolarG`],
   MergeBagsG[BotD, `-PolarG`, `-PolarG`],
   MultiplyG[`-ArgsG`],
   NatG[`BotD:`, `BotN:`],
   NegateG[`BotD:`, `-PolarG`],
   PulseG,
-  QuoteG[`BotD:`, BotK, BotM],
-  VariantG[`BotD:`, BotK, `-PolarG`],
+  QuoteHG[`BotD:`, `BotK:`, BotM],
+  VariantHG[`BotD:`, `BotK:`, `-PolarG`],
   `-BoolG`,
   `-MultisetG`,
   `-OrderG`,
@@ -83,17 +83,38 @@ sealed trait SendG[
 //region ==== Constructor/Destructor Polars ====
 
 sealed trait RecordG[+SelfD >: `BotD:` <: `TopD:`] extends PolarG[SelfD]
-sealed trait EmptyRecordG extends RecordG[`D0`[EmptyRecordD]]
-sealed trait NonEmptyRecordG[
-  +SelfD >: `BotD:` <: `TopD:`,
-  +Key >: BotK <: TopK, +Value >: `-PolarG` <: PolarG[`TopD:`], +Tail >: `-RecordG` <: RecordG[`TopD:`],
-] extends RecordG[SelfD]
-sealed trait `-RecordG` extends EmptyRecordG, NonEmptyRecordG[`BotD:`, BotK, `-PolarG`, `-RecordG`]
 
-sealed trait VariantG[
+sealed trait EmptyRecordG extends RecordG[`D0`[EmptyRecordD]]
+
+/**
+  * Helper type. It helps with being able to take the lower bound over [[NonEmptyRecordG]],
+  * even though the latter is invariant in [[K]].
+  */
+private sealed trait NonEmptyRecordHG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +Key >: BotK <: TopK, +Value >: `-PolarG` <: PolarG[`TopD:`],
+  +Key >: `BotK:` <: `TopK:`, +Value >: `-PolarG` <: PolarG[`TopD:`], +Tail >: `-RecordG` <: RecordG[`TopD:`],
+] extends RecordG[SelfD]
+
+type NonEmptyRecordG[
+  +SelfD >: `BotD:` <: `TopD:`,
+  Key >: BotK <: TopK, +Value >: `-PolarG` <: PolarG[`TopD:`], +Tail >: `-RecordG` <: RecordG[`TopD:`],
+] = NonEmptyRecordHG[SelfD, `K0`[Key], Value, Tail]
+
+sealed trait `-RecordG` extends EmptyRecordG, NonEmptyRecordHG[`BotD:`, `BotK:`, `-PolarG`, `-RecordG`]
+
+/**
+  * Helper type. It helps with being able to take the lower bound over [[VariantG]],
+  * even though the latter is invariant in [[K]].
+  */
+private sealed trait VariantHG[
+  +SelfD >: `BotD:` <: `TopD:`,
+  +Key >: `BotK:` <: `TopK:`, +Value >: `-PolarG` <: PolarG[`TopD:`],
 ] extends PolarG[SelfD]
+
+type VariantG[
+  +SelfD >: `BotD:` <: `TopD:`,
+  Key >: BotK <: TopK, +Value >: `-PolarG` <: PolarG[`TopD:`],
+] = VariantHG[SelfD, `K0`[Key], Value]
 
 sealed trait MultisetG[+SelfD >: `BotD:` <: `TopD:`] extends PolarG[SelfD]
 sealed trait EmptyMultisetG extends MultisetG[`D0`[EmptyMultisetD]]
@@ -108,20 +129,44 @@ sealed trait BagG[
   +Elements >: `-ArgsG` <: ArgsG,
 ] extends PolarG[SelfD]
 
-sealed trait QuoteG[
+/**
+  * Helper type. It helps with being able to take the lower bound over [[QuoteG]],
+  * even though the latter is invariant in [[K]].
+  */
+private sealed trait QuoteHG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +K >: BotK <: TopK, +Body >: BotM <: TopM,
+  +K >: `BotK:` <: `TopK:`, +Body >: BotM <: TopM,
 ] extends PolarG[SelfD]
 
-sealed trait CertificateG[
+type QuoteG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +K >: BotK <: TopK, +Payload  >: `-PolarG` <: PolarG[`TopD:`],
+  K >: BotK <: TopK, +Body >: BotM <: TopM,
+] = QuoteHG[SelfD, `K0`[K], Body]
+
+/**
+  * Helper type. It helps with being able to take the lower bound over [[CertificateG]],
+  * even though the latter is invariant in [[K]].
+  */
+private sealed trait CertificateHG[
+  +SelfD >: `BotD:` <: `TopD:`,
+  +K >: `BotK:` <: `TopK:`, +Payload  >: `-PolarG` <: PolarG[`TopD:`],
 ] extends PolarG[SelfD]
 
-sealed trait IdentifierG[
+type CertificateG[
+  +SelfD >: `BotD:` <: `TopD:`,
+  K >: BotK <: TopK, +Payload  >: `-PolarG` <: PolarG[`TopD:`],
+] = CertificateHG[SelfD, `K0`[K], Payload]
+
+/**
+  * Helper type. It helps with being able to take the lower bound over [[IdentifierG]],
+  * even though the latter is invariant in [[K]].
+  */
+private sealed trait IdentifierHG[
   +SelfD >: `BotD:` <: `TopD:`,
   +K >: `BotK:` <: `TopK:`,
 ] extends PolarG[SelfD]
+
+type IdentifierG[K >: BotK <: TopK] = IdentifierHG[`D0`[IdentifierD[K]], `K0`[K]]
 
 sealed trait AddressG[
   +SelfD >: `BotD:` <: `TopD:`,
@@ -151,11 +196,21 @@ sealed trait PulseG extends PolarG[`D0`[PulseD]]
 
 //region ==== Other Reversible Polars ====
 
-sealed trait CollectG[
+/**
+  * Helper type. It helps with being able to take the lower bound over [[CollectG]],
+  * even though the latter is invariant in [[K]].
+  */
+private sealed trait CollectHG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +K >: BotK <: TopK, +ElementType >: `BotD:` <: `TopD:`,
+  +K >: `BotK:` <: `TopK:`, +ElementType >: `BotD:` <: `TopD:`,
   +Size >: `-PolarG` <: PolarG[`D:`[NatD[TopN], OffBotD] | `D:`[OffTopD, NatD[BotN]]],
 ] extends PolarG[SelfD]
+
+type CollectG[
+  +SelfD >: `BotD:` <: `TopD:`,
+  K >: BotK <: TopK, +ElementType >: `BotD:` <: `TopD:`,
+  +Size >: `-PolarG` <: PolarG[`D:`[NatD[TopN], OffBotD] | `D:`[OffTopD, NatD[BotN]]],
+] = CollectHG[SelfD, `K0`[K], ElementType, Size]
 
 sealed trait NegateG[
   +SelfD >: `BotD:` <: `TopD:`,
