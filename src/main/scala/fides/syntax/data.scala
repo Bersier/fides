@@ -33,9 +33,11 @@ sealed trait TopD extends OffTopD
 sealed trait BotD extends
   AddressD[BotK, TopD],
   BagD[BotD],
+  BehaviorD[`-XpolarG`],
   CertificateD[BotK, BotD],
   IdentifierD[BotK],
   NatD[BotN],
+  PreQuoteD[BotM],
   PulseD,
   QuoteD[BotM],
   VariantD[BotK, BotD],
@@ -81,9 +83,19 @@ sealed trait `-MultisetD` extends EmptyMultisetD, NonEmptyMultisetD[BotD, `-Mult
 sealed trait BagD[+Element >: BotD <: TopD] extends TopD
 
 /**
-  * Code value
+  * Quote that hasn't been syntactically checked
+  */
+sealed trait PreQuoteD[+Body >: BotM <: TopM] extends TopD
+
+/**
+  * Code as value
   */
 sealed trait QuoteD[+Body >: BotM <: TopM] extends TopD
+
+/**
+  * "Compiled" quote
+  */
+sealed trait BehaviorD[+Behavior >: `-XpolarG` <: XpolarG] extends TopD
 
 /**
   * Signed value
