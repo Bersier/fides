@@ -54,12 +54,12 @@ sealed trait `-PolarG` extends // todo incorrect mirroring
   InspectG[BotD, `-PolarG`, `-PolarG`],
   MergeBagsG[BotD, `-PolarG`, `-PolarG`],
   MultiplyG[`-ArgsG`],
+  MultisetG[`BotD:`, `-ArgsG`],
   NatG[`BotD:`, `BotN:`],
   NegateG[`BotD:`, `-PolarG`],
   PulseG,
   QuoteHG[`BotD:`, `BotK:`, BotM],
   VariantHG[`BotD:`, `BotK:`, `-PolarG`],
-  `-MultisetG`,
   `-RecordG`
 
 sealed trait BipolarG[+I >: `BotD::` <: `TopD::`, +O >: `BotD::` <: `TopD::`] extends XpolarG
@@ -80,7 +80,7 @@ sealed trait SendG[
 
 //region ==== Constructor/Destructor Polars ====
 
-sealed trait RecordG // todo use ArgsG to build RecordG and MultisetG
+sealed trait RecordG
 
 sealed trait EmptyRecordG extends RecordG, PolarG[`D0`[EmptyRecordD]]
 
@@ -114,13 +114,10 @@ type VariantG[
   Key >: BotK <: TopK, +Value >: `-PolarG` <: PolarG[`TopD:`],
 ] = VariantHG[SelfD, `K0`[Key], Value]
 
-sealed trait MultisetG
-sealed trait EmptyMultisetG extends MultisetG, PolarG[`D0`[EmptyMultisetD]]
-sealed trait NonEmptyMultisetG[
+sealed trait MultisetG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +Head >: `-PolarG` <: PolarG[`TopD:`], +Tail >: `-MultisetG` <: MultisetG,
-] extends MultisetG, PolarG[SelfD]
-sealed trait `-MultisetG` extends EmptyMultisetG, NonEmptyMultisetG[`BotD:`, `-PolarG`, `-MultisetG`]
+  +Elements >: `-ArgsG` <: ArgsG,
+] extends PolarG[SelfD]
 
 sealed trait BagG[
   +SelfD >: `BotD:` <: `TopD:`,
