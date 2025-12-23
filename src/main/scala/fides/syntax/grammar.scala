@@ -41,7 +41,7 @@ sealed trait `-ApolarG` extends ConcurrentG[`-ArgsG`], RepeatedG[`-ApolarG`], Se
 sealed trait PolarG[+D >: `BotD:` <: `TopD:`] extends XpolarG
 type ExprG[+D >: BotD <: TopD] = PolarG[`D+`[D]]
 type XctrG[-D >: BotD <: TopD] = PolarG[`D-`[D]]
-sealed trait `-PolarG` extends
+sealed trait `-PolarG` extends // todo incorrect mirroring
   AddG[`-ArgsG`],
   AddressG[`BotD:`, `-PolarG`, `TopD:`],
   BagG[`BotD:`, `-ArgsG`],
@@ -59,9 +59,7 @@ sealed trait `-PolarG` extends
   PulseG,
   QuoteHG[`BotD:`, `BotK:`, BotM],
   VariantHG[`BotD:`, `BotK:`, `-PolarG`],
-  `-BoolG`,
   `-MultisetG`,
-  `-OrderG`,
   `-RecordG`
 
 sealed trait BipolarG[+I >: `BotD::` <: `TopD::`, +O >: `BotD::` <: `TopD::`] extends XpolarG
@@ -82,9 +80,9 @@ sealed trait SendG[
 
 //region ==== Constructor/Destructor Polars ====
 
-sealed trait RecordG[+SelfD >: `BotD:` <: `TopD:`] extends PolarG[SelfD]
+sealed trait RecordG // todo use ArgsG to build RecordG and MultisetG
 
-sealed trait EmptyRecordG extends RecordG[`D0`[EmptyRecordD]]
+sealed trait EmptyRecordG extends RecordG, PolarG[`D0`[EmptyRecordD]]
 
 /**
   * Helper type. It helps with being able to take the lower bound over [[NonEmptyRecordG]],
@@ -92,12 +90,12 @@ sealed trait EmptyRecordG extends RecordG[`D0`[EmptyRecordD]]
   */
 private sealed trait NonEmptyRecordHG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +Key >: `BotK:` <: `TopK:`, +Value >: `-PolarG` <: PolarG[`TopD:`], +Tail >: `-RecordG` <: RecordG[`TopD:`],
-] extends RecordG[SelfD]
+  +Key >: `BotK:` <: `TopK:`, +Value >: `-PolarG` <: PolarG[`TopD:`], +Tail >: `-RecordG` <: RecordG,
+] extends RecordG, PolarG[SelfD]
 
 type NonEmptyRecordG[
   +SelfD >: `BotD:` <: `TopD:`,
-  Key >: BotK <: TopK, +Value >: `-PolarG` <: PolarG[`TopD:`], +Tail >: `-RecordG` <: RecordG[`TopD:`],
+  Key >: BotK <: TopK, +Value >: `-PolarG` <: PolarG[`TopD:`], +Tail >: `-RecordG` <: RecordG,
 ] = NonEmptyRecordHG[SelfD, `K0`[Key], Value, Tail]
 
 sealed trait `-RecordG` extends EmptyRecordG, NonEmptyRecordHG[`BotD:`, `BotK:`, `-PolarG`, `-RecordG`]
@@ -116,12 +114,12 @@ type VariantG[
   Key >: BotK <: TopK, +Value >: `-PolarG` <: PolarG[`TopD:`],
 ] = VariantHG[SelfD, `K0`[Key], Value]
 
-sealed trait MultisetG[+SelfD >: `BotD:` <: `TopD:`] extends PolarG[SelfD]
-sealed trait EmptyMultisetG extends MultisetG[`D0`[EmptyMultisetD]]
+sealed trait MultisetG
+sealed trait EmptyMultisetG extends MultisetG, PolarG[`D0`[EmptyMultisetD]]
 sealed trait NonEmptyMultisetG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +Head >: `-PolarG` <: PolarG[`TopD:`], +Tail >: `-MultisetG` <: MultisetG[`TopD:`],
-] extends MultisetG[SelfD]
+  +Head >: `-PolarG` <: PolarG[`TopD:`], +Tail >: `-MultisetG` <: MultisetG,
+] extends MultisetG, PolarG[SelfD]
 sealed trait `-MultisetG` extends EmptyMultisetG, NonEmptyMultisetG[`BotD:`, `-PolarG`, `-MultisetG`]
 
 sealed trait BagG[
@@ -179,16 +177,12 @@ sealed trait NatG[
   +N >: `BotN:` <: `TopN:`,
 ] extends PolarG[SelfD]
 
-sealed trait OrderG[+SelfD >: `BotD:` <: `D:`[OrderD, OffBotD] | `D:`[OffTopD, `-OrderD`]] extends PolarG[SelfD]
-sealed trait KillG extends OrderG[`D0`[KillD]]
-sealed trait PauseG extends OrderG[`D0`[PauseD]]
-sealed trait StartG extends OrderG[`D0`[StartD]]
-sealed trait `-OrderG` extends KillG, PauseG, StartG
+sealed trait KillG extends PolarG[`D0`[KillD]]
+sealed trait PauseG extends PolarG[`D0`[PauseD]]
+sealed trait StartG extends PolarG[`D0`[StartD]]
 
-sealed trait BoolG[+SelfD >: `BotD:` <: `D:`[BoolD, OffBotD] | `D:`[OffTopD, `-BoolD`]] extends PolarG[SelfD]
-sealed trait FalseG extends BoolG[`D0`[FalseD]]
-sealed trait TrueG extends BoolG[`D0`[TrueD]]
-sealed trait `-BoolG` extends FalseG, TrueG
+sealed trait FalseG extends PolarG[`D0`[FalseD]]
+sealed trait TrueG extends PolarG[`D0`[TrueD]]
 
 sealed trait PulseG extends PolarG[`D0`[PulseD]]
 

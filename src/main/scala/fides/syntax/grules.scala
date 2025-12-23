@@ -13,13 +13,23 @@ package fides.syntax
 //region ==== `SelfD` Rules ====
 
 sealed trait NonEmptyRecordGR[
-  Key >: BotK <: TopK, -Value >: `-PolarG` <: PolarG[`TopD:`], -Tail >: `-RecordG` <: RecordG[`TopD:`],
+  Key >: BotK <: TopK, -Value >: `-PolarG` <: PolarG[`TopD:`], -Tail >: `-RecordG` <: RecordG,
   SelfD >: `BotD:` <: `TopD:`,
 ]
 object NonEmptyRecordGR:
   given [
+    ValueType >: `BotD:` <: `TopD:`,
+    Key >: BotK <: TopK, Value >: `-PolarG` <: PolarG[ValueType],
+    SelfD >: `BotD:` <: `TopD:`,
+  ] => NonEmptyRecordDR[Key, ValueType, `D0`[EmptyRecordD], SelfD] => NonEmptyRecordGR[Key, Value, EmptyRecordG, SelfD]
+  given [
     ValueType >: `BotD:` <: `TopD:`, TailType >: `BotD:` <: `D:`[RecordD, OffBotD] | `D:`[OffTopD, `-RecordD`],
-    Key >: BotK <: TopK, Value >: `-PolarG` <: PolarG[ValueType], Tail >: `-RecordG` <: RecordG[TailType],
+    Key >: BotK <: TopK, Value >: `-PolarG` <: PolarG[ValueType],
+    Tail >: NonEmptyRecordHG[
+      TailType, `BotK:`, `-PolarG`, `-RecordG`,
+    ] <: NonEmptyRecordG[
+      TailType, TopK, PolarG[`TopD:`], RecordG,
+    ],
     SelfD >: `BotD:` <: `TopD:`,
   ] => NonEmptyRecordDR[Key, ValueType, TailType, SelfD] => NonEmptyRecordGR[Key, Value, Tail, SelfD]
 end NonEmptyRecordGR
