@@ -13,21 +13,19 @@ package fides.syntax
 //region ==== `SelfD` Rules ====
 
 sealed trait NonEmptyRecordGR[
-  Key >: BotK <: TopK, -Value >: `-PolarG` <: PolarG[`TopD:`], -Tail >: `-RecordG` <: RecordG,
+  Key >: BotK <: TopK, -Value <: PolarG[`TopD:`], -Tail <: RecordG,
   SelfD >: `BotD:` <: `TopD:`,
 ]
 object NonEmptyRecordGR:
   given [
     ValueType >: `BotD:` <: `TopD:`,
-    Key >: BotK <: TopK, Value >: `-PolarG` <: PolarG[ValueType],
+    Key >: BotK <: TopK, Value <: PolarG[ValueType],
     SelfD >: `BotD:` <: `TopD:`,
   ] => NonEmptyRecordDR[Key, ValueType, `D0`[EmptyRecordD], SelfD] => NonEmptyRecordGR[Key, Value, EmptyRecordG, SelfD]
   given [
     ValueType >: `BotD:` <: `TopD:`, TailType >: `BotD:` <: `D:`[RecordD, OffBotD] | `D:`[OffTopD, `-RecordD`],
-    Key >: BotK <: TopK, Value >: `-PolarG` <: PolarG[ValueType],
-    Tail >: NonEmptyRecordHG[
-      TailType, `BotK:`, `-PolarG`, `-RecordG`,
-    ] <: NonEmptyRecordG[
+    Key >: BotK <: TopK, Value <: PolarG[ValueType],
+    Tail <: NonEmptyRecordG[
       TailType, TopK, PolarG[`TopD:`], RecordG,
     ],
     SelfD >: `BotD:` <: `TopD:`,
@@ -35,13 +33,13 @@ object NonEmptyRecordGR:
 end NonEmptyRecordGR
 
 sealed trait VariantGR[
-  Key >: BotK <: TopK, -Value >: `-PolarG` <: PolarG[`TopD:`],
+  Key >: BotK <: TopK, -Value <: PolarG[`TopD:`],
   SelfD >: `BotD:` <: `TopD:`,
 ]
 object VariantGR:
   given [
     ValueType >: `BotD:` <: `TopD:`,
-    Key >: BotK <: TopK, Value >: `-PolarG` <: PolarG[ValueType],
+    Key >: BotK <: TopK, Value <: PolarG[ValueType],
     SelfD >: `BotD:` <: `TopD:`,
   ] => VariantDR[Key, ValueType, SelfD] => VariantGR[Key, Value, SelfD]
 end VariantGR
@@ -50,19 +48,19 @@ end VariantGR
 
 //region ==== Other Rules ====
 
-sealed trait ConcurrentGR[Processes >: `-ArgsG` <: ArgsG]
+sealed trait ConcurrentGR[Processes <: ArgsG]
 object ConcurrentGR:
   given ConcurrentGR[EmptyArgsG]
   given [
-    Head >: `-ApolarG` <: ApolarG, Tail >: `-ArgsG` <: ArgsG,
+    Head <: ApolarG, Tail <: ArgsG,
   ] => ConcurrentGR[Tail] => ConcurrentGR[NonEmptyArgsG[Head, Tail]]
 end ConcurrentGR
 
-sealed trait SendGR[Contents >: `-PolarG` <: ExprG[TopD], Recipient >: `-PolarG` <: ExprG[AddressD[TopK, BotD]]]
+sealed trait SendGR[Contents <: ExprG[TopD], Recipient <: ExprG[AddressD[TopK, BotD]]]
 object SendGR:
   given [
     Datatype >: BotD <: TopD,
-    Contents >: `-PolarG` <: ExprG[Datatype], Recipient >: `-PolarG` <: ExprG[AddressD[TopK, Datatype]],
+    Contents <: ExprG[Datatype], Recipient <: ExprG[AddressD[TopK, Datatype]],
   ] => SendGR[Contents, Recipient]
 end SendGR
 

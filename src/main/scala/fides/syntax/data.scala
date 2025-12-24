@@ -33,7 +33,7 @@ sealed trait TopD extends OffTopD
 sealed trait BotD extends
   AddressD[BotK, TopD],
   BagD[BotD],
-  BehaviorD[`-XpolarG`],
+  BehaviorD[`-H`[XpolarG]],
   CertificateD[BotK, BotD],
   IdentifierD[BotK],
   NatD[BotN],
@@ -95,7 +95,7 @@ sealed trait QuoteD[+Body >: BotM <: TopM] extends TopD
 /**
   * "Compiled" quote
   */
-sealed trait BehaviorD[+Behavior >: `-XpolarG` <: XpolarG] extends TopD
+sealed trait BehaviorD[+Behavior >: `-H`[XpolarG] <: `+H`[XpolarG]] extends TopD
 
 /**
   * Signed value
