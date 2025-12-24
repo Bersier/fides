@@ -12,6 +12,8 @@ package fides.syntax
 
 //region ==== `SelfD` Rules ====
 
+// todo replace some G parameters by H parameters?
+
 sealed trait NonEmptyRecordGR[
   Key >: BotK <: TopK, -Value <: PolarG[`TopD:`], -Tail <: RecordG,
   SelfD >: `BotD:` <: `TopD:`,
@@ -26,7 +28,7 @@ object NonEmptyRecordGR:
     ValueType >: `BotD:` <: `TopD:`, TailType >: `BotD:` <: `D:`[RecordD, OffBotD] | `D:`[OffTopD, `-RecordD`],
     Key >: BotK <: TopK, Value <: PolarG[ValueType],
     Tail <: NonEmptyRecordG[
-      TailType, TopK, PolarG[`TopD:`], RecordG,
+      TailType, TopK, `+H`[PolarG[`TopD:`]], `+H`[RecordG],
     ],
     SelfD >: `BotD:` <: `TopD:`,
   ] => NonEmptyRecordDR[Key, ValueType, TailType, SelfD] => NonEmptyRecordGR[Key, Value, Tail, SelfD]
@@ -48,13 +50,23 @@ end VariantGR
 
 //region ==== Other Rules ====
 
-sealed trait ConcurrentGR[Processes <: ArgsG]
+sealed trait ConcurrentGR[Processes >: `-H`[ArgsG] <: `+H`[ArgsG]]
 object ConcurrentGR:
-  given ConcurrentGR[EmptyArgsG]
   given [
-    Head <: ApolarG, Tail <: ArgsG,
-  ] => ConcurrentGR[Tail] => ConcurrentGR[NonEmptyArgsG[Head, Tail]]
+    ProcessesG <: ArgsG,
+    Processes >: `-H`[ProcessesG] <: `+H`[ProcessesG],
+  ] => BoundedArgs[ProcessesG, ApolarG] => ConcurrentGR[Processes]
 end ConcurrentGR
+
+sealed trait BoundedArgs[G <: ArgsG, Bound <: TopG]
+object BoundedArgs:
+  given [Bound <: TopG] => BoundedArgs[EmptyArgsG, Bound]
+  given [
+    TailG <: ArgsG,
+    Head >: `-H`[Bound] <: `+H`[Bound], TailH >: `-H`[TailG] <: `+H`[TailG],
+    Bound <: TopG,
+  ] => BoundedArgs[TailG, Bound] => BoundedArgs[NonEmptyArgsG[Head, TailH], Bound]
+end BoundedArgs
 
 sealed trait SendGR[Contents <: ExprG[TopD], Recipient <: ExprG[AddressD[TopK, BotD]]]
 object SendGR:

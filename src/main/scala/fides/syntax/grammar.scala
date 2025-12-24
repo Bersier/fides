@@ -19,11 +19,11 @@ sealed trait TopG extends OffTopG
   */
 sealed trait ArgsG extends TopG
 final abstract class EmptyArgsG extends ArgsG
-final abstract class NonEmptyArgsG[+Head <: TopG, +Tail <: ArgsG] extends ArgsG
+final abstract class NonEmptyArgsG[+Head >: BotH <: TopH, +Tail >: `-H`[ArgsG] <: `+H`[ArgsG]] extends ArgsG
 
 //region ==== Locations ====
 
-final abstract class LocG[+K <: TopK, +Datatype >: `BotD:` <: `TopD:`] extends TopG
+final abstract class LocG[+K >: BotK <: TopK, +Datatype >: `BotD:` <: `TopD:`] extends TopG
 
 //endregion - Locations
 
@@ -43,19 +43,20 @@ final abstract class BipolarG[+I >: `BotD::` <: `TopD::`, +O >: `BotD::` <: `Top
 
 //region ==== Apolars ====
 
-final abstract class ConcurrentG[+Processes <: ArgsG] extends ApolarG
+final abstract class ConcurrentG[+Processes >: `-H`[ArgsG] <: `+H`[ArgsG]] extends ApolarG
 
-final abstract class RepeatedG[+Process <: ApolarG] extends ApolarG
+final abstract class RepeatedG[+Process >: `-H`[ApolarG] <: `+H`[ApolarG]] extends ApolarG
 
 final abstract class SendG[
-  +Contents <: ExprG[TopD], +Recipient <: ExprG[AddressD[TopK, BotD]],
+  +Contents >: `-H`[ExprG[TopD]] <: `+H`[ExprG[TopD]],
+  +Recipient >: `-H`[ExprG[AddressD[TopK, BotD]]] <: `+H`[ExprG[AddressD[TopK, BotD]]],
 ] extends ApolarG
 
 //endregion - Apolars
 
 //region ==== Constructor/Destructor Polars ====
 
-sealed trait RecordG
+sealed trait RecordG extends PolarG[`D0`[RecordD]]
 
 final abstract class EmptyRecordG extends RecordG, PolarG[`D0`[EmptyRecordD]]
 
@@ -65,12 +66,14 @@ final abstract class EmptyRecordG extends RecordG, PolarG[`D0`[EmptyRecordD]]
   */
 private final abstract class NonEmptyRecordHG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +Key >: `BotK:` <: `TopK:`, +Value <: PolarG[`TopD:`], +Tail <: RecordG,
+  +Key >: `BotK:` <: `TopK:`, +Value >: `-H`[PolarG[`TopD:`]] <: `+H`[PolarG[`TopD:`]],
+  +Tail >: `-H`[RecordG] <: `+H`[RecordG],
 ] extends RecordG, PolarG[SelfD]
 
 type NonEmptyRecordG[
   +SelfD >: `BotD:` <: `TopD:`,
-  Key >: BotK <: TopK, +Value <: PolarG[`TopD:`], +Tail <: RecordG,
+  Key >: BotK <: TopK, +Value >: `-H`[PolarG[`TopD:`]] <: `+H`[PolarG[`TopD:`]],
+  +Tail >: `-H`[RecordG] <: `+H`[RecordG],
 ] = NonEmptyRecordHG[SelfD, `K0`[Key], Value, Tail]
 
 /**
@@ -79,22 +82,22 @@ type NonEmptyRecordG[
   */
 private final abstract class VariantHG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +Key >: `BotK:` <: `TopK:`, +Value <: PolarG[`TopD:`],
+  +Key >: `BotK:` <: `TopK:`, +Value >: `-H`[PolarG[`TopD:`]] <: `+H`[PolarG[`TopD:`]],
 ] extends PolarG[SelfD]
 
 type VariantG[
   +SelfD >: `BotD:` <: `TopD:`,
-  Key >: BotK <: TopK, +Value <: PolarG[`TopD:`],
+  Key >: BotK <: TopK, +Value >: `-H`[PolarG[`TopD:`]] <: `+H`[PolarG[`TopD:`]],
 ] = VariantHG[SelfD, `K0`[Key], Value]
 
 final abstract class MultisetG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +Elements <: ArgsG,
+  +Elements >: `-H`[ArgsG] <: `+H`[ArgsG],
 ] extends PolarG[SelfD]
 
 final abstract class BagG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +Elements <: ArgsG,
+  +Elements >: `-H`[ArgsG] <: `+H`[ArgsG],
 ] extends PolarG[SelfD]
 
 /**
@@ -117,12 +120,12 @@ type QuoteG[
   */
 private final abstract class CertificateHG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +K >: `BotK:` <: `TopK:`, +Payload  <: PolarG[`TopD:`],
+  +K >: `BotK:` <: `TopK:`, +Payload  >: `-H`[PolarG[`TopD:`]] <: `+H`[PolarG[`TopD:`]],
 ] extends PolarG[SelfD]
 
 type CertificateG[
   +SelfD >: `BotD:` <: `TopD:`,
-  K >: BotK <: TopK, +Payload  <: PolarG[`TopD:`],
+  K >: BotK <: TopK, +Payload  >: `-H`[PolarG[`TopD:`]] <: `+H`[PolarG[`TopD:`]],
 ] = CertificateHG[SelfD, `K0`[K], Payload]
 
 /**
@@ -138,7 +141,7 @@ type IdentifierG[K >: BotK <: TopK] = IdentifierHG[`D0`[IdentifierD[K]], `K0`[K]
 
 final abstract class AddressG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +Name <: PolarG[`D:`[IdentifierD[TopK], OffBotD] | `D:`[OffTopD, IdentifierD[BotK]]],
+  +Name >: `-H`[IdentifierPolarG] <: `+H`[IdentifierPolarG],
   -Datatype >: `BotD:` <: `TopD:`,
 ] extends PolarG[SelfD]
 
@@ -167,18 +170,18 @@ final abstract class PulseG extends PolarG[`D0`[PulseD]]
 private final abstract class CollectHG[
   +SelfD >: `BotD:` <: `TopD:`,
   +K >: `BotK:` <: `TopK:`, +ElementType >: `BotD:` <: `TopD:`,
-  +Size <: PolarG[`D:`[NatD[TopN], OffBotD] | `D:`[OffTopD, NatD[BotN]]],
+  +Size >: `-H`[NatPolarG] <: `+H`[NatPolarG],
 ] extends PolarG[SelfD]
 
 type CollectG[
   +SelfD >: `BotD:` <: `TopD:`,
   K >: BotK <: TopK, +ElementType >: `BotD:` <: `TopD:`,
-  +Size <: PolarG[`D:`[NatD[TopN], OffBotD] | `D:`[OffTopD, NatD[BotN]]],
+  +Size >: `-H`[NatPolarG] <: `+H`[NatPolarG],
 ] = CollectHG[SelfD, `K0`[K], ElementType, Size]
 
 final abstract class NegateG[
   +SelfD >: `BotD:` <: `TopD:`,
-  +B <: PolarG[`D:`[BoolD, OffBotD] | `D:`[OffTopD, `-BoolD`]],
+  +B >: `-H`[BoolPolarG] <: `+H`[BoolPolarG],
 ] extends PolarG[SelfD]
 
 //endregion - Other Reversible Polars
@@ -187,21 +190,22 @@ final abstract class NegateG[
 
 final abstract class MergeBagsG[
   +ElementType >: BotD <: TopD,
-  +Bag1 <: ExprG[BagD[ElementType]],
-  +Bag2 <: ExprG[BagD[ElementType]],
+  +Bag1  >: `-H`[ExprG[BagD[ElementType]]] <: `+H`[ExprG[BagD[ElementType]]],
+  +Bag2  >: `-H`[ExprG[BagD[ElementType]]] <: `+H`[ExprG[BagD[ElementType]]],
 ] extends ExprG[BagD[ElementType]]
 
-final abstract class AddG[+Terms <: ArgsG] extends ExprG[NatD[TopN]]
+final abstract class AddG[+Terms >: `-H`[ArgsG] <: `+H`[ArgsG]] extends ExprG[NatD[TopN]]
 
-final abstract class MultiplyG[+Factors <: ArgsG] extends ExprG[NatD[TopN]]
+final abstract class MultiplyG[+Factors >: `-H`[ArgsG] <: `+H`[ArgsG]] extends ExprG[NatD[TopN]]
 
 final abstract class CompareG[
-  +Left <: ExprG[NatD[TopN]], +Right <: ExprG[NatD[TopN]],
+  +Left >: `-H`[ExprG[NatD[TopN]]] <: `+H`[ExprG[NatD[TopN]]],
+  +Right >: `-H`[ExprG[NatD[TopN]]] <: `+H`[ExprG[NatD[TopN]]],
 ] extends ExprG[BoolD]
 
-final abstract class ConjoinG[+Conjuncts <: ArgsG] extends ExprG[BoolD]
+final abstract class ConjoinG[+Conjuncts >: `-H`[ArgsG] <: `+H`[ArgsG]] extends ExprG[BoolD]
 
-final abstract class DisjoinG[+Disjuncts <: ArgsG] extends ExprG[BoolD]
+final abstract class DisjoinG[+Disjuncts >: `-H`[ArgsG] <: `+H`[ArgsG]] extends ExprG[BoolD]
 
 //endregion - Other Expression Polars
 
@@ -209,7 +213,16 @@ final abstract class DisjoinG[+Disjuncts <: ArgsG] extends ExprG[BoolD]
 
 final abstract class InspectG[
   -PayloadType >: BotD <: TopD,
-  +Signature <: XctrG[IdentifierD[TopK]], +Payload <: XctrG[PayloadType],
+  +Signature >: `-H`[XctrG[IdentifierD[TopK]]] <: `+H`[XctrG[IdentifierD[TopK]]],
+  +Payload >: `-H`[XctrG[PayloadType]] <: `+H`[XctrG[PayloadType]],
 ] extends XctrG[CertificateD[TopK, PayloadType]]
 
 //endregion - Other Extractor Polars
+
+//region ==== Synonyms ====
+
+type IdentifierPolarG = PolarG[`D:`[IdentifierD[TopK], OffBotD] | `D:`[OffTopD, IdentifierD[BotK]]]
+type BoolPolarG = PolarG[`D:`[BoolD, OffBotD] | `D:`[OffTopD, `-BoolD`]]
+type NatPolarG = PolarG[`D:`[NatD[TopN], OffBotD] | `D:`[OffTopD, NatD[BotN]]]
+
+//endregion - Synonyms
