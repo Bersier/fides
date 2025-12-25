@@ -13,10 +13,6 @@ private[syntax] final val launcherK: TopK = "Launcher"
 type LauncherK = launcherK.type
 type BotK = Nothing
 
-type KInv[K >: BotK <: TopK] <: TopK = K match
-  case Nothing => String
-  // todo...
-
 /**
   * Representation of natural numbers
   */

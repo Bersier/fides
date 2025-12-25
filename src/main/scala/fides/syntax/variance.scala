@@ -1,25 +1,32 @@
 package fides.syntax
 
-import scala.annotation.unchecked.uncheckedVariance
-
 // -------------------------------------------------------------------------------------------------
 // This file contains boilerplate for polymorphic variance for various type hierarchies.
 // -------------------------------------------------------------------------------------------------
 
-sealed trait `OffTopD:` private[syntax]()
-sealed trait `D:`[+`D+` >: BotD <: OffTopD, -`D-` >: OffBotD <: TopD] extends `OffTopD:`
-type `TopD:` = `D:`[OffTopD, OffBotD]
+final abstract class `D:`[+`D+` >: OffBotD <: OffTopD, -`D-` >: OffBotD <: OffTopD]
+type `OffTopD:` = `D:`[OffTopD, OffBotD]
+type `TopD:` = `D:`[TopD, OffBotD] | `D:`[OffTopD, BotD]
 type `D+`[+D >: BotD <: TopD] = `D:`[D, OffBotD]
 type `D-`[-D >: BotD <: TopD] = `D:`[OffTopD, D]
 type `D0`[D >: BotD <: TopD] = `D:`[D, D]
-type `DX`[+D >: BotD <: TopD] = `D:`[D, DInv[D @uncheckedVariance] | OffBotD] // todo would be nice
 type `BotD:` = `D:`[BotD, TopD]
-final abstract class `OffBotD:` extends `BotD:`
+type `OffBotD:` = `D:`[OffBotD, OffTopD]
+
+/**
+  * Fixes [[DX]] from [[D]].
+  *
+  * @tparam DX `D:[+D, -D]`
+  */
+sealed trait DXR[D >: BotD <: TopD, DX >: `BotD:` <: `TopD:`]
+object DXR:
+  given [`+D` >: BotD <: TopD, `-D` >: BotD <: TopD] => DInvR[`+D`, `-D`] => DXR[`+D`, `D:`[`+D`, `-D`]]
+end DXR
 
 final abstract class `D::`[+`D:+` >:`BotD:` <: `OffTopD:`, -`D:-` >: `OffBotD:` <:`TopD:`]
-type `TopD::` = `D::`[`OffTopD:`, `OffBotD:`]
-type `D:+`[+`D:` >:`BotD:` <:`TopD:`] = `D::`[`D:`, `OffBotD:`]
-type `D:-`[-`D:` >:`BotD:` <:`TopD:`] = `D::`[`OffTopD:`, `D:`]
+type `TopD::` = `D::`[`TopD:`, `OffBotD:`] | `D::`[`OffTopD:`, `BotD:`]
+type `D:+`[+`D:` >:`BotD:` <:`TopD:`] = `D::`[`D:`, `BotD:`]
+type `D:-`[-`D:` >:`BotD:` <:`TopD:`] = `D::`[`TopD:`, `D:`]
 type `D:0`[`D:` >:`BotD:` <:`TopD:`] = `D::`[`D:`, `D:`]
 type `BotD::` = `D::`[`BotD:`,`TopD:`]
 
