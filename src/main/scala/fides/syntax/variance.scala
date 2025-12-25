@@ -1,5 +1,7 @@
 package fides.syntax
 
+import scala.annotation.unchecked.uncheckedVariance
+
 // -------------------------------------------------------------------------------------------------
 // This file contains boilerplate for polymorphic variance for various type hierarchies.
 // -------------------------------------------------------------------------------------------------
@@ -10,6 +12,7 @@ type `TopD:` = `D:`[OffTopD, OffBotD]
 type `D+`[+D >: BotD <: TopD] = `D:`[D, OffBotD]
 type `D-`[-D >: BotD <: TopD] = `D:`[OffTopD, D]
 type `D0`[D >: BotD <: TopD] = `D:`[D, D]
+type `DX`[+D >: BotD <: TopD] = `D:`[D, DInv[D @uncheckedVariance] | OffBotD] // todo would be nice
 type `BotD:` = `D:`[BotD, TopD]
 final abstract class `OffBotD:` extends `BotD:`
 
