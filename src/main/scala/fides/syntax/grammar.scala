@@ -23,7 +23,13 @@ final abstract class NonEmptyArgsG[+Head >: BotH <: TopH, +Tail >: `-H`[ArgsG] <
 
 //region ==== Locations ====
 
-final abstract class LocG[+K >: BotK <: TopK, +Datatype >: `BotD:` <: `TopD:`] extends TopG
+// todo now that we removed the explicit bot types, perhaps we don't need helper types anymore
+private sealed trait CellHG[+K >: BotK <: TopK, +Datatype >: `BotD:` <: `TopD:`, +Value >: BotD <: TopD] extends TopG
+type CellG[+K >: BotK <: TopK, Datatype >: BotD <: TopD, +Value >: BotD <: Datatype] = CellHG[K, `D0`[Datatype], Value]
+
+sealed trait LocRefG[+K <: TopK, +Datatype >: `BotD:` <: `TopD:`] extends TopG
+sealed trait ChanRefG[+K <: TopK, +Datatype >: `BotD:` <: `TopD:`] extends LocRefG[K, Datatype]
+sealed trait CellRefG[+K <: TopK, +Datatype >: `BotD:` <: `TopD:`] extends LocRefG[K, Datatype]
 
 //endregion - Locations
 
