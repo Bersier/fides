@@ -19,6 +19,8 @@ type BotH = `-H`[OffTopG]
   */
 private final abstract class `ideal -H`[-G <: OffTopG] extends `+H`[G @uncheckedVariance]
 
+// todo HUnionR & Co (Naive type union, `|`, doesn't do the right thing because we cannot use `ideal -H`)
+
 /**
   * Correct subtyping relation for H
   */

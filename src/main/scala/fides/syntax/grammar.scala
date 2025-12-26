@@ -23,8 +23,13 @@ final abstract class NonEmptyArgsG[+Head >: BotH <: TopH, +Tail >: `-H`[ArgsG] <
 
 //region ==== Locations ====
 
-// todo now that we removed the explicit bot types, perhaps we don't need helper types anymore
+/**
+  * Helper type. Provides closure under union and intersection.
+  */
 private sealed trait CellHG[+K >: BotK <: TopK, +Datatype >: `BotD:` <: `TopD:`, +Value >: BotD <: TopD] extends TopG
+// todo I think we need to make this the main actual type, for the cases when we want to have a quote polar containing
+//  Cell, with an escape in the position of the datatype.
+
 type CellG[+K >: BotK <: TopK, Datatype >: BotD <: TopD, +Value >: BotD <: Datatype] = CellHG[K, `D0`[Datatype], Value]
 
 sealed trait LocRefG[+K <: TopK, +Datatype >: `BotD:` <: `TopD:`] extends TopG
@@ -67,8 +72,7 @@ sealed trait RecordG extends PolarG[`D0`[RecordD]]
 final abstract class EmptyRecordG extends RecordG, PolarG[`D0`[EmptyRecordD]]
 
 /**
-  * Helper type. It helps with being able to take the lower bound over [[NonEmptyRecordG]],
-  * even though the latter is invariant in [[K]].
+  * Helper type. Provides closure under union and intersection.
   */
 private final abstract class NonEmptyRecordHG[
   +SelfD >: `BotD:` <: `TopD:`,
@@ -83,8 +87,7 @@ type NonEmptyRecordG[
 ] = NonEmptyRecordHG[SelfD, `K0`[Key], Value, Tail]
 
 /**
-  * Helper type. It helps with being able to take the lower bound over [[VariantG]],
-  * even though the latter is invariant in [[K]].
+  * Helper type. Provides closure under union and intersection.
   */
 private final abstract class VariantHG[
   +SelfD >: `BotD:` <: `TopD:`,
@@ -107,8 +110,7 @@ final abstract class BagG[
 ] extends PolarG[SelfD]
 
 /**
-  * Helper type. It helps with being able to take the lower bound over [[QuoteG]],
-  * even though the latter is invariant in [[K]].
+  * Helper type. Provides closure under union and intersection.
   */
 private final abstract class QuoteHG[
   +SelfD >: `BotD:` <: `TopD:`,
@@ -121,8 +123,7 @@ type QuoteG[
 ] = QuoteHG[SelfD, `K0`[K], Body]
 
 /**
-  * Helper type. It helps with being able to take the lower bound over [[CertificateG]],
-  * even though the latter is invariant in [[K]].
+  * Helper type. Provides closure under union and intersection.
   */
 private final abstract class CertificateHG[
   +SelfD >: `BotD:` <: `TopD:`,
@@ -135,8 +136,7 @@ type CertificateG[
 ] = CertificateHG[SelfD, `K0`[K], Payload]
 
 /**
-  * Helper type. It helps with being able to take the lower bound over [[IdentifierG]],
-  * even though the latter is invariant in [[K]].
+  * Helper type. Provides closure under union and intersection.
   */
 private final abstract class IdentifierHG[
   +SelfD >: `BotD:` <: `TopD:`,
@@ -170,8 +170,7 @@ final abstract class PulseG extends PolarG[`D0`[PulseD]]
 //region ==== Other Reversible Polars ====
 
 /**
-  * Helper type. It helps with being able to take the lower bound over [[CollectG]],
-  * even though the latter is invariant in [[K]].
+  * Helper type. Provides closure under union and intersection.
   */
 private final abstract class CollectHG[
   +SelfD >: `BotD:` <: `TopD:`,
