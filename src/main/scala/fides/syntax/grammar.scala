@@ -132,7 +132,7 @@ private final abstract class CertificateHG[
 
 type CertificateG[
   +SelfD >: `BotD:` <: `TopD:`,
-  K >: BotK <: TopK, +Payload  >: `-H`[PolarG[`TopD:`]] <: `+H`[PolarG[`TopD:`]],
+  K >: BotK <: TopK, +Payload >: `-H`[PolarG[`TopD:`]] <: `+H`[PolarG[`TopD:`]],
 ] = CertificateHG[SelfD, `K0`[K], Payload]
 
 /**
@@ -188,6 +188,21 @@ final abstract class NegateG[
   +SelfD >: `BotD:` <: `TopD:`,
   +B >: `-H`[BoolPolarG] <: `+H`[BoolPolarG],
 ] extends PolarG[SelfD]
+
+/**
+  * Helper type. Provides closure under union and intersection.
+  */
+private final abstract class SwapHG[
+  +SelfD >: `BotD:` <: `TopD:`,
+  +Target >: `BotK:` <: `TopK:`, +Replacement >: `BotK:` <: `TopK:`,
+  +Object >: `-H`[PolarG[`TopD:`]] <: `+H`[PolarG[`TopD:`]],
+]
+
+type SwapG[
+  +SelfD >: `BotD:` <: `TopD:`,
+  Target >: BotK <: TopK, Replacement >: BotK <: TopK,
+  +Object >: `-H`[PolarG[`TopD:`]] <: `+H`[PolarG[`TopD:`]],
+] = SwapHG[SelfD, `K0`[Target], `K0`[Replacement], Object]
 
 //endregion - Other Reversible Polars
 
