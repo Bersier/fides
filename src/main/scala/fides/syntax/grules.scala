@@ -5,7 +5,7 @@ package fides.syntax
 // parameter bounds.
 //
 // The corresponding Gs have to satisfy these rules to be valid.
-// 
+//
 // Some rules defined here can be used to fix the loose `SelfD` type parameters present in
 // `grammar.scala`.
 // -------------------------------------------------------------------------------------------------

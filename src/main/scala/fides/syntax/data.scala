@@ -32,7 +32,6 @@ sealed trait TopD extends OffTopD
   */
 sealed trait BotD extends
   AddressD[BotK, TopD],
-  BagD[BotD],
   BehaviorD[`-H`[XpolarG]],
   CertificateD[BotK, BotD],
   IdentifierD[BotK],
@@ -41,8 +40,8 @@ sealed trait BotD extends
   PulseD,
   QuoteD[BotM],
   VariantD[BotK, BotD],
+  `-BagD`,
   `-BoolD`,
-  `-MultisetD`,
   `-OrderD`,
   `-RecordD`
 
@@ -72,15 +71,15 @@ sealed trait VariantD[+Key >: BotK <: TopK, +Value >: BotD <: TopD] extends TopD
   * But we cannot represent unordered types in Scala, so we instead use a list of data types.
   * It is assumed that it is sorted by data type, so it's a canonical representation of the multiset.
   */
-sealed trait MultisetD extends TopD
-sealed trait EmptyMultisetD extends MultisetD
-sealed trait NonEmptyMultisetD[+Head >: BotD <: TopD, +Tail >: `-MultisetD` <: MultisetD] extends MultisetD
-sealed trait `-MultisetD` extends EmptyMultisetD, NonEmptyMultisetD[BotD, `-MultisetD`]
-
-/**
-  * Unordered uniformly-typed collection of values
-  */
 sealed trait BagD[+Element >: BotD <: TopD] extends TopD
+sealed trait EmptyBagD extends BagD[BotD]
+sealed trait NonEmptyBagD[
+  +TailBound >: BotD <: TopD,
+  +Head >: BotD <: TopD, +Tail >: `-BagD` <: BagD[TailBound],
+] extends BagD[Head | TailBound]
+sealed trait `-BagD` extends EmptyBagD, NonEmptyBagD[BotD, BotD, `-BagD`]
+// todo with this new version of Multiset/Bag, we need separate mirroring of D, just as for G,
+//  as `-BagD` does not mirror BagD properly anymore.
 
 /**
   * Quote that hasn't been syntactically checked

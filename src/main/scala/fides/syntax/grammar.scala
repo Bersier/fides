@@ -99,11 +99,6 @@ type VariantG[
   Key >: BotK <: TopK, +Value >: `-H`[PolarG[`TopD:`]] <: `+H`[PolarG[`TopD:`]],
 ] = VariantHG[SelfD, `K0`[Key], Value]
 
-final abstract class MultisetG[
-  +SelfD >: `BotD:` <: `TopD:`,
-  +Elements >: `-H`[ArgsG] <: `+H`[ArgsG],
-] extends PolarG[SelfD]
-
 final abstract class BagG[
   +SelfD >: `BotD:` <: `TopD:`,
   +Elements >: `-H`[ArgsG] <: `+H`[ArgsG],
@@ -209,10 +204,10 @@ type SwapG[
 //region ==== Other Expression Polars ====
 
 final abstract class MergeBagsG[
-  +ElementType >: BotD <: TopD,
-  +Bag1  >: `-H`[ExprG[BagD[ElementType]]] <: `+H`[ExprG[BagD[ElementType]]],
-  +Bag2  >: `-H`[ExprG[BagD[ElementType]]] <: `+H`[ExprG[BagD[ElementType]]],
-] extends ExprG[BagD[ElementType]]
+  +Bag1Type >: `-BagD` <: BagD[TopD], +Bag2Type >: `-BagD` <: BagD[TopD], +BagType >: `-BagD` <: BagD[TopD],
+  +Bag1  >: `-H`[ExprG[Bag1Type]] <: `+H`[ExprG[Bag1Type]],
+  +Bag2  >: `-H`[ExprG[Bag2Type]] <: `+H`[ExprG[Bag2Type]],
+] extends ExprG[BagType]
 
 final abstract class AddG[+Terms >: `-H`[ArgsG] <: `+H`[ArgsG]] extends ExprG[NatD[TopN]]
 
@@ -220,7 +215,7 @@ final abstract class MultiplyG[+Factors >: `-H`[ArgsG] <: `+H`[ArgsG]] extends E
 
 final abstract class CompareG[
   +Left >: `-H`[ExprG[NatD[TopN]]] <: `+H`[ExprG[NatD[TopN]]],
-  +Right >: `-H`[ExprG[NatD[TopN]]] <: `+H`[ExprG[NatD[TopN]]],
+  +Rite >: `-H`[ExprG[NatD[TopN]]] <: `+H`[ExprG[NatD[TopN]]],
 ] extends ExprG[BoolD]
 
 final abstract class ConjoinG[+Conjuncts >: `-H`[ArgsG] <: `+H`[ArgsG]] extends ExprG[BoolD]
