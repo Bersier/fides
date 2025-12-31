@@ -63,6 +63,13 @@ final abstract class SendG[
   +Recipient >: `-H`[ExprG[AddressD[TopK, BotD]]] <: `+H`[ExprG[AddressD[TopK, BotD]]],
 ] extends ApolarG
 
+final abstract class DivModG[
+  +Dividend >: `-H`[ExprG[NatD[TopN]]] <: `+H`[ExprG[NatD[TopN]]],
+  +Divisor >: `-H`[ExprG[NatD[PosN]]] <: `+H`[ExprG[NatD[PosN]]],
+  +Quotient >: `-H`[XctrG[NatD[TopN]]] <: `+H`[XctrG[NatD[TopN]]],
+  +Remainder >: `-H`[XctrG[NatD[TopN]]] <: `+H`[XctrG[NatD[TopN]]],
+] extends ApolarG
+
 //endregion - Apolars
 
 //region ==== Constructor/Destructor Polars ====
@@ -212,11 +219,6 @@ final abstract class MergeBagsG[
 final abstract class AddG[+Terms >: `-H`[ArgsG] <: `+H`[ArgsG]] extends ExprG[NatD[TopN]]
 
 final abstract class MultiplyG[+Factors >: `-H`[ArgsG] <: `+H`[ArgsG]] extends ExprG[NatD[TopN]]
-
-final abstract class CompareG[
-  +Left >: `-H`[ExprG[NatD[TopN]]] <: `+H`[ExprG[NatD[TopN]]],
-  +Rite >: `-H`[ExprG[NatD[TopN]]] <: `+H`[ExprG[NatD[TopN]]],
-] extends ExprG[BoolD]
 
 final abstract class ConjoinG[+Conjuncts >: `-H`[ArgsG] <: `+H`[ArgsG]] extends ExprG[BoolD]
 
