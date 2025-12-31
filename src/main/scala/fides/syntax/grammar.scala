@@ -52,6 +52,20 @@ final abstract class BipolarG[+I >: `BotD::` <: `TopD::`, +O >: `BotD::` <: `Top
 
 //endregion - Xpolar Categories
 
+//region ==== Xpolar Converters ====
+
+final abstract class BlockExprG[
+  +D >: BotD <: TopD,
+  +Apolar >: `-H`[ApolarG] <: `+H`[ApolarG], +Expr >: `-H`[ExprG[D]] <: `+H`[ExprG[D]],
+] extends ExprG[D]
+
+final abstract class BlockXctrG[
+  -D >: BotD <: TopD,
+  +Apolar >: `-H`[ApolarG] <: `+H`[ApolarG], +Xctr >: `-H`[XctrG[D]] <: `+H`[XctrG[D]],
+] extends XctrG[D]
+
+//endregian - Xpolar Converters
+
 //region ==== Apolars ====
 
 final abstract class ConcurrentG[+Processes >: `-H`[ArgsG] <: `+H`[ArgsG]] extends ApolarG
@@ -209,6 +223,11 @@ type SwapG[
 //endregion - Other Reversible Polars
 
 //region ==== Other Expression Polars ====
+
+final abstract class DeShadowFreshenG[
+  +SelfD >: BotD <: TopD,
+  +Quote >: `-H`[ExprG[QuoteD[TopM]]] <: `+H`[ExprG[QuoteD[TopM]]],
+] extends ExprG[SelfD]
 
 final abstract class MergeBagsG[
   +Bag1Type >: `-BagD` <: BagD[TopD], +Bag2Type >: `-BagD` <: BagD[TopD], +BagType >: `-BagD` <: BagD[TopD],
