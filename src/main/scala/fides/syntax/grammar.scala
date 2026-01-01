@@ -113,15 +113,15 @@ type NonEmptyRecordG[
 /**
   * Helper type. Provides closure under union and intersection.
   */
-private final abstract class VariantHG[
+private final abstract class EntryHG[
   +SelfD >: `BotD:` <: `TopD:`,
   +Key >: `BotK:` <: `TopK:`, +Value >: `-H`[PolarG[`TopD:`]] <: `+H`[PolarG[`TopD:`]],
 ] extends PolarG[SelfD]
 
-type VariantG[
+type EntryG[
   +SelfD >: `BotD:` <: `TopD:`,
   Key >: BotK <: TopK, +Value >: `-H`[PolarG[`TopD:`]] <: `+H`[PolarG[`TopD:`]],
-] = VariantHG[SelfD, `K0`[Key], Value]
+] = EntryHG[SelfD, `K0`[Key], Value]
 
 final abstract class BagG[
   +SelfD >: `BotD:` <: `TopD:`,

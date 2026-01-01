@@ -17,6 +17,6 @@ object NextDR:
   given NextDR[NatD[TopN], PreQuoteD[BotM]]
   given NextDR[PreQuoteD[TopM], PulseD]
   given NextDR[PulseD, QuoteD[TopM]]
-  given NextDR[QuoteD[BotM], VariantD[TopK, TopD]]
+  given NextDR[QuoteD[BotM], EntryD[TopK, TopD]]
   // todo add more cases
 end NextDR

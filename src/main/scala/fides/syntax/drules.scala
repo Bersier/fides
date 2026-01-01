@@ -26,18 +26,18 @@ object NonEmptyRecordDR extends NonEmptyRecordLDR:
   ]
 end NonEmptyRecordDR
 
-sealed trait VariantDR[
+sealed trait EntryDR[
   Key >: BotK <: TopK, -Value >: `BotD:` <: `TopD:`,
   SelfD >: `BotD:` <: `TopD:`,
 ]
-sealed trait VariantLDR:
-  given [Key >: BotK <: TopK, Value >: BotD <: TopD] => VariantDR[Key, `D+`[Value], `D+`[VariantD[Key, Value]]]
-  given [Key >: BotK <: TopK, Value >: BotD <: TopD] => VariantDR[Key, `D-`[Value], `D-`[VariantD[Key, Value]]]
-object VariantDR extends VariantLDR:
+sealed trait EntryLDR:
+  given [Key >: BotK <: TopK, Value >: BotD <: TopD] => EntryDR[Key, `D+`[Value], `D+`[EntryD[Key, Value]]]
+  given [Key >: BotK <: TopK, Value >: BotD <: TopD] => EntryDR[Key, `D-`[Value], `D-`[EntryD[Key, Value]]]
+object EntryDR extends EntryLDR:
   given [
     Key >: BotK <: TopK, `Value+` >: BotD <: TopD, `Value-` >: BotD <: TopD,
-  ] => VariantDR[Key, `D:`[`Value+`, `Value-`], `D:`[VariantD[Key, `Value+`], VariantD[Key, `Value-`]]]
-end VariantDR
+  ] => EntryDR[Key, `D:`[`Value+`, `Value-`], `D:`[EntryD[Key, `Value+`], EntryD[Key, `Value-`]]]
+end EntryDR
 
 sealed trait MergeBagsDR[Bag1 >: `-BagD` <: BagD[TopD], Bag2 >: `-BagD` <: BagD[TopD], Bag >: `-BagD` <: BagD[TopD]]
 sealed trait MergeBagsLDR:

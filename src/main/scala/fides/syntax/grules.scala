@@ -34,17 +34,17 @@ object NonEmptyRecordGR:
   ] => NonEmptyRecordDR[Key, ValueType, TailType, SelfD] => NonEmptyRecordGR[Key, Value, Tail, SelfD]
 end NonEmptyRecordGR
 
-sealed trait VariantGR[
+sealed trait EntryGR[
   Key >: BotK <: TopK, -Value <: PolarG[`TopD:`],
   SelfD >: `BotD:` <: `TopD:`,
 ]
-object VariantGR:
+object EntryGR:
   given [
     ValueType >: `BotD:` <: `TopD:`,
     Key >: BotK <: TopK, Value <: PolarG[ValueType],
     SelfD >: `BotD:` <: `TopD:`,
-  ] => VariantDR[Key, ValueType, SelfD] => VariantGR[Key, Value, SelfD]
-end VariantGR
+  ] => EntryDR[Key, ValueType, SelfD] => EntryGR[Key, Value, SelfD]
+end EntryGR
 
 sealed trait BundleGR[
   Keys >: `-H`[ArgsG] <: `+H`[ArgsG],

@@ -34,12 +34,12 @@ sealed trait BotD extends
   AddressD[BotK, TopD],
   BehaviorD[`-H`[XpolarG]],
   CertificateD[BotK, BotD],
+  EntryD[BotK, BotD],
   IdentifierD[BotK],
   NatD[BotN],
   PreQuoteD[BotM],
   PulseD,
   QuoteD[BotM],
-  VariantD[BotK, BotD],
   `-BagD`,
   `-BoolD`,
   `-OrderD`,
@@ -62,7 +62,7 @@ sealed trait `-RecordD` extends EmptyRecordD, NonEmptyRecordD[BotK, BotD, `-Reco
 /**
   * Labeled value
   */
-sealed trait VariantD[+Key >: BotK <: TopK, +Value >: BotD <: TopD] extends TopD
+sealed trait EntryD[+Key >: BotK <: TopK, +Value >: BotD <: TopD] extends TopD
 
 /**
   * Heterogeneous unordered collection
