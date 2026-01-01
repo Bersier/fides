@@ -43,7 +43,8 @@ sealed trait BotD extends
   `-BagD`,
   `-BoolD`,
   `-OrderD`,
-  `-RecordD`
+  `-RecordD`,
+  `-VariantD`
 
 /**
   * Labeled product type
@@ -63,6 +64,20 @@ sealed trait `-RecordD` extends EmptyRecordD, NonEmptyRecordD[BotK, BotD, `-Reco
   * Labeled value
   */
 sealed trait EntryD[+Key >: BotK <: TopK, +Value >: BotD <: TopD] extends TopD
+
+/**
+  * Labeled sum type
+  *
+  * The type of a variant is a set of key-(value-type) pairs. But we cannot represent unordered types in Scala,
+  * so we instead use a list of key-(value-type) pairs. It is assumed that it is sorted by key and without duplicate,
+  * so it's a canonical representation of the set of pairs.
+  */
+sealed trait VariantD extends TopD
+sealed trait EmptyVariantD extends VariantD
+sealed trait NonEmptyVariantD[
+  +Key >: BotK <: TopK, +Value >: BotD <: TopD, +Tail >: `-VariantD` <: VariantD,
+] extends VariantD
+sealed trait `-VariantD` extends EmptyVariantD, NonEmptyVariantD[BotK, BotD, `-VariantD`]
 
 /**
   * Heterogeneous unordered collection
