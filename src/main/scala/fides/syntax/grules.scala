@@ -46,6 +46,22 @@ object VariantGR:
   ] => VariantDR[Key, ValueType, SelfD] => VariantGR[Key, Value, SelfD]
 end VariantGR
 
+sealed trait BundleGR[
+  Keys >: `-H`[ArgsG] <: `+H`[ArgsG],
+  SelfD >: `BotD:` <: `TopD:`,
+]
+object BundleGR:
+  given BundleGR[`+H`[EmptyArgsG], `D0`[EmptyRecordD]]
+  given [
+    Key >: BotK <: TopK, Datatype >: `BotD:` <: `TopD:`,
+    Head >: `-H`[LocRefG[Key, Datatype]] <: `+H`[LocRefG[Key, Datatype]], Tail >: `-H`[ArgsG] <: `+H`[ArgsG],
+    TailD >: `BotD:` <: `D:`[RecordD, OffBotD] | `D:`[OffTopD, `-RecordD`],
+    SelfD >: `BotD:` <: `TopD:`,
+  ] => BundleGR[Tail, TailD] => NonEmptyRecordDR[
+    Key, Datatype, TailD, SelfD,
+  ] => BundleGR[`+H`[NonEmptyArgsG[Head, Tail]], SelfD]
+end BundleGR
+
 //endregion - `SelfD` Rules
 
 //region ==== Other Rules ====

@@ -21,6 +21,9 @@ sealed trait ArgsG extends TopG
 final abstract class EmptyArgsG extends ArgsG
 final abstract class NonEmptyArgsG[+Head >: BotH <: TopH, +Tail >: `-H`[ArgsG] <: `+H`[ArgsG]] extends ArgsG
 
+final abstract class NameG[+K <: TopK] extends TopG
+type LauncherNameG = NameG[LauncherK]
+
 //region ==== Locations ====
 
 /**
@@ -64,7 +67,7 @@ final abstract class BlockXctrG[
   +Apolar >: `-H`[ApolarG] <: `+H`[ApolarG], +Xctr >: `-H`[XctrG[D]] <: `+H`[XctrG[D]],
 ] extends XctrG[D]
 
-//endregian - Xpolar Converters
+//endregion - Xpolar Converters
 
 //region ==== Apolars ====
 
@@ -184,6 +187,16 @@ final abstract class PulseG extends PolarG[`D0`[PulseD]]
 //endregion - Constructor/Destructor Polars
 
 //region ==== Other Reversible Polars ====
+
+private final abstract class BundleG[
+  +SelfD >: `BotD:` <: `TopD:`,
+  +Keys >: `-H`[ArgsG] <: `+H`[ArgsG],
+] extends PolarG[SelfD]
+
+private final abstract class SwitchG[
+  +SelfD >: `BotD:` <: `TopD:`,
+  +Keys >: `-H`[ArgsG] <: `+H`[ArgsG],
+] extends PolarG[SelfD]
 
 /**
   * Helper type. Provides closure under union and intersection.
