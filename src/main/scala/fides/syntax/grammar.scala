@@ -128,6 +128,11 @@ final abstract class BagG[
   +Elements >: `-H`[ArgsG] <: `+H`[ArgsG],
 ] extends PolarG[SelfD]
 
+final abstract class PickG[
+  +SelfD >: `BotD:` <: `TopD:`,
+  +Options >: `-H`[ArgsG] <: `+H`[ArgsG],
+] extends PolarG[SelfD]
+
 /**
   * Helper type. Provides closure under union and intersection.
   */
