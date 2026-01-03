@@ -12,39 +12,11 @@ package fides.syntax
 sealed trait OffTopD private[syntax]()
 
 /**
-  * A type smaller than [[BotD]]
-  *
-  * Indicates an illegal data type in contravariant position (and it's unreachable in covariant position).
-  */
-final abstract class OffBotD extends BotD
-
-/**
   * Anything; Fides' version of [[Any]]
   *
   * Upper bound for all data types
   */
 sealed trait TopD extends OffTopD
-
-/**
-  * Nothing; Fides' version of [[Nothing]]
-  *
-  * Lower bound for all data types
-  */
-sealed trait BotD extends
-  AddressD[BotK, TopD],
-  BehaviorD[`-H`[XpolarG]],
-  CertificateD[BotK, BotD],
-  EntryD[BotK, BotD],
-  IdentifierD[BotK],
-  NatD[BotN],
-  PreQuoteD[BotM],
-  PulseD,
-  QuoteD[BotM],
-  `-BagD`,
-  `-BoolD`,
-  `-OrderD`,
-  `-RecordD`,
-  `-VariantD`
 
 /**
   * Labeled product type
@@ -54,16 +26,15 @@ sealed trait BotD extends
   * so it's a canonical representation of the set of pairs.
   */
 sealed trait RecordD extends TopD
-sealed trait EmptyRecordD extends RecordD
-sealed trait NonEmptyRecordD[
-  +Key >: BotK <: TopK, +Value >: BotD <: TopD, +Tail >: `-RecordD` <: RecordD,
+final abstract class EmptyRecordD extends RecordD
+final abstract class NonEmptyRecordD[
+  +Key >: BotK <: TopK, +Value >: `-E`[TopD] <: `+E`[TopD], +Tail >: `-E`[RecordD] <: `+E`[RecordD],
 ] extends RecordD
-sealed trait `-RecordD` extends EmptyRecordD, NonEmptyRecordD[BotK, BotD, `-RecordD`]
 
 /**
   * Labeled value
   */
-sealed trait EntryD[+Key >: BotK <: TopK, +Value >: BotD <: TopD] extends TopD
+final abstract class EntryD[+Key >: BotK <: TopK, +Value >: `-E`[TopD] <: `+E`[TopD]] extends TopD
 
 /**
   * Labeled sum type
@@ -73,11 +44,10 @@ sealed trait EntryD[+Key >: BotK <: TopK, +Value >: BotD <: TopD] extends TopD
   * so it's a canonical representation of the set of pairs.
   */
 sealed trait VariantD extends TopD
-sealed trait EmptyVariantD extends VariantD
-sealed trait NonEmptyVariantD[
-  +Key >: BotK <: TopK, +Value >: BotD <: TopD, +Tail >: `-VariantD` <: VariantD,
+final abstract class EmptyVariantD extends VariantD
+final abstract class NonEmptyVariantD[
+  +Key >: BotK <: TopK, +Value >: `-E`[TopD] <: `+E`[TopD], +Tail >: `-E`[VariantD] <: `+E`[VariantD],
 ] extends VariantD
-sealed trait `-VariantD` extends EmptyVariantD, NonEmptyVariantD[BotK, BotD, `-VariantD`]
 
 /**
   * Heterogeneous unordered collection
@@ -86,69 +56,64 @@ sealed trait `-VariantD` extends EmptyVariantD, NonEmptyVariantD[BotK, BotD, `-V
   * But we cannot represent unordered types in Scala, so we instead use a list of data types.
   * It is assumed that it is sorted by data type, so it's a canonical representation of the multiset.
   */
-sealed trait BagD[+Element >: BotD <: TopD] extends TopD
-sealed trait EmptyBagD extends BagD[BotD]
-sealed trait NonEmptyBagD[
-  +TailBound >: BotD <: TopD,
-  +Head >: BotD <: TopD, +Tail >: `-BagD` <: BagD[TailBound],
+sealed trait BagD[+Element >: `-E`[TopD] <: `+E`[TopD]] extends TopD
+final abstract class EmptyBagD extends BagD[`-E`[TopD]]
+final abstract class NonEmptyBagD[
+  +TailBound >: `-E`[TopD] <: `+E`[TopD],
+  +Head >: `-E`[TopD] <: `+E`[TopD], +Tail >: `-E`[BagD[TailBound]] <: `+E`[BagD[TailBound]],
 ] extends BagD[Head | TailBound]
-sealed trait `-BagD` extends EmptyBagD, NonEmptyBagD[BotD, BotD, `-BagD`]
-// todo with this new version of Multiset/Bag, we need separate mirroring of D, just as for G,
-//  as `-BagD` does not mirror BagD properly anymore.
 
 /**
   * Quote that hasn't been syntactically checked
   */
-sealed trait PreQuoteD[+Body >: BotM <: TopM] extends TopD
+final abstract class PreQuoteD[+Body >: BotM <: TopM] extends TopD
 
 /**
   * Code as value
   */
-sealed trait QuoteD[+Body >: BotM <: TopM] extends TopD
+final abstract class QuoteD[+Body >: BotM <: TopM] extends TopD
 
 /**
   * "Compiled" quote
   */
-sealed trait BehaviorD[+Behavior >: `-H`[XpolarG] <: `+H`[XpolarG]] extends TopD
+final abstract class BehaviorD[+Behavior >: `-H`[XpolarG] <: `+H`[XpolarG]] extends TopD
 
 /**
   * Signed value
   */
-sealed trait CertificateD[+K >: BotK <: TopK, +Payload >: BotD <: TopD] extends TopD
+final abstract class CertificateD[+K >: BotK <: TopK, +Payload >: `-E`[TopD] <: `+E`[TopD]] extends TopD
 
 /**
   * Name as value
   */
-sealed trait IdentifierD[+K >: BotK <: TopK] extends TopD
+final abstract class IdentifierD[+K >: BotK <: TopK] extends TopD
 
 /**
   * Channel address
   */
-sealed trait AddressD[+K >: BotK <: TopK, -Data >: BotD <: TopD] extends TopD
+final abstract class AddressD[+K >: BotK <: TopK, -Data >: `-E`[TopD] <: `+E`[TopD]] extends TopD
 
 /**
   * Natural number
   */
-sealed trait NatD[+N >: BotN <: TopN] extends TopD
+final abstract class NatD[+N >: BotN <: TopN] extends TopD
 
 /**
   * Process control order
   */
 sealed trait OrderD extends TopD
-sealed trait KillD extends OrderD
-sealed trait PauseD extends OrderD
-sealed trait StartD extends OrderD
-sealed trait `-OrderD` extends KillD, PauseD, StartD
+final abstract class KillD extends OrderD
+final abstract class PauseD extends OrderD
+final abstract class StartD extends OrderD
 
 /**
   * Boolean
   */
 sealed trait BoolD extends TopD
-sealed trait FalseD extends BoolD
-sealed trait TrueD extends BoolD
-sealed trait `-BoolD` extends FalseD, TrueD
+final abstract class FalseD extends BoolD
+final abstract class TrueD extends BoolD
 
 /**
   * Unit
   */
-sealed trait PulseD extends TopD
+final abstract class PulseD extends TopD

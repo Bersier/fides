@@ -15,48 +15,50 @@ package fides.syntax
 // todo replace some G parameters by H parameters?
 
 sealed trait NonEmptyRecordGR[
-  Key >: BotK <: TopK, -Value <: PolarG[`TopD:`], -Tail <: RecordG,
-  SelfD >: `BotD:` <: `TopD:`,
+  Key >: BotK <: TopK, -Value <: PolarG[`TopE:`], -Tail <: RecordG,
+  SelfD >: `BotE:` <: `TopE:`,
 ]
 object NonEmptyRecordGR:
   given [
-    ValueType >: `BotD:` <: `TopD:`,
+    ValueType >: `BotE:` <: `TopE:`,
     Key >: BotK <: TopK, Value <: PolarG[ValueType],
-    SelfD >: `BotD:` <: `TopD:`,
-  ] => NonEmptyRecordDR[Key, ValueType, `D0`[EmptyRecordD], SelfD] => NonEmptyRecordGR[Key, Value, EmptyRecordG, SelfD]
+    SelfD >: `BotE:` <: `TopE:`,
+  ] => NonEmptyRecordDR[
+    Key, ValueType, `E0`[`+E`[EmptyRecordD]], SelfD,
+  ] => NonEmptyRecordGR[Key, Value, EmptyRecordG, SelfD]
   given [
-    ValueType >: `BotD:` <: `TopD:`, TailType >: `BotD:` <: `D:`[RecordD, OffBotD] | `D:`[OffTopD, `-RecordD`],
+    ValueType >: `BotE:` <: `TopE:`, TailType >: `BotE:` <: `TopRecordE:`,
     Key >: BotK <: TopK, Value <: PolarG[ValueType],
     Tail <: NonEmptyRecordG[
-      TailType, TopK, `+H`[PolarG[`TopD:`]], `+H`[RecordG],
+      TailType, TopK, `+H`[PolarG[`TopE:`]], `+H`[RecordG],
     ],
-    SelfD >: `BotD:` <: `TopD:`,
+    SelfD >: `BotE:` <: `TopE:`,
   ] => NonEmptyRecordDR[Key, ValueType, TailType, SelfD] => NonEmptyRecordGR[Key, Value, Tail, SelfD]
 end NonEmptyRecordGR
 
 sealed trait EntryGR[
-  Key >: BotK <: TopK, -Value <: PolarG[`TopD:`],
-  SelfD >: `BotD:` <: `TopD:`,
+  Key >: BotK <: TopK, -Value <: PolarG[`TopE:`],
+  SelfD >: `BotE:` <: `TopE:`,
 ]
 object EntryGR:
   given [
-    ValueType >: `BotD:` <: `TopD:`,
+    ValueType >: `BotE:` <: `TopE:`,
     Key >: BotK <: TopK, Value <: PolarG[ValueType],
-    SelfD >: `BotD:` <: `TopD:`,
+    SelfD >: `BotE:` <: `TopE:`,
   ] => EntryDR[Key, ValueType, SelfD] => EntryGR[Key, Value, SelfD]
 end EntryGR
 
 sealed trait BundleGR[
   Keys >: `-H`[ArgsG] <: `+H`[ArgsG],
-  SelfD >: `BotD:` <: `TopD:`,
+  SelfD >: `BotE:` <: `TopE:`,
 ]
 object BundleGR:
-  given BundleGR[`+H`[EmptyArgsG], `D0`[EmptyRecordD]]
+  given BundleGR[`+H`[EmptyArgsG], `E0`[`+E`[EmptyRecordD]]]
   given [
-    Key >: BotK <: TopK, Datatype >: `BotD:` <: `TopD:`,
+    Key >: BotK <: TopK, Datatype >: `BotE:` <: `TopE:`,
     Head >: `-H`[LocRefG[Key, Datatype]] <: `+H`[LocRefG[Key, Datatype]], Tail >: `-H`[ArgsG] <: `+H`[ArgsG],
-    TailD >: `BotD:` <: `D:`[RecordD, OffBotD] | `D:`[OffTopD, `-RecordD`],
-    SelfD >: `BotD:` <: `TopD:`,
+    TailD >: `BotE:` <: `TopRecordE:`,
+    SelfD >: `BotE:` <: `TopE:`,
   ] => BundleGR[Tail, TailD] => NonEmptyRecordDR[
     Key, Datatype, TailD, SelfD,
   ] => BundleGR[`+H`[NonEmptyArgsG[Head, Tail]], SelfD]
@@ -84,11 +86,11 @@ object BoundedArgs:
   ] => BoundedArgs[TailG, Bound] => BoundedArgs[NonEmptyArgsG[Head, TailH], Bound]
 end BoundedArgs
 
-sealed trait SendGR[Contents <: ExprG[TopD], Recipient <: ExprG[AddressD[TopK, BotD]]]
+sealed trait SendGR[Contents <: ExprG[`+E`[TopD]], Recipient <: ExprG[`+E`[AddressD[TopK, `-E`[TopD]]]]]
 object SendGR:
   given [
-    Datatype >: BotD <: TopD,
-    Contents <: ExprG[Datatype], Recipient <: ExprG[AddressD[TopK, Datatype]],
+    Datatype >: `-E`[TopD] <: `+E`[TopD],
+    Contents <: ExprG[Datatype], Recipient <: ExprG[`+E`[AddressD[TopK, Datatype]]],
   ] => SendGR[Contents, Recipient]
 end SendGR
 

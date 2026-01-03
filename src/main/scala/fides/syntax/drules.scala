@@ -1,59 +1,74 @@
 package fides.syntax
 
 // -------------------------------------------------------------------------------------------------
-// This file contains inductive rules for building more complex D (and D:) types from simpler ones.
+// This file contains inductive rules for building more complex E (and E:) types from simpler ones.
 // -------------------------------------------------------------------------------------------------
 
 sealed trait NonEmptyRecordDR[
-  -Key >: BotK <: TopK, -Value >: `BotD:` <: `TopD:`,
-  -Tail >: `BotD:` <: `D:`[RecordD, OffBotD] | `D:`[OffTopD, `-RecordD`],
-  SelfD >: `BotD:` <: `TopD:`,
+  -Key >: BotK <: TopK, -Value >: `BotE:` <: `TopE:`,
+  -Tail >: `BotE:` <: `TopRecordE:`,
+  SelfD >: `BotE:` <: `TopE:`,
 ]
 sealed trait NonEmptyRecordLDR:
   given [
-    Key >: BotK <: TopK, Value >: BotD <: TopD, Tail >: `-RecordD` <: RecordD,
-  ] => NonEmptyRecordDR[Key, `D+`[Value], `D+`[Tail], `D+`[NonEmptyRecordD[Key, Value, Tail]]]
+    Key >: BotK <: TopK, Value >: `-E`[TopD] <: `+E`[TopD], Tail >: `-E`[RecordD] <: `+E`[RecordD],
+  ] => NonEmptyRecordDR[Key, `E+`[Value], `E+`[Tail], `E+`[`+E`[NonEmptyRecordD[Key, Value, Tail]]]]
   given [
-    Key >: BotK <: TopK, Value >: BotD <: TopD, Tail >: `-RecordD` <: RecordD,
-  ] => NonEmptyRecordDR[Key, `D-`[Value], `D-`[Tail], `D-`[NonEmptyRecordD[Key, Value, Tail]]]
+    Key >: BotK <: TopK, Value >: `-E`[TopD] <: `+E`[TopD], Tail >: `-E`[RecordD] <: `+E`[RecordD],
+  ] => NonEmptyRecordDR[Key, `E-`[Value], `E-`[Tail], `E-`[`+E`[NonEmptyRecordD[Key, Value, Tail]]]]
 object NonEmptyRecordDR extends NonEmptyRecordLDR:
   given [
-    Key >: BotK <: TopK, `Value+` >: BotD <: TopD, `Value-` >: BotD <: TopD,
-    `Tail+` >: `-RecordD` <: RecordD, `Tail-` >: `-RecordD` <: RecordD,
+    Key >: BotK <: TopK, `Value+` >: `-E`[TopD] <: `+E`[TopD], `Value-` >: `-E`[TopD] <: `+E`[TopD],
+    `Tail+` >: `-E`[RecordD] <: `+E`[RecordD], `Tail-` >: `-E`[RecordD] <: `+E`[RecordD],
   ] => NonEmptyRecordDR[
-    Key, `D:`[`Value+`, `Value-`], `D:`[`Tail+`, `Tail-`],
-    `D:`[NonEmptyRecordD[Key, `Value+`, `Tail+`], NonEmptyRecordD[Key, `Value-`, `Tail-`]],
+    Key, `E:`[`Value+`, `Value-`], `E:`[`Tail+`, `Tail-`],
+    `E:`[`+E`[NonEmptyRecordD[Key, `Value+`, `Tail+`]], `+E`[NonEmptyRecordD[Key, `Value-`, `Tail-`]]],
   ]
 end NonEmptyRecordDR
 
 sealed trait EntryDR[
-  Key >: BotK <: TopK, -Value >: `BotD:` <: `TopD:`,
-  SelfD >: `BotD:` <: `TopD:`,
+  Key >: BotK <: TopK, -Value >: `BotE:` <: `TopE:`,
+  SelfD >: `BotE:` <: `TopE:`,
 ]
 sealed trait EntryLDR:
-  given [Key >: BotK <: TopK, Value >: BotD <: TopD] => EntryDR[Key, `D+`[Value], `D+`[EntryD[Key, Value]]]
-  given [Key >: BotK <: TopK, Value >: BotD <: TopD] => EntryDR[Key, `D-`[Value], `D-`[EntryD[Key, Value]]]
+  given [
+    Key >: BotK <: TopK, Value >: `-E`[TopD] <: `+E`[TopD],
+  ] => EntryDR[Key, `E+`[Value], `E+`[`+E`[EntryD[Key, Value]]]]
+  given [
+    Key >: BotK <: TopK, Value >: `-E`[TopD] <: `+E`[TopD],
+  ] => EntryDR[Key, `E-`[Value], `E-`[`+E`[EntryD[Key, Value]]]]
 object EntryDR extends EntryLDR:
   given [
-    Key >: BotK <: TopK, `Value+` >: BotD <: TopD, `Value-` >: BotD <: TopD,
-  ] => EntryDR[Key, `D:`[`Value+`, `Value-`], `D:`[EntryD[Key, `Value+`], EntryD[Key, `Value-`]]]
+    Key >: BotK <: TopK, `Value+` >: `-E`[TopD] <: `+E`[TopD], `Value-` >: `-E`[TopD] <: `+E`[TopD],
+  ] => EntryDR[Key, `E:`[`Value+`, `Value-`], `E:`[`+E`[EntryD[Key, `Value+`]], `+E`[EntryD[Key, `Value-`]]]]
 end EntryDR
 
-sealed trait MergeBagsDR[Bag1 >: `-BagD` <: BagD[TopD], Bag2 >: `-BagD` <: BagD[TopD], Bag >: `-BagD` <: BagD[TopD]]
+sealed trait MergeBagsDR[
+  Bag1 >: `-E`[BagD[`+E`[TopD]]] <: `+E`[BagD[`+E`[TopD]]],
+  Bag2 >: `-E`[BagD[`+E`[TopD]]] <: `+E`[BagD[`+E`[TopD]]],
+  Bag >: `-E`[BagD[`+E`[TopD]]] <: `+E`[BagD[`+E`[TopD]]],
+]
 sealed trait MergeBagsLDR:
   given [
-    Bag1 >: `-BagD` <: BagD[TopD], Bag2 >: `-BagD` <: BagD[TopD], Bag >: `-BagD` <: BagD[TopD],
+    Bag1 >: `-E`[BagD[`+E`[TopD]]] <: `+E`[BagD[`+E`[TopD]]],
+    Bag2 >: `-E`[BagD[`+E`[TopD]]] <: `+E`[BagD[`+E`[TopD]]],
+    Bag >: `-E`[BagD[`+E`[TopD]]] <: `+E`[BagD[`+E`[TopD]]],
   ] => MergeBagsDR[Bag2, Bag1, Bag] => MergeBagsDR[Bag1, Bag2, Bag]
 object MergeBagsDR extends MergeBagsLDR:
-  given [Bag >: `-BagD` <: BagD[TopD]] => MergeBagsDR[Bag, EmptyBagD, Bag]
+  given [Bag >: `-E`[BagD[`+E`[TopD]]] <: `+E`[BagD[`+E`[TopD]]]] => MergeBagsDR[Bag, `+E`[EmptyBagD], Bag]
   given [
-    TailBound >: BotD <: TopD,
-    Tail >: `-BagD` <: BagD[TailBound],
-    Head1 >: BotD <: TopD, Tail1 >: `-BagD` <: BagD[TopD], Head2 >: BotD <: TopD,
-    Bag1 >: `-BagD` <: NonEmptyBagD[TopD, Head1, Tail1],
-    Bag2 >: `-BagD` <: NonEmptyBagD[TopD, Head2, ?],
+    TailBound >: `-E`[TopD] <: `+E`[TopD],
+    Tail >: `-E`[BagD[TailBound]] <: `+E`[BagD[TailBound]],
+    Head1 >: `-E`[TopD] <: `+E`[TopD], Tail1 >: `-E`[BagD[`+E`[TopD]]] <: `+E`[BagD[`+E`[TopD]]],
+    Head2 >: `-E`[TopD] <: `+E`[TopD],
+    Bag1 >: `-E`[NonEmptyBagD[`+E`[TopD], Head1, Tail1]] <: `+E`[NonEmptyBagD[`+E`[TopD], Head1, Tail1]],
+    Bag2 >: `-E`[
+      NonEmptyBagD[`+E`[TopD], Head2, `+E`[BagD[`+E`[TopD]]]],
+    ] <: `+E`[
+      NonEmptyBagD[`+E`[TopD], Head2, `+E`[BagD[`+E`[TopD]]]],
+    ],
   ] => (
-    BeforeDR[Head1, Head2],
+    BeforeER[Head1, Head2],
     MergeBagsDR[Tail1, Bag2, Tail],
-  ) => MergeBagsDR[Bag1, Bag2, NonEmptyBagD[TailBound, Head1, Tail]]
+  ) => MergeBagsDR[Bag1, Bag2, `+E`[NonEmptyBagD[TailBound, Head1, Tail]]]
 end MergeBagsDR

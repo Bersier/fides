@@ -4,31 +4,34 @@ package fides.syntax
 // This file contains boilerplate for polymorphic variance for various type hierarchies.
 // -------------------------------------------------------------------------------------------------
 
-final abstract class `D:`[+`D+` >: OffBotD <: OffTopD, -`D-` >: OffBotD <: OffTopD]
-type `OffTopD:` = `D:`[OffTopD, OffBotD]
-type `TopD:` = `D:`[TopD, OffBotD] | `D:`[OffTopD, BotD]
-type `D+`[+D >: BotD <: TopD] = `D:`[D, OffBotD]
-type `D-`[-D >: BotD <: TopD] = `D:`[OffTopD, D]
-type `D0`[D >: BotD <: TopD] = `D:`[D, D]
-type `BotD:` = `D:`[BotD, TopD]
-type `OffBotD:` = `D:`[OffBotD, OffTopD]
+final abstract class `E:`[+`E+` >: `-E`[OffTopD] <: `+E`[OffTopD], -`E-` >: `-E`[OffTopD] <: `+E`[OffTopD]]
+type `OffTopE:` = `E:`[`+E`[OffTopD], `-E`[OffTopD]]
+type `TopE:` = `E:`[`+E`[TopD], `-E`[OffTopD]] | `E:`[`+E`[OffTopD], `-E`[TopD]]
+type `E+`[+E >: `-E`[TopD] <: `+E`[TopD]] = `E:`[E, `-E`[OffTopD]]
+type `E-`[-E >: `-E`[TopD] <: `+E`[TopD]] = `E:`[`+E`[OffTopD], E]
+type `E0`[E >: `-E`[TopD] <: `+E`[TopD]] = `E:`[E, E]
+type `BotE:` = `E:`[`-E`[TopD], `+E`[TopD]]
+type `OffBotE:` = `E:`[`-E`[OffTopD], `+E`[OffTopD]]
 
 /**
-  * Fixes [[DX]] from [[D]].
+  * Fixes [[EX]] from [[E]].
   *
-  * @tparam DX `D:[+D, -D]`
+  * @tparam EX `E:[+E, -E]`
   */
-sealed trait DXR[D >: BotD <: TopD, DX >: `BotD:` <: `TopD:`]
-object DXR:
-  given [`+D` >: BotD <: TopD, `-D` >: BotD <: TopD] => DInvR[`+D`, `-D`] => DXR[`+D`, `D:`[`+D`, `-D`]]
-end DXR
+sealed trait EXR[E >: `-E`[TopD] <: `+E`[TopD], EX >: `BotE:` <: `TopE:`]
+object EXR:
+  given [
+    `+ E` >: `-E`[TopD] <: `+E`[TopD],
+    `- E` >: `-E`[TopD] <: `+E`[TopD],
+  ] => EInvR[`+ E`, `- E`] => EXR[`+ E`, `E:`[`+ E`, `- E`]]
+end EXR
 
-final abstract class `D::`[+`D:+` >:`BotD:` <: `OffTopD:`, -`D:-` >: `OffBotD:` <:`TopD:`]
-type `TopD::` = `D::`[`TopD:`, `OffBotD:`] | `D::`[`OffTopD:`, `BotD:`]
-type `D:+`[+`D:` >:`BotD:` <:`TopD:`] = `D::`[`D:`, `BotD:`]
-type `D:-`[-`D:` >:`BotD:` <:`TopD:`] = `D::`[`TopD:`, `D:`]
-type `D:0`[`D:` >:`BotD:` <:`TopD:`] = `D::`[`D:`, `D:`]
-type `BotD::` = `D::`[`BotD:`,`TopD:`]
+final abstract class `E::`[+`E:+` >:`BotE:` <: `OffTopE:`, -`E:-` >: `OffBotE:` <:`TopE:`]
+type `TopE::` = `E::`[`TopE:`, `OffBotE:`] | `E::`[`OffTopE:`, `BotE:`]
+type `E:+`[+`E:` >:`BotE:` <:`TopE:`] = `E::`[`E:`, `BotE:`]
+type `E:-`[-`E:` >:`BotE:` <:`TopE:`] = `E::`[`TopE:`, `E:`]
+type `E:0`[`E:` >:`BotE:` <:`TopE:`] = `E::`[`E:`, `E:`]
+type `BotE::` = `E::`[`BotE:`,`TopE:`]
 
 final abstract class `K:`[+`K+` >: BotK <: TopK, -`K-` >: BotK <: TopK]
 type `TopK:` = `K:`[TopK, BotK]
@@ -43,3 +46,5 @@ type `N+`[+N >: BotN <: TopN] = `N:`[N, BotN]
 type `N-`[-N >: BotN <: TopN] = `N:`[TopN, N]
 type `N0`[N >: BotN <: TopN] = `N:`[N, N]
 type `BotN:` = `N:`[BotN, TopN]
+
+type `TopRecordE:` = `E:`[`+E`[RecordD], `-E`[OffTopD]] | `E:`[`+E`[OffTopD], `-E`[RecordD]]
