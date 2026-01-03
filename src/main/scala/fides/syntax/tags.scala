@@ -14,6 +14,17 @@ type LauncherK = launcherK.type
 opaque type BotK <: launcherK.type = Nothing
 
 /**
+  * Inversion relation for K
+  */
+sealed trait KInvR[K >: BotK <: TopK, `-K` >: BotK <: TopK]
+sealed trait KInvLR:
+  given [K >: BotK <: TopK] => KInvR[K, K]
+object KInvR extends KInvLR:
+  given KInvR[BotK, TopK]
+  given KInvR[TopK, BotK]
+end KInvR
+
+/**
   * Representation of natural numbers
   */
 opaque type TopN = String

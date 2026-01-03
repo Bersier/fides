@@ -28,13 +28,13 @@ sealed trait TopD extends OffTopD
 sealed trait RecordD extends TopD
 final abstract class EmptyRecordD extends RecordD
 final abstract class NonEmptyRecordD[
-  +Key >: BotK <: TopK, +Value >: `-E`[TopD] <: `+E`[TopD], +Tail >: `-E`[RecordD] <: `+E`[RecordD],
+  +Key >: BotK <: TopK, +Value >: ND[TopD] <: PD[TopD], +Tail >: ND[RecordD] <: PD[RecordD],
 ] extends RecordD
 
 /**
   * Labeled value
   */
-final abstract class EntryD[+Key >: BotK <: TopK, +Value >: `-E`[TopD] <: `+E`[TopD]] extends TopD
+final abstract class EntryD[+Key >: BotK <: TopK, +Value >: ND[TopD] <: PD[TopD]] extends TopD
 
 /**
   * Labeled sum type
@@ -46,7 +46,7 @@ final abstract class EntryD[+Key >: BotK <: TopK, +Value >: `-E`[TopD] <: `+E`[T
 sealed trait VariantD extends TopD
 final abstract class EmptyVariantD extends VariantD
 final abstract class NonEmptyVariantD[
-  +Key >: BotK <: TopK, +Value >: `-E`[TopD] <: `+E`[TopD], +Tail >: `-E`[VariantD] <: `+E`[VariantD],
+  +Key >: BotK <: TopK, +Value >: ND[TopD] <: PD[TopD], +Tail >: ND[VariantD] <: PD[VariantD],
 ] extends VariantD
 
 /**
@@ -56,11 +56,11 @@ final abstract class NonEmptyVariantD[
   * But we cannot represent unordered types in Scala, so we instead use a list of data types.
   * It is assumed that it is sorted by data type, so it's a canonical representation of the multiset.
   */
-sealed trait BagD[+Element >: `-E`[TopD] <: `+E`[TopD]] extends TopD
-final abstract class EmptyBagD extends BagD[`-E`[TopD]]
+sealed trait BagD[+Element >: ND[TopD] <: PD[TopD]] extends TopD
+final abstract class EmptyBagD extends BagD[ND[TopD]]
 final abstract class NonEmptyBagD[
-  +TailBound >: `-E`[TopD] <: `+E`[TopD],
-  +Head >: `-E`[TopD] <: `+E`[TopD], +Tail >: `-E`[BagD[TailBound]] <: `+E`[BagD[TailBound]],
+  +TailBound >: ND[TopD] <: PD[TopD],
+  +Head >: ND[TopD] <: PD[TopD], +Tail >: ND[BagD[TailBound]] <: PD[BagD[TailBound]],
 ] extends BagD[Head | TailBound]
 
 /**
@@ -76,12 +76,12 @@ final abstract class QuoteD[+Body >: BotM <: TopM] extends TopD
 /**
   * "Compiled" quote
   */
-final abstract class BehaviorD[+Behavior >: `-H`[XpolarG] <: `+H`[XpolarG]] extends TopD
+final abstract class BehaviorD[+Behavior >: NG[XpolarG] <: PG[XpolarG]] extends TopD
 
 /**
   * Signed value
   */
-final abstract class CertificateD[+K >: BotK <: TopK, +Payload >: `-E`[TopD] <: `+E`[TopD]] extends TopD
+final abstract class CertificateD[+K >: BotK <: TopK, +Payload >: ND[TopD] <: PD[TopD]] extends TopD
 
 /**
   * Name as value
@@ -91,7 +91,7 @@ final abstract class IdentifierD[+K >: BotK <: TopK] extends TopD
 /**
   * Channel address
   */
-final abstract class AddressD[+K >: BotK <: TopK, -Data >: `-E`[TopD] <: `+E`[TopD]] extends TopD
+final abstract class AddressD[+K >: BotK <: TopK, -Data >: ND[TopD] <: PD[TopD]] extends TopD
 
 /**
   * Natural number

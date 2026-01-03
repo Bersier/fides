@@ -12,67 +12,67 @@ package fides.syntax
 
 //region ==== `SelfD` Rules ====
 
-// todo replace some G parameters by H parameters?
+// todo replace some G parameters by PG/NG parameters?
 
 sealed trait NonEmptyRecordGR[
-  Key >: BotK <: TopK, -Value <: PolarG[`TopE:`], -Tail <: RecordG,
-  SelfD >: `BotE:` <: `TopE:`,
+  Key >: BotK <: TopK, -Value <: PolarG[`TopD:`], -Tail <: RecordG,
+  SelfD >: `BotD:` <: `TopD:`,
 ]
 object NonEmptyRecordGR:
   given [
-    ValueType >: `BotE:` <: `TopE:`,
+    ValueType >: `BotD:` <: `TopD:`,
     Key >: BotK <: TopK, Value <: PolarG[ValueType],
-    SelfD >: `BotE:` <: `TopE:`,
+    SelfD >: `BotD:` <: `TopD:`,
   ] => NonEmptyRecordDR[
-    Key, ValueType, `E0`[`+E`[EmptyRecordD]], SelfD,
+    Key, ValueType, `D0`[PD[EmptyRecordD]], SelfD,
   ] => NonEmptyRecordGR[Key, Value, EmptyRecordG, SelfD]
   given [
-    ValueType >: `BotE:` <: `TopE:`, TailType >: `BotE:` <: `TopRecordE:`,
+    ValueType >: `BotD:` <: `TopD:`, TailType >: `BotD:` <: `TopRecordD:`,
     Key >: BotK <: TopK, Value <: PolarG[ValueType],
     Tail <: NonEmptyRecordG[
-      TailType, TopK, `+H`[PolarG[`TopE:`]], `+H`[RecordG],
+      TailType, TopK, PG[PolarG[`TopD:`]], PG[RecordG],
     ],
-    SelfD >: `BotE:` <: `TopE:`,
+    SelfD >: `BotD:` <: `TopD:`,
   ] => NonEmptyRecordDR[Key, ValueType, TailType, SelfD] => NonEmptyRecordGR[Key, Value, Tail, SelfD]
 end NonEmptyRecordGR
 
 sealed trait EntryGR[
-  Key >: BotK <: TopK, -Value <: PolarG[`TopE:`],
-  SelfD >: `BotE:` <: `TopE:`,
+  Key >: BotK <: TopK, -Value <: PolarG[`TopD:`],
+  SelfD >: `BotD:` <: `TopD:`,
 ]
 object EntryGR:
   given [
-    ValueType >: `BotE:` <: `TopE:`,
+    ValueType >: `BotD:` <: `TopD:`,
     Key >: BotK <: TopK, Value <: PolarG[ValueType],
-    SelfD >: `BotE:` <: `TopE:`,
+    SelfD >: `BotD:` <: `TopD:`,
   ] => EntryDR[Key, ValueType, SelfD] => EntryGR[Key, Value, SelfD]
 end EntryGR
 
 sealed trait BundleGR[
-  Keys >: `-H`[ArgsG] <: `+H`[ArgsG],
-  SelfD >: `BotE:` <: `TopE:`,
+  Keys >: NG[ArgsG] <: PG[ArgsG],
+  SelfD >: `BotD:` <: `TopD:`,
 ]
 object BundleGR:
-  given BundleGR[`+H`[EmptyArgsG], `E0`[`+E`[EmptyRecordD]]]
+  given BundleGR[PG[EmptyArgsG], `D0`[PD[EmptyRecordD]]]
   given [
-    Key >: BotK <: TopK, Datatype >: `BotE:` <: `TopE:`,
-    Head >: `-H`[LocRefG[Key, Datatype]] <: `+H`[LocRefG[Key, Datatype]], Tail >: `-H`[ArgsG] <: `+H`[ArgsG],
-    TailD >: `BotE:` <: `TopRecordE:`,
-    SelfD >: `BotE:` <: `TopE:`,
+    Key >: BotK <: TopK, Datatype >: `BotD:` <: `TopD:`,
+    Head >: NG[LocRefG[Key, Datatype]] <: PG[LocRefG[Key, Datatype]], Tail >: NG[ArgsG] <: PG[ArgsG],
+    TailD >: `BotD:` <: `TopRecordD:`,
+    SelfD >: `BotD:` <: `TopD:`,
   ] => BundleGR[Tail, TailD] => NonEmptyRecordDR[
     Key, Datatype, TailD, SelfD,
-  ] => BundleGR[`+H`[NonEmptyArgsG[Head, Tail]], SelfD]
+  ] => BundleGR[PG[NonEmptyArgsG[Head, Tail]], SelfD]
 end BundleGR
 
 //endregion - `SelfD` Rules
 
 //region ==== Other Rules ====
 
-sealed trait ConcurrentGR[Processes >: `-H`[ArgsG] <: `+H`[ArgsG]]
+sealed trait ConcurrentGR[Processes >: NG[ArgsG] <: PG[ArgsG]]
 object ConcurrentGR:
   given [
     ProcessesG <: ArgsG,
-    Processes >: `-H`[ProcessesG] <: `+H`[ProcessesG],
+    Processes >: NG[ProcessesG] <: PG[ProcessesG],
   ] => BoundedArgs[ProcessesG, ApolarG] => ConcurrentGR[Processes]
 end ConcurrentGR
 
@@ -81,16 +81,16 @@ object BoundedArgs:
   given [Bound <: TopG] => BoundedArgs[EmptyArgsG, Bound]
   given [
     TailG <: ArgsG,
-    Head >: `-H`[Bound] <: `+H`[Bound], TailH >: `-H`[TailG] <: `+H`[TailG],
+    Head >: NG[Bound] <: PG[Bound], TailH >: NG[TailG] <: PG[TailG],
     Bound <: TopG,
   ] => BoundedArgs[TailG, Bound] => BoundedArgs[NonEmptyArgsG[Head, TailH], Bound]
 end BoundedArgs
 
-sealed trait SendGR[Contents <: ExprG[`+E`[TopD]], Recipient <: ExprG[`+E`[AddressD[TopK, `-E`[TopD]]]]]
+sealed trait SendGR[Contents <: ExprG[PD[TopD]], Recipient <: ExprG[PD[AddressD[TopK, ND[TopD]]]]]
 object SendGR:
   given [
-    Datatype >: `-E`[TopD] <: `+E`[TopD],
-    Contents <: ExprG[Datatype], Recipient <: ExprG[`+E`[AddressD[TopK, Datatype]]],
+    Datatype >: ND[TopD] <: PD[TopD],
+    Contents <: ExprG[Datatype], Recipient <: ExprG[PD[AddressD[TopK, Datatype]]],
   ] => SendGR[Contents, Recipient]
 end SendGR
 
