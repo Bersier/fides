@@ -1,34 +1,49 @@
 package fides.syntax
 
-// todo fix, and rename
-sealed trait BeforeER[-E1 >: ND[TopD] <: PD[TopD], +E2 >: ND[TopD] <: PD[TopD]]
-object BeforeER:
-  given [
-    E1 >: ND[TopD] <: PD[TopD], E2 >: ND[TopD] <: PD[TopD],
-  ] => DSubtypeR[E1, E2] => BeforeER[E1, E2]
-  given [D1 <: TopD, D2 <: TopD] => BeforeDR[D1, D2] => BeforeER[PD[D1], PD[D2]]
-  given [D1 <: TopD, D2 <: TopD] => BeforeDR[D1, D2] => BeforeER[ND[D1], PD[D2]]
-  given [D1 <: TopD, D2 <: TopD] => BeforeDR[D1, D2] => BeforeER[ND[D1], ND[D2]]
-end BeforeER
+import scala.util.NotGiven
 
-// todo delete
-sealed trait BeforeDR[-D1 <: TopD, +D2 <: TopD]
+sealed trait BeforeDR[D1 >: ND[TopD] <: PD[TopD], D2 >: ND[TopD] <: PD[TopD]]
 object BeforeDR:
-  given [D1 <: D2, D2 <: TopD] => BeforeDR[D1, D2]
-  given [D1 <: TopD, D2 <: TopD, D3 <: TopD] => NextDR[D1, D2] => BeforeDR[D2, D3] => BeforeDR[D1, D3]
+  given [
+    D1 >: ND[TopD] <: PD[TopD],
+    D2 >: ND[TopD] <: PD[TopD],
+  ] => DSubtypeR[D1, D2] => BeforeDR[D1, D2]
+  given LeftSubtypeWeakening: [
+    D1 >: ND[TopD] <: PD[TopD],
+    D2 >: ND[TopD] <: PD[TopD],
+    D3 >: ND[TopD] <: PD[TopD],
+  ] => DSubtypeR[D1, D2] => BeforeDR[D2, D3] => BeforeDR[D1, D3]()
+  given RightSubtypeWeakening: [
+    D1 >: ND[TopD] <: PD[TopD],
+    D2 >: ND[TopD] <: PD[TopD],
+    D3 >: ND[TopD] <: PD[TopD],
+  ] => DSubtypeR[D2, D3] => BeforeDR[D1, D2] => BeforeDR[D1, D3]()
+  given LeftChaining: [
+    D1 >: ND[TopD] <: PD[TopD],
+    D2 >: ND[TopD] <: PD[TopD],
+    D3 >: ND[TopD] <: PD[TopD],
+  ] => ChainedDR[D1, D2] => BeforeDR[D2, D3] => BeforeDR[D1, D3]()
+  given RightChaining: [
+    D1 >: ND[TopD] <: PD[TopD],
+    D2 >: ND[TopD] <: PD[TopD],
+    D3 >: ND[TopD] <: PD[TopD],
+  ] => ChainedDR[D2, D3] => BeforeDR[D1, D2] => BeforeDR[D1, D3]()
 end BeforeDR
+// todo not constructive enough. Search would have to first try to find a local path, then go up, and repeat.
+//  Weakening has to be used just right, not too little, not too much.
 
-// todo should take PDs
-private sealed trait NextDR[-D1 <: TopD, +D2 <: TopD]
-object NextDR:
-  given NextDR[AddressD[TopK, ND[TopD]], BehaviorD[NG[XpolarG]]]
-  given NextDR[FalseD, TrueD]
-  given NextDR[BehaviorD[PG[XpolarG]], CertificateD[BotK, ND[TopD]]]
-  given NextDR[CertificateD[TopK, PD[TopD]], IdentifierD[BotK]]
-  given NextDR[IdentifierD[TopK], NatD[BotN]]
-  given NextDR[NatD[TopN], PreQuoteD[BotM]]
-  given NextDR[PreQuoteD[TopM], PulseD]
-  given NextDR[PulseD, QuoteD[TopM]]
-  given NextDR[QuoteD[BotM], EntryD[TopK, PD[TopD]]]
-  // todo add more cases and fix; should be fractal
-end NextDR
+private sealed trait ChainedDR[D1 >: ND[TopD] <: PD[TopD], D2 >: ND[TopD] <: PD[TopD]]
+object ChainedDR:
+  given AddressOrder: [
+    D1 >: ND[TopD] <: PD[TopD], D2 >: ND[TopD] <: PD[TopD],
+    K1 >: BotK <: K2, K2 >: BotK <: TopK,
+  ] => NotGiven[K2 <:< K1] => ChainedDR[PD[AddressD[K1, D1]], PD[AddressD[K2, D2]]]()
+  given AddressBeforeBehavior: [
+    D >: ND[TopD] <: PD[TopD], G >: NG[XpolarG] <: PG[XpolarG],
+  ] => ChainedDR[PD[AddressD[TopK, D]], PD[BehaviorD[G]]]()
+  given BehaviorBeforeBool: [
+    G >: NG[XpolarG] <: PG[XpolarG], D >: ND[BoolD] <: PD[BoolD],
+  ] => ChainedDR[PD[BehaviorD[G]], D]()
+  given FalseBeforeTrue: ChainedDR[PD[FalseD], PD[TrueD]]()
+  // todo add more cases
+end ChainedDR

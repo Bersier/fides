@@ -68,7 +68,7 @@ object MergeBagsDR extends MergeBagsLDR:
       NonEmptyBagD[PD[TopD], Head2, PD[BagD[PD[TopD]]]],
     ],
   ] => (
-    BeforeER[Head1, Head2],
+    BeforeDR[Head1, Head2],
     MergeBagsDR[Tail1, Bag2, Tail],
   ) => MergeBagsDR[Bag1, Bag2, PD[NonEmptyBagD[TailBound, Head1, Tail]]]
 end MergeBagsDR
