@@ -40,10 +40,11 @@ object ChainedDR:
   ] => NotGiven[K2 <:< K1] => ChainedDR[PD[AddressD[K1, D1]], PD[AddressD[K2, D2]]]()
   given AddressBeforeBehavior: [
     D >: ND[TopD] <: PD[TopD], G >: NG[XpolarG] <: PG[XpolarG],
-  ] => ChainedDR[PD[AddressD[TopK, D]], PD[BehaviorD[G]]]()
+    Behavior >: ND[BehaviorD] <: PD[BehaviorD],
+  ] => ChainedDR[PD[AddressD[TopK, D]], Behavior]()
   given BehaviorBeforeBool: [
-    G >: NG[XpolarG] <: PG[XpolarG], D >: ND[BoolD] <: PD[BoolD],
-  ] => ChainedDR[PD[BehaviorD[G]], D]()
+    D >: ND[BoolD] <: PD[BoolD],
+  ] => ChainedDR[PD[BehaviorD], D]()
   given FalseBeforeTrue: ChainedDR[PD[FalseD], PD[TrueD]]()
   // todo add more cases
 end ChainedDR

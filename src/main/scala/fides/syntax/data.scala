@@ -76,7 +76,10 @@ final abstract class QuoteD[+Body >: BotM <: TopM] extends TopD
 /**
   * "Compiled" quote
   */
-final abstract class BehaviorD[+Behavior >: NG[XpolarG] <: PG[XpolarG]] extends TopD
+sealed trait BehaviorD extends TopD
+final abstract class ApolarBehaviorD extends BehaviorD
+final abstract class PolarBehaviorD[+D >: `BotD:` <: `TopD:`] extends BehaviorD
+final abstract class BipolarBehaviorD[+I >: `BotD::` <: `TopD::`, +O >: `BotD::` <: `TopD::`] extends BehaviorD
 
 /**
   * Signed value
