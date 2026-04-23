@@ -1,8 +1,8 @@
 
 lazy val root = (project in file("."))
   .dependsOn(
-    RootProject(uri("https://github.com/Bersier/TypeLevelNumbers.git")),
-    RootProject(uri("https://github.com/Bersier/observable.git")),
+//    RootProject(uri("https://github.com/Bersier/TypeLevelNumbers.git")),
+//    RootProject(uri("https://github.com/Bersier/observable.git")),
   ) // to reload the dependencies, delete all copies of it in ~/.sbt/1.0/staging
   .settings(
     name := "Fides",
@@ -13,9 +13,9 @@ lazy val root = (project in file("."))
     resolvers += Resolver.scalaNightlyRepository,
 
     libraryDependencies ++= Seq(
-      "org.scala-lang" %% "scala3-staging" % scalaVersion.value,
+//      "org.scala-lang" %% "scala3-staging" % scalaVersion.value,
       // See https://docs.scala-lang.org/api/all.html
-      "dev.zio" %% "zio" % "2.1.14",
+//      "dev.zio" %% "zio" % "2.1.14",
 //      "dev.zio" %% "zio-streams" % "2.1.14",
 //      "org.typelevel" %% "cats-core" % "2.12.0",
 //      "org.typelevel" %% "kittens" % "3.4.0",
