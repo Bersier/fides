@@ -10,6 +10,18 @@ sealed trait Code
 
 //region ==== Locations ====
 
+/**
+  * <h2>A memory cell process</h2>
+  *
+  * <b>Syntax</b>
+  *  - [[name]]: Name
+  *  - [[contents]]: Ntrl
+  *  - [[this]]: Apolar
+  *
+  * <b>Semantics</b>
+  * @param name used to refer to this cell
+  * @param contents of this cell
+  */
 final case class Cell(name: Code, contents: Code) extends Code
 
 /**
