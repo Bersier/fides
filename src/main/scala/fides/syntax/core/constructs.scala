@@ -12,9 +12,15 @@ sealed trait Code
 
 final case class Cell(name: Code, contents: Code) extends Code
 
-final case class ChanRef(name: Code) extends Code
+/**
+  * Channel location reference
+  */
+final case class ChanRef(name: Code, datatype: Code) extends Code
 
-final case class CellRef(name: Code) extends Code
+/**
+  * Cell location reference
+  */
+final case class CellRef(name: Code, datatype: Code) extends Code
 
 //endregion - Locations
 
@@ -68,10 +74,12 @@ final case class Pulse() extends Code
 
 final case class Bool(representation: Boolean) extends Code
 
-final case class Nat(representation: BigInt) extends Code
-
 enum Command extends Code:
   case Start, Pause, Kill
+
+final case class Nat(representation: BigInt) extends Code
+
+final case class Address(name: Code, datatype: Code) extends Code
 
 // Unary structors
 
@@ -93,6 +101,30 @@ final case class Bag(elements: Code) extends Code
 final case class Pick(options: Code) extends Code
 
 //endregion - Constructor/Destructor Polars
+
+//region ==== Other Reversible Polars ====
+
+/**
+  * @param keys a multiset of location references
+  */
+final case class BundleG(keys: Code) extends Code
+
+/**
+  * @param keys a multiset of location references
+  */
+final case class SwitchG(keys: Code) extends Code
+
+/**
+  * @param channel a channel reference
+  * @param size the number of elements to collect
+  */
+final case class CollectG(channel: Code, size: Code) extends Code
+
+final case class NegateG(bool: Code) extends Code
+
+final case class SwapG(name1: Code, name2: Code, target: Code) extends Code
+
+//endregion - Other Reversible Polars
 
 /**
   * An unordered collection of syntactic elements
