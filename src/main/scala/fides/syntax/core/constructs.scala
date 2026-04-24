@@ -94,6 +94,15 @@ final case class Mortal(signal: Code, process: Code) extends Code
   */
 final case class Catchable(signal: Code, process: Code, quote: Code) extends Code
 
+/**
+  * All the names used by [[contained]] are effectively new, providing isolation.
+  *
+  * @param monitor process, not isolated from the outside
+  * @param bridgeNames new names that are accessible to both [[monitor]] and [[contained]], allowing them to interact
+  * @param contained isolated process
+  */
+final case class Sandboxed(monitor: Code, bridgeNames: Code, contained: Code) extends Code
+
 //endregion - Apolars
 
 //region ==== Constructor/Destructor Polars ====
@@ -118,9 +127,9 @@ final case class Address(name: Code, datatype: Code) extends Code
   */
 final case class Entry(key: Code, value: Code) extends Code
 
-final case class Quote(code: Code) extends Code
-
 final case class Document(signatory: Code, contents: Code) extends Code
+
+final case class Quote(code: Code) extends Code
 
 // Multiset structors
 
@@ -152,6 +161,13 @@ final case class NegateG(bool: Code) extends Code
 
 final case class SwapG(name1: Code, name2: Code, target: Code) extends Code
 
+/**
+  * As an Expr, converts a [[Bag]] of code quotations to a [[Quoted]] of [[Args]] of all the pieces of code.
+  *
+  * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Args]].
+  */
+final case class Zip(pieces: Code) extends Code
+
 //endregion - Other Reversible Polars
 
 //region ==== Other Expression Polars ====
@@ -167,6 +183,22 @@ final case class Sum(terms: Code) extends Code
 final case class Multiply(factors: Code) extends Code
 
 final case class Merge(bags: Code) extends Code
+
+/**
+  * Wraps a value into a Quoted.
+  *
+  * @param value an expression whose value it reduces to is to be wrapped
+  * @return an expression of a quote
+  */
+final case class Wrap(value: Code) extends Code
+
+/**
+  * Evaluates a quoted expression.
+  *
+  * @param value a quote of an expression
+  * @return an expression that evaluates like the expression in quotes
+  */
+final case class Eval(value: Code) extends Code
 
 /**
   * Replaces all the names in the quote by fresh names. Also removes all shadowing.
@@ -191,6 +223,7 @@ final case class Children(quote: Code) extends Code
   * Launches [[quote]] as a new process, and outputs a signed value (aka document) of the code, confirming the launch.
   */
 final case class Launch(quote: Code) extends Code
+// todo take quote wrapped in New? To expose/publish some names the launched process nevertheless owns?
 
 //endregion - Other Expression Polars
 
@@ -231,3 +264,11 @@ final case class New(names: Code, body: Code) extends Code
   * @param annotation the annotation; a value
   */
 final case class Annotated(quoteName: Code, code: Code, annotation: Code) extends Code
+
+/**
+  * Allows escaping the body of a quote.
+  *
+  * @param name of the quote to escape
+  * @param quote to insert
+  */
+final case class Escape(name: Code, quote: Code) extends Code
