@@ -125,9 +125,6 @@ final case class Pulse() extends Code
 
 final case class Bool(representation: Boolean) extends Code
 
-enum Command extends Code:
-  case Start, Pause, Kill
-
 final case class Nat(representation: BigInt) extends Code
 
 final case class Address(name: Code, datatype: Code) extends Code
