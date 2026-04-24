@@ -11,7 +11,8 @@ sealed trait Code
 //region ==== Locations ====
 
 /**
-  * <h2>A memory cell process</h2>
+  * <h2>Memory cell process</h2>
+  * Stores a single value. Can be updated, and can be used for synchronization.
   *
   * <b>Syntax</b>
   *  - [[name]]: Name
@@ -151,6 +152,20 @@ final case class Pick(options: Code) extends Code
 //region ==== Other Reversible Polars ====
 
 /**
+  * <h2>Location connection</h2>
+  * As an expression, sends a value to a fixed location.
+  * As an extractor, receives a value from a fixed location.
+  *
+  * <b>Syntax</b>
+  *  - [[reference]]: LocRef
+  *  - [[this]]: Polar
+  *
+  * <b>Semantics</b>
+  * @param reference to which to connect for a one-time read or write
+  */
+final case class Xput(reference: Code) extends Code
+
+/**
   * @param keys a multiset of location references
   */
 final case class BundleG(keys: Code) extends Code
@@ -192,6 +207,27 @@ final case class Sum(terms: Code) extends Code
 final case class Multiply(factors: Code) extends Code
 
 final case class Merge(bags: Code) extends Code
+
+/**
+  * <h2>Compare-and-swap</h2>
+  *
+  * Atomically
+  *  1. Reads the value of the cell, V.
+  *  2. Compares V to [[testValue]].
+  *  3. If they are the same, writes [[newValue]] to the cell.
+  *  4. Outputs V.
+  * 
+  * Atomically compares the current value of the cell with the inputted pattern and,
+  * only if they are the same, updates the value of the cell to the inputted new value, and
+  * outputs the previous value of the cell.
+  *
+  * <b>Syntax</b>
+  *  - [[testValue]]: Expr
+  *  - [[newValue]]: Expr
+  *  - [[reference]]: CellRef
+  *  - [[this]]: Expr
+  */
+final case class CompareAndSwap(testValue: Code, newValue: Code, reference: Code) extends Code
 
 /**
   * Wraps a value into a Quoted.
@@ -238,6 +274,20 @@ final case class Launch(quote: Code) extends Code
 
 //region ==== Other Extractor Polars ====
 
+/**
+  * <h2>Match statement</h2>
+  *
+  * <b>Syntax</b>
+  *  - [[pattern]]: Xctr
+  *  - [[alternative]]: Xctr
+  *  - [[this]]: Xctr
+  *
+  * <b>Semantics</b>
+  * @param pattern executes if the singleton type of the inputted value is a subtype of its type
+  * @param alternative defaults to this otherwise
+  */
+final case class Match(pattern: Code, alternative: Code) extends Code
+
 final case class Inspect(signature: Code, payload: Code)
 
 //endregion - Other Extractor Polars
@@ -273,6 +323,8 @@ final case class New(names: Code, body: Code) extends Code
   * @param annotation the annotation; a value
   */
 final case class Annotated(quoteName: Code, code: Code, annotation: Code) extends Code
+
+final case class Type(witness: Code) extends Code
 
 /**
   * Allows escaping the body of a quote.
