@@ -56,7 +56,43 @@ final case class Repeated(body: Code) extends Code
   */
 final case class Concurrent(processes: Code) extends Code
 
+final case class DivMod(dividend: Code, divisor: Code, quotient: Code, remainder: Code) extends Code
+
 //endregion - Apolars
+
+//region ==== Constructor/Destructor Polars ====
+
+// Nullary structors
+
+final case class Pulse() extends Code
+
+final case class Bool(representation: Boolean) extends Code
+
+final case class Nat(representation: BigInt) extends Code
+
+enum Command extends Code:
+  case Start, Pause, Kill
+
+// Unary structors
+
+/**
+  * @param key a name
+  */
+final case class Entry(key: Code, value: Code) extends Code
+
+final case class Quote(code: Code) extends Code
+
+// Binary structors
+
+final case class Document(signatory: Code, contents: Code) extends Code
+
+// Multiset structors
+
+final case class Bag(elements: Code) extends Code
+
+final case class Pick(options: Code) extends Code
+
+//endregion - Constructor/Destructor Polars
 
 /**
   * An unordered collection of syntactic elements
@@ -66,7 +102,7 @@ final case class Args(arguments: Multiset[Code]) extends Code
 /**
   * Akin to names in the pi-calculus
   */
-final case class Name(identifier: Identifier) extends Code
+final case class Name(representation: Identifier) extends Code
 
 final val LauncherName = Name(launcherIdentifier)
 
