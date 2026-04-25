@@ -1,5 +1,8 @@
 package util
 
+enum Trit:
+  case Negative, Neutral, Positive
+
 extension (b: Boolean)
   inline def asOption: Option[Unit] = if b then Some(()) else None
   inline infix def thenYield[T](inline t: => T): Option[T] = if b then Some(t) else None

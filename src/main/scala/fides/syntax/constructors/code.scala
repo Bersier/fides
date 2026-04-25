@@ -1,5 +1,6 @@
-package fides.syntax.core
+package fides.syntax.constructors
 
+import fides.syntax.util.{Identifier, launcherIdentifier}
 import util.Multiset
 
 // -------------------------------------------------------------------------------------------------
