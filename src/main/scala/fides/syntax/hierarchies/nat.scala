@@ -2,10 +2,9 @@ package fides.syntax.hierarchies
 
 import util.Hierarchy
 
-object Bool extends Hierarchy:
-  import ElementT.*
-  enum ElementT derives CanEqual:
-    case Top, True, False
+object Nat extends Hierarchy:
+  case class ElementT(value: Option[BigInt]) derives CanEqual:
+    assert(value.forall(_ >= 0))
 
   def u(elements: Set[ElementT]): ElementT = elements.size match
     case 2 => top
@@ -13,9 +12,9 @@ object Bool extends Hierarchy:
     case 0 => throw AssertionError("At least one element should be provided")
     case _ => throw AssertionError("Impossible case")
 
-  def top: ElementT = Top
+  def top: ElementT = ElementT(None)
 
   extension (element: ElementT)
     def <=(other: ElementT): Boolean =
-      element == other || other == Top
-end Bool
+      element == other || other == ElementT(None)
+end Nat
