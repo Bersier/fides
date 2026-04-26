@@ -1,5 +1,6 @@
 package fides.syntax.hierarchies
 
+import fides.syntax.hierarchies.Bool.ElementT
 import fides.syntax.util.Hierarchy
 import util.{NonEmptyFiniteSet, SimpleSet, Trit}
 
@@ -8,6 +9,7 @@ object Nat extends Hierarchy:
     assert(value.forall(_ >= 0))
 
   def elements: SimpleSet[ElementT] = new SimpleSet[ElementT]:
+    def contains[U](u: U)(using CanEqual[U, ElementT]): Boolean = u.isInstanceOf[ElementT]
     def iterator: Iterator[ElementT] =
       Iterator.single(top) ++ Iterator.iterate(BigInt(0))(_ + 1).map(n => ElementT(Some(n)))
 

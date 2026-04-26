@@ -9,6 +9,7 @@ object Bool extends Hierarchy:
     case Top, True, False
 
   def elements: SimpleSet[ElementT] = new SimpleSet[ElementT]:
+    def contains[U](u: U)(using CanEqual[U, ElementT]): Boolean = u.isInstanceOf[ElementT]
     def iterator: Iterator[ElementT] = ElementT.values.iterator
   
   def u(elements: NonEmptyFiniteSet[ElementT]): ElementT =

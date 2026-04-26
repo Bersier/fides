@@ -1,8 +1,5 @@
 package util
 
-import java.util
-import scala.annotation.tailrec
-
 trait SetOps[SimpleSet[+_]]:
   def empty: SimpleSet[Nothing]
   def SimpleSet[T](elements: T*): SimpleSet[T]
@@ -12,37 +9,8 @@ trait SetOps[SimpleSet[+_]]:
 end SetOps
 
 trait SimpleSet[+T]:
-  final def iterator: Iterator[T] = new Iterator[T]:
-    def hasNext: Boolean =
-      peekNext().nonEmpty
-
-    def next(): T =
-      nextOption().get
-
-    override def nextOption(): Option[T] =
-      val result = peekNext()
-      nextState = None
-      result
-
-    private def peekNext(): Option[T] =
-      if nextState.isEmpty then
-        nextState = Some(getNext())
-      nextState.get
-
-    @tailrec
-    private def getNext(): Option[T] =
-      unsafeIterator.nextOption() match
-        case None => None
-        case Some(t) =>
-          if seen.containsKey(t)
-          then getNext()
-          else
-            seen.put(t, ())
-            Some(t)
-
-    private val seen = util.IdentityHashMap[T, Unit]()
-    private var nextState: Option[Option[T]] = None
-  protected def unsafeIterator: Iterator[T]
+  def contains[U](u: U)(using CanEqual[U, T]): Boolean
+  def iterator: Iterator[T]
 end SimpleSet
 
 trait NonEmptyFiniteSet[+T] extends SimpleSet[T]:
