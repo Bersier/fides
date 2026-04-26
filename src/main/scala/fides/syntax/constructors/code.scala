@@ -1,7 +1,7 @@
 package fides.syntax.constructors
 
 import fides.syntax.util.{Identifier, launcherIdentifier}
-import util.Multiset
+import util.collections.extensional.Multiset
 
 // -------------------------------------------------------------------------------------------------
 // This file contains all the Fides syntactic code constructors.
