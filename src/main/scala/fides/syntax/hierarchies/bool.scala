@@ -1,19 +1,20 @@
 package fides.syntax.hierarchies
 
-import util.Trit
+import fides.syntax.util.Hierarchy
+import util.{NonEmptyFiniteSet, SimpleSet, Trit}
 
 object Bool extends Hierarchy:
   import ElementT.*
   enum ElementT derives CanEqual:
     case Top, True, False
 
-  def elements: Set[ElementT] = ElementT.values.toSet
+  def elements: SimpleSet[ElementT] = new SimpleSet[ElementT]:
+    def iterator: Iterator[ElementT] = ElementT.values.iterator
   
-  def u(elements: Set[ElementT]): ElementT = elements.size match
-    case 2 => top
-    case 1 => elements.head
-    case 0 => throw AssertionError("At least one element should be provided")
-    case _ => throw AssertionError("Impossible case")
+  def u(elements: NonEmptyFiniteSet[ElementT]): ElementT =
+    if elements.size > 1
+    then top
+    else elements.iterator.next()
 
   def top: ElementT = Top
 

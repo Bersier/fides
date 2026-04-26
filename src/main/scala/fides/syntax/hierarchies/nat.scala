@@ -1,18 +1,20 @@
 package fides.syntax.hierarchies
 
-import util.Trit
+import fides.syntax.util.Hierarchy
+import util.{NonEmptyFiniteSet, SimpleSet, Trit}
 
 object Nat extends Hierarchy:
   case class ElementT(value: Option[BigInt]) derives CanEqual:
     assert(value.forall(_ >= 0))
 
-  def elements: Set[ElementT] = ???
-  
-  def u(elements: Set[ElementT]): ElementT = elements.size match
-    case 2 => top
-    case 1 => elements.head
-    case 0 => throw AssertionError("At least one element should be provided")
-    case _ => throw AssertionError("Impossible case")
+  def elements: SimpleSet[ElementT] = new SimpleSet[ElementT]:
+    def iterator: Iterator[ElementT] =
+      Iterator.single(top) ++ Iterator.iterate(BigInt(0))(_ + 1).map(n => ElementT(Some(n)))
+
+  def u(elements: NonEmptyFiniteSet[ElementT]): ElementT =
+    if elements.size > 1
+    then top
+    else elements.iterator.next()
 
   def top: ElementT = ElementT(None)
 

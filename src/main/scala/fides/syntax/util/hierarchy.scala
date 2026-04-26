@@ -1,6 +1,6 @@
-package fides.syntax.hierarchies
+package fides.syntax.util
 
-import util.Trit
+import util.{NonEmptyFiniteSet, SimpleSet, Trit}
 
 /**
   * [[<=]] and [[ElementT]] define a complete join-semilattice.
@@ -14,13 +14,13 @@ trait Hierarchy:
   /**
     * @return all the values of type [[ElementT]], all the elements in the hierarchy
     */
-  def elements: Set[ElementT] // todo use Cats Set?
+  def elements: SimpleSet[ElementT]
 
   /**
     * @param elements a non-empty set of elements in the hierarchy
     * @return the join of [[elements]]
     */
-  def u(elements: Set[ElementT]): ElementT // todo NonEmptySet
+  def u(elements: NonEmptyFiniteSet[ElementT]): ElementT
 
   /**
     * @return the element larger than any other element
@@ -31,10 +31,20 @@ trait Hierarchy:
     * @return the sign of that element
     */
   def sign(element: ElementT): Trit
-  
+
   extension (element: ElementT)
     /**
       * @return true iff [[element]] is smaller or equal to [[other]]
       */
     def <=(other: ElementT): Boolean
 end Hierarchy
+
+
+
+
+sealed trait Constructive extends Hierarchy
+
+sealed trait Component[T]: // todo T needs to be "splittable"
+  def at(t: T): Component[Unit] // todo shouldn't be all-or-nothing
+
+final case class ExtensionPair(subtype: Any, supertype: Any) // todo generalize to components
