@@ -1,6 +1,8 @@
 package fides.syntax.util
 
-import util.{NonEmptyFiniteSet, SimpleSet, Trit}
+import util.Trit
+import util.collections.extensional.NonEmptySet
+import util.collections.generic.SimpleSet
 
 /**
   * [[<=]] and [[ElementT]] define a complete join-semilattice.
@@ -20,7 +22,7 @@ trait Hierarchy:
     * @param elements a non-empty set of elements in the hierarchy
     * @return the join of [[elements]]
     */
-  def u(elements: NonEmptyFiniteSet[ElementT]): ElementT
+  def u(elements: NonEmptySet[ElementT]): ElementT
 
   /**
     * @return the element larger than any other element
