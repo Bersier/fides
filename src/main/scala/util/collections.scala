@@ -1,16 +1,14 @@
 package util
 
-trait SetOps[SimpleSet[+_]]:
-  def empty: SimpleSet[Nothing]
-  def SimpleSet[T](elements: T*): SimpleSet[T]
-  def union[T](m1: SimpleSet[T], m2: SimpleSet[T]): SimpleSet[T]
-  extension [T](m: SimpleSet[T])
-    def mapped[U](f: T => U): SimpleSet[U]
-end SetOps
-
 trait SimpleSet[+T]:
   def contains[U](u: U)(using CanEqual[U, T]): Boolean
   def iterator: Iterator[T]
+end SimpleSet
+object SimpleSet:
+  class Rules[T](set: SimpleSet[T])(using CanEqual[T, T]):
+    def uniqueness(n1: Int, n2: Int): Boolean =
+      set.iterator.drop(n1).nextOption() != set.iterator.drop(n2).nextOption()
+  end Rules
 end SimpleSet
 
 trait NonEmptyFiniteSet[+T] extends SimpleSet[T]:
