@@ -40,13 +40,15 @@ trait Hierarchy:
       */
     def <=(other: ElementT): Boolean
 end Hierarchy
+object Hierarchy:
+  sealed trait Constructive extends Hierarchy:
+    type Node
 
+  sealed trait Element
 
+  sealed trait Constructor[E, Domain <: Hierarchy { type ElementT = E }]:
+    def at(element: E): Element
+  end Constructor
 
-
-sealed trait Constructive extends Hierarchy
-
-sealed trait Component[T]: // todo T needs to be "splittable"
-  def at(t: T): Component[Unit] // todo shouldn't be all-or-nothing
-
-final case class ExtensionPair(subtype: Any, supertype: Any) // todo generalize to components
+  final case class Relation(subtype: Any, supertype: Any) // todo
+end Hierarchy
