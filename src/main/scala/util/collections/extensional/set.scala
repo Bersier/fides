@@ -12,6 +12,8 @@ case class FiniteSet[+T] private(protected val repr: Set[T @uncheckedVariance]) 
   def mapped[U](f: T => U): FiniteSet[U] = new FiniteSet(repr.map(f))
   def u[U](that: FiniteSet[U]): FiniteSet[T | U] =
     new FiniteSet(this.repr ++ that.repr)
+  def u[U](that: FiniteSet.NonEmpty[U]): FiniteSet.NonEmpty[T | U] =
+    new FiniteSet.NonEmpty(this.repr ++ that.repr)
 object FiniteSet:
   def apply(): FiniteSet[Nothing] =
     new FiniteSet(Set.empty)
