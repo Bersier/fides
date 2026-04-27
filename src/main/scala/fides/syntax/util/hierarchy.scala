@@ -45,39 +45,34 @@ end Hierarchy
 
 object Hierarchy:
 
-  sealed trait Rooted[
-      Domain <: Hierarchy { type ElementT = E }, E,
-    ] extends Hierarchy, Mapping[Domain, E, this.type, this.ElementT]
-  
+  sealed trait Rooted[E] extends Hierarchy:
+
+    def apply(e: E): ElementT
+
+  end Rooted
+
   object Rooted:
 
-    final case class WithRoot(
+    final case class WithRoot[E](
       rootHierarchy: Hierarchy,
-      newRelations: Multiset[Any/*(Rooted, Mapping)*/],
-    ) extends Rooted:
+      newRelations: Multiset[(Any, Any)],
+    ) extends Rooted[E]:
 
-      def elements: SimpleSet[WithRoot.this.type] = ???
+      def elements: SimpleSet[ElementT] = ???
 
-      def u(elements: FiniteSet.NonEmpty[WithRoot.this.type]): WithRoot.this.type = ???
+      def u(elements: FiniteSet.NonEmpty[ElementT]): ElementT = ???
 
-      def top: WithRoot.this.type = ???
+      def top: ElementT = ???
 
-      def sign(element: WithRoot.this.type): Trit = ???
+      def sign(element: ElementT): Trit = ???
 
-      extension (element: WithRoot.this.type)
-        def <=(other: WithRoot.this.type): Boolean = ???
+      extension (element: ElementT)
+        def <=(other: ElementT): Boolean = ???
+
+      def apply(e: E): ElementT = ???
 
     end WithRoot
 
   end Rooted
-
-  sealed trait Mapping[
-    Domain <: Hierarchy { type ElementT = E1 }, E1,
-    Codomain <: Hierarchy { type ElementT = E2 }, E2,
-  ]:
-
-    def at(element: E1): E2
-
-  end Mapping
 
 end Hierarchy
