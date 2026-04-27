@@ -45,32 +45,16 @@ end Hierarchy
 
 object Hierarchy:
 
-  sealed trait Constructive extends Hierarchy:
-
-    sealed trait Constructor[
+  sealed trait Rooted[
       Domain <: Hierarchy { type ElementT = E }, E,
-    ] extends Mapping[Domain, E, this.type, ElementT]:
+    ] extends Hierarchy, Mapping[Domain, E, this.type, this.ElementT]
+  
+  object Rooted:
 
-      def at(element: E): ElementT
-
-    end Constructor
-
-    final case class Relation[
-      Domain <: Hierarchy { type ElementT = E1 }, E1,
-      Codomain <: Hierarchy { type ElementT = E2 }, E2,
-    ](
-      subtype: Constructor[Domain, E1],
-      arrow: Mapping[Domain, E1, Codomain, E2],
-      supertype: Constructor[Codomain, E2],
-    )
-
-  end Constructive
-
-  object Constructive:
-
-    final case class WithRoot(rootHierarchy: Hierarchy, newRelations: Multiset[()]) extends Constructive:
-
-      type ElementT = this.type
+    final case class WithRoot(
+      rootHierarchy: Hierarchy,
+      newRelations: Multiset[Any/*(Rooted, Mapping)*/],
+    ) extends Rooted:
 
       def elements: SimpleSet[WithRoot.this.type] = ???
 
@@ -85,7 +69,7 @@ object Hierarchy:
 
     end WithRoot
 
-  end Constructive
+  end Rooted
 
   sealed trait Mapping[
     Domain <: Hierarchy { type ElementT = E1 }, E1,
