@@ -3,7 +3,7 @@ package fides.syntax.hierarchies
 import fides.syntax.hierarchies.Bool.ElementT
 import fides.syntax.util.Hierarchy
 import util.Trit
-import util.collections.extensional.NonEmptySet
+import util.collections.extensional.FiniteSet
 import util.collections.generic.SimpleSet
 
 object Nat extends Hierarchy:
@@ -15,7 +15,7 @@ object Nat extends Hierarchy:
     def iterator: Iterator[ElementT] =
       Iterator.single(top) ++ Iterator.iterate(BigInt(0))(_ + 1).map(n => ElementT(Some(n)))
 
-  def u(elements: NonEmptySet[ElementT]): ElementT =
+  def u(elements: FiniteSet.NonEmpty[ElementT]): ElementT =
     if elements.size > 1
     then top
     else elements.iterator.next()

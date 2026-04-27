@@ -2,7 +2,7 @@ package fides.syntax.hierarchies
 
 import fides.syntax.util.Hierarchy
 import util.Trit
-import util.collections.extensional.NonEmptySet
+import util.collections.extensional.FiniteSet
 import util.collections.generic.SimpleSet
 
 object Bool extends Hierarchy:
@@ -14,7 +14,7 @@ object Bool extends Hierarchy:
     def contains[U](u: U)(using CanEqual[U, ElementT]): Boolean = u.isInstanceOf[ElementT]
     def iterator: Iterator[ElementT] = ElementT.values.iterator
   
-  def u(elements: NonEmptySet[ElementT]): ElementT =
+  def u(elements: FiniteSet.NonEmpty[ElementT]): ElementT =
     if elements.size > 1
     then top
     else elements.iterator.next()

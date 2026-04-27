@@ -1,7 +1,7 @@
 package fides.syntax.util
 
 import util.Trit
-import util.collections.extensional.NonEmptySet
+import util.collections.extensional.FiniteSet
 import util.collections.generic.SimpleSet
 
 /**
@@ -22,7 +22,7 @@ trait Hierarchy:
     * @param elements a non-empty set of elements in the hierarchy
     * @return the join of [[elements]]
     */
-  def u(elements: NonEmptySet[ElementT]): ElementT
+  def u(elements: FiniteSet.NonEmpty[ElementT]): ElementT
 
   /**
     * @return the element larger than any other element
