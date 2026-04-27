@@ -45,34 +45,26 @@ end Hierarchy
 
 object Hierarchy:
 
-  sealed trait Rooted[E] extends Hierarchy:
+  final case class Rooted[T](
+    root: Hierarchy,
+    children: Multiset[Sub[T]],
+  ) extends Hierarchy:
 
-    def apply(e: E): ElementT
+    def elements: SimpleSet[ElementT] = ???
+    def u(elements: FiniteSet.NonEmpty[ElementT]): ElementT = ???
+    def top: ElementT = ???
+    def sign(element: ElementT): Trit = ???
 
+    extension (element: ElementT)
+      def <=(other: ElementT): Boolean = ???
+
+    def apply(t: T): ElementT = ??? // todo could also return a new Rooted
+    def subs: Multiset[Hierarchy] = ???
   end Rooted
 
-  object Rooted:
+  sealed trait Link[Domain, Codomain] extends (Domain => Codomain):
+    def withChild(hierarchy: Hierarchy): Sub[Codomain]
+  end Link
 
-    final case class WithRoot[E](
-      rootHierarchy: Hierarchy,
-      newRelations: Multiset[(Any, Any)],
-    ) extends Rooted[E]:
-
-      def elements: SimpleSet[ElementT] = ???
-
-      def u(elements: FiniteSet.NonEmpty[ElementT]): ElementT = ???
-
-      def top: ElementT = ???
-
-      def sign(element: ElementT): Trit = ???
-
-      extension (element: ElementT)
-        def <=(other: ElementT): Boolean = ???
-
-      def apply(e: E): ElementT = ???
-
-    end WithRoot
-
-  end Rooted
-
+  sealed trait Sub[Codomain]
 end Hierarchy
