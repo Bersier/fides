@@ -3,7 +3,7 @@ package util.collections.generic
 trait SimpleSet[+T]:
   def contains[U](u: U)(using CanEqual[U, T]): Boolean
   def iterator: Iterator[T]
-  def u[U](that: SimpleSet[U]): SimpleSet[T | U] = new SimpleSet[T | U]:
+  infix def u[U](that: SimpleSet[U]): SimpleSet[T | U] = new SimpleSet[T | U]:
     // todo will repeat elements when the two are not disjoint
     def contains[V](u: V)(using CanEqual[V, T | U]): Boolean =
       SimpleSet.this.contains(u) || that.contains(u)

@@ -54,7 +54,7 @@ object Hierarchy:
 
   sealed trait Rooted[T] extends Hierarchy:
 
-    type Constructor <: Link[T, Element]
+    type Constructor <: Link[?, Element]
     given FiniteEnumerable[Constructor] = deferred
 
     /**
@@ -68,7 +68,12 @@ object Hierarchy:
   end Rooted
 
   final case class Extended[T](rooted: Rooted[T], child: Sub[T]) extends Rooted[T]:
-    override given FiniteEnumerable[Constructor] = ???
+    type Element = rooted.Element | child.child.Element
+    type Constructor = rooted.Constructor | child.child.Constructor
+    
+    override given FiniteEnumerable[Constructor]:
+      def values: FiniteSet[Constructor] =
+        summon[FiniteEnumerable[rooted.Constructor]].values u summon[FiniteEnumerable[child.child.Constructor]]
     override given Enumerable[Element] = ???
 
     def root: Constructor = ???
@@ -85,9 +90,9 @@ object Hierarchy:
       def <=(other: Element): Boolean = ???
   end Extended
 
-  sealed trait Link[Domain, Codomain] extends (Domain => Codomain):
-    def withChild(rooted: Rooted[Domain]): Sub[Codomain]
-  end Link
+  sealed trait Link[-Domain, +Codomain] extends (Domain => Codomain):
+    def withChild[D <: Domain](rooted: Rooted[D]): Sub[Codomain]
 
-  sealed trait Sub[Codomain]
+  sealed trait Sub[+Codomain]:
+    val child: Rooted[?]
 end Hierarchy

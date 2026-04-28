@@ -10,9 +10,9 @@ case class FiniteSet[+T] private(protected val repr: Set[T @uncheckedVariance]) 
   def iterator: Iterator[T] = repr.iterator
   def size: Int = repr.size
   def mapped[U](f: T => U): FiniteSet[U] = new FiniteSet(repr.map(f))
-  def u[U](that: FiniteSet[U]): FiniteSet[T | U] =
+  infix def u[U](that: FiniteSet[U]): FiniteSet[T | U] =
     new FiniteSet(this.repr ++ that.repr)
-  def u[U](that: FiniteSet.NonEmpty[U]): FiniteSet.NonEmpty[T | U] =
+  infix def u[U](that: FiniteSet.NonEmpty[U]): FiniteSet.NonEmpty[T | U] =
     new FiniteSet.NonEmpty(this.repr ++ that.repr)
 object FiniteSet:
   def apply(): FiniteSet[Nothing] =
@@ -27,7 +27,7 @@ object FiniteSet:
     new NonEmpty(elements.toSet + element)
 
   class NonEmpty[+T](representation: Set[T @uncheckedVariance]) extends FiniteSet[T](representation):
-    override def u[U](that: FiniteSet[U]): NonEmpty[T | U] =
+    override infix def u[U](that: FiniteSet[U]): NonEmpty[T | U] =
       new NonEmpty(this.repr ++ that.repr)
   end NonEmpty
 end FiniteSet
