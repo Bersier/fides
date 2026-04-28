@@ -6,26 +6,26 @@ import util.collections.extensional.FiniteSet
 import util.collections.generic.SimpleSet
 
 object Bool extends Hierarchy:
-  import ElementT.*
-  enum ElementT derives CanEqual:
+  import Element.*
+  enum Element derives CanEqual:
     case Top, True, False
 
-  def elements: SimpleSet[ElementT] = new SimpleSet[ElementT]:
-    def contains[U](u: U)(using CanEqual[U, ElementT]): Boolean = u.isInstanceOf[ElementT]
-    def iterator: Iterator[ElementT] = ElementT.values.iterator
+  val elements: SimpleSet[Element] = new SimpleSet[Element]:
+    def contains[U](u: U)(using CanEqual[U, Element]): Boolean = u.isInstanceOf[Element]
+    def iterator: Iterator[Element] = Element.values.iterator
   
-  def u(elements: FiniteSet.NonEmpty[ElementT]): ElementT =
+  def u(elements: FiniteSet.NonEmpty[Element]): Element =
     if elements.size > 1
     then top
     else elements.iterator.next()
 
-  def top: ElementT = Top
+  def top: Element = Top
 
-  def sign(element: ElementT): Trit = element match
+  def sign(element: Element): Trit = element match
     case Top => Trit.Positive
     case _ => Trit.Neutral
 
-  extension (element: ElementT)
-    def <=(other: ElementT): Boolean =
+  extension (element: Element)
+    def <=(other: Element): Boolean =
       element == other || other == Top
 end Bool

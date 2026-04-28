@@ -6,14 +6,14 @@ import util.collections.extensional.FiniteSet
 import util.collections.generic.SimpleSet
 
 def mirrored(hierarchy: Hierarchy): Hierarchy = new Hierarchy:
-  type ElementT
-  
-  def elements: SimpleSet[ElementT] = ???
-  
-  def u(elements: FiniteSet.NonEmpty[ElementT]): ElementT = ???
-  def top: ElementT = ???
+  type Element
 
-  def sign(element: ElementT): Trit = ???
-  
-  extension (element: ElementT)
-    def <=(other: ElementT): Boolean = ???  
+  def elements: SimpleSet[Element] = ???
+
+  def u(elements: FiniteSet.NonEmpty[Element]): Element = ???
+  def top: Element = ???
+
+  def sign(element: Element): Trit = ???
+
+  extension (element: Element)
+    def <=(other: Element): Boolean = ???
