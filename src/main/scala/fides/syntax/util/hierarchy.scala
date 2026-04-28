@@ -67,12 +67,27 @@ object Hierarchy:
     def rootChildren: Multiset[Sub[T]]
   end Rooted
 
-  final case class Extended[P](rooted: Rooted[P], child: Sub[P]) extends Rooted[P]
-  
+  final case class Extended[T](rooted: Rooted[T], child: Sub[T]) extends Rooted[T]:
+    override given FiniteEnumerable[Constructor] = ???
+    override given Enumerable[Element] = ???
+
+    def root: Constructor = ???
+
+    def rootChildren: Multiset[Sub[T]] = ???
+
+    def u(elements: FiniteSet.NonEmpty[Element]): Element = ???
+
+    def top: Element = ???
+
+    def sign(element: Element): Trit = ???
+
+    extension (element: Element)
+      def <=(other: Element): Boolean = ???
+  end Extended
+
   sealed trait Link[Domain, Codomain] extends (Domain => Codomain):
     def withChild(rooted: Rooted[Domain]): Sub[Codomain]
   end Link
 
   sealed trait Sub[Codomain]
 end Hierarchy
-
