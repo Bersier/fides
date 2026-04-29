@@ -26,7 +26,7 @@ trait Hierarchy:
     * @param elements a non-empty set of elements in the hierarchy
     * @return the join of [[elements]]
     */
-  def u(elements: FiniteSet.NonEmpty[Element]): Element
+  infix def u(elements: FiniteSet.NonEmpty[Element]): Element
 
   /**
     * @return the element larger than any other element
@@ -53,8 +53,9 @@ end Hierarchy
 object Hierarchy:
 
   sealed trait Rooted[T] extends Hierarchy:
+    given (Hierarchy{ type Element = T }) = deferred
 
-    type Constructor <: Link[?, Element]
+    type Constructor <: Link[T, Element]
     given FiniteEnumerable[Constructor] = deferred
 
     /**
@@ -70,19 +71,23 @@ object Hierarchy:
   final case class Extended[T](rooted: Rooted[T], child: Sub[T]) extends Rooted[T]:
     type Element = rooted.Element | child.child.Element
     type Constructor = rooted.Constructor | child.child.Constructor
-    
+
     override given FiniteEnumerable[Constructor]:
       def values: FiniteSet[Constructor] =
-        summon[FiniteEnumerable[rooted.Constructor]].values u summon[FiniteEnumerable[child.child.Constructor]]
-    override given Enumerable[Element] = ???
+        summon[FiniteEnumerable[rooted.Constructor]].values u summon[FiniteEnumerable[child.child.Constructor]].values
 
-    def root: Constructor = ???
+    override given Enumerable[Element]:
+      def values: SimpleSet[Element] =
+        summon[Enumerable[rooted.Element]].values u summon[Enumerable[child.child.Element]].values
 
-    def rootChildren: Multiset[Sub[T]] = ???
+    def root: Constructor = rooted.root
+
+    def rootChildren: Multiset[Sub[T]] =
+      rooted.rootChildren u Multiset(child)
 
     def u(elements: FiniteSet.NonEmpty[Element]): Element = ???
 
-    def top: Element = ???
+    def top: Element = root(summon[Hierarchy{ type Element = T }].top)
 
     def sign(element: Element): Trit = ???
 
