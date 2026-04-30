@@ -3,10 +3,12 @@ package util.collections.generic
 trait SimpleSet[+T]:
   def contains[U](u: U)(using CanEqual[U, T]): Boolean
   def iterator: Iterator[T]
-  infix def u[U](that: SimpleSet[U]): SimpleSet[T | U] = new SimpleSet[T | U]:
-    // todo will repeat elements when the two are not disjoint
+
+  infix def u[U](that: SimpleSet[U])(): SimpleSet[T | U] = new SimpleSet[T | U]:
     def contains[V](u: V)(using CanEqual[V, T | U]): Boolean =
       SimpleSet.this.contains(u) || that.contains(u)
+
+    // todo will repeat elements when the two are not disjoint
     def iterator: Iterator[T | U] = new Iterator[T | U]:
       private var first: Iterator[T | U] = SimpleSet.this.iterator
       private var second: Iterator[T | U] = that.iterator
@@ -25,7 +27,7 @@ trait SimpleSet[+T]:
           
           result
         else second.next()
-end SimpleSet
+
 object SimpleSet:
   class Rules[T](set: SimpleSet[T])(using CanEqual[T, T]):
     def uniqueness(n1: Int, n2: Int): Boolean =
