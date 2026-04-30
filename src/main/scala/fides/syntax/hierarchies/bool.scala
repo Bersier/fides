@@ -1,7 +1,7 @@
 package fides.syntax.hierarchies
 
 import fides.syntax.util.Hierarchy
-import util.{Enumerable, Trit}
+import util.{Trit}
 import util.collections.extensional.FiniteSet
 import util.collections.generic.SimpleSet
 
@@ -10,11 +10,6 @@ object Bool extends Hierarchy:
   enum Element derives CanEqual:
     case Top, True, False
 
-  override given Enumerable[Element]:
-    val values: SimpleSet[Element] = new SimpleSet[Element]:
-      def contains[U](u: U)(using CanEqual[U, Element]): Boolean = u.isInstanceOf[Element]
-      def iterator: Iterator[Element] = Element.values.iterator
-  
   def u(elements: FiniteSet.NonEmpty[Element]): Element =
     if elements.size > 1
     then top

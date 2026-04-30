@@ -1,6 +1,6 @@
 package fides.syntax.util
 
-import util.{Enumerable, FiniteEnumerable, Trit}
+import util.{FiniteEnumerable, Trit}
 import util.collections.extensional.{FiniteSet, Multiset}
 import util.collections.generic.SimpleSet
 
@@ -15,12 +15,6 @@ import scala.compiletime.deferred
 trait Hierarchy:
 
   type Element
-  given Enumerable[Element] = deferred
-
-  /**
-    * @return all the elements in the hierarchy
-    */
-  final def elements: SimpleSet[Element] = summon[Enumerable[Element]].values
 
   /**
     * @param elements a non-empty set of elements in the hierarchy
@@ -75,10 +69,6 @@ object Hierarchy:
     override given FiniteEnumerable[Constructor]:
       def values: FiniteSet[Constructor] =
         summon[FiniteEnumerable[rooted.Constructor]].values u summon[FiniteEnumerable[child.child.Constructor]].values
-
-    override given Enumerable[Element]:
-      def values: SimpleSet[Element] =
-        summon[Enumerable[rooted.Element]].values u summon[Enumerable[child.child.Element]].values
 
     def root: Constructor = rooted.root
 

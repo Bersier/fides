@@ -1,15 +1,12 @@
 package fides.syntax.hierarchies
 
 import fides.syntax.util.Hierarchy
-import util.{Enumerable, Trit}
+import util.{Trit}
 import util.collections.extensional.FiniteSet
 import util.collections.generic.SimpleSet
 
 def mirrored(hierarchy: Hierarchy): Hierarchy = new Hierarchy:
   type Element
-
-  override given Enumerable[Element]:
-    def values: SimpleSet[Element] = ???
 
   def u(elements: FiniteSet.NonEmpty[Element]): Element = ???
   def top: Element = ???
