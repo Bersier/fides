@@ -2,7 +2,6 @@ package fides.syntax.util
 
 import util.{FiniteEnumerable, Trit}
 import util.collections.extensional.{FiniteSet, Multiset}
-import util.collections.generic.SimpleSet
 
 import scala.compiletime.deferred
 
@@ -14,6 +13,9 @@ import scala.compiletime.deferred
   */
 trait Hierarchy:
 
+  /**
+    * Type inhabited by exactly the elements of this hierarchy.
+    */
   type Element
 
   /**
@@ -46,10 +48,18 @@ end Hierarchy
 
 object Hierarchy:
 
-  sealed trait Rooted[T] extends Hierarchy:
-    given (Hierarchy{ type Element = T }) = deferred
+  /**
+    * A hierarchy with a finite number of constructors.
+    *
+    * @tparam RootParamT the element type of the hierarchy on which the root constructor is parametrized
+    */
+  sealed trait Constructed[RootParamT] extends Hierarchy:
+    given (Hierarchy{ type Element = RootParamT }) = deferred
 
-    type Constructor <: Link[T, Element]
+    /**
+      * Type inhabited by exactly the constructors of [[this]].
+      */
+    type Constructor <: Link[?, Element]
     given FiniteEnumerable[Constructor] = deferred
 
     /**
@@ -57,37 +67,89 @@ object Hierarchy:
       */
     final def constructors: FiniteSet[Constructor] = summon[FiniteEnumerable[Constructor]].values
 
-    def root: Constructor
+    /**
+      * @return the root constructor
+      */
+    def root: Constructor & Link[RootParamT, Element]
 
-    def rootChildren: Multiset[Sub[T]]
-  end Rooted
+    /**
+      * When the root constructor is applied to the top element of the hierarchy it's parametrized on,
+      * it yields the top element of [[this]] hierarchy.
+      */
+    def top: Element = root(summon[Hierarchy{ type Element = RootParamT }].top)
 
-  final case class Extended[T](rooted: Rooted[T], child: Sub[T]) extends Rooted[T]:
-    type Element = rooted.Element | child.child.Element
-    type Constructor = rooted.Constructor | child.child.Constructor
+    /**
+      * @return all the children of the root constructor, as well as their exact relation to the root
+      */
+    def rootChildren: Multiset[Sub[RootParamT]]
+  end Constructed
+
+  /**
+    * Defines a new [[Constructed]] by merging two existing ones.
+    * The root of [[sub]] is added as a new child of the root of [[main]].
+    *
+    * @param main the [[Constructed]] whose root is reused
+    * @param sub the [[Constructed]] to be glued to the main [[Constructed]] via its root
+    */
+  final case class Extended[RootParamT](
+    main: Constructed[RootParamT], sub: Sub[RootParamT],
+  )(using Hierarchy{ type Element = RootParamT }) extends Constructed[RootParamT]:
+
+    type Element = main.Element | sub.child.Element
+    type Constructor = main.Constructor | sub.child.Constructor
 
     override given FiniteEnumerable[Constructor]:
       def values: FiniteSet[Constructor] =
-        summon[FiniteEnumerable[rooted.Constructor]].values u summon[FiniteEnumerable[child.child.Constructor]].values
+        summon[FiniteEnumerable[main.Constructor]].values u summon[FiniteEnumerable[sub.child.Constructor]].values
 
-    def root: Constructor = rooted.root
+    def root: Constructor & Link[RootParamT, Element] = main.root
 
-    def rootChildren: Multiset[Sub[T]] =
-      rooted.rootChildren u Multiset(child)
+    def rootChildren: Multiset[Sub[RootParamT]] =
+      main.rootChildren u Multiset(sub)
 
-    def u(elements: FiniteSet.NonEmpty[Element]): Element = ???
+    def u(elements: FiniteSet.NonEmpty[Element]): Element = ??? // todo use private u to implement
 
-    def top: Element = root(summon[Hierarchy{ type Element = T }].top)
+    private def u(e1: Element, e2: Element): Element = e1 match
+      // todo the type test for Element cannot be checked at runtime
+      //  because it refers to an abstract type member or type parameter
+      case mainElement1: main.Element => e2 match
+        case mainElement2: main.Element => main.u(FiniteSet(mainElement1, mainElement2))
+        case _: sub.child.Element => top
+      case subElement1: sub.child.Element => e2 match
+        case _: main.Element => top
+        case subElement2: sub.child.Element => sub.child.u(FiniteSet(subElement1, subElement2))
 
-    def sign(element: Element): Trit = ???
+    def sign(element: Element): Trit = element match
+      case mainElement: main.Element => main.sign(mainElement)
+      case subElement: sub.child.Element => sub.child.sign(subElement)
 
     extension (element: Element)
-      def <=(other: Element): Boolean = ???
+      def <=(other: Element): Boolean = element match
+        case mainElement1: main.Element => other match
+          case mainElement2: main.Element => mainElement1 <= mainElement2
+          case subElement2: sub.child.Element => ??? // todo
+        case subElement1: sub.child.Element => other match
+          case mainElement2: main.Element => ???
+          case subElement2: sub.child.Element => subElement1 <= subElement2
   end Extended
 
+  /**
+    * Represents a subtyping relation beetween two constructors,
+    * mapping elements of the hierarchy on which the sub constructor is parametrized
+    * to elements of the hierarchy on which the super constructor is parametrized.
+    * Exactly represents their subtyping relation.
+    *
+    * @tparam Domain the element type of the hierarchy on which the sub constructor is parametrized
+    * @tparam Codomain the element type of the hierarchy on which the super constructor is parametrized
+    */
   sealed trait Link[-Domain, +Codomain] extends (Domain => Codomain):
-    def withChild[D <: Domain](rooted: Rooted[D]): Sub[Codomain]
+    def withChild[D <: Domain](rooted: Constructed[D]): Sub[Codomain]
 
+  /**
+    * Represents a subtyping relation beetween two constructors, together with the exact sub.
+    *
+    * @tparam Codomain the element type of the hierarchy on which the super constructor is parametrized
+    */
   sealed trait Sub[+Codomain]:
-    val child: Rooted[?]
+    val child: Constructed[?]
 end Hierarchy

@@ -1,7 +1,6 @@
 package util
 
 import util.collections.extensional.FiniteSet
-import util.collections.generic.SimpleSet
 
 trait FiniteEnumerable[T]:
   /**
