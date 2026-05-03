@@ -117,9 +117,16 @@ object Hierarchy:
     def rootChildren: FiniteSet[Sub[RootParamT]] =
       main.rootChildren u FiniteSet(sub)
 
-    def u(elements: FiniteSet.NonEmpty[Element]): Element = ??? // todo use private u to implement
+    def u(elements: FiniteSet.NonEmpty[Element]): Element =
+      def u(elements: FiniteSet[Element]): Option[Element] =
+        elements match
+          case FiniteSet.NonEmpty(element, others) => u(others) match
+            case Some(e2) => Some(join(element, e2))
+            case None => Some(element)
+          case _ => None
+      u(elements).get
 
-    private def u(e1: Element, e2: Element): Element =
+    private def join(e1: Element, e2: Element): Element =
       val mainValues = summon[Enumerable[main.Element]].values
       val subValues = summon[Enumerable[sub.child.Element]].values
       if mainValues.contains(e1)

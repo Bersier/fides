@@ -30,5 +30,11 @@ object FiniteSet:
     override def mapped[U](f: T => U): NonEmpty[U] = new NonEmpty(repr.map(f))
     override infix def u[U](that: FiniteSet[U]): NonEmpty[T | U] =
       new NonEmpty(this.repr ++ that.repr)
+  object NonEmpty:
+    def unapply[T](elements: FiniteSet[T]): Option[(T, FiniteSet[T])] = elements match
+      case nonEmpty: NonEmpty[T] =>
+        val head = nonEmpty.repr.head
+        Some((head, FiniteSet(nonEmpty.repr - head)))
+      case _ => None
   end NonEmpty
 end FiniteSet
