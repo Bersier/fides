@@ -1,8 +1,10 @@
 package fides.syntax.util
 
-import util.{FiniteEnumerable, Trit}
-import util.collections.extensional.{FiniteSet, Multiset}
+import util.collections.extensional.FiniteSet
+import util.collections.generic.SimpleSet
+import util.{Enumerable, FiniteEnumerable, Trit}
 
+import scala.CanEqual.derived
 import scala.compiletime.deferred
 
 /**
@@ -17,6 +19,7 @@ trait Hierarchy:
     * Type inhabited by exactly the elements of this hierarchy.
     */
   type Element
+  given Enumerable[Element] = deferred
 
   /**
     * @param elements a non-empty set of elements in the hierarchy
@@ -81,7 +84,7 @@ object Hierarchy:
     /**
       * @return all the children of the root constructor, as well as their exact relation to the root
       */
-    def rootChildren: Multiset[Sub[RootParamT]]
+    def rootChildren: FiniteSet[Sub[RootParamT]]
   end Constructed
 
   /**
@@ -95,6 +98,13 @@ object Hierarchy:
     main: Constructed[RootParamT], sub: Sub[RootParamT],
   )(using Hierarchy{ type Element = RootParamT }) extends Constructed[RootParamT]:
 
+    private given mainCanEqual: CanEqual[Element, main.Element] = derived
+    private given subCanEqual: CanEqual[Element, sub.child.Element] = derived
+
+    override given Enumerable[Element]:
+      def values: SimpleSet[Element] =
+        summon[Enumerable[main.Element]].values u summon[Enumerable[sub.child.Element]].values
+
     type Element = main.Element | sub.child.Element
     type Constructor = main.Constructor | sub.child.Constructor
 
@@ -104,33 +114,48 @@ object Hierarchy:
 
     def root: Constructor & Link[RootParamT, Element] = main.root
 
-    def rootChildren: Multiset[Sub[RootParamT]] =
-      main.rootChildren u Multiset(sub)
+    def rootChildren: FiniteSet[Sub[RootParamT]] =
+      main.rootChildren u FiniteSet(sub)
 
     def u(elements: FiniteSet.NonEmpty[Element]): Element = ??? // todo use private u to implement
 
-    private def u(e1: Element, e2: Element): Element = e1 match
-      // todo the type test for Element cannot be checked at runtime
-      //  because it refers to an abstract type member or type parameter
-      case mainElement1: main.Element => e2 match
-        case mainElement2: main.Element => main.u(FiniteSet(mainElement1, mainElement2))
-        case _: sub.child.Element => top
-      case subElement1: sub.child.Element => e2 match
-        case _: main.Element => top
-        case subElement2: sub.child.Element => sub.child.u(FiniteSet(subElement1, subElement2))
+    private def u(e1: Element, e2: Element): Element =
+      val mainValues = summon[Enumerable[main.Element]].values
+      val subValues = summon[Enumerable[sub.child.Element]].values
+      if mainValues.contains(e1)
+      then
+        if mainValues.contains(e2)
+        then
+          main.u(FiniteSet(e1.asInstanceOf[main.Element], e2.asInstanceOf[main.Element]))
+        else
+          ???
+      else
+        if subValues.contains(e2) then
+          sub.child.u(FiniteSet(e1.asInstanceOf[sub.child.Element], e2.asInstanceOf[sub.child.Element]))
+        else
+          ???
 
-    def sign(element: Element): Trit = element match
-      case mainElement: main.Element => main.sign(mainElement)
-      case subElement: sub.child.Element => sub.child.sign(subElement)
+    def sign(element: Element): Trit =
+      if summon[Enumerable[main.Element]].values.contains(element)
+      then main.sign(element.asInstanceOf[main.Element])
+      else sub.child.sign(element.asInstanceOf[sub.child.Element])
 
     extension (element: Element)
-      def <=(other: Element): Boolean = element match
-        case mainElement1: main.Element => other match
-          case mainElement2: main.Element => mainElement1 <= mainElement2
-          case subElement2: sub.child.Element => ??? // todo
-        case subElement1: sub.child.Element => other match
-          case mainElement2: main.Element => ???
-          case subElement2: sub.child.Element => subElement1 <= subElement2
+      def <=(other: Element): Boolean =
+        val mainValues = summon[Enumerable[main.Element]].values
+        val subValues = summon[Enumerable[sub.child.Element]].values
+        if mainValues.contains(element)
+        then
+          if mainValues.contains(other)
+          then
+            element.asInstanceOf[main.Element] <= other.asInstanceOf[main.Element]
+          else
+            ???
+        else
+          if subValues.contains(other) then
+            element.asInstanceOf[sub.child.Element] <= other.asInstanceOf[sub.child.Element]
+          else
+            ???
   end Extended
 
   /**

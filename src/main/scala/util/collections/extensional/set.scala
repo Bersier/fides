@@ -27,6 +27,7 @@ object FiniteSet:
     new NonEmpty(elements.toSet)
 
   class NonEmpty[+T](representation: Set[T @uncheckedVariance]) extends FiniteSet[T](representation):
+    override def mapped[U](f: T => U): NonEmpty[U] = new NonEmpty(repr.map(f))
     override infix def u[U](that: FiniteSet[U]): NonEmpty[T | U] =
       new NonEmpty(this.repr ++ that.repr)
   end NonEmpty
