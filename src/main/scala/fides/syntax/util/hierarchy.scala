@@ -2,7 +2,7 @@ package fides.syntax.util
 
 import util.collections.extensional.FiniteSet
 import util.collections.generic.SimpleSet
-import util.{Enumerable, FiniteEnumerable, Trit}
+import util.{FiniteEnumerable, Trit}
 
 import scala.compiletime.deferred
 import scala.reflect.TypeTest
@@ -19,7 +19,6 @@ trait Hierarchy:
     * Type inhabited by exactly the elements of this hierarchy.
     */
   type Element
-  given Enumerable[Element] = deferred
 
   /**
     * @param elements a non-empty set of elements in the hierarchy
@@ -101,10 +100,6 @@ object Hierarchy:
     TypeTest[main.Element | sub.child.Element, main.Element],
     TypeTest[main.Element | sub.child.Element, sub.child.Element],
   ) extends Constructed[RootParamT]:
-
-    override given Enumerable[Element]:
-      def values: SimpleSet[Element] =
-        summon[Enumerable[main.Element]].values u summon[Enumerable[sub.child.Element]].values
 
     type Element = main.Element | sub.child.Element
     type Constructor = main.Constructor | sub.child.Constructor
