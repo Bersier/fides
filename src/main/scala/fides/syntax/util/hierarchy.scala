@@ -4,8 +4,8 @@ import util.collections.extensional.FiniteSet
 import util.collections.generic.SimpleSet
 import util.{Enumerable, FiniteEnumerable, Trit}
 
-import scala.CanEqual.derived
 import scala.compiletime.deferred
+import scala.reflect.TypeTest
 
 /**
   * [[<=]] and [[Element]] define a complete join-semilattice.
@@ -96,10 +96,11 @@ object Hierarchy:
     */
   final case class Extended[RootParamT](
     main: Constructed[RootParamT], sub: Sub[RootParamT],
-  )(using Hierarchy{ type Element = RootParamT }) extends Constructed[RootParamT]:
-
-    private given mainCanEqual: CanEqual[Element, main.Element] = derived
-    private given subCanEqual: CanEqual[Element, sub.child.Element] = derived
+  )(using
+    Hierarchy{ type Element = RootParamT },
+    TypeTest[main.Element | sub.child.Element, main.Element],
+    TypeTest[main.Element | sub.child.Element, sub.child.Element],
+  ) extends Constructed[RootParamT]:
 
     override given Enumerable[Element]:
       def values: SimpleSet[Element] =
@@ -126,43 +127,27 @@ object Hierarchy:
           case _ => None
       u(elements).get
 
-    private def join(e1: Element, e2: Element): Element =
-      val mainValues = summon[Enumerable[main.Element]].values
-      val subValues = summon[Enumerable[sub.child.Element]].values
-      if mainValues.contains(e1)
-      then
-        if mainValues.contains(e2)
-        then
-          main.u(FiniteSet(e1.asInstanceOf[main.Element], e2.asInstanceOf[main.Element]))
-        else
-          ???
-      else
-        if subValues.contains(e2) then
-          sub.child.u(FiniteSet(e1.asInstanceOf[sub.child.Element], e2.asInstanceOf[sub.child.Element]))
-        else
-          ???
+    private def join(e1: Element, e2: Element): Element = e1 match
+      case mainElement1: main.Element => e2 match
+        case mainElement2: main.Element => main.u(FiniteSet(mainElement1, mainElement2))
+        case _: sub.child.Element => ???
+      case subElement1: sub.child.Element => e2 match
+        case subElement2: sub.child.Element => sub.child.u(FiniteSet(subElement1, subElement2))
+        case _: main.Element => ???
 
-    def sign(element: Element): Trit =
-      if summon[Enumerable[main.Element]].values.contains(element)
-      then main.sign(element.asInstanceOf[main.Element])
-      else sub.child.sign(element.asInstanceOf[sub.child.Element])
+    def sign(element: Element): Trit = element match
+      case mainElement: main.Element => main.sign(mainElement)
+      case subElement: sub.child.Element => sub.child.sign(subElement)
 
     extension (element: Element)
-      def <=(other: Element): Boolean =
-        val mainValues = summon[Enumerable[main.Element]].values
-        val subValues = summon[Enumerable[sub.child.Element]].values
-        if mainValues.contains(element)
-        then
-          if mainValues.contains(other)
-          then
-            element.asInstanceOf[main.Element] <= other.asInstanceOf[main.Element]
-          else
-            ???
-        else
-          if subValues.contains(other) then
-            element.asInstanceOf[sub.child.Element] <= other.asInstanceOf[sub.child.Element]
-          else
-            ???
+      def <=(other: Element): Boolean = element match
+        case mainElement1: main.Element => other match
+          case mainElement2: main.Element => mainElement1 <= mainElement2
+          case subElement2: sub.child.Element => ??? // todo
+        case subElement1: sub.child.Element => other match
+          case subElement2: sub.child.Element => subElement1 <= subElement2
+          case mainElement2: main.Element => ???
+
   end Extended
 
   /**
