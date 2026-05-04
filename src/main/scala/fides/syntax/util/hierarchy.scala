@@ -51,6 +51,18 @@ end Hierarchy
 object Hierarchy:
 
   /**
+    * The hierarchy with a single element.
+    */
+  object Singleton extends Hierarchy:
+    opaque type Element = Unit
+    infix def u(es: FiniteSet.NonEmpty[Element]): Element = ()
+    def top: Element = ()
+    def sign(e: Element): Trit.Neutral.type = Trit.Neutral
+    extension (element: Element)
+      def <=(other: Element): true = true
+  end Singleton
+
+  /**
     * A hierarchy with a finite number of constructors.
     *
     * @tparam RootParamT the element type of the hierarchy on which the root constructor is parametrized

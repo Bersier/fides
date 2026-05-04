@@ -5,16 +5,22 @@ import util.collections.generic.SimpleSet
 import scala.annotation.unchecked.uncheckedVariance
 
 case class FiniteSet[+T] private(protected val repr: Set[T @uncheckedVariance]) extends SimpleSet[T]:
+
   def contains[U](u: U)(using CanEqual[U, T]): Boolean =
     repr.contains(u.asInstanceOf[T])
+
   def iterator: Iterator[T] = repr.iterator
   def size: Int = repr.size
   def mapped[U](f: T => U): FiniteSet[U] = new FiniteSet(repr.map(f))
+
   infix def u[U](that: FiniteSet[U]): FiniteSet[T | U] =
     new FiniteSet(this.repr ++ that.repr)
+
   infix def u[U](that: FiniteSet.NonEmpty[U]): FiniteSet.NonEmpty[T | U] =
     new FiniteSet.NonEmpty(this.repr ++ that.repr)
+
 object FiniteSet:
+
   def apply(): FiniteSet[Nothing] =
     new FiniteSet(Set.empty)
   def apply(element: Any): NonEmpty[element.type] =
@@ -27,14 +33,17 @@ object FiniteSet:
     new NonEmpty(elements.toSet)
 
   class NonEmpty[+T](representation: Set[T @uncheckedVariance]) extends FiniteSet[T](representation):
+
     override def mapped[U](f: T => U): NonEmpty[U] = new NonEmpty(repr.map(f))
+
     override infix def u[U](that: FiniteSet[U]): NonEmpty[T | U] =
       new NonEmpty(this.repr ++ that.repr)
+
   object NonEmpty:
     def unapply[T](elements: FiniteSet[T]): Option[(T, FiniteSet[T])] = elements match
       case nonEmpty: NonEmpty[T] =>
         val head = nonEmpty.repr.head
         Some((head, FiniteSet(nonEmpty.repr - head)))
       case _ => None
-  end NonEmpty
+
 end FiniteSet
