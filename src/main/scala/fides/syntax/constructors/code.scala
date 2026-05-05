@@ -9,7 +9,46 @@ import util.collections.extensional.Multiset
 
 sealed trait Code
 
-//region ==== Locations ====
+sealed trait Xpolar extends Code
+
+sealed trait Polar extends Xpolar
+
+final case class AbstractPolar(positiveDatatype: Code, negativeDatatype: Code) extends Polar
+
+//region ==== Location References ====
+
+sealed trait LocRef extends Code
+
+final case class AbstractLocRef(name: Code, datatype: Code) extends LocRef
+
+/**
+  * Channel location reference
+  */
+final case class ChanRef(name: Code, datatype: Code) extends LocRef
+
+/**
+  * Cell location reference
+  */
+final case class CellRef(name: Code, datatype: Code) extends LocRef
+
+//endregion - Location References
+
+//region ==== Xpolar Converters ====
+
+final case class BlockExpr(apolarBlock: Code, HeadExpresssion: Code) extends Polar
+
+final case class BlockXctr(apolarBlock: Code, HeadExtractor: Code) extends Polar
+
+//endregion - Xpolar Converters
+
+//region ==== Apolars ====
+
+/**
+  * Syntactic descriptions of processes
+  */
+sealed trait Apolar extends Xpolar
+
+final case class AbstractApolar() extends Apolar
 
 /**
   * <h2>Memory cell process</h2>
@@ -24,29 +63,7 @@ sealed trait Code
   * @param name used to refer to this cell
   * @param contents of this cell
   */
-final case class Cell(name: Code, contents: Code) extends Code
-
-/**
-  * Channel location reference
-  */
-final case class ChanRef(name: Code, datatype: Code) extends Code
-
-/**
-  * Cell location reference
-  */
-final case class CellRef(name: Code, datatype: Code) extends Code
-
-//endregion - Locations
-
-//region ==== Xpolar Converters ====
-
-final case class BlockExpr(apolarBlock: Code, HeadExpresssion: Code) extends Code
-
-final case class BlockXctr(apolarBlock: Code, HeadExtractor: Code) extends Code
-
-//endregion - Xpolar Converters
-
-//region ==== Apolars ====
+final case class Cell(name: Code, contents: Code) extends Apolar
 
 /**
   * Sends a value to an address.
@@ -62,26 +79,36 @@ final case class BlockXctr(apolarBlock: Code, HeadExtractor: Code) extends Code
   * @param contents the value to be sent
   * @param recipient address of the recipient
   */
-final case class Send(contents: Code, recipient: Code) extends Code
+final case class Send(contents: Code, recipient: Code) extends Apolar
 
-final case class DivMod(dividend: Code, divisor: Code, quotient: Code, remainder: Code) extends Code
+final case class DivMod(dividend: Code, divisor: Code, quotient: Code, remainder: Code) extends Apolar
+
+/**
+  * A hard-coded connection between one input and one output
+  *
+  * <b>Syntax</b>
+  *  - [[inp]]: Expr
+  *  - [[out]]: Xctr
+  *  - [[this]]: Apolar
+  */
+final case class Forward(inp: Code, out: Code) extends Apolar
 
 /**
   * Behaviorally equivalent to an infinite number of copies of the given body
   *
   * @param body the process to be repeated
   */
-final case class Repeated(body: Code) extends Code
+final case class Repeated(body: Code) extends Apolar
 
 /**
   * Composes the given processes concurrently.
   */
-final case class Concurrent(processes: Code) extends Code
+final case class Concurrent(processes: Code) extends Apolar
 
 /**
   * @param awake a Boolean cell whose value indicates whether the process is running (True) or paused (False)
   */
-final case class Pausable(awake: Code, process: Code) extends Code
+final case class Pausable(awake: Code, process: Code) extends Apolar
 
 /**
    * Delays [[process]] until [[signal]] is received.
@@ -89,7 +116,7 @@ final case class Pausable(awake: Code, process: Code) extends Code
    * Executes the body only if the received signal is [[True]].
    * If [[False]], the body is discarded without getting executed.
   */
-final case class Possible(signal: Code, process: Code) extends Code
+final case class Possible(signal: Code, process: Code) extends Apolar
 
 /**
   * A killable process; apolar
@@ -99,14 +126,14 @@ final case class Possible(signal: Code, process: Code) extends Code
   * @param signal when it arrives, kills the process
   * @param process the process that can be stopped; apolar
   */
-final case class Mortal(signal: Code, process: Code) extends Code
+final case class Mortal(signal: Code, process: Code) extends Apolar
 
 /**
   * @param signal to catch the process
   * @param process that can be caught
   * @param quote an extractor for the quote of the caught process state
   */
-final case class Catchable(signal: Code, process: Code, quote: Code) extends Code
+final case class Catchable(signal: Code, process: Code, quote: Code) extends Apolar
 
 /**
   * All the names used by [[contained]] are effectively new, providing isolation.
@@ -115,7 +142,7 @@ final case class Catchable(signal: Code, process: Code, quote: Code) extends Cod
   * @param bridgeNames new names that are accessible to both [[monitor]] and [[contained]], allowing them to interact
   * @param contained isolated process
   */
-final case class Sandboxed(monitor: Code, bridgeNames: Code, contained: Code) extends Code
+final case class Sandboxed(monitor: Code, bridgeNames: Code, contained: Code) extends Apolar
 
 //endregion - Apolars
 
@@ -123,30 +150,30 @@ final case class Sandboxed(monitor: Code, bridgeNames: Code, contained: Code) ex
 
 // Nullary structors
 
-final case class Pulse() extends Code
+final case class Pulse() extends Polar
 
-final case class Bool(representation: Boolean) extends Code
+final case class Bool(representation: Boolean) extends Polar
 
-final case class Nat(representation: BigInt) extends Code
+final case class Nat(representation: BigInt) extends Polar
 
-final case class Address(name: Code, datatype: Code) extends Code
+final case class Address(name: Code, datatype: Code) extends Polar
 
 // Unary structors
 
 /**
   * @param key a name
   */
-final case class Entry(key: Code, value: Code) extends Code
+final case class Entry(key: Code, value: Code) extends Polar
 
-final case class Document(signatory: Code, contents: Code) extends Code
+final case class Document(signatory: Code, contents: Code) extends Polar
 
-final case class Quote(code: Code) extends Code
+final case class Quote(code: Code) extends Polar
 
 // Multiset structors
 
-final case class Bag(elements: Code) extends Code
+final case class Bag(elements: Code) extends Polar
 
-final case class Pick(options: Code) extends Code
+final case class Pick(options: Code) extends Polar
 
 //endregion - Constructor/Destructor Polars
 
@@ -164,50 +191,50 @@ final case class Pick(options: Code) extends Code
   * <b>Semantics</b>
   * @param reference to which to connect for a one-time read or write
   */
-final case class Xput(reference: Code) extends Code
+final case class Xput(reference: Code) extends Polar
 
 /**
   * @param keys a multiset of location references
   */
-final case class BundleG(keys: Code) extends Code
+final case class BundleG(keys: Code) extends Polar
 
 /**
   * @param keys a multiset of location references
   */
-final case class SwitchG(keys: Code) extends Code
+final case class SwitchG(keys: Code) extends Polar
 
 /**
   * @param channel a channel reference
   * @param size the number of elements to collect
   */
-final case class CollectG(channel: Code, size: Code) extends Code
+final case class CollectG(channel: Code, size: Code) extends Polar
 
-final case class NegateG(bool: Code) extends Code
+final case class NegateG(bool: Code) extends Polar
 
-final case class SwapG(name1: Code, name2: Code, target: Code) extends Code
+final case class SwapG(name1: Code, name2: Code, target: Code) extends Polar
 
 /**
   * As an Expr, converts a [[Bag]] of code quotations to a [[Quoted]] of [[Args]] of all the pieces of code.
   *
   * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Args]].
   */
-final case class Zip(pieces: Code) extends Code
+final case class Zip(pieces: Code) extends Polar
 
 //endregion - Other Reversible Polars
 
 //region ==== Other Expression Polars ====
 
-final case class Conjoin(conjuncts: Code) extends Code
+final case class Conjoin(conjuncts: Code) extends Polar
 
-final case class Disjoin(disjuncts: Code) extends Code
+final case class Disjoin(disjuncts: Code) extends Polar
 
-final case class RandomBit() extends Code
+final case class RandomBit() extends Polar
 
-final case class Sum(terms: Code) extends Code
+final case class Sum(terms: Code) extends Polar
 
-final case class Multiply(factors: Code) extends Code
+final case class Multiply(factors: Code) extends Polar
 
-final case class Merge(bags: Code) extends Code
+final case class Merge(bags: Code) extends Polar
 
 /**
   * <h2>Compare-and-swap</h2>
@@ -217,7 +244,7 @@ final case class Merge(bags: Code) extends Code
   *  2. Compares V to [[testValue]].
   *  3. If they are the same, writes [[newValue]] to the cell.
   *  4. Outputs V.
-  * 
+  *
   * Atomically compares the current value of the cell with the inputted pattern and,
   * only if they are the same, updates the value of the cell to the inputted new value, and
   * outputs the previous value of the cell.
@@ -228,7 +255,7 @@ final case class Merge(bags: Code) extends Code
   *  - [[reference]]: CellRef
   *  - [[this]]: Expr
   */
-final case class CompareAndSwap(testValue: Code, newValue: Code, reference: Code) extends Code
+final case class CompareAndSwap(testValue: Code, newValue: Code, reference: Code) extends Polar
 
 /**
   * Wraps a value into a Quoted.
@@ -236,7 +263,11 @@ final case class CompareAndSwap(testValue: Code, newValue: Code, reference: Code
   * @param value an expression whose value it reduces to is to be wrapped
   * @return an expression of a quote
   */
-final case class Wrap(value: Code) extends Code
+final case class Wrap(value: Code) extends Polar
+
+final case class Apply(component: Code, input: Code) extends Polar
+
+final case class Deply(component: Code, input: Code) extends Polar
 
 /**
   * Evaluates a quoted expression.
@@ -244,12 +275,12 @@ final case class Wrap(value: Code) extends Code
   * @param value a quote of an expression
   * @return an expression that evaluates like the expression in quotes
   */
-final case class Eval(value: Code) extends Code
+final case class Eval(value: Code) extends Polar
 
 /**
   * Replaces all the names in the quote by fresh names. Also removes all shadowing.
   */
-final case class Freshen(quote: Code) extends Code
+final case class Freshen(quote: Code) extends Polar
 
 /**
   * Applies the given transformation to each child of the root of the given quote whose type is compatible,
@@ -258,17 +289,17 @@ final case class Freshen(quote: Code) extends Code
   * @param quote to be equivariantly transformed
   * @param transformation to be applied to compatible children of the quote root node
   */
-final case class Update(quote: Code, transformation: Code) extends Code
+final case class Update(quote: Code, transformation: Code) extends Polar
 
 /**
   * Outputs the children of the root of the given quote, as a bag.
   */
-final case class Children(quote: Code) extends Code
+final case class Children(quote: Code) extends Polar
 
 /**
   * Launches [[quote]] as a new process, and outputs a signed value (aka document) of the code, confirming the launch.
   */
-final case class Launch(quote: Code) extends Code
+final case class Launch(quote: Code) extends Polar
 // todo take quote wrapped in New? To expose/publish some names the launched process nevertheless owns?
 
 //endregion - Other Expression Polars
@@ -287,11 +318,24 @@ final case class Launch(quote: Code) extends Code
   * @param pattern executes if the singleton type of the inputted value is a subtype of its type
   * @param alternative defaults to this otherwise
   */
-final case class Match(pattern: Code, alternative: Code) extends Code
+final case class Match(pattern: Code, alternative: Code) extends Polar
 
-final case class Inspect(signature: Code, payload: Code)
+final case class Inspect(signature: Code, payload: Code) extends Polar
 
 //endregion - Other Extractor Polars
+
+//region ==== Bipolars ====
+
+sealed trait Bipolar extends Xpolar
+
+final case class AbstractBipolar() extends Bipolar // todo
+
+/**
+  * Dual of Forward. The connection between [[inp]] and [[out]] is instead achieved via variables.
+  */
+final case class Backward(inp: Code, out: Code) extends Bipolar
+
+//endregion - Bipolars
 
 /**
   * Akin to names in the pi-calculus
@@ -311,7 +355,7 @@ final case class Args(arguments: Multiset[Code]) extends Code
   * @param names that are new within the scope
   * @param body the body of the scope, in which the names are available
   */
-final case class New(names: Code, body: Code) extends Code
+final case class New(names: Code, body: Code) extends Xpolar
 
 /**
   * An annotated piece of code. The annotation does not change the semantics of the code.
