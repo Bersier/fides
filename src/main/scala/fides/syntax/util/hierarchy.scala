@@ -67,7 +67,8 @@ object Hierarchy:
     *
     * @tparam RootParamT the element type of the hierarchy on which the root constructor is parametrized
     */
-  sealed trait Constructed[RootParamT] extends Hierarchy:
+  sealed trait Constructed extends Hierarchy:
+    type RootParamT
     given (Hierarchy{ type Element = RootParamT }) = deferred
 
     /**
@@ -105,14 +106,15 @@ object Hierarchy:
     * @param main the [[Constructed]] whose root is reused
     * @param sub the [[Constructed]] to be glued to the main [[Constructed]] via its root
     */
-  final case class Extended[RootParamT](
-    main: Constructed[RootParamT], sub: Sub[RootParamT],
+  final case class Extended[R](
+    main: Constructed{ type RootParamT = R }, sub: Sub[R],
   )(using
-    Hierarchy{ type Element = RootParamT },
+    Hierarchy{ type Element = R },
     TypeTest[main.Element | sub.child.Element, main.Element],
     TypeTest[main.Element | sub.child.Element, sub.child.Element],
-  ) extends Constructed[RootParamT]:
+  ) extends Constructed:
 
+    type RootParamT = R
     type Element = main.Element | sub.child.Element
     type Constructor = main.Constructor | sub.child.Constructor
 
@@ -120,9 +122,9 @@ object Hierarchy:
       def values: FiniteSet[Constructor] =
         summon[FiniteEnumerable[main.Constructor]].values u summon[FiniteEnumerable[sub.child.Constructor]].values
 
-    def root: Constructor & Link[RootParamT, Element] = main.root
+    def root: Constructor & Link[R, Element] = main.root
 
-    def rootChildren: FiniteSet[Sub[RootParamT]] =
+    def rootChildren: FiniteSet[Sub[R]] =
       main.rootChildren u FiniteSet(sub)
 
     def u(elements: FiniteSet.NonEmpty[Element]): Element =
@@ -167,7 +169,7 @@ object Hierarchy:
     * @tparam Codomain the element type of the hierarchy on which the super constructor is parametrized
     */
   sealed trait Link[-Domain, +Codomain] extends (Domain => Codomain):
-    def withChild[D <: Domain](rooted: Constructed[D]): Sub[Codomain]
+    def withChild[D <: Domain](rooted: Constructed{ type RootParamT = D }): Sub[Codomain]
 
   /**
     * Represents a subtyping relation beetween two constructors, together with the exact sub.
@@ -175,5 +177,5 @@ object Hierarchy:
     * @tparam Codomain the element type of the hierarchy on which the super constructor is parametrized
     */
   sealed trait Sub[+Codomain]:
-    val child: Constructed[?]
+    val child: Constructed
 end Hierarchy
