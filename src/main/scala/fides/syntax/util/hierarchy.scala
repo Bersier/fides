@@ -74,8 +74,7 @@ object Hierarchy:
     /**
       * Type inhabited by exactly the constructors of [[this]].
       */
-    type Constructor <: Link[?, Element]
-    given FiniteEnumerable[Constructor] = deferred
+    type Constructor <: Link[?, Element] : FiniteEnumerable
 
     /**
       * @return all the values of type [[Constructor]], all the constructors in the hierarchy
