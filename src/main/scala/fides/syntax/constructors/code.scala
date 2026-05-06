@@ -173,11 +173,9 @@ final case class Document(signatory: Code, contents: Code) extends Polar
 
 final case class Quote(code: Code) extends Polar
 
-// Multiset structors
+// Variadic structors
 
 final case class Bag(elements: Code) extends Polar
-
-final case class Pick(options: Code) extends Polar
 
 //endregion - Constructor/Destructor Polars
 
@@ -198,24 +196,42 @@ final case class Pick(options: Code) extends Polar
 final case class Xput(reference: Code) extends Polar
 
 /**
-  * @param keys a multiset of location references
+  * As an expression, forwards one of the inputs.
+  * Is guaranteed to forward a value if any of the inputs yields a value.
+  * Another way to think about this is that
+  * it forwards the value of the expression that "first" reduces to a value.
+  *
+  * As an extractor, behaves like internal choice:
+  * non-deterministically forwards the input to one of the outputs.
+  *
+  * Dual of [[Bag]], in the sense that [[Bag]] constructs or destructs an untagged product,
+  * while [[Pick]] constructs or destructs an untagged sum.
+  *
+  * <b>Syntax</b>
+  *  - [[options]]: NonEmptyArgs[T]
+  *  - [[this]]: Polar[T]
   */
-final case class BundleG(keys: Code) extends Polar
+final case class Pick(options: Code) extends Polar
 
 /**
   * @param keys a multiset of location references
   */
-final case class SwitchG(keys: Code) extends Polar
+final case class Bundle(keys: Code) extends Polar
+
+/**
+  * @param keys a multiset of location references
+  */
+final case class Switch(keys: Code) extends Polar
 
 /**
   * @param channel a channel reference
   * @param size the number of elements to collect
   */
-final case class CollectG(channel: Code, size: Code) extends Polar
+final case class Collect(channel: Code, size: Code) extends Polar
 
-final case class NegateG(bool: Code) extends Polar
+final case class Negate(bool: Code) extends Polar
 
-final case class SwapG(name1: Code, name2: Code, target: Code) extends Polar
+final case class Swap(name1: Code, name2: Code, target: Code) extends Polar
 
 /**
   * As an Expr, converts a [[Bag]] of code quotations to a [[Quoted]] of [[Args]] of all the pieces of code.
@@ -239,6 +255,26 @@ final case class Sum(terms: Code) extends Polar
 final case class Multiply(factors: Code) extends Polar
 
 final case class Merge(bags: Code) extends Polar
+
+/**
+  * Forwards the inputted value once signalled to do so.
+  *
+  * <b>Syntax</b>
+  *  - [[signal]]: Expr[Pulse]
+  *  - [[value]]: Expr[T]
+  *  - [[this]]: Expr[T]
+  */
+final case class Hold(signal: Code, value: Code) extends Code
+
+/**
+  * Upon reception of a value, outputs a pulse. It only communicates the arrival of the value,
+  * but forgets/ignores the actual value.
+  *
+  * <b>Syntax</b>
+  *  - [[trigger]]: Expr
+  *  - [[this]]: Expr[Pulse]
+  */
+final case class Signal(trigger: Code) extends Code
 
 /**
   * <h2>Compare-and-swap</h2>
@@ -309,6 +345,17 @@ final case class Launch(quote: Code) extends Polar
 //endregion - Other Expression Polars
 
 //region ==== Other Extractor Polars ====
+
+/**
+  * Spreads a value to multiple recipients.
+  *
+  * [[Spread]](`<no-recipient>`) is equivalent to Ignore/Sink/Forget/Discard/Drop.
+  *
+  * <b>Syntax</b>
+  *  - [[recipients]]: Args[Xctr[T]]
+  *  - [[this]]: Xctr[T]
+  */
+final case class Spread(recipients: Code) extends Polar
 
 /**
   * <h2>Match statement</h2>
