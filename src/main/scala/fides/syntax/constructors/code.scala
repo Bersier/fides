@@ -13,11 +13,31 @@ sealed trait Xpolar extends Code
 
 sealed trait Polar extends Xpolar
 
-final case class AbstractReversiblePolar(datatype: Code) extends Polar
+/**
+  * Concrete syntactic element to express a generic polar.
+  */
+final case class AbstractPolar() extends Polar
 
+/**
+  * Concrete syntactic element to express a generic expression polar.
+  *
+  * @param datatype of the polar
+  */
 final case class AbstractExpression(datatype: Code) extends Polar
 
+/**
+  * Concrete syntactic element to express a generic extractor polar.
+  *
+  * @param datatype of the polar
+  */
 final case class AbstractExtractor(datatype: Code) extends Polar
+
+/**
+  * Concrete syntactic element to express a generic reversible polar.
+  *
+  * @param datatype of the polar
+  */
+final case class AbstractReversiblePolar(datatype: Code) extends Polar
 
 //region ==== Location References ====
 
