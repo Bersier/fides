@@ -402,11 +402,13 @@ final case class Inspect(signature: Code, payload: Code) extends Polar
   */
 sealed trait Bipolar extends Xpolar
 
-final case class AbstractReversibleBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
+final case class AbstractBipolar() extends Bipolar
 
 final case class AbstractExpressionBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
 
 final case class AbstractExtractorBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
+
+final case class AbstractReversibleBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
 
 /**
   * Dual of Forward. The connection between [[inp]] and [[out]] is instead achieved via variables.
