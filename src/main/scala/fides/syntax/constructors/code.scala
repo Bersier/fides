@@ -13,7 +13,11 @@ sealed trait Xpolar extends Code
 
 sealed trait Polar extends Xpolar
 
-final case class AbstractPolar(positiveDatatype: Code, negativeDatatype: Code) extends Polar
+final case class AbstractReversiblePolar(datatype: Code) extends Polar
+
+final case class AbstractExpression(datatype: Code) extends Polar
+
+final case class AbstractExtractor(datatype: Code) extends Polar
 
 //region ==== Location References ====
 
@@ -326,9 +330,16 @@ final case class Inspect(signature: Code, payload: Code) extends Polar
 
 //region ==== Bipolars ====
 
+/**
+  * Simlar to abstractions, but not values, and generalized to the polar setting.
+  */
 sealed trait Bipolar extends Xpolar
 
-final case class AbstractBipolar() extends Bipolar // todo
+final case class AbstractReversibleBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
+
+final case class AbstractExpressionBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
+
+final case class AbstractExtractorBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
 
 /**
   * Dual of Forward. The connection between [[inp]] and [[out]] is instead achieved via variables.
