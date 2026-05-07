@@ -9,9 +9,26 @@ import util.collections.extensional.Multiset
 
 sealed trait Code
 
+//region ==== Abstract Xpolar ====
+
 sealed trait Xpolar extends Code
 
+/**
+  * Syntactic descriptions of processes
+  */
+sealed trait Apolar extends Xpolar
+
 sealed trait Polar extends Xpolar
+
+/**
+  * Simlar to abstractions, but not values, and generalized to the polar setting.
+  */
+sealed trait Bipolar extends Xpolar
+
+/**
+  * Concrete syntactic element to express a generic xpolar.
+  */
+final case class AbstractXpolar() extends Polar
 
 /**
   * Concrete syntactic element to express a generic polar.
@@ -39,6 +56,16 @@ final case class AbstractExtractor(datatype: Code) extends Polar
   */
 final case class AbstractReversiblePolar(datatype: Code) extends Polar
 
+final case class AbstractBipolar() extends Bipolar
+
+final case class AbstractExpressionBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
+
+final case class AbstractExtractorBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
+
+final case class AbstractReversibleBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
+
+//endregion - Abstract Xpolar
+
 //region ==== Location References ====
 
 sealed trait LocRef extends Code
@@ -63,14 +90,28 @@ final case class BlockExpr(apolarBlock: Code, HeadExpresssion: Code) extends Pol
 
 final case class BlockXctr(apolarBlock: Code, HeadExtractor: Code) extends Polar
 
+/**
+  * A hard-coded connection between one input and one output
+  *
+  * <b>Syntax</b>
+  *  - [[inp]]: Expr
+  *  - [[out]]: Xctr
+  *  - [[this]]: Apolar
+  */
+final case class Forward(inp: Code, out: Code) extends Apolar
+
+/**
+  * Dual of Forward. The connection between [[inp]] and [[out]] is instead achieved via variables.
+  */
+final case class Backward(inp: Code, out: Code) extends Bipolar
+
+final case class Apply(component: Code, input: Code) extends Polar
+
+final case class Deply(component: Code, input: Code) extends Polar
+
 //endregion - Xpolar Converters
 
 //region ==== Apolars ====
-
-/**
-  * Syntactic descriptions of processes
-  */
-sealed trait Apolar extends Xpolar
 
 final case class AbstractApolar() extends Apolar
 
@@ -106,16 +147,6 @@ final case class Cell(name: Code, contents: Code) extends Apolar
 final case class Send(contents: Code, recipient: Code) extends Apolar
 
 final case class DivMod(dividend: Code, divisor: Code, quotient: Code, remainder: Code) extends Apolar
-
-/**
-  * A hard-coded connection between one input and one output
-  *
-  * <b>Syntax</b>
-  *  - [[inp]]: Expr
-  *  - [[out]]: Xctr
-  *  - [[this]]: Apolar
-  */
-final case class Forward(inp: Code, out: Code) extends Apolar
 
 /**
   * Behaviorally equivalent to an infinite number of copies of the given body
@@ -191,7 +222,9 @@ final case class Entry(key: Code, value: Code) extends Polar
 
 final case class Document(signatory: Code, contents: Code) extends Polar
 
-final case class Quote(code: Code) extends Polar
+final case class Quote(name: Code, code: Code) extends Polar
+
+final case class Prequote(name: Code, code: Code) extends Polar
 
 // Variadic structors
 
@@ -319,6 +352,8 @@ final case class Signal(trigger: Code) extends Code
   */
 final case class CompareAndSwap(testValue: Code, newValue: Code, reference: Code) extends Polar
 
+final case class Behavior(name: Code, code: Code) extends Polar
+
 /**
   * Wraps a value into a Quoted.
   *
@@ -326,10 +361,6 @@ final case class CompareAndSwap(testValue: Code, newValue: Code, reference: Code
   * @return an expression of a quote
   */
 final case class Wrap(value: Code) extends Polar
-
-final case class Apply(component: Code, input: Code) extends Polar
-
-final case class Deply(component: Code, input: Code) extends Polar
 
 /**
   * Evaluates a quoted expression.
@@ -364,6 +395,8 @@ final case class Children(quote: Code) extends Polar
 final case class Launch(quote: Code) extends Polar
 // todo take quote wrapped in New? To expose/publish some names the launched process nevertheless owns?
 
+final case class Validate(prequote: Code) extends Polar
+
 //endregion - Other Expression Polars
 
 //region ==== Other Extractor Polars ====
@@ -396,28 +429,6 @@ final case class Match(pattern: Code, alternative: Code) extends Polar
 final case class Inspect(signature: Code, payload: Code) extends Polar
 
 //endregion - Other Extractor Polars
-
-//region ==== Bipolars ====
-
-/**
-  * Simlar to abstractions, but not values, and generalized to the polar setting.
-  */
-sealed trait Bipolar extends Xpolar
-
-final case class AbstractBipolar() extends Bipolar
-
-final case class AbstractExpressionBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
-
-final case class AbstractExtractorBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
-
-final case class AbstractReversibleBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
-
-/**
-  * Dual of Forward. The connection between [[inp]] and [[out]] is instead achieved via variables.
-  */
-final case class Backward(inp: Code, out: Code) extends Bipolar
-
-//endregion - Bipolars
 
 /**
   * Akin to names in the pi-calculus
@@ -460,3 +471,5 @@ final case class Type(witness: Code) extends Code
   * @param quote to insert
   */
 final case class Escape(name: Code, quote: Code) extends Code
+
+final case class Embed(name: Code, behavior: Code) extends Code
