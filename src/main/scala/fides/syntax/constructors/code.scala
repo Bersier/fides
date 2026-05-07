@@ -234,6 +234,18 @@ final case class Xput(reference: Code) extends Polar
 final case class Pick(options: Code) extends Polar
 
 /**
+  * As an expression, forwards the inputted value once signalled to do so.
+  *
+  * As an extractor, notifies one listener of the arrival of the value.
+  *
+  * <b>Syntax</b>
+  *  - [[signal]]: Expr[Pulse]
+  *  - [[value]]: Expr[T]
+  *  - [[this]]: Expr[T]
+  */
+final case class Hold(signal: Code, value: Code) extends Code
+
+/**
   * @param keys a multiset of location references
   */
 final case class Bundle(keys: Code) extends Polar
@@ -275,16 +287,6 @@ final case class Sum(terms: Code) extends Polar
 final case class Multiply(factors: Code) extends Polar
 
 final case class Merge(bags: Code) extends Polar
-
-/**
-  * Forwards the inputted value once signalled to do so.
-  *
-  * <b>Syntax</b>
-  *  - [[signal]]: Expr[Pulse]
-  *  - [[value]]: Expr[T]
-  *  - [[this]]: Expr[T]
-  */
-final case class Hold(signal: Code, value: Code) extends Code
 
 /**
   * Upon reception of a value, outputs a pulse. It only communicates the arrival of the value,
