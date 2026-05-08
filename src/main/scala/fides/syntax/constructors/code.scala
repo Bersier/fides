@@ -20,6 +20,15 @@ sealed trait Apolar extends Xpolar
 
 sealed trait Polar extends Xpolar
 
+sealed trait Expression extends Polar
+
+sealed trait Extractor extends Polar
+
+/**
+  * Polars that are not necessarily restricted in terms of whether they can be used as expressions and extractors.
+  */
+sealed trait Neutral extends Expression, Extractor
+
 /**
   * Simlar to abstractions, but not values, and generalized to the polar setting.
   */
@@ -40,21 +49,21 @@ final case class AbstractPolar() extends Polar
   *
   * @param datatype of the polar
   */
-final case class AbstractExpression(datatype: Code) extends Polar
+final case class AbstractExpression(datatype: Code) extends Expression
 
 /**
   * Concrete syntactic element to express a generic extractor polar.
   *
   * @param datatype of the polar
   */
-final case class AbstractExtractor(datatype: Code) extends Polar
+final case class AbstractExtractor(datatype: Code) extends Extractor
 
 /**
   * Concrete syntactic element to express a generic reversible polar.
   *
   * @param datatype of the polar
   */
-final case class AbstractReversiblePolar(datatype: Code) extends Polar
+final case class AbstractReversiblePolar(datatype: Code) extends Neutral
 
 final case class AbstractBipolar() extends Bipolar
 
@@ -86,9 +95,9 @@ final case class CellRef(name: Code, datatype: Code) extends LocRef
 
 //region ==== Xpolar Converters ====
 
-final case class BlockExpr(apolarBlock: Code, HeadExpresssion: Code) extends Polar
+final case class BlockExpr(apolarBlock: Code, HeadExpresssion: Code) extends Expression
 
-final case class BlockXctr(apolarBlock: Code, HeadExtractor: Code) extends Polar
+final case class BlockXctr(apolarBlock: Code, HeadExtractor: Code) extends Extractor
 
 /**
   * A hard-coded connection between one input and one output
@@ -105,9 +114,9 @@ final case class Forward(inp: Code, out: Code) extends Apolar
   */
 final case class Backward(inp: Code, out: Code) extends Bipolar
 
-final case class Apply(component: Code, input: Code) extends Polar
+final case class Apply(component: Code, input: Code) extends Neutral
 
-final case class Deply(component: Code, input: Code) extends Polar
+final case class Deply(component: Code, input: Code) extends Neutral
 
 //endregion - Xpolar Converters
 
@@ -205,30 +214,30 @@ final case class Sandboxed(monitor: Code, bridgeNames: Code, contained: Code) ex
 
 // Nullary structors
 
-final case class Pulse() extends Polar
+final case class Pulse() extends Neutral
 
-final case class Bool(representation: Boolean) extends Polar
+final case class Bool(representation: Boolean) extends Neutral
 
-final case class Nat(representation: BigInt) extends Polar
+final case class Nat(representation: BigInt) extends Neutral
 
-final case class Address(name: Code, datatype: Code) extends Polar
+final case class Address(name: Code, datatype: Code) extends Neutral
 
 // Unary structors
 
 /**
   * @param key a name
   */
-final case class Entry(key: Code, value: Code) extends Polar
+final case class Entry(key: Code, value: Code) extends Neutral
 
-final case class Document(signatory: Code, contents: Code) extends Polar
+final case class Document(signatory: Code, contents: Code) extends Neutral
 
-final case class Quote(name: Code, code: Code) extends Polar
+final case class Quote(name: Code, code: Code) extends Neutral
 
-final case class Prequote(name: Code, code: Code) extends Polar
+final case class Prequote(name: Code, code: Code) extends Neutral
 
 // Variadic structors
 
-final case class Bag(elements: Code) extends Polar
+final case class Bag(elements: Code) extends Neutral
 
 //endregion - Constructor/Destructor Polars
 
@@ -246,7 +255,7 @@ final case class Bag(elements: Code) extends Polar
   * <b>Semantics</b>
   * @param reference to which to connect for a one-time read or write
   */
-final case class Xput(reference: Code) extends Polar
+final case class Com(reference: Code) extends Neutral
 
 /**
   * As an expression, forwards one of the inputs.
@@ -264,7 +273,7 @@ final case class Xput(reference: Code) extends Polar
   *  - [[options]]: NonEmptyArgs[T]
   *  - [[this]]: Polar[T]
   */
-final case class Pick(options: Code) extends Polar
+final case class Pick(options: Code) extends Neutral
 
 /**
   * As an expression, forwards the inputted value once signalled to do so.
@@ -276,60 +285,50 @@ final case class Pick(options: Code) extends Polar
   *  - [[value]]: Expr[T]
   *  - [[this]]: Expr[T]
   */
-final case class Hold(signal: Code, value: Code) extends Code
+final case class Hold(signal: Code, value: Code) extends Neutral
 
 /**
   * @param keys a multiset of location references
   */
-final case class Bundle(keys: Code) extends Polar
+final case class Bundle(keys: Code) extends Neutral
 
 /**
   * @param keys a multiset of location references
   */
-final case class Switch(keys: Code) extends Polar
+final case class Switch(keys: Code) extends Neutral
 
 /**
   * @param channel a channel reference
   * @param size the number of elements to collect
   */
-final case class Collect(channel: Code, size: Code) extends Polar
+final case class Collect(channel: Code, size: Code) extends Neutral
 
-final case class Negate(bool: Code) extends Polar
+final case class Negate(bool: Code) extends Neutral
 
-final case class Swap(name1: Code, name2: Code, target: Code) extends Polar
+final case class Swap(name1: Code, name2: Code, target: Code) extends Neutral
 
 /**
   * As an Expr, converts a [[Bag]] of code quotations to a [[Quoted]] of [[Args]] of all the pieces of code.
   *
   * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Args]].
   */
-final case class Zip(pieces: Code) extends Polar
+final case class Zip(pieces: Code) extends Neutral
 
 //endregion - Other Reversible Polars
 
 //region ==== Other Expression Polars ====
 
-final case class Conjoin(conjuncts: Code) extends Polar
+final case class Conjoin(conjuncts: Code) extends Expression
 
-final case class Disjoin(disjuncts: Code) extends Polar
+final case class Disjoin(disjuncts: Code) extends Expression
 
-final case class RandomBit() extends Polar
+final case class RandomBit() extends Expression
 
-final case class Sum(terms: Code) extends Polar
+final case class Sum(terms: Code) extends Expression
 
-final case class Multiply(factors: Code) extends Polar
+final case class Multiply(factors: Code) extends Expression
 
-final case class Merge(bags: Code) extends Polar
-
-/**
-  * Upon reception of a value, outputs a pulse. It only communicates the arrival of the value,
-  * but forgets/ignores the actual value.
-  *
-  * <b>Syntax</b>
-  *  - [[trigger]]: Expr
-  *  - [[this]]: Expr[Pulse]
-  */
-final case class Signal(trigger: Code) extends Code
+final case class Merge(bags: Code) extends Expression
 
 /**
   * <h2>Compare-and-swap</h2>
@@ -350,9 +349,9 @@ final case class Signal(trigger: Code) extends Code
   *  - [[reference]]: CellRef
   *  - [[this]]: Expr
   */
-final case class CompareAndSwap(testValue: Code, newValue: Code, reference: Code) extends Polar
+final case class CompareAndSwap(testValue: Code, newValue: Code, reference: Code) extends Expression
 
-final case class Behavior(name: Code, code: Code) extends Polar
+final case class Behavior(name: Code, code: Code) extends Expression
 
 /**
   * Wraps a value into a Quoted.
@@ -360,7 +359,7 @@ final case class Behavior(name: Code, code: Code) extends Polar
   * @param value an expression whose value it reduces to is to be wrapped
   * @return an expression of a quote
   */
-final case class Wrap(value: Code) extends Polar
+final case class Wrap(value: Code) extends Expression
 
 /**
   * Evaluates a quoted expression.
@@ -368,12 +367,12 @@ final case class Wrap(value: Code) extends Polar
   * @param value a quote of an expression
   * @return an expression that evaluates like the expression in quotes
   */
-final case class Eval(value: Code) extends Polar
+final case class Eval(value: Code) extends Expression
 
 /**
   * Replaces all the names in the quote by fresh names. Also removes all shadowing.
   */
-final case class Freshen(quote: Code) extends Polar
+final case class Freshen(quote: Code) extends Expression
 
 /**
   * Applies the given transformation to each child of the root of the given quote whose type is compatible,
@@ -382,27 +381,29 @@ final case class Freshen(quote: Code) extends Polar
   * @param quote to be equivariantly transformed
   * @param transformation to be applied to compatible children of the quote root node
   */
-final case class Update(quote: Code, transformation: Code) extends Polar
+final case class Update(quote: Code, transformation: Code) extends Polar // todo bipolar?
 
 /**
   * Outputs the children of the root of the given quote, as a bag.
   */
-final case class Children(quote: Code) extends Polar
+final case class Children(quote: Code) extends Expression
 
 /**
   * Launches [[quote]] as a new process, and outputs a signed value (aka document) of the code, confirming the launch.
   */
-final case class Launch(quote: Code) extends Polar
+final case class Launch(quote: Code) extends Expression
 // todo take quote wrapped in New? To expose/publish some names the launched process nevertheless owns?
 
-final case class Validate(prequote: Code) extends Polar
+final case class Validate(prequote: Code) extends Expression
 
 //endregion - Other Expression Polars
 
 //region ==== Other Extractor Polars ====
 
 /**
-  * Spreads a value to multiple recipients.
+  * Spreads a value to zero or more recipients.
+  *
+  * Nonlinear primitive
   *
   * [[Spread]](`<no-recipient>`) is equivalent to Ignore/Sink/Forget/Discard/Drop.
   *
@@ -410,7 +411,7 @@ final case class Validate(prequote: Code) extends Polar
   *  - [[recipients]]: Args[Xctr[T]]
   *  - [[this]]: Xctr[T]
   */
-final case class Spread(recipients: Code) extends Polar
+final case class Spread(recipients: Code) extends Extractor
 
 /**
   * <h2>Match statement</h2>
@@ -424,9 +425,9 @@ final case class Spread(recipients: Code) extends Polar
   * @param pattern executes if the singleton type of the inputted value is a subtype of its type
   * @param alternative defaults to this otherwise
   */
-final case class Match(pattern: Code, alternative: Code) extends Polar
+final case class Match(pattern: Code, alternative: Code) extends Extractor
 
-final case class Inspect(signature: Code, payload: Code) extends Polar
+final case class Inspect(signature: Code, payload: Code) extends Extractor
 
 //endregion - Other Extractor Polars
 

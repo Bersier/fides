@@ -5,7 +5,7 @@ This is a drafty draft.
 Fides is an *interaction language*. It posits that interaction is the fundamental unit of reality, with communication and computation emerging merely as special cases. Its primary inspiration is the **pi-calculus**, inheriting concepts of concurrency, message-passing, non-determinism, ephemeral code, mobility, and the primacy of names.
 
 * **Interaction-Universality:** Fides is designed to faithfully represent all possible games, whether cooperative, competitive, or concurrent.
-* **The Fidesphere (Trust Model):** The language runtime is the *only* required Trusted Third Party. The language itself is reified into a launch primitive. It acts as a digital notary, launching quoted process code and providing certificates of exactly what code got launched. If the runtime is trusted, it can be used to bootstrap other trusted third parties, allowing arbitrary cooperation, programmatically, amongst parties that do not trust each other a priori.
+* **The Fidesphere (Trust Model):** The language runtime is the only required Trusted Third Party. The language itself is reified into a launch primitive. It acts as a digital notary, launching quoted process code and providing certificates of exactly what code got launched. If the runtime is trusted, it can be used to bootstrap other trusted third parties, allowing arbitrary cooperation, programmatically, amongst parties that do not trust each other a priori.
 * **Timelessness:** There is no global clock. Causality is established solely through communication events (happens-before relationships).
 
 ## 2. The Syntactic Topology
@@ -26,8 +26,9 @@ One important and convenient syntactic category in Fides is polars.
 ## 3. Primitives and Composition
 ### 3.1 Connection Mechanisms
 * **`Forward(Polar_A, Polar_B)`:** The fundamental "Cut" operation. Fuses a Source (A) and a Sink (B) into an Apolar process.
-* **`Apply(Bipolar, Polar)`:** Extends a Polar by attaching a Bipolar transducer in the forward direction (Input \to Transducer \to Polar).
-* **`Deply(Bipolar, Polar)`:** Extends a Polar in reverse (Polar \to Transducer \to Output).
+* **`Apply(Bipolar, Polar)`:** Constructs a new Polar by connecting a Polar with a Bipolar in the forward direction.
+* **`Deply(Bipolar, Polar)`:** 
+Constructs a new Polar by connecting a Polar with a Bipolar in the reverse direction, meaning that the Bipolar is inverted before getting connected.
 * **`Backward(Polar_A, Polar_B)`:** Creates a Bipolar that internally pipes data between A and B, exposing their outer ends to the context.
 
 ### 3.2 Communication & Concurrency
