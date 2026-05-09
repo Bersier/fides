@@ -239,6 +239,9 @@ final case class Prequote(name: Code, code: Code) extends Neutral
 
 final case class Bag(elements: Code) extends Neutral
 
+// todo
+final case class Abstraction(names: Code, contents: Code) extends Neutral
+
 //endregion - Constructor/Destructor Polars
 
 //region ==== Other Reversible Polars ====
@@ -381,7 +384,7 @@ final case class Freshen(quote: Code) extends Expression
   * @param quote to be equivariantly transformed
   * @param transformation to be applied to compatible children of the quote root node
   */
-final case class Update(quote: Code, transformation: Code) extends Polar // todo bipolar?
+final case class Update(quote: Code, transformation: Code) extends Expression
 
 /**
   * Outputs the children of the root of the given quote, as a bag.
@@ -390,9 +393,13 @@ final case class Children(quote: Code) extends Expression
 
 /**
   * Launches [[quote]] as a new process, and outputs a signed value (aka document) of the code, confirming the launch.
+  *
+  * <b>Syntax</b>
+  *  - [[quote]]: New[?, Expr[Quote]]
+  *  - [[this]]: Expr[Document]
   */
 final case class Launch(quote: Code) extends Expression
-// todo take quote wrapped in New? To expose/publish some names the launched process nevertheless owns?
+// todo
 
 final case class Validate(prequote: Code) extends Expression
 
