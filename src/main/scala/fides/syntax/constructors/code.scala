@@ -239,9 +239,6 @@ final case class Prequote(name: Code, code: Code) extends Neutral
 
 final case class Bag(elements: Code) extends Neutral
 
-// todo
-final case class Abstraction(names: Code, contents: Code) extends Neutral
-
 //endregion - Constructor/Destructor Polars
 
 //region ==== Other Reversible Polars ====
@@ -334,6 +331,11 @@ final case class Multiply(factors: Code) extends Expression
 final case class Merge(bags: Code) extends Expression
 
 /**
+  * Nominal abstraction value construction
+  */
+final case class Abstraction(names: Code, contents: Code) extends Expression
+
+/**
   * <h2>Compare-and-swap</h2>
   *
   * Atomically
@@ -419,6 +421,11 @@ final case class Validate(prequote: Code) extends Expression
   *  - [[this]]: Xctr[T]
   */
 final case class Spread(recipients: Code) extends Extractor
+
+/**
+  * Nominal concretion
+  */
+final case class Concretion(bindings: Code, updated: Code) extends Extractor
 
 /**
   * <h2>Match statement</h2>
