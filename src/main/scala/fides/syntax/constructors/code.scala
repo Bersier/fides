@@ -30,6 +30,11 @@ sealed trait Extractor extends Polar
 sealed trait Neutral extends Expression, Extractor
 
 /**
+  * Neutrals that might be constant.
+  */
+sealed trait Constant extends Neutral
+
+/**
   * Simlar to abstractions, but not values, and generalized to the polar setting.
   */
 sealed trait Bipolar extends Xpolar
@@ -214,30 +219,30 @@ final case class Sandboxed(monitor: Code, bridgeNames: Code, contained: Code) ex
 
 // Nullary structors
 
-final case class Pulse() extends Neutral
+final case class Pulse() extends Constant
 
-final case class Bool(representation: Boolean) extends Neutral
+final case class Bool(representation: Boolean) extends Constant
 
-final case class Nat(representation: BigInt) extends Neutral
+final case class Nat(representation: BigInt) extends Constant
 
-final case class Address(name: Code, datatype: Code) extends Neutral
+final case class Address(name: Code, datatype: Code) extends Constant
 
 // Unary structors
 
 /**
   * @param key a name
   */
-final case class Entry(key: Code, value: Code) extends Neutral
+final case class Entry(key: Code, value: Code) extends Constant
 
-final case class Document(signatory: Code, contents: Code) extends Neutral
+final case class Document(signatory: Code, contents: Code) extends Constant
 
-final case class Quote(name: Code, code: Code) extends Neutral
+final case class Quote(name: Code, code: Code) extends Constant
 
-final case class Prequote(name: Code, code: Code) extends Neutral
+final case class Prequote(name: Code, code: Code) extends Constant
 
 // Variadic structors
 
-final case class Bag(elements: Code) extends Neutral
+final case class Bag(elements: Code) extends Constant
 
 //endregion - Constructor/Destructor Polars
 
@@ -305,7 +310,7 @@ final case class Collect(channel: Code, size: Code) extends Neutral
 
 final case class Negate(bool: Code) extends Neutral
 
-final case class Swap(name1: Code, name2: Code, target: Code) extends Neutral
+final case class Substitute(mapping: Code, target: Code) extends Neutral
 
 /**
   * As an Expr, converts a [[Bag]] of code quotations to a [[Quoted]] of [[Args]] of all the pieces of code.
