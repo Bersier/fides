@@ -83,8 +83,11 @@ final case class AbstractReversibleBipolar(inputDatatype: Code, outputDatatype: 
 //region ==== Location References ====
 
 sealed trait LocRef extends Code
+// todo get rid of refs, and rely on name typing in New instead? Or the other way around?
 
 final case class AbstractLocRef(name: Code, datatype: Code) extends LocRef
+// todo add case class for type varied in variance? Which would be used here for datatype, for example?
+// todo continue adding abstract/generic cases
 
 /**
   * Channel location reference
@@ -142,7 +145,7 @@ final case class AbstractApolar() extends Apolar
   * @param name used to refer to this cell
   * @param contents of this cell
   */
-final case class Cell(name: Code, contents: Code) extends Apolar
+final case class Cell(name: Code, contents: Option[Code]) extends Apolar
 
 /**
   * Sends a value to an address.
@@ -221,9 +224,15 @@ final case class Sandboxed(monitor: Code, bridgeNames: Code, contained: Code) ex
 
 final case class Pulse() extends Constant
 
-final case class Bool(representation: Boolean) extends Constant
+/**
+  * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic Bool constant.
+  */
+final case class Bool(representation: Option[Boolean]) extends Constant
 
-final case class Nat(representation: BigInt) extends Constant
+/**
+  * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic Nat constant.
+  */
+final case class Nat(representation: Option[BigInt]) extends Constant
 
 final case class Address(name: Code, datatype: Code) extends Constant
 
@@ -236,8 +245,25 @@ final case class Entry(key: Code, value: Code) extends Constant
 
 final case class Document(signatory: Code, contents: Code) extends Constant
 
+/**
+  * Nominal abstraction
+  */
+final case class Abstraction(mapping: Code, contents: Code) extends Neutral
+
+/**
+  * Represents a value that keeps track of an abstraction concretization operation,
+  * as a pair that includes the applied mapping, as well as the result.
+  */
+final case class Concretion(mapping: Code, contents: Code) extends Neutral
+
+/**
+  * The correct alpha-equivariance based on the name is built in.
+  */
 final case class Quote(name: Code, code: Code) extends Constant
 
+/**
+  * The correct alpha-equivariance based on the name is built in.
+  */
 final case class Prequote(name: Code, code: Code) extends Constant
 
 // Variadic structors
@@ -310,8 +336,6 @@ final case class Collect(channel: Code, size: Code) extends Neutral
 
 final case class Negate(bool: Code) extends Neutral
 
-final case class Substitute(mapping: Code, target: Code) extends Neutral
-
 /**
   * As an Expr, converts a [[Bag]] of code quotations to a [[Quoted]] of [[Args]] of all the pieces of code.
   *
@@ -333,12 +357,19 @@ final case class Sum(terms: Code) extends Expression
 
 final case class Multiply(factors: Code) extends Expression
 
+/**
+  * Deterministic collision-resistant (i.e. effectively injective) mapping
+  * from any value to a name (represented as a pulse entry).
+  */
+final case class AsName(value: Code) extends Expression
+
 final case class Merge(bags: Code) extends Expression
 
 /**
-  * Nominal abstraction value construction
+  * Changes an abstraction into a new one, where the body remains the same,
+  * but the key names have been mapped to new ones, possibly with collisions.
   */
-final case class Abstraction(names: Code, contents: Code) extends Expression
+final case class Project(mapping: Code, abstraction: Code) extends Expression
 
 /**
   * <h2>Compare-and-swap</h2>
@@ -361,7 +392,17 @@ final case class Abstraction(names: Code, contents: Code) extends Expression
   */
 final case class CompareAndSwap(testValue: Code, newValue: Code, reference: Code) extends Expression
 
+/**
+  * Nullary data constructor for behaviors. Behaviors are black-box, so they cannot be inspected.
+  *
+  * The correct alpha-equivariance based on the name is built in.
+  */
 final case class Behavior(name: Code, code: Code) extends Expression
+
+/**
+  * Compiles an xpolar quote to a behavior.
+  */
+final case class Compile(xpolarQuote: Code) extends Expression
 
 /**
   * Wraps a value into a Quoted.
@@ -380,16 +421,11 @@ final case class Wrap(value: Code) extends Expression
 final case class Eval(value: Code) extends Expression
 
 /**
-  * Replaces all the names in the quote by fresh names. Also removes all shadowing.
-  */
-final case class Freshen(quote: Code) extends Expression
-
-/**
-  * Applies the given transformation to each child of the root of the given quote whose type is compatible,
+  * Applies the given transformation to each descendent of the root of the given quote whose type is compatible,
   * and outputs the updated quote.
   *
   * @param quote to be equivariantly transformed
-  * @param transformation to be applied to compatible children of the quote root node
+  * @param transformation to be applied to compatible descendents of the quote root node
   */
 final case class Update(quote: Code, transformation: Code) extends Expression
 
@@ -402,11 +438,10 @@ final case class Children(quote: Code) extends Expression
   * Launches [[quote]] as a new process, and outputs a signed value (aka document) of the code, confirming the launch.
   *
   * <b>Syntax</b>
-  *  - [[quote]]: New[?, Expr[Quote]]
-  *  - [[this]]: Expr[Document]
+  *  - [[quote]]: Expr[Abstraction[?, Quote]]
+  *  - [[this]]: Expr[Concretion[?, Document]]
   */
 final case class Launch(quote: Code) extends Expression
-// todo
 
 final case class Validate(prequote: Code) extends Expression
 
@@ -428,11 +463,6 @@ final case class Validate(prequote: Code) extends Expression
 final case class Spread(recipients: Code) extends Extractor
 
 /**
-  * Nominal concretion
-  */
-final case class Concretion(bindings: Code, updated: Code) extends Extractor
-
-/**
   * <h2>Match statement</h2>
   *
   * <b>Syntax</b>
@@ -452,10 +482,12 @@ final case class Inspect(signature: Code, payload: Code) extends Extractor
 
 /**
   * Akin to names in the pi-calculus
+  *
+  * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic name.
   */
-final case class Name(representation: Identifier) extends Code
+final case class Name(representation: Option[Identifier]) extends Code
 
-final val LauncherName = Name(launcherIdentifier)
+final val LauncherName = Name(Some(launcherIdentifier))
 
 /**
   * An unordered collection of syntactic elements
@@ -465,10 +497,13 @@ final case class Args(arguments: Multiset[Code]) extends Code
 /**
   * Akin to `new` in the pi-calculus
   *
+  * Behaves like a (biased) nominal abstraction in quotes, so pattern matching on it respects alpha-equivariance
+  *
   * @param names that are new within the scope
   * @param body the body of the scope, in which the names are available
   */
 final case class New(names: Code, body: Code) extends Xpolar
+// todo types
 
 /**
   * An annotated piece of code. The annotation does not change the semantics of the code.
@@ -482,7 +517,7 @@ final case class New(names: Code, body: Code) extends Xpolar
   */
 final case class Annotated(quoteName: Code, code: Code, annotation: Code) extends Code
 
-final case class Type(witness: Code) extends Code
+final case class Type(witness: Option[Code]) extends Code
 
 /**
   * Allows escaping the body of a quote.
