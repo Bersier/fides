@@ -1,7 +1,7 @@
 package fides.syntax.constructors
 
 import fides.syntax.util.{Identifier, launcherIdentifier}
-import util.collections.extensional.Multiset
+import util.collections.extensional.{Multiset}
 
 // -------------------------------------------------------------------------------------------------
 // This file contains all the Fides syntactic code constructors.
@@ -83,10 +83,9 @@ final case class AbstractReversibleBipolar(inputDatatype: Code, outputDatatype: 
 //region ==== Location References ====
 
 sealed trait LocRef extends Code
-// todo get rid of refs, and rely on name typing in New instead? Or the other way around?
 
 final case class AbstractLocRef(name: Code, datatype: Code) extends LocRef
-// todo add case class for type varied in variance? Which would be used here for datatype, for example?
+
 // todo continue adding abstract/generic cases
 
 /**
@@ -248,13 +247,13 @@ final case class Document(signatory: Code, contents: Code) extends Constant
 /**
   * Nominal abstraction
   */
-final case class Abstraction(mapping: Code, contents: Code) extends Neutral
+final case class Abstraction(mapping: Code, contents: Code) extends Constant
 
 /**
   * Represents a value that keeps track of an abstraction concretization operation,
   * as a pair that includes the applied mapping, as well as the result.
   */
-final case class Concretion(mapping: Code, contents: Code) extends Neutral
+final case class Concretion(mapping: Code, contents: Code) extends Constant
 
 /**
   * The correct alpha-equivariance based on the name is built in.
@@ -364,12 +363,6 @@ final case class Multiply(factors: Code) extends Expression
 final case class AsName(value: Code) extends Expression
 
 final case class Merge(bags: Code) extends Expression
-
-/**
-  * Changes an abstraction into a new one, where the body remains the same,
-  * but the key names have been mapped to new ones, possibly with collisions.
-  */
-final case class Project(mapping: Code, abstraction: Code) extends Expression
 
 /**
   * <h2>Compare-and-swap</h2>
@@ -503,7 +496,7 @@ final case class Args(arguments: Multiset[Code]) extends Code
   * @param body the body of the scope, in which the names are available
   */
 final case class New(names: Code, body: Code) extends Xpolar
-// todo types
+// todo types?
 
 /**
   * An annotated piece of code. The annotation does not change the semantics of the code.
