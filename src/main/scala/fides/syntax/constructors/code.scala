@@ -250,12 +250,6 @@ final case class Document(signatory: Code, contents: Code) extends Constant
 final case class Abstraction(mapping: Code, contents: Code) extends Constant
 
 /**
-  * Represents a value that keeps track of an abstraction concretization operation,
-  * as a pair that includes the applied mapping, as well as the result.
-  */
-final case class Concretion(mapping: Code, contents: Code) extends Constant
-
-/**
   * The correct alpha-equivariance based on the name is built in.
   */
 final case class Quote(name: Code, code: Code) extends Constant
@@ -358,7 +352,7 @@ final case class Multiply(factors: Code) extends Expression
 
 /**
   * Deterministic collision-resistant (i.e. effectively injective) mapping
-  * from any value to a name (represented as a pulse entry).
+  * from any value to a name (represented as a name quote).
   */
 final case class AsName(value: Code) extends Expression
 
@@ -427,15 +421,6 @@ final case class Update(quote: Code, transformation: Code) extends Expression
   */
 final case class Children(quote: Code) extends Expression
 
-/**
-  * Launches [[quote]] as a new process, and outputs a signed value (aka document) of the code, confirming the launch.
-  *
-  * <b>Syntax</b>
-  *  - [[quote]]: Expr[Abstraction[?, Quote]]
-  *  - [[this]]: Expr[Concretion[?, Document]]
-  */
-final case class Launch(quote: Code) extends Expression
-
 final case class Validate(prequote: Code) extends Expression
 
 //endregion - Other Expression Polars
@@ -470,6 +455,18 @@ final case class Spread(recipients: Code) extends Extractor
 final case class Match(pattern: Code, alternative: Code) extends Extractor
 
 final case class Inspect(signature: Code, payload: Code) extends Extractor
+
+/**
+  * Launches the given quote (wrapped in an abstraction) as a new process,
+  * and outputs a signed value (aka document) of the code, confirming the launch,
+  * as well as a mapping for how the abstraction got concretized.
+  *
+  * <b>Syntax</b>
+  *  - [[mapping]]: Xctr[Record[Quote[Name]]]
+  *  - [[certificate]]: Xctr[Document[LauncherName, Quote]]
+  *  - [[this]]: Xctr[Abstraction[?, Quote]]
+  */
+final case class Launch(mapping: Code, certificate: Code) extends Extractor
 
 //endregion - Other Extractor Polars
 
