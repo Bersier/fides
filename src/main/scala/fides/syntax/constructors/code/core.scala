@@ -1,4 +1,4 @@
-package fides.syntax.constructors
+package fides.syntax.constructors.code
 
 import fides.syntax.util.{Identifier, launcherIdentifier}
 import util.collections.extensional.{Multiset}
@@ -145,6 +145,8 @@ final case class AbstractApolar() extends Apolar
   * @param contents of this cell
   */
 final case class Cell(name: Code, contents: Option[Code]) extends Apolar
+
+final case class Atomic(body: Code) extends Apolar
 
 /**
   * Sends a value to an address.
@@ -359,32 +361,17 @@ final case class AsName(value: Code) extends Expression
 final case class Merge(bags: Code) extends Expression
 
 /**
-  * <h2>Compare-and-swap</h2>
-  *
-  * Atomically
-  *  1. Reads the value of the cell, V.
-  *  2. Compares V to [[testValue]].
-  *  3. If they are the same, writes [[newValue]] to the cell.
-  *  4. Outputs V.
-  *
-  * Atomically compares the current value of the cell with the inputted pattern and,
-  * only if they are the same, updates the value of the cell to the inputted new value, and
-  * outputs the previous value of the cell.
-  *
-  * <b>Syntax</b>
-  *  - [[testValue]]: Expr
-  *  - [[newValue]]: Expr
-  *  - [[reference]]: CellRef
-  *  - [[this]]: Expr
-  */
-final case class CompareAndSwap(testValue: Code, newValue: Code, reference: Code) extends Expression
-
-/**
   * Nullary data constructor for behaviors. Behaviors are black-box, so they cannot be inspected.
   *
   * The correct alpha-equivariance based on the name is built in.
   */
 final case class Behavior(name: Code, code: Code) extends Expression
+
+/**
+  * Changes an abstraction into a new one, where the body remains the same,
+  * but the key names have been mapped to new ones, possibly with collisions.
+  */
+final case class Rekey(mapping: Code, abstraction: Code) extends Expression
 
 /**
   * Compiles an xpolar quote to a behavior.
