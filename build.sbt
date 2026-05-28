@@ -9,7 +9,7 @@ lazy val root = (project in file("."))
     version := "0.1.0",
 
     // See https://www.scala-lang.org/news/new-scala-nightlies-repo.html
-    scalaVersion := "3.8.5-RC1-bin-20260417-49b4241-NIGHTLY",
+    scalaVersion := "3.10.0-RC1-bin-20260528-7d0d3db-NIGHTLY",
     resolvers += Resolver.scalaNightlyRepository,
 
     libraryDependencies ++= Seq(

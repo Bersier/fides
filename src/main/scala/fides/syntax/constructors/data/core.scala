@@ -9,24 +9,19 @@ import util.collections.extensional.Multiset
 // -------------------------------------------------------------------------------------------------
 
 sealed trait Data
-
-// Nullary structors
+object Data:
+  final case class Top() extends Data
 
 final case class Pulse() extends Data
 
 final case class Bool(representation: Option[Boolean]) extends Data
 
-final case class Name(representation: Option[Identifier]) extends Data // todo have name values?
+final case class Name(representation: Option[Identifier]) extends Data
 
 final case class Nat(representation: Option[BigInt]) extends Data
 
 final case class Address(name: Option[Identifier], datatype: Data) extends Data
 
-// Unary structors
-
-/**
-  * @param key a name
-  */
 final case class Entry(key: Option[Identifier], value: Data) extends Data
 
 final case class Document(signatory: Option[Identifier], contents: Data) extends Data
@@ -39,9 +34,7 @@ final case class Prequote(name: Option[Identifier], code: Code) extends Data
 
 final case class Behavior(xpolar: Option[XpolarType]) extends Data
 
-// Variadic structors
-
-final case class Bag[R <: Bag.Refinement](
+final case class Bag[R <: Bag.Refinement]( // todo consistency conditions
   explicitElements: Multiset[Data], closed: Boolean, upperBound: Data, refinement: R,
 ) extends Data
 object Bag:
@@ -51,8 +44,14 @@ object Bag:
 sealed trait XpolarType
 object XpolarType:
   final case class Apolar() extends XpolarType
-  final case class Polar(variance: Option[Variance], tipe: Data) extends XpolarType
-  final case class Bipolar() extends XpolarType // todo parameters
+  final case class Polar(tipe: Option[Polar.Type]) extends XpolarType
+  final case class Bipolar(inpType: Option[Polar.Type], outType: Option[Polar.Type]) extends XpolarType:
+    import Polar.Variance.Ntrl
+    assert(inpType.map(_.variance).forall(inpType => outType.map(_.variance).forall(outType =>
+      inpType == outType || inpType == Ntrl || outType == Ntrl
+    )))
 
-enum Variance:
-  case Bivariant, Covariant, Contravariant, Invariant
+  object Polar:
+    final case class Type(variance: Variance, tipe: Data)
+    enum Variance derives CanEqual:
+      case Expr, Xctr, Ntrl

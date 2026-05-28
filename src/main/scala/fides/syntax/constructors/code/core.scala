@@ -9,6 +9,13 @@ import util.collections.extensional.{Multiset}
 
 sealed trait Code
 
+/**
+  * Concrete syntactic element to express a generic piece of code.
+  */
+final case class AbstractCode() extends Polar
+
+// todo add a subtype of Code that includes anything except Escape and Embed?
+
 //region ==== Abstract Xpolar ====
 
 sealed trait Xpolar extends Code
@@ -86,8 +93,6 @@ sealed trait LocRef extends Code
 
 final case class AbstractLocRef(name: Code, datatype: Code) extends LocRef
 
-// todo continue adding abstract/generic cases
-
 /**
   * Channel location reference
   */
@@ -144,7 +149,7 @@ final case class AbstractApolar() extends Apolar
   * @param name used to refer to this cell
   * @param contents of this cell
   */
-final case class Cell(name: Code, contents: Option[Code]) extends Apolar
+final case class Cell(name: Code, contents: Code) extends Apolar
 
 final case class Atomic(body: Code) extends Apolar
 
@@ -229,6 +234,15 @@ final case class Pulse() extends Constant
   * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic Bool constant.
   */
 final case class Bool(representation: Option[Boolean]) extends Constant
+
+/**
+  * Akin to names in the pi-calculus
+  *
+  * Names are mostly used as syntactic entities, in which case they are constants. But names can also be values.
+  *
+  * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic name.
+  */
+final case class Name(representation: Option[Identifier]) extends Constant
 
 /**
   * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic Nat constant.
@@ -456,13 +470,6 @@ final case class Inspect(signature: Code, payload: Code) extends Extractor
 final case class Launch(mapping: Code, certificate: Code) extends Extractor
 
 //endregion - Other Extractor Polars
-
-/**
-  * Akin to names in the pi-calculus
-  *
-  * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic name.
-  */
-final case class Name(representation: Option[Identifier]) extends Code
 
 final val LauncherName = Name(Some(launcherIdentifier))
 
