@@ -20,26 +20,27 @@ final case class Name(representation: Option[Identifier]) extends Data
 
 final case class Nat(representation: Option[BigInt]) extends Data
 
-final case class Address(name: Option[Identifier], datatype: Data) extends Data
+final case class Address(name: Name, datatype: Data) extends Data
 
-final case class Entry(key: Option[Identifier], value: Data) extends Data
+final case class Entry(key: Name, value: Data) extends Data
 
-final case class Document(signatory: Option[Identifier], contents: Data) extends Data
+final case class Document(signatory: Name, contents: Data) extends Data
 
-final case class Abstraction(mapping: Bag[Bag.Refinement.Renaming.type], contents: Data) extends Data
+final case class Abstraction(mapping: AbstractRenaming | Bag, contents: Data) extends Data
 
-final case class Quote(name: Option[Identifier], code: Code) extends Data
+final case class Quote(name: Name, code: Code) extends Data
 
-final case class Prequote(name: Option[Identifier], code: Code) extends Data
+final case class Prequote(name: Name, code: Code) extends Data
 
 final case class Behavior(xpolar: Option[XpolarType]) extends Data
 
-final case class Bag[R <: Bag.Refinement]( // todo consistency conditions
-  explicitElements: Multiset[Data], closed: Boolean, upperBound: Data, refinement: R,
-) extends Data
-object Bag:
-  enum Refinement:
-    case None, Set, Record, Renaming
+final case class AbstractBag(elementType: Data) extends Data
+
+final case class AbstractRecord(valueType: Data) extends Data
+
+final case class AbstractRenaming() extends Data
+
+final case class Bag(elements: Multiset[Data]) extends Data
 
 sealed trait XpolarType
 object XpolarType:

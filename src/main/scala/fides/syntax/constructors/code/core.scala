@@ -251,6 +251,13 @@ final case class Nat(representation: Option[BigInt]) extends Constant
 
 final case class Address(name: Code, datatype: Code) extends Constant
 
+/**
+  * Concrete syntactic element to express a generic renaming.
+  *
+  * Renamings are bijections from a set of names to another. So they are a special type of record.
+  */
+final case class AbstractRenaming() extends Constant
+
 // Unary structors
 
 /**
@@ -274,6 +281,18 @@ final case class Quote(name: Code, code: Code) extends Constant
   * The correct alpha-equivariance based on the name is built in.
   */
 final case class Prequote(name: Code, code: Code) extends Constant
+
+/**
+  * Concrete syntactic element to express a generic bag.
+  */
+final case class AbstractBag(elementType: Code) extends Constant
+
+/**
+  * Concrete syntactic element to express a generic record.
+  *
+  * Records are dictionaries. So they are a special type of bag.
+  */
+final case class AbstractRecord(valueType: Code) extends Constant
 
 // Variadic structors
 
@@ -374,6 +393,8 @@ final case class AsName(value: Code) extends Expression
 
 final case class Merge(bags: Code) extends Expression
 
+final case class AbstractBehavior(/* todo XpolarType */) extends Expression
+
 /**
   * Nullary data constructor for behaviors. Behaviors are black-box, so they cannot be inspected.
   *
@@ -399,14 +420,6 @@ final case class Compile(xpolarQuote: Code) extends Expression
   * @return an expression of a quote
   */
 final case class Wrap(value: Code) extends Expression
-
-/**
-  * Evaluates a quoted expression.
-  *
-  * @param value a quote of an expression
-  * @return an expression that evaluates like the expression in quotes
-  */
-final case class Eval(value: Code) extends Expression
 
 /**
   * Applies the given transformation to each descendent of the root of the given quote whose type is compatible,
@@ -474,6 +487,11 @@ final case class Launch(mapping: Code, certificate: Code) extends Extractor
 final val LauncherName = Name(Some(launcherIdentifier))
 
 /**
+  * Concrete syntactic element to express a generic bag.
+  */
+final case class AbstractArgs(elementType: Code) extends Constant
+
+/**
   * An unordered collection of syntactic elements
   */
 final case class Args(arguments: Multiset[Code]) extends Code
@@ -487,7 +505,6 @@ final case class Args(arguments: Multiset[Code]) extends Code
   * @param body the body of the scope, in which the names are available
   */
 final case class New(names: Code, body: Code) extends Xpolar
-// todo types?
 
 /**
   * An annotated piece of code. The annotation does not change the semantics of the code.
