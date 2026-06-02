@@ -402,12 +402,6 @@ final case class AbstractAbstraction(/* todo XpolarType */) extends Expression
 final case class Abstraction(mapping: Code, code: Code) extends Expression
 
 /**
-  * Changes an abstraction into a new one, where the body remains the same,
-  * but the key names have been mapped to new ones, possibly with collisions.
-  */
-final case class Rekey(mapping: Code, abstraction: Code) extends Expression
-
-/**
   * Compiles an xpolar quote to a behavior.
   */
 final case class Compile(mapping: Code, xpolarQuote: Code) extends Expression
