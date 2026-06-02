@@ -15,6 +15,7 @@ sealed trait Code
 final case class AbstractCode() extends Polar
 
 // todo add a subtype of Code that includes anything except Escape and Embed?
+//  And what about Quotable/Wrappable?
 
 //region ==== Abstract Xpolar ====
 
@@ -268,11 +269,6 @@ final case class Entry(key: Code, value: Code) extends Constant
 final case class Document(signatory: Code, contents: Code) extends Constant
 
 /**
-  * Nominal abstraction
-  */
-final case class Abstraction(mapping: Code, contents: Code) extends Constant
-
-/**
   * The correct alpha-equivariance based on the name is built in.
   */
 final case class Quote(name: Code, code: Code) extends Constant
@@ -393,14 +389,17 @@ final case class AsName(value: Code) extends Expression
 
 final case class Merge(bags: Code) extends Expression
 
-final case class AbstractBehavior(/* todo XpolarType */) extends Expression
+final case class AbstractAbstraction(/* todo XpolarType */) extends Expression
 
 /**
-  * Nullary data constructor for behaviors. Behaviors are black-box, so they cannot be inspected.
+  * Behavior/Xpolar abstraction literal.
   *
-  * The correct alpha-equivariance based on the name is built in.
+  * Abstractions are black-box, so they cannot be inspected. Note however that if the xpolar is a constant,
+  * then that constant will be returned, which itself can be inspected.
+  *
+  * Abstraction values can also be though of and used as nominal abstraction values.
   */
-final case class Behavior(name: Code, code: Code) extends Expression
+final case class Abstraction(mapping: Code, code: Code) extends Expression
 
 /**
   * Changes an abstraction into a new one, where the body remains the same,
@@ -411,15 +410,7 @@ final case class Rekey(mapping: Code, abstraction: Code) extends Expression
 /**
   * Compiles an xpolar quote to a behavior.
   */
-final case class Compile(xpolarQuote: Code) extends Expression
-
-/**
-  * Wraps a value into a Quoted.
-  *
-  * @param value an expression whose value it reduces to is to be wrapped
-  * @return an expression of a quote
-  */
-final case class Wrap(value: Code) extends Expression
+final case class Compile(mapping: Code, xpolarQuote: Code) extends Expression
 
 /**
   * Applies the given transformation to each descendent of the root of the given quote whose type is compatible,
@@ -528,4 +519,4 @@ final case class Type(witness: Option[Code]) extends Code
   */
 final case class Escape(name: Code, quote: Code) extends Code
 
-final case class Embed(name: Code, behavior: Code) extends Code
+final case class Embed(mapping: Code, behavior: Code) extends Code
