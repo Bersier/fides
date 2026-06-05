@@ -287,8 +287,6 @@ final case class AbstractRecord(valueType: Code) extends Constant
 
 /**
   * Only a constant when there is no remainder and the elements are constant.
-  *
-  * Can also be an unordered collection of syntactic elements.
   */
 final case class Bag(elements: Code, remainder: Option[Code]) extends Constant
 
