@@ -252,13 +252,6 @@ final case class Nat(representation: Option[BigInt]) extends Constant
 
 final case class Address(name: Code, datatype: Code) extends Constant
 
-/**
-  * Concrete syntactic element to express a generic renaming.
-  *
-  * Renamings are bijections from a set of names to another. So they are a special type of record.
-  */
-final case class AbstractRenaming() extends Constant
-
 // Unary structors
 
 /**
@@ -292,7 +285,14 @@ final case class AbstractRecord(valueType: Code) extends Constant
 
 // Variadic structors
 
-final case class Bag(elements: Code) extends Constant
+/**
+  * Only a constant when there is no remainder and the elements are constant.
+  *
+  * Can also be an unordered collection of syntactic elements.
+  */
+final case class Bag(elements: Code, remainder: Option[Code]) extends Constant
+
+final case class Record(elements: Code, remainder: Option[Code]) extends Constant
 
 //endregion - Constructor/Destructor Polars
 
@@ -387,9 +387,11 @@ final case class Multiply(factors: Code) extends Expression
   */
 final case class AsName(value: Code) extends Expression
 
-final case class Merge(bags: Code) extends Expression
+final case class Flatten(bags: Code) extends Expression
 
-final case class AbstractAbstraction(/* todo XpolarType */) extends Expression
+final case class Push(bag: Code, transformation: Code) extends Expression
+
+final case class At(key: Code, record: Code) extends Expression
 
 /**
   * Behavior/Xpolar abstraction literal.
