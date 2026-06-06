@@ -271,26 +271,14 @@ final case class Quote(name: Code, code: Code) extends Constant
   */
 final case class Prequote(name: Code, code: Code) extends Constant
 
-/**
-  * Concrete syntactic element to express a generic bag.
-  */
-final case class AbstractBag(elementType: Code) extends Constant
-
-/**
-  * Concrete syntactic element to express a generic record.
-  *
-  * Records are dictionaries. So they are a special type of bag.
-  */
-final case class AbstractRecord(valueType: Code) extends Constant
-
 // Variadic structors
 
-/**
-  * Only a constant when there is no remainder and the elements are constant.
-  */
-final case class Bag(elements: Code, remainder: Option[Code]) extends Constant
+final case class Bag(elements: Code) extends Constant
 
-final case class Record(elements: Code, remainder: Option[Code]) extends Constant
+/**
+  * Records are dictionaries. So they are a special type of bag.
+  */
+final case class Record(elements: Code) extends Constant
 
 //endregion - Constructor/Destructor Polars
 
@@ -358,6 +346,8 @@ final case class Collect(channel: Code, size: Code) extends Neutral
 
 final case class Negate(bool: Code) extends Neutral
 
+final case class Flatten(bags: Code) extends Neutral
+
 /**
   * As an Expr, converts a [[Bag]] of code quotations to a [[Quoted]] of [[Args]] of all the pieces of code.
   *
@@ -384,8 +374,6 @@ final case class Multiply(factors: Code) extends Expression
   * from any value to a name (represented as a name quote).
   */
 final case class AsName(value: Code) extends Expression
-
-final case class Flatten(bags: Code) extends Expression
 
 final case class Push(bag: Code, transformation: Code) extends Expression
 
@@ -474,7 +462,7 @@ final val LauncherName = Name(Some(launcherIdentifier))
 /**
   * Concrete syntactic element to express a generic bag.
   */
-final case class AbstractArgs(elementType: Code) extends Constant
+final case class AbstractArgs(arguments: Multiset[Code], restElementType: Code) extends Constant
 
 /**
   * An unordered collection of syntactic elements
