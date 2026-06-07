@@ -15,10 +15,7 @@ sealed trait Code
 /**
   * Concrete syntactic element to express a generic piece of code.
   */
-final case class AbstractCode() extends Polar
-
-// todo add a subtype of Code that includes anything except Escape and Embed?
-//  Which of these need corresponding syntactic elements?
+final case class AbstractCode() extends Code
 
 //region ==== Abstract Xpolar ====
 
@@ -293,18 +290,41 @@ final case class Bag(elements: Code) extends Constant
 
 /**
   * Records are dictionaries. So they are a special type of bag.
+  *
+  * So [[Record]](C) is the same as [[Bag]](C) at the value level (but not at the syntax level).
   */
 final case class Record(elements: Code) extends Constant
 
 /**
-  * The correct alpha-equivariance based on the name is built in.
+  * A quote that could be compiled.
+  *
+  * Typewise, it's still a quote.
+  * So [[CompilableQuote]](C) is the same as [[Quote]](C) at the value level (but not at the syntax level).
+  *
+  * At the top level, it should
+  *  1. have no unbound escapes
+  *  2. follow the usual syntax (unlike extractor quotes)
+  *  3. have no abstract syntactic constructors
+  *
+  * If there are no capability requirements, then it's a launchable quote.
   */
-final case class Quote(name: Code, capabilityRequirements: Option[Code], code: Code) extends Constant
+final case class CompilableQuote(name: Code, capabilityRequirements: Code, code: Code) extends Constant
+
+/**
+  * The correct alpha-equivariance based on the name is built in.
+  *
+  * All quotes are also prequotes.
+  * So [[Quote]](C) is the same as [[Prequote]](C) at the value level (but not at the syntax level).
+  *
+  * Also, autowrapping means that [[Quote]](C) is the same as C, when C is a whitebox constant/value
+  * (which is all values, except for abstractions of non-constants).
+  */
+final case class Quote(name: Code, capabilityRequirements: Code, code: Code) extends Constant
 
 /**
   * The correct alpha-equivariance based on the name is built in.
   */
-final case class Prequote(name: Code, capabilityRequirements: Option[Code], code: Code) extends Constant
+final case class Prequote(name: Code, capabilityRequirements: Code, code: Code) extends Constant
 
 //endregion - Constructor/Destructor Polars
 
@@ -413,7 +433,7 @@ final case class At(key: Code, record: Code) extends Expression
   *
   * Abstraction values can also be though of and used as nominal abstraction values.
   */
-final case class Abstraction(mapping: Code, capabilityRequirements: Option[Code], code: Code) extends Expression
+final case class Abstraction(mapping: Code, capabilityRequirements: Code, code: Code) extends Expression
 
 /**
   * Compiles an xpolar quote to a behavior.
