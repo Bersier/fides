@@ -18,9 +18,6 @@ sealed trait Code
 final case class AbstractCode() extends Polar
 
 // todo add a subtype of Code that includes anything except Escape and Embed?
-//  And what about Quotable/Wrappable?
-//  And what about closed launchable code?
-//  And what about capabilities?
 //  Which of these need corresponding syntactic elements?
 
 //region ==== Abstract Xpolar ====
@@ -290,16 +287,6 @@ final case class Entry(key: Code, value: Code) extends Constant
 
 final case class Document(signatory: Code, contents: Code) extends Constant
 
-/**
-  * The correct alpha-equivariance based on the name is built in.
-  */
-final case class Quote(name: Code, code: Code) extends Constant
-
-/**
-  * The correct alpha-equivariance based on the name is built in.
-  */
-final case class Prequote(name: Code, code: Code) extends Constant
-
 // Variadic structors
 
 final case class Bag(elements: Code) extends Constant
@@ -308,6 +295,16 @@ final case class Bag(elements: Code) extends Constant
   * Records are dictionaries. So they are a special type of bag.
   */
 final case class Record(elements: Code) extends Constant
+
+/**
+  * The correct alpha-equivariance based on the name is built in.
+  */
+final case class Quote(name: Code, capabilityRequirements: Option[Code], code: Code) extends Constant
+
+/**
+  * The correct alpha-equivariance based on the name is built in.
+  */
+final case class Prequote(name: Code, capabilityRequirements: Option[Code], code: Code) extends Constant
 
 //endregion - Constructor/Destructor Polars
 
@@ -416,7 +413,7 @@ final case class At(key: Code, record: Code) extends Expression
   *
   * Abstraction values can also be though of and used as nominal abstraction values.
   */
-final case class Abstraction(mapping: Code, code: Code) extends Expression
+final case class Abstraction(mapping: Code, capabilityRequirements: Option[Code], code: Code) extends Expression
 
 /**
   * Compiles an xpolar quote to a behavior.
