@@ -7,6 +7,9 @@ import util.collections.extensional.{Multiset}
 // This file contains all the Fides syntactic code constructors.
 // -------------------------------------------------------------------------------------------------
 
+/**
+  * Parent trait
+  */
 sealed trait Code
 
 /**
@@ -16,20 +19,46 @@ final case class AbstractCode() extends Polar
 
 // todo add a subtype of Code that includes anything except Escape and Embed?
 //  And what about Quotable/Wrappable?
+//  And what about closed launchable code?
+//  And what about capabilities?
+//  Which of these need corresponding syntactic elements?
 
 //region ==== Abstract Xpolar ====
 
+/**
+  * Xpolars are syntactic entities that represent behaviors.
+  *
+  * Documentation type; not used for any type safety
+  */
 sealed trait Xpolar extends Code
 
 /**
   * Syntactic descriptions of processes
+  *
+  * Documentation type; not used for any type safety
   */
 sealed trait Apolar extends Xpolar
 
+/**
+  * Syntactic descriptions of polars, which represent specialized processes with one distinguished xput,
+  * so that syntactic composition is as easy as for expressions in other languages
+  *
+  * Documentation type; not used for any type safety
+  */
 sealed trait Polar extends Xpolar
 
+/**
+  * Syntactic descriptions of expressions
+  *
+  * Documentation type; not used for any type safety
+  */
 sealed trait Expression extends Polar
 
+/**
+  * Syntactic descriptions of extractors
+  *
+  * Documentation type; not used for any type safety
+  */
 sealed trait Extractor extends Polar
 
 /**
