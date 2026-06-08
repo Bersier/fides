@@ -516,6 +516,10 @@ final val LauncherName = Name(Some(launcherIdentifier))
   */
 final case class AbstractArgs(arguments: Multiset[Code], restElementType: Code) extends Code
 
+final case class AbstractParametrizedArgs(arguments: Multiset[Code], restParameter: Code) extends Code
+// todo ?
+// todo nested type parameter packs?
+
 /**
   * An unordered collection of syntactic elements
   */
@@ -544,6 +548,11 @@ final case class New(names: Code, body: Code) extends Xpolar
 final case class Annotated(quoteName: Code, code: Code, annotation: Code) extends Code
 
 final case class Type(witness: Option[Code]) extends Code
+
+/**
+  * Together with [[New]], allows the expression of parametric types.
+  */
+final case class AbstractTypeParameter(name: Code) extends Code
 
 /**
   * Allows escaping the body of a quote.
