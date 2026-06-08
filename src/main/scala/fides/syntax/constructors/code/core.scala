@@ -63,7 +63,7 @@ sealed trait Neutral extends Expression, Extractor
 /**
   * Neutrals that might be constant.
   */
-sealed trait Constant extends Neutral
+sealed trait Literal extends Neutral
 
 /**
   * Simlar to abstractions, but not values, and generalized to the polar setting.
@@ -252,48 +252,62 @@ final case class Sandboxed(monitor: Code, bridgeNames: Code, contained: Code) ex
 
 // Nullary structors
 
-final case class Pulse() extends Constant
+final case class Pulse() extends Literal
 
 /**
-  * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic Bool constant.
+  * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic Bool literal.
   */
-final case class Bool(representation: Option[Boolean]) extends Constant
+final case class Bool(representation: Option[Boolean]) extends Literal
 
 /**
   * Akin to names in the pi-calculus
   *
-  * Names are mostly used as syntactic entities, in which case they are constants. But names can also be values.
+  * Names are mostly used as syntactic entities, in which case they are hard-coded. But names can also be values.
   *
   * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic name.
   */
-final case class Name(representation: Option[Identifier]) extends Constant
+final case class Name(representation: Option[Identifier]) extends Literal
 
 /**
-  * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic Nat constant.
+  * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic Nat literal.
   */
-final case class Nat(representation: Option[BigInt]) extends Constant
+final case class Nat(representation: Option[BigInt]) extends Literal
 
-final case class Address(name: Code, datatype: Code) extends Constant
+final case class Address(name: Code, datatype: Code) extends Literal
+
+/**
+  * Behavior/Xpolar abstraction literal.
+  *
+  * Kind-of plays 2 roles:
+  *  1. Reifies behaviors
+  *  2. Abstracts connections
+  *
+  * Abstractions are black-box in general, so they cannot be inspected.
+  * However, abstractions do become white-box when the xpolar is a literal.
+  *
+  * Abstraction values can also be thought of and used as nominal abstraction values.
+  */
+final case class Abstraction(mapping: Code, capabilityRequirements: Code, xpolar: Code) extends Literal
 
 // Unary structors
 
 /**
   * @param key a name
   */
-final case class Entry(key: Code, value: Code) extends Constant
+final case class Entry(key: Code, value: Code) extends Literal
 
-final case class Document(signatory: Code, contents: Code) extends Constant
+final case class Document(signatory: Code, contents: Code) extends Literal
 
 // Variadic structors
 
-final case class Bag(elements: Code) extends Constant
+final case class Bag(elements: Code) extends Literal
 
 /**
   * Records are dictionaries. So they are a special type of bag.
   *
   * So [[Record]](C) is the same as [[Bag]](C) at the value level (but not at the syntax level).
   */
-final case class Record(elements: Code) extends Constant
+final case class Record(elements: Code) extends Literal
 
 /**
   * A quote that could be compiled.
@@ -308,7 +322,7 @@ final case class Record(elements: Code) extends Constant
   *
   * If there are no capability requirements, then it's a launchable quote.
   */
-final case class CompilableQuote(name: Code, capabilityRequirements: Code, code: Code) extends Constant
+final case class CompilableQuote(name: Code, capabilityRequirements: Code, code: Code) extends Literal
 
 /**
   * The correct alpha-equivariance based on the name is built in.
@@ -316,15 +330,15 @@ final case class CompilableQuote(name: Code, capabilityRequirements: Code, code:
   * All quotes are also prequotes.
   * So [[Quote]](C) is the same as [[Prequote]](C) at the value level (but not at the syntax level).
   *
-  * Also, autowrapping means that [[Quote]](C) is the same as C, when C is a whitebox constant/value
-  * (which is all values, except for abstractions of non-constants).
+  * Also, autowrapping means that [[Quote]](C) is the same as C, when C is a whitebox literal/value
+  * (which is all values, except for abstractions of non-literals).
   */
-final case class Quote(name: Code, capabilityRequirements: Code, code: Code) extends Constant
+final case class Quote(name: Code, capabilityRequirements: Code, code: Code) extends Literal
 
 /**
   * The correct alpha-equivariance based on the name is built in.
   */
-final case class Prequote(name: Code, capabilityRequirements: Code, code: Code) extends Constant
+final case class Prequote(name: Code, capabilityRequirements: Code, code: Code) extends Literal
 
 //endregion - Constructor/Destructor Polars
 
@@ -401,6 +415,13 @@ final case class Flatten(bags: Code) extends Neutral
   */
 final case class Zip(pieces: Code) extends Neutral
 
+/**
+  * Compiles an xpolar quote to an abstraction.
+  *
+  * It can only be used as an extractor for value abstractions, in which case it behaves like concretion.
+  */
+final case class Compile(mapping: Code, xpolarQuote: Code) extends Neutral
+
 //endregion - Other Reversible Polars
 
 //region ==== Other Expression Polars ====
@@ -424,21 +445,6 @@ final case class AsName(value: Code) extends Expression
 final case class Push(bag: Code, transformation: Code) extends Expression
 
 final case class At(key: Code, record: Code) extends Expression
-
-/**
-  * Behavior/Xpolar abstraction literal.
-  *
-  * Abstractions are black-box, so they cannot be inspected. Note however that if the xpolar is a constant,
-  * then that constant will be returned, which itself can be inspected.
-  *
-  * Abstraction values can also be though of and used as nominal abstraction values.
-  */
-final case class Abstraction(mapping: Code, capabilityRequirements: Code, code: Code) extends Expression
-
-/**
-  * Compiles an xpolar quote to a behavior.
-  */
-final case class Compile(mapping: Code, xpolarQuote: Code) extends Expression
 
 /**
   * Applies the given transformation to each descendent of the root of the given quote whose type is compatible,
@@ -508,7 +514,7 @@ final val LauncherName = Name(Some(launcherIdentifier))
 /**
   * Concrete syntactic element to express a generic bag.
   */
-final case class AbstractArgs(arguments: Multiset[Code], restElementType: Code) extends Constant
+final case class AbstractArgs(arguments: Multiset[Code], restElementType: Code) extends Code
 
 /**
   * An unordered collection of syntactic elements
