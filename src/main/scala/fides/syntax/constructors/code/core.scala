@@ -514,11 +514,10 @@ final val LauncherName = Name(Some(launcherIdentifier))
 /**
   * Concrete syntactic element to express a generic bag.
   */
-final case class AbstractArgs(arguments: Multiset[Code], restElementType: Code) extends Code
+final case class AbstractArgs(
+  arguments: Multiset[Code], restParameter: Option[Code], restElementType: Option[Code],
+) extends Code
 
-final case class AbstractParametrizedArgs(arguments: Multiset[Code], restParameter: Code) extends Code
-// todo ?
-// todo nested type parameter packs?
 
 /**
   * An unordered collection of syntactic elements
@@ -553,6 +552,14 @@ final case class Type(witness: Option[Code]) extends Code
   * Together with [[New]], allows the expression of parametric types.
   */
 final case class AbstractTypeParameter(name: Code) extends Code
+
+// todo
+
+final case class ApplyType(typeConstructor: Code) extends Code
+
+final case class PushType(argParameter: Code, transformation: Code) extends Code
+
+final case class FlattenType(nestedArgParameter: Code) extends Code
 
 /**
   * Allows escaping the body of a quote.
