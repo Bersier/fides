@@ -55,17 +55,17 @@ sealed trait Expression extends Polar
   */
 sealed trait Extractor extends Polar
 
+sealed trait Type extends Extractor // todo need something like a variance for Type and Literal
+
 /**
   * Polars that are not necessarily restricted in terms of whether they can be used as expressions and extractors.
   */
 sealed trait Neutral extends Expression, Extractor
 
-sealed trait Type extends Neutral
-
 /**
   * Neutrals that might be constant.
   */
-sealed trait Literal extends Type
+sealed trait Literal extends Neutral, Type
 
 /**
   * Simlar to abstractions, but not values, and generalized to the polar setting.
@@ -128,9 +128,9 @@ final case class Forward(inp: Code, out: Code) extends Apolar
   */
 final case class Backward(inp: Code, out: Code) extends Bipolar
 
-final case class Apply(component: Code, input: Code) extends Type
+final case class Apply(component: Code, input: Code) extends Neutral, Type
 
-final case class Deply(component: Code, input: Code) extends Type
+final case class Deply(component: Code, input: Code) extends Neutral, Type
 
 //endregion - Xpolar Converters
 
@@ -232,12 +232,16 @@ final case class Sandboxed(monitor: Code, bridgeNames: Code, contained: Code) ex
 
 final case class Pulse() extends Literal
 
+final case class BoolType() extends Type
+
 /**
   * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic Bool literal.
   */
-final case class Bool(representation: Option[Boolean]) extends Literal
-// todo Bool(None) should be separate, as it's not a Neutral
+final case class Bool(representation: Boolean) extends Literal
+
 // todo separate the three types of types: types, typeEscapes, and xpolar/abstraction types
+
+final case class NameType() extends Type
 
 /**
   * Akin to names in the pi-calculus
@@ -246,12 +250,14 @@ final case class Bool(representation: Option[Boolean]) extends Literal
   *
   * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic name.
   */
-final case class Name(representation: Option[Identifier]) extends Literal
+final case class Name(representation: Identifier) extends Literal
+
+final case class NatType() extends Type
 
 /**
   * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic Nat literal.
   */
-final case class Nat(representation: Option[BigInt]) extends Literal
+final case class Nat(representation: BigInt) extends Literal
 
 final case class Address(name: Code, datatype: Code) extends Literal
 
@@ -392,14 +398,14 @@ final case class Collect(channel: Code, size: Code) extends Neutral
 
 final case class Negate(bool: Code) extends Neutral
 
-final case class At(key: Code, record: Code) extends Type
+final case class At(key: Code, record: Code) extends Neutral, Type
 
-final case class Flatten(bags: Code) extends Type
+final case class Flatten(bags: Code) extends Neutral, Type
 
 /**
   * @param transformation a bipolar
   */
-final case class Push(bag: Code, transformation: Code) extends Type
+final case class Push(bag: Code, transformation: Code) extends Neutral, Type
 
 /**
   * Applies the given transformation to each descendent of the root of the given quote whose type is compatible,
@@ -415,7 +421,7 @@ final case class Update(quote: Code, transformation: Code) extends Neutral
   *
   * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Bag]].
   */
-final case class Zip(pieces: Code) extends Type
+final case class Zip(pieces: Code) extends Neutral, Type
 
 /**
   * Compiles an xpolar quote to an abstraction.
@@ -498,7 +504,7 @@ final case class Launch(mapping: Code, certificate: Code) extends Extractor
 
 //endregion - Other Extractor Polars
 
-final val LauncherName = Name(Some(launcherIdentifier))
+final val LauncherName = Name(launcherIdentifier)
 
 /**
   * Akin to `new` in the pi-calculus
@@ -535,6 +541,8 @@ final case class AbstractParameter(name: Code) extends Type // todo make it a re
   */
 final case class Escape(name: Code, quote: Code) extends Code
 
+final case class EscapeCategory(name: Code, syntacticType: Code) extends Code
+
 final case class Embed(mapping: Code, behavior: Code) extends Code
 
 sealed trait Varianced extends Code
@@ -550,3 +558,5 @@ final case class Contravariant(tipe: Code) extends Varianced
 final case class Invariant(tipe: Code) extends Varianced
 
 final case class Ambivariant(tipe: Code) extends Varianced
+
+final case class Union(types: Code) extends Type
