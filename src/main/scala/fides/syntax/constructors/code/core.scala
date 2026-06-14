@@ -60,10 +60,12 @@ sealed trait Extractor extends Polar
   */
 sealed trait Neutral extends Expression, Extractor
 
+sealed trait Type extends Neutral
+
 /**
   * Neutrals that might be constant.
   */
-sealed trait Literal extends Neutral
+sealed trait Literal extends Type
 
 /**
   * Simlar to abstractions, but not values, and generalized to the polar setting.
@@ -78,36 +80,12 @@ final case class AbstractXpolar() extends Polar
 /**
   * Concrete syntactic element to express a generic polar.
   */
-final case class AbstractPolar() extends Polar
+final case class AbstractPolar(variancedDatatype: Code) extends Polar
 
 /**
-  * Concrete syntactic element to express a generic expression polar.
-  *
-  * @param datatype of the polar
+  * @param dataType should be a varianced of an entry of a negative and a positive type
   */
-final case class AbstractExpression(datatype: Code) extends Expression
-
-/**
-  * Concrete syntactic element to express a generic extractor polar.
-  *
-  * @param datatype of the polar
-  */
-final case class AbstractExtractor(datatype: Code) extends Extractor
-
-/**
-  * Concrete syntactic element to express a generic reversible polar.
-  *
-  * @param datatype of the polar
-  */
-final case class AbstractReversiblePolar(datatype: Code) extends Neutral
-
-final case class AbstractBipolar() extends Bipolar
-
-final case class AbstractExpressionBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
-
-final case class AbstractExtractorBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
-
-final case class AbstractReversibleBipolar(inputDatatype: Code, outputDatatype: Code) extends Bipolar
+final case class AbstractBipolar(dataType: Code) extends Bipolar
 
 //endregion - Abstract Xpolar
 
@@ -131,7 +109,7 @@ final case class CellRef(name: Code, datatype: Code) extends LocRef
 
 //region ==== Xpolar Converters ====
 
-final case class BlockExpr(apolarBlock: Code, HeadExpresssion: Code) extends Expression
+final case class BlockExpr(apolarBlock: Code, HeadExpression: Code) extends Expression
 
 final case class BlockXctr(apolarBlock: Code, HeadExtractor: Code) extends Extractor
 
@@ -150,9 +128,9 @@ final case class Forward(inp: Code, out: Code) extends Apolar
   */
 final case class Backward(inp: Code, out: Code) extends Bipolar
 
-final case class Apply(component: Code, input: Code) extends Neutral
+final case class Apply(component: Code, input: Code) extends Type
 
-final case class Deply(component: Code, input: Code) extends Neutral
+final case class Deply(component: Code, input: Code) extends Type
 
 //endregion - Xpolar Converters
 
@@ -258,6 +236,8 @@ final case class Pulse() extends Literal
   * When [[representation]] is [[None]] then this is a concrete syntactic element to express a generic Bool literal.
   */
 final case class Bool(representation: Option[Boolean]) extends Literal
+// todo Bool(None) should be separate, as it's not a Neutral
+// todo separate the three types of types: types, typeEscapes, and xpolar/abstraction types
 
 /**
   * Akin to names in the pi-calculus
@@ -291,16 +271,22 @@ final case class Abstraction(mapping: Code, capabilityRequirements: Code, xpolar
 
 // Unary structors
 
-/**
-  * @param key a name
-  */
 final case class Entry(key: Code, value: Code) extends Literal
 
 final case class Document(signatory: Code, contents: Code) extends Literal
 
 // Variadic structors
 
-final case class Bag(elements: Code) extends Literal
+/**
+  * Concrete syntactic element to express a generic bag.
+  */
+final case class AbstractBag(arguments: Multiset[Code], restElementType: Code) extends Type
+
+/**
+  * When the elements are not all polars, then a bag can still serve a syntactic purpose,
+  * namely of representing a multiset (i.e. unordered collection) of syntactic entities.
+  */
+final case class Bag(elements: Multiset[Code]) extends Literal
 
 /**
   * Records are dictionaries. So they are a special type of bag.
@@ -406,14 +392,30 @@ final case class Collect(channel: Code, size: Code) extends Neutral
 
 final case class Negate(bool: Code) extends Neutral
 
-final case class Flatten(bags: Code) extends Neutral
+final case class At(key: Code, record: Code) extends Type
+
+final case class Flatten(bags: Code) extends Type
 
 /**
-  * As an Expr, converts a [[Bag]] of code quotations to a [[Quoted]] of [[Args]] of all the pieces of code.
-  *
-  * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Args]].
+  * @param transformation a bipolar
   */
-final case class Zip(pieces: Code) extends Neutral
+final case class Push(bag: Code, transformation: Code) extends Type
+
+/**
+  * Applies the given transformation to each descendent of the root of the given quote whose type is compatible,
+  * and outputs the updated quote.
+  *
+  * @param quote to be equivariantly transformed
+  * @param transformation to be applied to compatible descendents of the quote root node
+  */
+final case class Update(quote: Code, transformation: Code) extends Neutral
+
+/**
+  * As an Expr, converts a [[Bag]] of code quotations to a [[Quoted]] of [[Bag]] of all the pieces of code.
+  *
+  * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Bag]].
+  */
+final case class Zip(pieces: Code) extends Type
 
 /**
   * Compiles an xpolar quote to an abstraction.
@@ -442,19 +444,6 @@ final case class Multiply(factors: Code) extends Expression
   */
 final case class AsName(value: Code) extends Expression
 
-final case class Push(bag: Code, transformation: Code) extends Expression
-
-final case class At(key: Code, record: Code) extends Expression
-
-/**
-  * Applies the given transformation to each descendent of the root of the given quote whose type is compatible,
-  * and outputs the updated quote.
-  *
-  * @param quote to be equivariantly transformed
-  * @param transformation to be applied to compatible descendents of the quote root node
-  */
-final case class Update(quote: Code, transformation: Code) extends Expression
-
 /**
   * Outputs the children of the root of the given quote, as a bag.
   */
@@ -474,7 +463,7 @@ final case class Validate(prequote: Code) extends Expression
   * [[Spread]](`<no-recipient>`) is equivalent to Ignore/Sink/Forget/Discard/Drop.
   *
   * <b>Syntax</b>
-  *  - [[recipients]]: Args[Xctr[T]]
+  *  - [[recipients]]: Bag[Xctr[T]]
   *  - [[this]]: Xctr[T]
   */
 final case class Spread(recipients: Code) extends Extractor
@@ -512,16 +501,6 @@ final case class Launch(mapping: Code, certificate: Code) extends Extractor
 final val LauncherName = Name(Some(launcherIdentifier))
 
 /**
-  * Concrete syntactic element to express a generic bag.
-  */
-final case class AbstractArgs(arguments: Multiset[Code], restElementType: Code) extends Code
-
-/**
-  * An unordered collection of syntactic elements
-  */
-final case class Args(arguments: Multiset[Code]) extends Code
-
-/**
   * Akin to `new` in the pi-calculus
   *
   * Behaves like a (biased) nominal abstraction in quotes, so pattern matching on it respects alpha-equivariance
@@ -543,20 +522,10 @@ final case class New(names: Code, body: Code) extends Xpolar
   */
 final case class Annotated(quoteName: Code, code: Code, annotation: Code) extends Code
 
-final case class Type(witness: Option[Code]) extends Code
-
 /**
   * Together with [[New]], allows the expression of parametric types.
   */
-final case class AbstractParameter(name: Code) extends Code
-
-// todo
-
-final case class ApplyType(typeConstructor: Code) extends Code
-
-final case class PushType(argParameter: Code, transformation: Code) extends Code
-
-final case class FlattenType(nestedArgParameter: Code) extends Code
+final case class AbstractParameter(name: Code) extends Type // todo make it a ref?
 
 /**
   * Allows escaping the body of a quote.
@@ -567,3 +536,17 @@ final case class FlattenType(nestedArgParameter: Code) extends Code
 final case class Escape(name: Code, quote: Code) extends Code
 
 final case class Embed(mapping: Code, behavior: Code) extends Code
+
+sealed trait Varianced extends Code
+
+final case class AbstractVarianced(tipe: Code) extends Varianced
+
+final case class Bivariant() extends Varianced
+
+final case class Covariant(tipe: Code) extends Varianced
+
+final case class Contravariant(tipe: Code) extends Varianced
+
+final case class Invariant(tipe: Code) extends Varianced
+
+final case class Ambivariant(tipe: Code) extends Varianced
