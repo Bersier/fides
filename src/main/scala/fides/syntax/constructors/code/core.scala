@@ -83,7 +83,7 @@ final case class AbstractXpolar() extends Polar
 final case class AbstractPolar(tipe: Code) extends Polar
 
 /**
-  * @param tipe should be a Polarized of a BipolarType
+  * @param tipe should be a Polarized of a Backward of types
   */
 final case class AbstractBipolar(tipe: Code) extends Bipolar
 
@@ -576,5 +576,3 @@ object Polarized:
 end Polarized
 
 final case class Union(types: Code) extends Datatype
-
-final case class BipolarType(inp: Code, out: Code) extends Code // todo?
