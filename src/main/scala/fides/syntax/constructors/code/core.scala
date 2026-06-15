@@ -55,7 +55,7 @@ sealed trait Expression extends Polar
   */
 sealed trait Extractor extends Polar
 
-sealed trait Datatype extends Extractor // todo need something like a variance for Type and Literal
+sealed trait Datatype extends Extractor
 
 /**
   * Polars that are not necessarily restricted in terms of whether they can be used as expressions and extractors.
@@ -80,12 +80,12 @@ final case class AbstractXpolar() extends Polar
 /**
   * Concrete syntactic element to express a generic polar.
   */
-final case class AbstractPolar(variancedDatatype: Code) extends Polar
+final case class AbstractPolar(tipe: Code) extends Polar
 
 /**
-  * @param dataType should be a varianced of an entry of a negative and a positive type
+  * @param tipe should be a Polarized of a BipolarType
   */
-final case class AbstractBipolar(dataType: Code) extends Bipolar
+final case class AbstractBipolar(tipe: Code) extends Bipolar
 
 //endregion - Abstract Xpolar
 
@@ -239,8 +239,6 @@ final case class AbstractBool() extends Datatype
   */
 final case class Bool(representation: Boolean) extends Literal
 
-// todo separate the three types of types: types, typeEscapes, and xpolar/abstraction types
-
 final case class AbstractName() extends Datatype
 
 /**
@@ -277,6 +275,9 @@ final case class Abstraction(mapping: Code, capabilityRequirements: Code, xpolar
 
 // Unary structors
 
+/**
+  * @param key a name, provided statically; cannot be an expression or an extractor
+  */
 final case class Entry(key: Code, value: Code) extends Literal
 
 final case class Document(signatory: Code, contents: Code) extends Literal
@@ -545,18 +546,35 @@ final case class Wildcard(name: Code, grammartype: Code) extends Code
 
 final case class Embed(mapping: Code, behavior: Code) extends Code
 
-sealed trait Varianced extends Code
+sealed trait Polarized extends Code
+object Polarized:
 
-final case class AbstractVarianced(tipe: Code) extends Varianced
+  final case class Abstract() extends Polarized
 
-final case class Bivariant() extends Varianced
+  final case class Unknown () extends Polarized
 
-final case class Covariant(tipe: Code) extends Varianced
+  /**
+    * Aka Expression
+    */
+  final case class Positive(tipe: Code) extends Polarized
 
-final case class Contravariant(tipe: Code) extends Varianced
+  /**
+    * Aka Extractor
+    */
+  final case class Negative(tipe: Code) extends Polarized
 
-final case class Invariant(tipe: Code) extends Varianced
+  final case class Neutral (tipe: Code) extends Polarized
 
-final case class Ambivariant(tipe: Code) extends Varianced
+  final case class Datatype(tipe: Code) extends Polarized
+
+  final case class Literal (tipe: Code) extends Polarized
+
+  /**
+    * For all t that are subtypes of T, Literal(t) is a subtype of Interval(T).
+    */
+  final case class Interval(tipe: Code) extends Polarized
+end Polarized
 
 final case class Union(types: Code) extends Datatype
+
+final case class BipolarType(inp: Code, out: Code) extends Code // todo?
