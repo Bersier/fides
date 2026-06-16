@@ -272,6 +272,7 @@ final case class Address(name: Code, datatype: Code) extends Literal
   * Abstraction values can also be thought of and used as nominal abstraction values.
   */
 final case class Abstraction(mapping: Code, capabilityRequirements: Code, xpolar: Code) extends Literal
+// todo is a reversible mapping needed for consistency?
 
 // Unary structors
 
@@ -308,10 +309,7 @@ final case class Record(elements: Code) extends Literal
   * Typewise, it's still a quote.
   * So [[CompilableQuote]](C) is the same as [[Quote]](C) at the value level (but not at the syntax level).
   *
-  * At the top level, it should
-  *  1. have no unbound escapes
-  *  2. follow the usual syntax (unlike extractor quotes)
-  *  3. have no abstract syntactic constructors
+  * At the top level, it should have no unbound escapes or wildcards.
   *
   * If there are no capability requirements, then it's a launchable quote.
   */
