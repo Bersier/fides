@@ -5,6 +5,8 @@ import util.collections.extensional.{Multiset}
 
 // -------------------------------------------------------------------------------------------------
 // This file contains all the Fides syntactic code constructors.
+//
+// Except for Code, all the traits in this file exist only for documentation.
 // -------------------------------------------------------------------------------------------------
 
 /**
@@ -271,8 +273,7 @@ final case class Address(name: Code, datatype: Code) extends Literal
   *
   * Abstraction values can also be thought of and used as nominal abstraction values.
   */
-final case class Abstraction(mapping: Code, capabilityRequirements: Code, xpolar: Code) extends Literal
-// todo is a reversible mapping needed for consistency?
+final case class Abstraction(renaming: Code, capabilityRequirements: Code, xpolar: Code) extends Literal
 
 // Unary structors
 
@@ -288,7 +289,21 @@ final case class Document(signatory: Code, contents: Code) extends Literal
 /**
   * Concrete syntactic element to express a generic bag.
   */
-final case class AbstractBag(arguments: Multiset[Code], restElementType: Code) extends Datatype
+final case class AbstractBag(knownElements: Code, restElementType: Code) extends Datatype
+
+/**
+  * Concrete syntactic element to express a generic record.
+  *
+  * Records are dictionaries. So they are a special type of bag.
+  */
+final case class AbstractRecord(knownElements: Code, restValueType: Code) extends Datatype
+
+/**
+  * Concrete syntactic element to express a generic renaming.
+  *
+  * Renamings are bijections from a set of names to another. So they are a special type of record.
+  */
+final case class AbstractRenaming(knownElements: Code) extends Datatype
 
 /**
   * When the elements are not all polars, then a bag can still serve a syntactic purpose,
@@ -427,7 +442,7 @@ final case class Zip(pieces: Code) extends Neutral, Datatype
   *
   * It can only be used as an extractor for value abstractions, in which case it behaves like concretion.
   */
-final case class Compile(mapping: Code, xpolarQuote: Code) extends Neutral
+final case class Compile(renaming: Code, xpolarQuote: Code) extends Neutral
 
 //endregion - Other Reversible Polars
 
@@ -444,8 +459,8 @@ final case class Sum(terms: Code) extends Expression
 final case class Multiply(factors: Code) extends Expression
 
 /**
-  * Deterministic collision-resistant (i.e. effectively injective) mapping
-  * from any value to a name (represented as a name quote).
+  * Deterministic collision-resistant (i.e. effectively injective) function
+  * from any value to a name.
   */
 final case class AsName(value: Code) extends Expression
 
@@ -492,14 +507,14 @@ final case class Inspect(signature: Code, payload: Code) extends Extractor
 /**
   * Launches the given quote (wrapped in an abstraction) as a new process,
   * and outputs a signed value (aka document) of the code, confirming the launch,
-  * as well as a mapping for how the abstraction got concretized.
+  * as well as a renaminrenaming for how the abstraction got concretized.
   *
   * <b>Syntax</b>
-  *  - [[mapping]]: Xctr[Record[Quote[Name]]]
+  *  - [[renaming]]: Xctr[Record[Quote[Name]]]
   *  - [[certificate]]: Xctr[Document[LauncherName, Quote]]
   *  - [[this]]: Xctr[Abstraction[?, Quote]]
   */
-final case class Launch(mapping: Code, certificate: Code) extends Extractor
+final case class Launch(renaming: Code, certificate: Code) extends Extractor
 
 //endregion - Other Extractor Polars
 
