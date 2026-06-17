@@ -422,12 +422,15 @@ final case class Negate(bool: Code) extends Neutral
 
 final case class At(key: Code, record: Code) extends Neutral, Datatype
 
-final case class Flatten(refinement: Bag.Refinement, bags: Code) extends Neutral, Datatype
+/**
+  * @param refinement needed to express certain types
+  */
+final case class Flatten(refinement: Code, bags: Code) extends Neutral, Datatype
 
 /**
   * @param transformation a bipolar
   */
-final case class Push(refinement: Bag.Refinement, bag: Code, transformation: Code) extends Neutral, Datatype
+final case class Push(refinement: Code, bag: Code, transformation: Code) extends Neutral, Datatype
 
 /**
   * Applies the given transformation to each descendent of the root of the given quote whose type is compatible,
