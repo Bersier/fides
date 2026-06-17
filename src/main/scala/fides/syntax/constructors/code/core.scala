@@ -155,6 +155,8 @@ final case class AbstractApolar() extends Apolar
   */
 final case class Cell(name: Code, contents: Code) extends Apolar
 
+final case class EmptyCell(name: Code) extends Apolar
+
 final case class Atomic(body: Code) extends Apolar
 
 /**
@@ -287,48 +289,37 @@ final case class Document(signatory: Code, contents: Code) extends Literal
 // Variadic structors
 
 /**
-  * Concrete syntactic element to express a generic bag.
+  * Concrete syntactic element to express a generic bag with an element type upper bound.
   */
-final case class AbstractBag(knownElements: Code, restElementType: Code) extends Datatype
-
-/**
-  * Concrete syntactic element to express a generic record.
-  *
-  * Records are dictionaries. So they are a special type of bag.
-  */
-final case class AbstractRecord(knownElements: Code, restValueType: Code) extends Datatype
-
-/**
-  * Concrete syntactic element to express a generic renaming.
-  *
-  * Renamings are bijections from a set of names to another. So they are a special type of record.
-  */
-final case class AbstractRenaming(knownElements: Code) extends Datatype
+final case class AbstractBag(refinement: Code, elementType: Code) extends Datatype
 
 /**
   * When the elements are not all polars, then a bag can still serve a syntactic purpose,
   * namely of representing a multiset (i.e. unordered collection) of syntactic entities.
+  *
+  * If [[refinement]] is [[Bag.Refinement.Any]], but it's actually a record, then it's not a [[Literal]].
+  * But it could still be a [[Neutral]] and a [[Datatype]]. Similarly for [[Bag.Refinement.Record]].
   */
-final case class Bag(elements: Multiset[Code]) extends Literal
+final case class Bag(refinement: Code, elements: Multiset[Code]) extends Literal
 
-/**
-  * Records are dictionaries. So they are a special type of bag.
-  *
-  * So [[Record]](C) is the same as [[Bag]](C) at the value level (but not at the syntax level).
-  */
-final case class Record(elements: Code) extends Literal
+object Bag:
 
-/**
-  * A quote that could be compiled.
-  *
-  * Typewise, it's still a quote.
-  * So [[CompilableQuote]](C) is the same as [[Quote]](C) at the value level (but not at the syntax level).
-  *
-  * At the top level, it should have no unbound escapes or wildcards.
-  *
-  * If there are no capability requirements, then it's a launchable quote.
-  */
-final case class CompilableQuote(name: Code, capabilityRequirements: Code, code: Code) extends Literal
+  sealed trait Refinement extends Code
+
+  final case class Any() extends Refinement
+  // this is not reduced... Datatype?
+
+  /**
+    * Records are dictionaries. So they are a special type of bag.
+    */
+  final case class Record() extends Refinement
+
+  /**
+    * enamings are bijections from a set of names to another. So they are a special type of record.
+    */
+  final case class Renaming() extends Refinement
+
+end Bag
 
 /**
   * The correct alpha-equivariance based on the name is built in.
@@ -339,12 +330,29 @@ final case class CompilableQuote(name: Code, capabilityRequirements: Code, code:
   * Also, autowrapping means that [[Quote]](C) is the same as C, when C is a whitebox literal/value
   * (which is all values, except for abstractions of non-literals).
   */
-final case class Quote(name: Code, capabilityRequirements: Code, code: Code) extends Literal
+final case class Quote(name: Code, validity: Code, capabilityRequirements: Code, code: Code) extends Literal
 
-/**
-  * The correct alpha-equivariance based on the name is built in.
-  */
-final case class Prequote(name: Code, capabilityRequirements: Code, code: Code) extends Literal
+object Quote:
+  sealed trait Validity extends Code
+
+  /**
+    * Validity of any quote. It should not be provably ill formed.
+    */
+  final case class Any() extends Validity
+
+  /**
+    * Validity of a quote that is well formed in some sense, though not necessarily compilable.
+    */
+  final case class Correct() extends Validity
+
+  /**
+    * Validity of a quote that could be compiled. It should be provably well formed.
+    * Moreover, at the top level, it should have no unbound escapes or wildcards.
+    *
+    * If there are no capability requirements, then it's a launchable quote.
+    */
+  final case class Compilable() extends Validity
+end Quote
 
 //endregion - Constructor/Destructor Polars
 
@@ -414,12 +422,12 @@ final case class Negate(bool: Code) extends Neutral
 
 final case class At(key: Code, record: Code) extends Neutral, Datatype
 
-final case class Flatten(bags: Code) extends Neutral, Datatype
+final case class Flatten(refinement: Bag.Refinement, bags: Code) extends Neutral, Datatype
 
 /**
   * @param transformation a bipolar
   */
-final case class Push(bag: Code, transformation: Code) extends Neutral, Datatype
+final case class Push(refinement: Bag.Refinement, bag: Code, transformation: Code) extends Neutral, Datatype
 
 /**
   * Applies the given transformation to each descendent of the root of the given quote whose type is compatible,
@@ -507,7 +515,7 @@ final case class Inspect(signature: Code, payload: Code) extends Extractor
 /**
   * Launches the given quote (wrapped in an abstraction) as a new process,
   * and outputs a signed value (aka document) of the code, confirming the launch,
-  * as well as a renaminrenaming for how the abstraction got concretized.
+  * as well as a renaming for how the abstraction got concretized.
   *
   * <b>Syntax</b>
   *  - [[renaming]]: Xctr[Record[Quote[Name]]]
