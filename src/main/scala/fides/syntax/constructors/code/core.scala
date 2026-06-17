@@ -93,19 +93,17 @@ final case class AbstractBipolar(tipe: Code) extends Bipolar
 
 //region ==== Location References ====
 
-sealed trait LocRef extends Code
+final case class LocRef(name: Code, loctype: Code, datatype: Code) extends Code
 
-final case class AbstractLocRef(name: Code, datatype: Code) extends LocRef
+object Loc:
+  sealed trait Type extends Code
 
-/**
-  * Channel location reference
-  */
-final case class ChanRef(name: Code, datatype: Code) extends LocRef
+  final case class Abstract() extends Type
 
-/**
-  * Cell location reference
-  */
-final case class CellRef(name: Code, datatype: Code) extends LocRef
+  final case class Channel() extends Type
+
+  final case class Cell() extends Type
+end Loc
 
 //endregion - Location References
 
@@ -152,10 +150,11 @@ final case class AbstractApolar() extends Apolar
   * <b>Semantics</b>
   * @param name used to refer to this cell
   * @param contents of this cell
+  * @param datatype of this cell; could be an Interval when used in a [[Wildcard]]
   */
-final case class Cell(name: Code, contents: Code) extends Apolar
+final case class Cell(name: Code, contents: Code, datatype: Code) extends Apolar
 
-final case class EmptyCell(name: Code) extends Apolar
+final case class EmptyCell(name: Code, datatype: Code) extends Apolar
 
 final case class Atomic(body: Code) extends Apolar
 
@@ -341,17 +340,14 @@ object Quote:
   final case class Any() extends Validity
 
   /**
-    * Validity of a quote that is well formed in some sense, though not necessarily compilable.
-    */
-  final case class Correct() extends Validity
-
-  /**
-    * Validity of a quote that could be compiled. It should be provably well formed.
-    * Moreover, at the top level, it should have no unbound escapes or wildcards.
+    * Validity of a quote that is provably well formed in some sense.
     *
-    * If there are no capability requirements, then it's a launchable quote.
+    * If there are no top-level unbound escapes or wildcards -
+    * i.e. it doesn't require and quote capability - then it could be compiled.
+    *
+    * If there are no capability requirements at all, then it's a launchable quote.
     */
-  final case class Compilable() extends Validity
+  final case class Valid() extends Validity
 end Quote
 
 //endregion - Constructor/Destructor Polars
@@ -480,8 +476,6 @@ final case class AsName(value: Code) extends Expression
   */
 final case class Children(quote: Code) extends Expression
 
-final case class Validate(prequote: Code) extends Expression
-
 //endregion - Other Expression Polars
 
 //region ==== Other Extractor Polars ====
@@ -561,12 +555,12 @@ final case class AbstractParameter(name: Code) extends Datatype // todo make it 
 /**
   * Allows escaping the body of a quote.
   *
-  * @param name of the quote to escape
-  * @param quote to insert
+  * @param quoteName of the quote to escape
+  * @param quote to insert or extract
   */
-final case class Escape(name: Code, quote: Code) extends Code
+final case class Escape(quoteName: Code, quote: Code) extends Code
 
-final case class Wildcard(name: Code, grammartype: Code) extends Code
+final case class Wildcard(quoteName: Code, grammartype: Code) extends Code
 
 final case class Embed(mapping: Code, behavior: Code) extends Code
 
