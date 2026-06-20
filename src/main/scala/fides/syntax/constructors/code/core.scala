@@ -91,22 +91,6 @@ final case class AbstractBipolar(tipe: Code) extends Bipolar
 
 //endregion - Abstract Xpolar
 
-//region ==== Location References ====
-
-final case class LocRef(name: Code, loctype: Code, datatype: Code) extends Code
-
-object Loc:
-  sealed trait Type extends Code
-
-  final case class Abstract() extends Type
-
-  final case class Channel() extends Type
-
-  final case class Cell() extends Type
-end Loc
-
-//endregion - Location References
-
 //region ==== Xpolar Converters ====
 
 final case class BlockExpr(apolarBlock: Code, HeadExpression: Code) extends Expression
@@ -138,6 +122,12 @@ final case class Deply(component: Code, input: Code) extends Neutral, Datatype
 
 final case class AbstractApolar() extends Apolar
 
+sealed trait Location extends Apolar
+
+final case class Constant(name: Code, value: Code) extends Location
+
+final case class Channel(name: Code, datatype: Code) extends Location
+
 /**
   * <h2>Memory cell process</h2>
   * Stores a single value. Can be updated, and can be used for synchronization.
@@ -152,9 +142,9 @@ final case class AbstractApolar() extends Apolar
   * @param contents of this cell
   * @param datatype of this cell; could be an Interval when used in a [[Wildcard]]
   */
-final case class Cell(name: Code, contents: Code, datatype: Code) extends Apolar
+final case class Cell(name: Code, contents: Code, datatype: Code) extends Location
 
-final case class EmptyCell(name: Code, datatype: Code) extends Apolar
+final case class EmptyCell(name: Code, datatype: Code) extends Location
 
 final case class Atomic(body: Code) extends Apolar
 
@@ -360,13 +350,15 @@ end Quote
   * As an extractor, receives a value from a fixed location.
   *
   * <b>Syntax</b>
-  *  - [[reference]]: LocRef
+  *  - [[name]]: Name
+  *  - [[datatype]]: Datatype
   *  - [[this]]: Polar
   *
   * <b>Semantics</b>
-  * @param reference to which to connect for a one-time read or write
+  * @param name of the location to which to connect for a one-time read or write
+  * @param datatype of the message
   */
-final case class Com(reference: Code) extends Neutral
+final case class Com(name: Code, datatype: Code) extends Neutral
 
 /**
   * As an expression, forwards one of the inputs.
@@ -528,7 +520,7 @@ final val LauncherName = Name(launcherIdentifier)
 /**
   * Akin to `new` in the pi-calculus
   *
-  * Behaves like a (biased) nominal abstraction in quotes, so pattern matching on it respects alpha-equivariance
+  * Behaves like a nominal abstraction in quotes, so pattern matching on it respects alpha-equivariance
   *
   * @param names that are new within the scope
   * @param body the body of the scope, in which the names are available
