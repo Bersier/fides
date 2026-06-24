@@ -214,8 +214,6 @@ final case class Sandboxed(monitor: Code, bridgeNames: Code, contained: Code) ex
 
 //region ==== Constructor/Destructor Polars ====
 
-// Nullary structors
-
 final case class Pulse() extends Literal
 
 final case class AbstractBool() extends Datatype
@@ -256,16 +254,12 @@ final case class AbstractionReference(
   name: Code, renaming: Code, capabilityRequirements: Code, xpolarType: Code,
 ) extends Literal
 
-// Unary structors
-
 /**
   * @param key a name, provided statically; cannot be an expression or an extractor
   */
 final case class Entry(key: Code, value: Code) extends Literal
 
 final case class Document(signatory: Code, contents: Code) extends Literal
-
-// Variadic structors
 
 /**
   * Concrete syntactic element to express a generic bag with an element type upper bound.
