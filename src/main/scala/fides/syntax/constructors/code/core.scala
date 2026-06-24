@@ -144,25 +144,18 @@ final case class Channel(name: Code, datatype: Code) extends Location
   */
 final case class Cell(name: Code, contents: Code, datatype: Code) extends Location
 
+/**
+  * Behavior/Xpolar abstraction
+  *
+  * Kind-of plays 2 roles:
+  *  1. Packages a behavior
+  *  2. Abstracts connections
+  */
+final case class Abstraction(name: Code, renaming: Code, capabilityRequirements: Code, xpolar: Code) extends Location
+
 final case class EmptyCell(name: Code, datatype: Code) extends Location
 
 final case class Atomic(body: Code) extends Apolar
-
-/**
-  * Sends a value to an address.
-  *
-  * The value is guaranteed to arrive eventually, assuming someone listens eventually.
-  * Sending is also guaranteed to be fully private.
-  *
-  * A message cannot be captured by any Inp that is on hold. If there is a possibility for an Inp to capture the
-  * message in the future, it should not disappear. In other words, a message waits until an Inp is ready to receive it.
-  * On the other hand, if it is known that there will never be any Inp for the channel, the message should eventually
-  * get garbage-collected.
-  *
-  * @param contents the value to be sent
-  * @param recipient address of the recipient
-  */
-final case class Send(contents: Code, recipient: Code) extends Apolar
 
 final case class DivMod(dividend: Code, divisor: Code, quotient: Code, remainder: Code) extends Apolar
 
@@ -250,21 +243,18 @@ final case class AbstractNat() extends Datatype
   */
 final case class Nat(representation: BigInt) extends Literal
 
-final case class Address(name: Code, datatype: Code) extends Literal
-
 /**
-  * Behavior/Xpolar abstraction literal.
+  * Behavior/Xpolar abstraction reference literal
   *
   * Kind-of plays 2 roles:
   *  1. Reifies behaviors
   *  2. Abstracts connections
   *
-  * Abstractions are black-box in general, so they cannot be inspected.
-  * However, abstractions do become white-box when the xpolar is a literal.
-  *
-  * Abstraction values can also be thought of and used as nominal abstraction values.
+  * Abstraction references can also be thought of and used as nominal abstraction values.
   */
-final case class Abstraction(renaming: Code, capabilityRequirements: Code, xpolar: Code) extends Literal
+final case class AbstractionReference(
+  name: Code, renaming: Code, capabilityRequirements: Code, xpolarType: Code,
+) extends Literal
 
 // Unary structors
 
@@ -348,6 +338,14 @@ end Quote
   * <h2>Location connection</h2>
   * As an expression, sends a value to a fixed location.
   * As an extractor, receives a value from a fixed location.
+  *
+  * The value is guaranteed to arrive eventually, assuming someone listens eventually.
+  * Sending is also guaranteed to be fully private.
+  *
+  * A message cannot be captured by any Inp that is on hold. If there is a possibility for an Inp to capture the
+  * message in the future, it should not disappear. In other words, a message waits until an Inp is ready to receive it.
+  * On the other hand, if it is known that there will never be any Inp for the channel, the message should eventually
+  * get garbage-collected.
   *
   * <b>Syntax</b>
   *  - [[name]]: Name
