@@ -422,6 +422,16 @@ final case class Push(refinement: Code, bag: Code, transformation: Code) extends
 final case class Update(quote: Code, transformation: Code) extends Neutral
 
 /**
+  * Wraps a value into a Quoted.
+  *
+  * As an extractor, unwraps a value in quotes.
+  *
+  * @param value an expression whose value it reduces to is to be wrapped
+  * @return an expression of a quote
+  */
+final case class Wrap(value: Code) extends Neutral
+
+/**
   * As an Expr, converts a [[Bag]] of code quotations to a [[Quoted]] of [[Bag]] of all the pieces of code.
   *
   * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Bag]].
