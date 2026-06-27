@@ -250,7 +250,7 @@ final case class Nat(representation: BigInt) extends Literal
   *
   * Abstraction references can also be thought of and used as nominal abstraction values.
   */
-final case class AbstractionReference(
+final case class AbstractionRef(
   name: Code, renaming: Code, capabilityRequirements: Code, xpolarType: Code,
 ) extends Literal
 
@@ -505,15 +505,18 @@ final case class Inspect(signature: Code, payload: Code) extends Extractor
 
 /**
   * Launches the given quote (wrapped in an abstraction) as a new process,
-  * and outputs a signed value (aka document) of the code, confirming the launch,
-  * as well as a renaming for how the abstraction got concretized.
+  * and outputs
+  *  1. a renaming for how the abstraction got concretized
+  *  2. abstraction refs for all abstraction locations whose names are public
+  *  3. a signed value (aka document) of the code, confirming the launch
   *
   * <b>Syntax</b>
   *  - [[renaming]]: Xctr[Record[Quote[Name]]]
+  *  - [[abstractionRefs]]: Xctr[Record[AbstractionRef]]
   *  - [[certificate]]: Xctr[Document[LauncherName, Quote]]
   *  - [[this]]: Xctr[Abstraction[?, Quote]]
   */
-final case class Launch(renaming: Code, certificate: Code) extends Extractor
+final case class Launch(renaming: Code, abstractionRefs: Code, certificate: Code) extends Extractor
 
 //endregion - Other Extractor Polars
 
