@@ -439,11 +439,11 @@ final case class Wrap(value: Code) extends Neutral
 final case class Zip(pieces: Code) extends Neutral, Datatype
 
 /**
-  * Compiles an xpolar quote to an abstraction.
+  * Creates a nominal abstraction, a special case of [[AbstractionReference]].
   *
-  * It can only be used as an extractor for value abstractions, in which case it behaves like concretion.
+  * As an extractor, it behaves like concretion.
   */
-final case class Compile(renaming: Code, xpolarQuote: Code) extends Neutral
+final case class Abstract(renaming: Code, body: Code) extends Neutral, Datatype
 
 //endregion - Other Reversible Polars
 
