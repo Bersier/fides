@@ -1,6 +1,6 @@
 package fides.syntax.constructors.code
 
-import fides.syntax.util.{Identifier, launcherIdentifier}
+import fides.syntax.util.{Identifier, launcherIdentifier, nullIdentifier}
 import util.collections.extensional.{Multiset}
 
 // -------------------------------------------------------------------------------------------------
@@ -12,12 +12,14 @@ import util.collections.extensional.{Multiset}
 /**
   * Parent trait
   */
-sealed trait Code
+sealed trait Code:
+  def grammaticallyExtends: Code = throw NotImplementedError()
 
 /**
   * Concrete syntactic element to express a generic piece of code.
   */
-final case class AbstractCode() extends Code
+final case class AbstractCode() extends Code:
+  override def grammaticallyExtends: Code = AbstractCode()
 
 //region ==== Abstract Xpolar ====
 
@@ -41,7 +43,8 @@ sealed trait Apolar extends Xpolar
   *
   * Documentation type; not used for any type safety
   */
-sealed trait Polar extends Xpolar
+sealed trait Polar extends Xpolar:
+  def polarType: Polarized = ???
 
 /**
   * Syntactic descriptions of expressions
@@ -49,6 +52,11 @@ sealed trait Polar extends Xpolar
   * Documentation type; not used for any type safety
   */
 sealed trait Expression extends Polar
+
+object Expression:
+  def apply(expressionCode: Code): Expression = expressionCode match
+    case expression: Expression => expression
+    case _ => throw NotImplementedError()
 
 /**
   * Syntactic descriptions of extractors
@@ -77,25 +85,36 @@ sealed trait Bipolar extends Xpolar
 /**
   * Concrete syntactic element to express a generic xpolar.
   */
-final case class AbstractXpolar() extends Polar
+final case class AbstractXpolar() extends Xpolar:
+  override def grammaticallyExtends: Code = AbstractCode()
 
 /**
   * Concrete syntactic element to express a generic polar.
+  *
+  * Whenever a polar is expected in a position,
+  * it should not require any com capabilities that go against its polarity.
   */
-final case class AbstractPolar(tipe: Code) extends Polar
+final case class AbstractPolar(@Variance.Co tipe: Code) extends Polar:
+  override def polarType: Polarized = ??? // Polarized(tipe)
+  override def grammaticallyExtends: Code = AbstractXpolar()
 
 /**
+  * Whenever a bipolar is expected in a position,
+  * it should not require any com capabilities.
+  *
   * @param tipe should be a Polarized of a Backward of types
   */
-final case class AbstractBipolar(tipe: Code) extends Bipolar
+final case class AbstractBipolar(@Variance.Co tipe: Code) extends Bipolar:
+  override def grammaticallyExtends: Code = AbstractXpolar()
 
 //endregion - Abstract Xpolar
 
 //region ==== Xpolar Converters ====
 
-final case class BlockExpr(apolarBlock: Code, HeadExpression: Code) extends Expression
+final case class BlockExpr(apolarBlock: Code, headExpression: Code) extends Expression:
+  override def grammaticallyExtends: Code = AbstractPolar(Expression(headExpression).polarType)
 
-final case class BlockXctr(apolarBlock: Code, HeadExtractor: Code) extends Extractor
+final case class BlockXctr(apolarBlock: Code, headExtractor: Code) extends Extractor
 
 /**
   * A hard-coded connection between one input and one output
@@ -127,6 +146,8 @@ sealed trait Location extends Apolar
 final case class Constant(name: Code, value: Code) extends Location
 
 final case class Channel(name: Code, datatype: Code) extends Location
+// todo also have Link, a simpler one-to-one version? And other similar locations?
+//  And maybe go back to having no explicit process for these?
 
 /**
   * <h2>Memory cell process</h2>
@@ -143,6 +164,7 @@ final case class Channel(name: Code, datatype: Code) extends Location
   * @param datatype of this cell; could be an Interval when used in a [[Wildcard]]
   */
 final case class Cell(name: Code, contents: Code, datatype: Code) extends Location
+// todo refinements like linear?
 
 /**
   * Behavior/Xpolar abstraction
@@ -386,6 +408,8 @@ final case class Pick(options: Code) extends Neutral
   */
 final case class Hold(signal: Code, value: Code) extends Neutral
 
+// todo reintroduce location references
+
 /**
   * @param keys a multiset of location references
   */
@@ -415,6 +439,7 @@ final case class Flatten(refinement: Code, bags: Code) extends Neutral, Datatype
   * @param transformation a bipolar
   */
 final case class Push(refinement: Code, bag: Code, transformation: Code) extends Neutral, Datatype
+// todo add fold as well?
 
 /**
   * Applies the given transformation to each descendent of the root of the given quote whose type is compatible,
@@ -434,6 +459,7 @@ final case class Update(quote: Code, transformation: Code) extends Neutral
   * @return an expression of a quote
   */
 final case class Wrap(value: Code) extends Neutral
+// todo bipolar?
 
 /**
   * As an Expr, converts a [[Bag]] of code quotations to a [[Quoted]] of [[Bag]] of all the pieces of code.
@@ -441,6 +467,7 @@ final case class Wrap(value: Code) extends Neutral
   * As an Xctr, extracts the arguments out of a [[Quoted]] of [[Bag]].
   */
 final case class Zip(pieces: Code) extends Neutral, Datatype
+// todo bipolar?
 
 /**
   * Creates a nominal abstraction, a special case of [[AbstractionReference]].
@@ -448,6 +475,8 @@ final case class Zip(pieces: Code) extends Neutral, Datatype
   * As an extractor, it behaves like concretion.
   */
 final case class Abstract(renaming: Code, body: Code) extends Neutral, Datatype
+
+final val NullName = Name(nullIdentifier)
 
 //endregion - Other Reversible Polars
 
@@ -504,6 +533,7 @@ final case class Spread(recipients: Code) extends Extractor
   * @param alternative defaults to this otherwise
   */
 final case class Match(pattern: Code, alternative: Code) extends Extractor
+// todo Equals?
 
 final case class Inspect(signature: Code, payload: Code) extends Extractor
 
@@ -551,7 +581,7 @@ final case class Annotated(quoteName: Code, code: Code, annotation: Code) extend
 /**
   * Together with [[New]], allows the expression of parametric types.
   */
-final case class AbstractParameter(name: Code) extends Datatype // todo make it a ref?
+final case class Parameter(name: Code, bound: Code) extends Datatype
 
 /**
   * Allows escaping the body of a quote.
@@ -610,10 +640,14 @@ object Capability:
     * Provides the right to assume that [[name]] is fresh (via [[New]]).
     * Provides the right to sign with [[name]].
     */
-  final case class Name(name: Name) extends Capability
+  final case class Name(name: Code) extends Capability
+  // todo for these two cases, we don't need dedicated capability constructors, we could simply recycle existing ones.
+  final case class Parameter(name: Code, bound: Code) extends Capability
 
   /**
     * Provides some capability related to communication and locations.
+    *
+    * The capability requirements of a neutral are expressed as if the neutral were used in an expression position.
     *
     * Implies [[Name]] capability.
     */
