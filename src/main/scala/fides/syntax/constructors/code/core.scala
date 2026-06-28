@@ -595,3 +595,51 @@ object Polarized:
 end Polarized
 
 final case class Union(types: Code) extends Datatype
+
+sealed trait Capability extends Code
+
+object Capability:
+
+  /**
+    * Provides the right to assume that a quote with [[name]] surrounds the code.
+    * This capability only makes sense for quote capability requirements.
+    */
+  final case class Quote(name: Code) extends Capability
+
+  /**
+    * Provides the right to assume that [[name]] is fresh (via [[New]]).
+    * Provides the right to sign with [[name]].
+    */
+  final case class Name(name: Name) extends Capability
+
+  /**
+    * Provides some capability related to communication and locations.
+    *
+    * Implies [[Name]] capability.
+    */
+  final case class Com(name: Code, tipe: Code, datatype: Code, locationType: Code) extends Capability
+
+  object Com:
+    enum Type extends Code:
+      case Any
+      case Positive
+      case Negative
+
+      /**
+        * A [[Com]] capability with [[Neutral]] as type
+        * provides the right to use a location in both polarities.
+        */
+      case Neutral
+
+      /**
+        * A [[Com]] capability with [[Location]] as type provides the right to define a location.
+        * It is therefore linear. Only one location per name is allowed.
+        */
+      case Location
+  end Com
+
+  object Location:
+    enum Type extends Code:
+      case Any, Constant, Channel, Cell
+  end Location
+end Capability
