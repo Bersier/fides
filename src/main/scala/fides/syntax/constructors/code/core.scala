@@ -150,6 +150,9 @@ final case class Cell(name: Code, contents: Code, datatype: Code) extends Locati
   * Kind-of plays 2 roles:
   *  1. Packages a behavior
   *  2. Abstracts connections
+  *
+  * [[capabilityRequirements]] are not fully determined by [[xpolar]],
+  * although they have to be compatible.
   */
 final case class Abstraction(name: Code, renaming: Code, capabilityRequirements: Code, xpolar: Code) extends Location
 
@@ -249,6 +252,8 @@ final case class Nat(representation: BigInt) extends Literal
   *  2. Abstracts connections
   *
   * Abstraction references can also be thought of and used as nominal abstraction values.
+  *
+  * [[capabilityRequirements]] are not determined by [[xpolar]].
   */
 final case class AbstractionRef(
   name: Code, renaming: Code, capabilityRequirements: Code, xpolarType: Code,
@@ -300,8 +305,7 @@ end Bag
   * All quotes are also prequotes.
   * So [[Quote]](C) is the same as [[Prequote]](C) at the value level (but not at the syntax level).
   *
-  * Also, autowrapping means that [[Quote]](C) is the same as C, when C is a whitebox literal/value
-  * (which is all values, except for abstractions of non-literals).
+  * Quote validity is fully determined by [[code]]. So are the [[capabilityRequirements]].
   */
 final case class Quote(name: Code, validity: Code, capabilityRequirements: Code, code: Code) extends Literal
 
