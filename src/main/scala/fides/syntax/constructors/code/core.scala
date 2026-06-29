@@ -1,6 +1,6 @@
 package fides.syntax.constructors.code
 
-import fides.syntax.util.{Identifier, launcherIdentifier, nullIdentifier}
+import fides.syntax.util.{Identifier, launcherIdentifier}
 import util.collections.extensional.{Multiset}
 
 // -------------------------------------------------------------------------------------------------
@@ -471,11 +471,11 @@ final case class Zip(pieces: Code) extends Neutral, Datatype
 /**
   * Creates a nominal abstraction, a special case of [[AbstractionReference]].
   *
+  * The name it uses is derived from the inputted value, using [[AsName]].
+  *
   * As an extractor, it behaves like concretion.
   */
-final case class Abstract(renaming: Code, body: Code) extends Neutral, Datatype
-
-final val NullName = Name(nullIdentifier)
+final case class Abstract(renaming: Code, value: Code) extends Neutral, Datatype
 
 //endregion - Other Reversible Polars
 
