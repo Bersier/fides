@@ -14,6 +14,7 @@ import util.collections.extensional.{Multiset}
   */
 sealed trait Code:
   def grammaticallyExtends: Code = throw NotImplementedError()
+  def asGrammarType[T]: T = asInstanceOf[T]
 
 /**
   * Concrete syntactic element to express a generic piece of code.
@@ -45,18 +46,15 @@ sealed trait Apolar extends Xpolar
   */
 sealed trait Polar extends Xpolar:
   def polarType: Polarized = ???
+// todo we need to be careful about not making assumptions that don't always hold
+//  perhaps we shouldn't use inheritance. That's still relying on a hierarchy encoded in Scala.
 
 /**
   * Syntactic descriptions of expressions
   *
   * Documentation type; not used for any type safety
   */
-sealed trait Expression extends Polar
-
-object Expression:
-  def apply(expressionCode: Code): Expression = expressionCode match
-    case expression: Expression => expression
-    case _ => throw NotImplementedError()
+private sealed trait Expression extends Polar
 
 /**
   * Syntactic descriptions of extractors
@@ -95,7 +93,7 @@ final case class AbstractXpolar() extends Xpolar:
   * it should not require any com capabilities that go against its polarity.
   */
 final case class AbstractPolar(@Variance.Co tipe: Code) extends Polar:
-  override def polarType: Polarized = ??? // Polarized(tipe)
+  override def polarType: Polarized = tipe.asGrammarType[Polarized]
   override def grammaticallyExtends: Code = AbstractXpolar()
 
 /**
@@ -112,7 +110,8 @@ final case class AbstractBipolar(@Variance.Co tipe: Code) extends Bipolar:
 //region ==== Xpolar Converters ====
 
 final case class BlockExpr(apolarBlock: Code, headExpression: Code) extends Expression:
-  override def grammaticallyExtends: Code = AbstractPolar(Expression(headExpression).polarType)
+  override def polarType: Polarized = headExpression.asGrammarType[AbstractPolar].polarType // todo restrict to Expr
+  override def grammaticallyExtends: AbstractPolar = AbstractPolar(polarType)
 
 final case class BlockXctr(apolarBlock: Code, headExtractor: Code) extends Extractor
 
@@ -282,11 +281,11 @@ final case class AbstractionRef(
 ) extends Literal
 
 /**
-  * @param key a name, provided statically; cannot be an expression or an extractor
+  * Now also plays the role of a signed value, aka document.
+  *
+  * @param key a name
   */
-final case class Entry(key: Code, value: Code) extends Literal
-
-final case class Document(signatory: Code, contents: Code) extends Literal
+final case class KeyedValue(key: Code, value: Code) extends Literal
 
 /**
   * Concrete syntactic element to express a generic bag with an element type upper bound.
@@ -315,7 +314,7 @@ object Bag:
   final case class Record() extends Refinement
 
   /**
-    * enamings are bijections from a set of names to another. So they are a special type of record.
+    * Renamings are bijections from a set of names to another. So they are a special type of record.
     */
   final case class Renaming() extends Refinement
 
@@ -535,8 +534,6 @@ final case class Spread(recipients: Code) extends Extractor
 final case class Match(pattern: Code, alternative: Code) extends Extractor
 // todo Equals?
 
-final case class Inspect(signature: Code, payload: Code) extends Extractor
-
 /**
   * Launches the given quote (wrapped in an abstraction) as a new process,
   * and outputs
@@ -640,8 +637,8 @@ object Capability:
     * Provides the right to assume that [[name]] is fresh (via [[New]]).
     * Provides the right to sign with [[name]].
     */
-  final case class Name(name: Code) extends Capability
-  // todo for these two cases, we don't need dedicated capability constructors, we could simply recycle existing ones.
+  final case class Ownership(name: Code) extends Capability
+
   final case class Parameter(name: Code, bound: Code) extends Capability
 
   /**
@@ -649,7 +646,7 @@ object Capability:
     *
     * The capability requirements of a neutral are expressed as if the neutral were used in an expression position.
     *
-    * Implies [[Name]] capability.
+    * Implies [[Ownership]] capability.
     */
   final case class Com(name: Code, tipe: Code, datatype: Code, locationType: Code) extends Capability
 
