@@ -1,7 +1,7 @@
 package fides.syntax.constructors.code
 
 import fides.syntax.util.{Identifier, launcherIdentifier}
-import util.collections.extensional.{Multiset}
+import util.collections.extensional.Multiset
 
 // -------------------------------------------------------------------------------------------------
 // This file contains all the Fides syntactic code constructors.
@@ -13,14 +13,16 @@ import util.collections.extensional.{Multiset}
   * Parent trait
   */
 sealed trait Code:
-  def grammaticallyExtends: Code = throw NotImplementedError()
-  def asGrammarType[T]: T = asInstanceOf[T]
+  def parent: Code = throw NotImplementedError()
+  def requirements: Code = throw NotImplementedError()
+  def grammarType: Code = throw NotImplementedError()
+//  def weakenedToGType
 
 /**
   * Concrete syntactic element to express a generic piece of code.
   */
 final case class AbstractCode() extends Code:
-  override def grammaticallyExtends: Code = AbstractCode()
+  override def parent: Code = AbstractCode()
 
 //region ==== Abstract Xpolar ====
 
@@ -44,10 +46,7 @@ sealed trait Apolar extends Xpolar
   *
   * Documentation type; not used for any type safety
   */
-sealed trait Polar extends Xpolar:
-  def polarType: Polarized = ???
-// todo we need to be careful about not making assumptions that don't always hold
-//  perhaps we shouldn't use inheritance. That's still relying on a hierarchy encoded in Scala.
+sealed trait Polar extends Xpolar
 
 /**
   * Syntactic descriptions of expressions
@@ -84,7 +83,7 @@ sealed trait Bipolar extends Xpolar
   * Concrete syntactic element to express a generic xpolar.
   */
 final case class AbstractXpolar() extends Xpolar:
-  override def grammaticallyExtends: Code = AbstractCode()
+  override def parent: Code = AbstractCode()
 
 /**
   * Concrete syntactic element to express a generic polar.
@@ -93,8 +92,7 @@ final case class AbstractXpolar() extends Xpolar:
   * it should not require any com capabilities that go against its polarity.
   */
 final case class AbstractPolar(@Variance.Co tipe: Code) extends Polar:
-  override def polarType: Polarized = tipe.asGrammarType[Polarized]
-  override def grammaticallyExtends: Code = AbstractXpolar()
+  override def parent: Code = AbstractXpolar()
 
 /**
   * Whenever a bipolar is expected in a position,
@@ -103,15 +101,26 @@ final case class AbstractPolar(@Variance.Co tipe: Code) extends Polar:
   * @param tipe should be a Polarized of a Backward of types
   */
 final case class AbstractBipolar(@Variance.Co tipe: Code) extends Bipolar:
-  override def grammaticallyExtends: Code = AbstractXpolar()
+  override def parent: Code = AbstractXpolar()
 
 //endregion - Abstract Xpolar
 
 //region ==== Xpolar Converters ====
 
 final case class BlockExpr(apolarBlock: Code, headExpression: Code) extends Expression:
-  override def polarType: Polarized = headExpression.asGrammarType[AbstractPolar].polarType // todo restrict to Expr
-  override def grammaticallyExtends: AbstractPolar = AbstractPolar(polarType)
+  override def parent: AbstractPolar =
+    val headExpressionParent = headExpression.grammarType.parent.asInstanceOf[AbstractPolar]
+    val headExpressionType = headExpressionParent.tipe.grammarType.asInstanceOf[Polarized]
+    val blockType = headExpressionType match
+      case Polarized.Positive(tipe) => Polarized.Positive(tipe)
+      case Polarized.Neutral(tipe) => Polarized.Positive(tipe)
+      case Polarized.Datatype(tipe) => Polarized.Positive(tipe)
+      case Polarized.Literal(tipe) => Polarized.Positive(tipe)
+      case Polarized.Unknown() => throw AssertionError()
+      case Polarized.Negative(_) => throw AssertionError()
+      case Polarized.Interval(_) => ???
+    AbstractPolar(blockType)
+  override def grammarType: BlockExpr = BlockExpr(apolarBlock.grammarType, headExpression.grammarType)
 
 final case class BlockXctr(apolarBlock: Code, headExtractor: Code) extends Extractor
 
@@ -497,6 +506,8 @@ final case class Multiply(factors: Code) extends Expression
   */
 final case class AsName(value: Code) extends Expression
 
+final case class Equal(value1: Code, value2: Code) extends Expression
+
 /**
   * Outputs the children of the root of the given quote, as a bag.
   */
@@ -532,7 +543,6 @@ final case class Spread(recipients: Code) extends Extractor
   * @param alternative defaults to this otherwise
   */
 final case class Match(pattern: Code, alternative: Code) extends Extractor
-// todo Equals?
 
 /**
   * Launches the given quote (wrapped in an abstraction) as a new process,
@@ -595,8 +605,6 @@ final case class Embed(mapping: Code, behavior: Code) extends Code
 sealed trait Polarized extends Code
 object Polarized:
 
-  final case class Abstract() extends Polarized
-
   final case class Unknown () extends Polarized
 
   /**
@@ -611,14 +619,14 @@ object Polarized:
 
   final case class Neutral (tipe: Code) extends Polarized
 
-  final case class Datatype(tipe: Code) extends Polarized
+  final case class Datatype(tipe: Code) extends Polarized // todo what about the intersection of Neutral and Datatype?
 
   final case class Literal (tipe: Code) extends Polarized
 
   /**
     * For all t that are subtypes of T, Literal(t) is a subtype of Interval(T).
     */
-  final case class Interval(tipe: Code) extends Polarized
+  final case class Interval(tipe: Code) extends Polarized  // todo should Interval be a Polarized?
 end Polarized
 
 final case class Union(types: Code) extends Datatype

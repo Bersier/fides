@@ -9,7 +9,7 @@ lazy val root = (project in file("."))
     version := "0.1.0",
 
     // See https://www.scala-lang.org/news/new-scala-nightlies-repo.html
-    scalaVersion := "3.10.0-RC1-bin-20260528-7d0d3db-NIGHTLY",
+    scalaVersion := "3.10.0-RC1-bin-20260630-a8ae375-NIGHTLY",
     resolvers += Resolver.scalaNightlyRepository,
 
     libraryDependencies ++= Seq(
@@ -59,7 +59,6 @@ lazy val root = (project in file("."))
 //      "-language:experimental.namedTypeArguments",
 //      "-language:experimental.pureFunctions",
 //      "-language:experimental.safe",
-      "-language:experimental.strictEqualityPatternMatching",
       "-language:strictEquality",
       "-new-syntax",
       "-preview",
