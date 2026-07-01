@@ -14,15 +14,17 @@ import util.collections.extensional.Multiset
   */
 sealed trait Code:
   def parent: Code = throw NotImplementedError()
-  def requirements: Code = throw NotImplementedError()
-  def grammarType: Code = throw NotImplementedError()
+  def requirements: Multiset[Capability] = throw NotImplementedError()
+  def grammarType: Code = throw NotImplementedError() // todo reify this into Fides, for pattern-matching?
 //  def weakenedToGType
 
 /**
   * Concrete syntactic element to express a generic piece of code.
   */
 final case class AbstractCode() extends Code:
-  override def parent: Code = AbstractCode()
+  override def parent: this.type = this
+  override def requirements: Multiset[Nothing] = Multiset()
+  override def grammarType: this.type = this
 
 //region ==== Abstract Xpolar ====
 
@@ -83,7 +85,9 @@ sealed trait Bipolar extends Xpolar
   * Concrete syntactic element to express a generic xpolar.
   */
 final case class AbstractXpolar() extends Xpolar:
-  override def parent: Code = AbstractCode()
+  override def parent: AbstractCode = AbstractCode()
+  override def requirements: Multiset[Nothing] = Multiset()
+  override def grammarType: this.type = this
 
 /**
   * Concrete syntactic element to express a generic polar.
@@ -92,7 +96,9 @@ final case class AbstractXpolar() extends Xpolar:
   * it should not require any com capabilities that go against its polarity.
   */
 final case class AbstractPolar(@Variance.Co tipe: Code) extends Polar:
-  override def parent: Code = AbstractXpolar()
+  override def parent: AbstractXpolar = AbstractXpolar()
+  override def requirements: Multiset[Capability] = tipe.requirements
+  override def grammarType: AbstractPolar = AbstractPolar(tipe.grammarType)
 
 /**
   * Whenever a bipolar is expected in a position,
@@ -101,7 +107,9 @@ final case class AbstractPolar(@Variance.Co tipe: Code) extends Polar:
   * @param tipe should be a Polarized of a Backward of types
   */
 final case class AbstractBipolar(@Variance.Co tipe: Code) extends Bipolar:
-  override def parent: Code = AbstractXpolar()
+  override def parent: AbstractXpolar = AbstractXpolar()
+  override def requirements: Multiset[Capability] = tipe.requirements
+  override def grammarType: AbstractBipolar = AbstractBipolar(tipe.grammarType)
 
 //endregion - Abstract Xpolar
 
@@ -111,15 +119,18 @@ final case class BlockExpr(apolarBlock: Code, headExpression: Code) extends Expr
   override def parent: AbstractPolar =
     val headExpressionParent = headExpression.grammarType.parent.asInstanceOf[AbstractPolar]
     val headExpressionType = headExpressionParent.tipe.grammarType.asInstanceOf[Polarized]
+    import Polarized.*
     val blockType = headExpressionType match
-      case Polarized.Positive(tipe) => Polarized.Positive(tipe)
-      case Polarized.Neutral(tipe) => Polarized.Positive(tipe)
-      case Polarized.Datatype(tipe) => Polarized.Positive(tipe)
-      case Polarized.Literal(tipe) => Polarized.Positive(tipe)
-      case Polarized.Unknown() => throw AssertionError()
-      case Polarized.Negative(_) => throw AssertionError()
-      case Polarized.Interval(_) => ???
+      case Positive(tipe) => Positive(tipe)
+      case Neutral(tipe) => Positive(tipe)
+      case Datatype(tipe) => Positive(tipe)
+      case Literal(tipe) => Positive(tipe)
+      case Unknown() => throw AssertionError()
+      case Negative(_) => throw AssertionError()
+      case Interval(_) => ???
     AbstractPolar(blockType)
+  override def requirements: Multiset[Capability] = apolarBlock.requirements u headExpression.requirements
+  // todo do proper requirement union
   override def grammarType: BlockExpr = BlockExpr(apolarBlock.grammarType, headExpression.grammarType)
 
 final case class BlockXctr(apolarBlock: Code, headExtractor: Code) extends Extractor
